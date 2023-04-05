@@ -1,0 +1,79 @@
+---
+// import site from "../data/site.json"
+// const title = `Let's get in touch!`;
+// const {socials, author, profile_pic, resume} = site;
+---
+<footer>
+    <hr />
+    <section>
+        <ul>
+            <li><a href="mailto:jluuruncs@gmail.com">Email</a></li>
+            <li>
+                <a href="https://www.linkedin.com/in/jeffrey-luu/">Linkedin</a>
+            </li>
+            <li><a href="https://github.com/jdluu">Github</a></li>
+            <li><p>Made with &hearts; by Jeffrey Luu</p></li>
+        </ul>
+    </section>
+</footer>
+
+<style>
+    footer section {
+    display: flex;  
+    flex-direction: column; 
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+footer ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin-top: 0.5rem;
+}
+
+@media screen and (min-width: 480px) {
+    footer ul {
+      grid-auto-flow: column;
+    }
+}
+
+footer a {
+    color: var(--link-color);
+    font-weight: bold;
+    text-decoration: underline;
+    box-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, 0.4);
+}
+
+footer a:hover {
+    box-shadow: inset 0 -1.2em 0 hsla(0, 0%, 100%, 0.4);
+
+}
+
+footer li {
+    margin: 0 0.5rem;
+}
+
+footer li p {
+    text-align: center;
+}
+  
+footer li:hover ~ li p {
+    animation: wave-animation 0.3s infinite;
+}
+
+@keyframes wave-animation {
+    0%,
+    25% {
+      transform: rotate(20deg);
+    }
+    75% {
+      transform: rotate(-15deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+}
+</style>
