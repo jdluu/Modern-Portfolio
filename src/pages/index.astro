@@ -1,81 +1,123 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+// import Card from '../components/Card.astro';
+import Header from '../components/Header.astro';
+import Navbar from '../components/Navbar.astro';
+import Intro from '../components/Intro.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 ---
-
-<Layout title="Welcome to Astro.">
+<html lang="eng">
+	<head>
+		<Header/>
+	</head>
 	<main>
-		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
-		<p class="instructions">
-			To get started, open the directory <code>src/pages</code> in your project.<br />
-			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
-			/>
-		</ul>
+		<Navbar/>
+		<Intro/>
+		<About/>
+		<Projects/>
+		<Contact/>
+		<Footer/>
 	</main>
-</Layout>
+</html>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
-	h1 {
-		font-size: 3rem;
-		font-weight: 800;
-		margin: 0;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		line-height: 1.6;
-		margin: 1rem 0;
-		border: 1px solid rgba(var(--accent), 25%);
-		background-color: white;
-		padding: 1rem;
-		border-radius: 0.4rem;
-	}
-	.instructions code {
-		font-size: 0.875em;
-		font-weight: bold;
-		background: rgba(var(--accent), 12%);
-		color: rgb(var(--accent));
-		border-radius: 4px;
-		padding: 0.3em 0.45em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 1rem;
-		padding: 0;
-	}
+	:root {
+  /* Font Sizes */
+  --body-size: 1rem;
+
+  /* Theme */
+  --data-theme: light;
+}
+
+[data-theme="light"] {
+  --bg-color: #F5E6D0;
+  --font-color: black;
+  --inverse-font-color: white;
+  --link-color: #0000FF;
+
+  --primary-color: #D1EBF5;
+  --secondary-color: #454545;
+
+  --button1-color: #D0DFF5;
+  --button2-color: #b8c4d6;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0a192f;
+  --font-color: #D1DFF5;
+  --inverse-font-color: black;
+  --link-color: #0000FF;
+
+  --primary-color: #2f200a;
+  --secondary-color: #B3B3B3;  
+  
+  --button1-color: #3e4249;
+  --button2-color: #535962;
+}
+
+/* Fonts */
+@font-face {
+  font-family: 'Lato';
+  src: url('https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjx4wWw.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pacifico';
+  src: url('https://fonts.gstatic.com/s/pacifico/v17/FwZY7-Qmy14u9lezJ96A.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--font-color);  
+  font-family: 'Lato', Fallback, sans-serif;
+  font-size: 1rem;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 1rem;
+  }
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+  font-family: 'Pacifico', Fallback, cursive;
+  color: var(--secondary-color);
+  float: left;
+  margin-left: 1rem;
+}
+
+/* If screen is smaller than 768 px, shrink the h1 font size and remove the margins */
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+    margin-top: 0;
+    float: none;
+  }
+}
+  
+h2 {
+    font-size: 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 1rem;
+    text-decoration: underline;
+    color: var(--font-color);
+}
+
+@media screen and (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+}
 </style>
