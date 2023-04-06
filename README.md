@@ -1,7 +1,7 @@
 # My Modern Web Portfolio
 
 ## Design Philosophy
-For this portfolio, I focused more on Javascript, using components with Astro JS to maintain speed, while making my portfolio easier to maintain. 
+For this portfolio, I focused more on making resuable components, making my website modular and easy to update. I am using Astro and minimizing Javascript to maintain a balance between interactivity and speed.
 
 The main content for this portoflio is taken from my original portfolio which is here: https://github.com/jdluu/portfolio
 
