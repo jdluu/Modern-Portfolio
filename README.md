@@ -1,16 +1,10 @@
-# Astro Starter Kit: Basics
+# My Modern Web Portfolio
 
-```
-npm create astro@latest -- --template basics
-```
+## Design Philosophy
+For this portfolio, I focused more on Javascript, using components with Astro JS to maintain speed, while making my portfolio easier to maintain. 
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+The main content for this portoflio is taken from my original portfolio which is here: https://github.com/jdluu/portfolio
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![basics](https://user-images.githubusercontent.com/4677417/186188965-73453154-fdec-4d6b-9c34-cb35c248ae5b.png)
 
 ## 🚀 Project Structure
 
@@ -19,23 +13,41 @@ Inside of your Astro project, you'll see the following folders and files:
 ```
 /
 ├── public/
-│   └── favicon.svg
+│   ├── assets/
+│   |    └── Luu_Jeffrey_Resume.pdf
+│   ├── images/
+│   |    └── fractal.jpg
+│   |    └── ms-icon-150x150.png
+│   |    └── ms-icon-310x310.png
+│   |    └── Placeholder.png
+│   |    └── profile.webp
+│   └── favicon.ico
 ├── src/
 │   ├── components/
-│   │   └── Card.astro
+│   |    └── About.astro
+│   |    └── Contact.astro
+│   |    └── Experience.astro
+│   |    └── Footer.astro
+│   |    └── Header.astro
+│   |    └── Intro.astro
+│   |    └── Projects.astro
+│   |    ├── Navbar/
+│   |    |    └── Navbar.css
+│   |    |    └── Navbar.jsx
+│   |    ├── Temp/
+│   |    |    └── Card.astro
+│   ├── data/
+│   |    └── site.json
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │    └── BaseLayout.astro
+│   │    └── MarkdownPostLayout.astro
 │   └── pages/
-│       └── index.astro
+│   |    ├── posts/
+│   |    |    └── post-1.md
+│   |    ├── projects/
+│   |    └── index.astro
 └── package.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
@@ -49,6 +61,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Deployment
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5b79e3ed-5748-4cbd-9609-a93a4967c79e/deploy-status)](https://app.netlify.com/sites/spectacular-basbousa-817044/deploys)
