@@ -1,0 +1,12 @@
+---
+import site from "../data/site.json"
+const {title, description} = site;
+---
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="keywords" content="HTML, CSS, JavaScript, Astro">
+<meta name="author" content="Jeffrey Luu">
+<meta name="description" content={description}>
+<meta http-equiv="X-UA-Compatible" content="ie=edge">

@@ -1,0 +1,38 @@
+{
+    "title": "Jeffrey Luu | Designer and Developer",
+    "description": "Jeffrey Luu - Portfolio",
+    "url": "https://spectacular-basbousa-817044.netlify.app/",
+    "author": "Jeffrey Luu",
+    "profile_pic": "../public/images/profile.webp",
+    "resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
+    "nav": [
+        {"link": "#intro", "name": "Jeffrey Luu"},
+        {"link": "#about", "name": "About"},
+        {"link": "#experience", "name": "Experience"},
+        {"link": "#projects", "name": "Projects"},
+        {"link": "#blog", "name": "Blog", "target": "_blank"},
+        {"link": "#contact", "name": "Contact"}
+    ],
+    "experience": [
+        {
+            "title": "CodePath",
+            "role": "Technical Program Manager Intern",
+            "date": "Jan 2022 - June 2022",
+            "description": "Oversaw all course management logistics for a CodePath.org course site",
+            "image": "../public/images/Placeholder.png"
+        }
+    ],
+    "socials": 
+        [
+            {
+                "link": "https://www.linkedin.com/in/jeffrey-luu/",
+                "title": "LinkedIn",
+                "icon": "linkedin"
+            },
+            {
+                "link": "https://github.com/jdluu",
+                "title": "GitHub",
+                "icon": "github"
+            }
+        ]
+}
