@@ -6,7 +6,7 @@
     "profile_pic": "../public/images/profile.webp",
     "resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
     "nav": [
-        {"link": "#intro", "name": "Home"},
+        {"link": "#intro", "name": "Jeffrey Luu"},
         {"link": "#about", "name": "About"},
         {"link": "#experience", "name": "Experience"},
         {"link": "#projects", "name": "Projects"},
