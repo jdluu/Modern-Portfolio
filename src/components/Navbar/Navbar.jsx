@@ -21,7 +21,7 @@ const Navbar = () => {
 
 	return (
 		<header id="header" className={color ? "active" : ""}>
-			<ul>
+			<ul id="topNav">
 				{nav.map((item, i) => (
 					<li key={i}>
 						<a href={item.link} target={item.target} rel="noopener noreferrer">
