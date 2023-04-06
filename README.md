@@ -13,23 +13,41 @@ Inside of your Astro project, you'll see the following folders and files:
 ```
 /
 ├── public/
-│   └── favicon.svg
+│   ├── assets/
+│   |    └── Luu_Jeffrey_Resume.pdf
+│   ├── images/
+│   |    └── fractal.jpg
+│   |    └── ms-icon-150x150.png
+│   |    └── ms-icon-310x310.png
+│   |    └── Placeholder.png
+│   |    └── profile.webp
+│   └── favicon.ico
 ├── src/
 │   ├── components/
-│   │   └── Card.astro
+│   |    └── About.astro
+│   |    └── Contact.astro
+│   |    └── Experience.astro
+│   |    └── Footer.astro
+│   |    └── Header.astro
+│   |    └── Intro.astro
+│   |    └── Projects.astro
+│   |    ├── Navbar/
+│   |    |    └── Navbar.css
+│   |    |    └── Navbar.jsx
+│   |    ├── Temp/
+│   |    |    └── Card.astro
+│   ├── data/
+│   |    └── site.json
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │    └── BaseLayout.astro
+│   │    └── MarkdownPostLayout.astro
 │   └── pages/
-│       └── index.astro
+│   |    ├── posts/
+│   |    |    └── post-1.md
+│   |    ├── projects/
+│   |    └── index.astro
 └── package.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
