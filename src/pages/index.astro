@@ -1,128 +1,15 @@
 ---
-// import Card from '../components/Card.astro';
-import Header from "../components/Header.astro";
-import Navbar from "../components/Navbar/Navbar.jsx";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Intro from "../components/Intro.astro";
 import About from "../components/About.astro";
 import Projects from "../components/Projects.astro";
 import Contact from "../components/Contact.astro";
-import Footer from "../components/Footer.astro";
+const { pageTitle } = Astro.props;
 ---
 
-<html lang="eng">
-	<head>
-		<Header />
-	</head>
-	<body>
-		<Navbar />
-		<main>
-			<Intro />
-			<About />
-			<Projects />
-			<Contact />
-		</main>
-    <Footer />
-	</body>
-</html>
-
-<style>
-  :root {
-    /* Font Sizes */
-    --body-size: 1rem;
-
-    /* Theme */
-    --data-theme: light;
-  }
-
-  [data-theme="light"] {
-    --bg-color: #f5e6d0;
-    --font-color: black;
-    --inverse-font-color: white;
-    --link-color: #0000ff;
-
-    --primary-color: #d1ebf5;
-    --secondary-color: #454545;
-
-    --button1-color: #d0dff5;
-    --button2-color: #b8c4d6;
-  }
-
-  [data-theme="dark"] {
-    --bg-color: #0a192f;
-    --font-color: #d1dff5;
-    --inverse-font-color: black;
-    --link-color: #0000ff;
-
-    --primary-color: #2f200a;
-    --secondary-color: #b3b3b3;
-
-    --button1-color: #3e4249;
-    --button2-color: #535962;
-  }
-
-  /* Fonts */
-  @font-face {
-    font-family: "Lato";
-    src: url("https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjx4wWw.ttf")
-      format("truetype");
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Pacifico";
-    src: url("https://fonts.gstatic.com/s/pacifico/v17/FwZY7-Qmy14u9lezJ96A.ttf")
-      format("truetype");
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  body {
-    background-color: var(--bg-color);
-    color: var(--font-color);
-    font-family: "Lato", Fallback, sans-serif;
-    font-size: 1rem;
-    overflow-x: hidden;
-  }
-
-  @media screen and (max-width: 768px) {
-    body {
-      font-size: 1rem;
-    }
-  }
-
-  h1 {
-    font-weight: bold;
-    font-size: 2.5rem;
-    font-family: "Pacifico", Fallback, cursive;
-    color: var(--secondary-color);
-    float: left;
-    margin-left: 1rem;
-  }
-
-  /* If screen is smaller than 768 px, shrink the h1 font size and remove the margins */
-  @media screen and (max-width: 768px) {
-    h1 {
-      font-size: 2rem;
-      margin-top: 0;
-      float: none;
-    }
-  }
-
-  h2 {
-    font-size: 2rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    margin-left: 1rem;
-    text-decoration: underline;
-    color: var(--font-color);
-  }
-
-  @media screen and (max-width: 768px) {
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
-</style>
+<BaseLayout pageTitle={pageTitle}>
+	<Intro />
+	<About />
+	<Projects />
+	<Contact />
+</BaseLayout>
