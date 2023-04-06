@@ -5,29 +5,20 @@ nav {
 	margin-bottom: 1.5rem;
 }
 
-ul {
+#topNav {
 	display: flex;
 	list-style: none;
 	justify-content: end;
 	align-items: center;
 }
 
-li {
+#topNav li {
 	margin-right: 1.25rem;
 	margin-top: 0.9375rem;
 	border-radius: 0.5rem;
 }
 
-/* TODO Move HOME all the way to the left */
-ul li:first-child {
-	font-weight: bold;
-	font-size: 2.5rem;
-	font-family: "Pacifico", Fallback, cursive;
-	color: var(--secondary-color);
-	margin-right: auto;
-}
-
-nav ul li a {
+#topNav li:not(:first-child){
 	text-decoration: none;
 	color: var(--font-color);
 	background-color: var(--button1-color);
@@ -37,3 +28,15 @@ nav ul li a {
 	padding: 10px 15px;
 	border-radius: 75px;
 }
+
+#topNav li:first-child {
+	font-weight: bold;
+	font-size: 2.5rem;
+	font-family: "Pacifico", Fallback, cursive;
+	color: var(--secondary-color);
+	margin-right: auto;
+}
+
+
+
+
