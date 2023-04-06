@@ -1,0 +1,39 @@
+nav {
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    margin-bottom: 1.5rem;
+}
+
+ul {
+    display: flex;
+    list-style: none;
+    justify-content: end;
+    align-items: center;
+}
+
+li {
+    margin-right: 1.25rem;
+    margin-top: 0.9375rem;
+    border-radius: 0.5rem;
+}
+
+/* TODO Move HOME all the way to the left */
+ul li:first-child {
+    
+}
+
+ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--font-color);
+    background-color: var(--button1-color);
+    border: 1px solid var(--font-color);
+    font-weight: bold;
+    font-size: 1.25rem;
+    padding: 10px 15px;
+    border-radius: 75px;
+}
