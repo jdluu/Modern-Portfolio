@@ -1,17 +1,17 @@
 {
 	"title": "Jeffrey Luu | Developer and Designer",
 	"description": "Jeffrey Luu - Portfolio",
-	"url": "https://spectacular-basbousa-817044.netlify.app/",
+	"url": "https://jeffreyluu.com",
 	"author": "Jeffrey Luu",
 	"profile_pic": "../public/images/profile.webp",
 	"resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
 	"nav": [
-		{ "link": "#intro", "name": "Jeffrey Luu" },
-		{ "link": "#about", "name": "About" },
-		{ "link": "#experience", "name": "Experience" },
-		{ "link": "#projects", "name": "Projects" },
-		{ "link": "#blog", "name": "Blog", "target": "_blank" },
-		{ "link": "#contact", "name": "Contact" }
+		{ "link": "", "name": "Jeffrey Luu" },
+		{ "link": "./#about", "name": "About" },
+		{ "link": "./#experience", "name": "Experience" },
+		{ "link": "./#projects", "name": "Projects" },
+		{ "link": "/blog", "name": "Blog", "target": "_blank" },
+		{ "link": "./#contact", "name": "Contact" }
 	],
 	"experience": [
 		{
