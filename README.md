@@ -1,10 +1,10 @@
 # My Modern Web Portfolio
 
 ## Design Philosophy
+
 For this portfolio, I focused more on making resuable components, making my website modular and easy to update. I am using Astro and minimizing Javascript to maintain a balance between interactivity and speed.
 
-This portfolio was built off of the content from my original portfolio here: https://github.com/jdluu/portfolio
-
+This portfolio was built off of the content from my original portfolio here: <https://github.com/jdluu/portfolio>
 
 ## 🚀 Project Structure
 
@@ -48,6 +48,7 @@ Inside of your Astro project, you'll see the following folders and files:
 │   |    └── index.astro
 └── package.json
 ```
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
@@ -62,4 +63,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro --help` | Get help using the Astro CLI                     |
 
 ## Deployment
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5b79e3ed-5748-4cbd-9609-a93a4967c79e/deploy-status)](https://app.netlify.com/sites/spectacular-basbousa-817044/deploys)
