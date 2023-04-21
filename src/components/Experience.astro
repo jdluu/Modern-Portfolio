@@ -1,22 +1,42 @@
-<section class="contentSection">
-	<h2 id="experience">Work Experience</h2>
-	<p>
-		temp
-	</p>
-</section>
+---
+
+---
+<h2 id="experience">Work Experience</h2>
+<div id ="ExperienceTimeLine">
+    <article class = "ExperienceItem">
+        <div class = "ExperienceHeading">
+            <h3> CodePath </h3>
+            <h4> Technical Program Manager </h4>
+            <h5> January 2022 - Present </h5>
+        </div>
+
+        <ul class = "ExperienceItemDescription">
+            <li class= "ExperienceItemBullet">Recruited over 80 students to participate in the course through student organization presentations, distributing informatics, and sharing my CodePath experience. </li>
+            <li class= "ExperienceItemBullet">Oversaw all course management logistics for a CodePath.org course site including confirming session dates and times, reviewing student submissions, and coordinating with other program managers. </li>
+            <li class= "ExperienceItemBullet">Collaborated closely with Regional Program Manager and CodePath.org operations team to address student concerns and feedback for improving the student learning experience. </li>
+            <li class= "ExperienceItemBullet">Mentored and supported students by providing technical support during labs and assignments to ensure they were on track with the pace of the course. </li>
+        </ul>
+    </article>
+</div>
+
+
 
 <style>
-	p {
-		text-indent: 2rem;
-		margin-left: 1rem;
-		font-size: 1.5rem;
-		text-align: left;
-		color: var(--font-color);
-	}
+    #ExperienceTimeLine {
+        display: flex;
+        flex-direction: row;
+        margin-left: 1rem;
+    }
 
-	@media screen and (max-width: 480px) {
-		p {
-			font-size: 1rem;
-		}
-	}
+    .ExperienceItem {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+        width: 100%;
+    }
+
+    .ExperienceItemBullet {
+        margin-bottom: 0.5rem;
+    }
 </style>
