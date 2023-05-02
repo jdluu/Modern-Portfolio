@@ -5,6 +5,7 @@ intro:
 pUrl:
 pAlt:
 problem:
+role:
 technologies:
 tools:
 solution:
