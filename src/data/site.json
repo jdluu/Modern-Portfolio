@@ -7,6 +7,7 @@
 	"resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
 	"nav": [
 		{ "link": "../", "name": "Jeffrey Luu" },
+		{ "link": "../about", "name": "About" },
 		{ "link": "../work", "name": "Work" },
 		{ "link": "../blog", "name": "Blog", "target": "_blank" },
 		{ "link": "../contact", "name": "Contact" }
