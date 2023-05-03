@@ -21,14 +21,110 @@
 	#aboutDesc {
 		text-indent: 2rem;
 		margin-left: 1rem;
-		font-size: 1.5rem;
+		font-size: var(--medium2-size);
 		text-align: left;
 		color: var(--font-color);
 	}
 
 	@media screen and (max-width: 480px) {
 		#aboutDesc {
-			font-size: 1rem;
+			font-size: var(--medium1-size)
 		}
+	}
+</style>
+
+
+<section class="contentSection">
+	<h2 id="education">Education</h2>
+	<div id="educationDesc">
+		<!-- Add a graduation date to the right of the h3 tag -->
+		<div id="topLine">
+			<h3 id="universityTitle">University of California, San Diego</h3>
+			<p id="gradDate">June 2023</p>
+		</div>
+		<p id="degree"> B.S. in Human Computer Interaction</p>
+		<p id="minor"> Minor in Computer Science </p>
+		<p id="gpa"> GPA: 3.5 </p>
+		<p id="descTitle"> Relevant Coursework: </p>
+		<div id="coursework">
+			<ul class="classList">
+				<li>CSE 100 Advanced Data Structures</li>
+				<li>CSE 101 Design and Analysis of Algorithms</li>
+				<li>COGS 108 Data Science in Practice</li>
+				<li>CSE 110 Software Engineering</li>
+				<li>CSE 120 Principles of Computer Operating Systems</li>
+				<li>CSE 134b Web Client Languages</li>
+				<li>CSE 135 Web Server Technologies</li>
+				<li>CSE 167 Computer Graphics</li>
+				<li>CSE 170 Interaction Design</li>
+				<li>CSE 191 Think Small and Win Big in Business</li>
+			</ul>
+		</div>
+		<p> For a complete list of all classes I took at UCSD, check my blog out
+			<a href="./blog">here</a>.
+		</p>
+	</div>
+</section>
+
+<style>
+	#topLine {
+		display: flex;
+		flex-direction: row;
+	}
+	#topLine p {
+		margin-left: auto;
+		margin-right: 1rem;
+		font-size: var(--medium2-size);
+	}
+
+	#educationDesc {
+		text-indent: 2rem;
+		margin-left: 1rem;
+		margin-right: 1rem;
+		text-align: left;
+		color: var(--font-color);
+	}
+
+	#universityTitle {
+		font-size: var(--medium3-size);
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	#degree {
+		font-size: var(--medium2-size);
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	#minor {
+		font-size: var(--medium2-size);
+		margin-top: 0;
+		padding-top: 0;
+	}
+
+	#gpa {
+		font-size: var(--medium2-size);
+		margin-top: 0;
+		padding-top: 0;
+	}
+
+	#descTitle {
+		font-size: var(--medium2-size);
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	#coursework {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.classList {
+		list-style-position: inside;
+	}
+
+	.classList li {
+		margin-bottom: 5px;
 	}
 </style>
