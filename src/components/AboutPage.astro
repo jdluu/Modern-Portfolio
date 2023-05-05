@@ -1,23 +1,46 @@
 <section class="contentSection">
 	<h2 id="about">About</h2>
-	<p id="aboutDesc">
-		<strong>Hi, I'm Jeffrey Luu!</strong>
-		I'm currently a 3rd year student studying Human Computer Interaction with a minor
-		in Computer Science at UCSD, set to graduate in June 2023.
-		<br />
-		<br />
-		Ever since I was young, I immersed myself into the world of technology, constantly
-		tinkering with my computer and learning new things. I also found joy in volunteering
-		spending 5 years at the same food bank helping every weekend.
-		<br />
-		<br />
-		Now, I'm working towards bridging the intersection between technology and human
-		interaction, making more functional and accessible web and mobile interfaces
-		for everyone.
-	</p>
+	<div id="aboutWrapper">
+		<p id="aboutDesc">
+			<strong>Hi, I'm Jeffrey Luu!</strong>
+			I'm currently a 3rd year student studying Human Computer Interaction with a minor
+			in Computer Science at UCSD, set to graduate in June 2023.
+			<br />
+			<br />
+			Ever since I was young, I immersed myself into the world of technology, constantly
+			tinkering with my computer and learning new things. I also found joy in volunteering
+			spending 5 years at the same food bank helping every weekend.
+			<br />
+			<br />
+			Now, I'm working towards bridging the intersection between technology and human
+			interaction, making more functional and accessible web and mobile interfaces
+			for everyone.
+		</p>
+		<picture>
+			<source srcset="../images/Placeholder.png" media="(min-width: 480px)">
+			<img src="../images/Placeholder.png" alt="Jeffrey Luu">
+		</picture>
+		<picture>
+			<source srcset="../images/Placeholder.png" media="(min-width: 480px)">
+			<img src="../images/Placeholder.png" alt="Jeffrey Luu">
+		</picture>
+		<picture>
+			<source srcset="../images/Placeholder.png" media="(min-width: 480px)">
+			<img src="../images/Placeholder.png" alt="Jeffrey Luu">
+		</picture>
+	</div>
+
 </section>
 
 <style>
+	#aboutWrapper {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 0;
+		flex-shrink: 0;
+		flex-basis: 50%;
+	}
+
 	#aboutDesc {
 		text-indent: 2rem;
 		margin-left: 1rem;
@@ -60,21 +83,16 @@
 				<li>CSE 191 Think Small and Win Big in Business</li>
 			</ul>
 		</div>
-		<p> For a complete list of all classes I took at UCSD, check my blog out
-			<a href="./blog">here</a>.
+		<p id="advertLink"> For a complete list of classes I took at UCSD, check my blog out
+			<a href="./blog">here</a>!
 		</p>
 	</div>
 </section>
 
 <style>
-	#topLine {
-		display: flex;
-		flex-direction: row;
-	}
-	#topLine p {
-		margin-left: auto;
-		margin-right: 1rem;
-		font-size: var(--medium2-size);
+	#education {
+		margin-bottom: 0;
+		padding-bottom: 0;
 	}
 
 	#educationDesc {
@@ -85,34 +103,43 @@
 		color: var(--font-color);
 	}
 
+	#topLine {
+		display: flex;
+		flex-direction: row;
+	}
+	#topLine p {
+		margin-left: auto;
+		margin-right: 1rem;
+		font-size: var(--medium2-size);
+	}
+
 	#universityTitle {
 		font-size: var(--medium3-size);
-		margin-bottom: 0;
-		padding-bottom: 0;
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.5rem;
 	}
 
 	#degree {
 		font-size: var(--medium2-size);
-		margin-bottom: 0;
-		padding-bottom: 0;
+		margin: 0;
 	}
 
 	#minor {
 		font-size: var(--medium2-size);
-		margin-top: 0;
+		margin: 0 0 1rem;
 		padding-top: 0;
 	}
 
 	#gpa {
 		font-size: var(--medium2-size);
-		margin-top: 0;
+		margin: 0 0 1rem;
 		padding-top: 0;
 	}
 
 	#descTitle {
 		font-size: var(--medium2-size);
-		margin-bottom: 0;
-		padding-bottom: 0;
+		margin: 0;
+		padding: 0;
 	}
 
 	#coursework {
@@ -126,5 +153,11 @@
 
 	.classList li {
 		margin-bottom: 5px;
+	}
+
+	#advertLink {
+		font-size: var(--medium2-size);
+		margin: 0;
+		padding: 0;
 	}
 </style>
