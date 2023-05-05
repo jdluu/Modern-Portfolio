@@ -1,13 +1,12 @@
 <section class="contentSection">
 	<h2 id="home">Home</h2>
-	<div id="homeCols">
 		<div id="homeRows">
 			<figure id="intro">
 				<p id="introDesc">Hi, I'm Jeffrey Luu, a Developer and Designer.</p>
 				<p id="introDesc2">
 					A 3rd year student at UCSD interested in mobile and web development.
 				</p>
-				<section id="resumeButton">
+				<div id="resumeButton">
 					<a
 						id="resumeLink"
 						href="https://drive.google.com/file/d/1eXwe5AGbLlQ61-fzjME4_vMcAU8m390R/view?usp=sharing"
@@ -16,7 +15,7 @@
 					>
 						Download Resume
 					</a>
-				</section>
+				</div>
 			</figure>
 			<figure id="me">
 				<picture id="headshot">
@@ -45,26 +44,12 @@
 				</figcaption>
 			</figure>
 		</div>
-	</div>
 </section>
 
 <style>
 	#home {
 		position: absolute;
 		left: -9999px;
-	}
-
-	#homeCols {
-		justify-content: center;
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
-		border: 1px solid red;
-	}
-
-	@media screen and (max-width: 1024px) {
-		#homeCols {
-			margin-left: 2rem;
-		}
 	}
 
 	#homeRows {
