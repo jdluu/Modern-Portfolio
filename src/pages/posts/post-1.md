@@ -1,11 +1,10 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'My First Blog Post'
-pubDate: 2022-07-01
-description: 'This is the first post of my new Astro blog.'
-author: 'Astro Learner'
+title: 'Year 1 - Zoom University'
+pubDate: 2023-05-06
+description: 'This is a post about my first year at UCSD.'
 image:
     url: 'https://astro.build/assets/blog/astro-1-release-update/cover.jpeg' 
     alt: 'The Astro logo with the word One.'
-tags: ["astro", "blogging", "learning in public"]
+tags: ["first year", "college", "UCSD", "zoom", "cognitive science", "computer science"]
 ---
