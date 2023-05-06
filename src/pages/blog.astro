@@ -2,11 +2,13 @@
 import DefaultLayout from "../layouts/DefaultLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 const allPosts = await Astro.glob("../pages/posts/*.md");
-const pageTitle = "My Astro Learning Blog";
+const pageTitle = "My Blog";
 ---
 
 <DefaultLayout pageTitle={pageTitle}>
-	<p>This is where I will post about my journey learning Astro.</p>
+	<h2> A collection of posts written about school and tech!</h2>
+	<p> In progress! Check back later! </p>
+	<!--
 	<ul>
 		{
 			allPosts.map((post) => (
@@ -14,4 +16,5 @@ const pageTitle = "My Astro Learning Blog";
 			))
 		}
 	</ul>
+	-->
 </DefaultLayout>
