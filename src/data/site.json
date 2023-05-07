@@ -9,7 +9,7 @@
 		{ "link": "../", "name": "Jeffrey Luu" },
 		{ "link": "../about", "name": "About" },
 		{ "link": "../work", "name": "Work" },
-		{ "link": "../blog", "name": "Blog", "target": "_blank" },
+		{ "link": "../blog", "name": "Blog" },
 		{ "link": "../contact", "name": "Contact" }
 	],
 	"experience": [
