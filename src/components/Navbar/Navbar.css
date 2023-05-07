@@ -16,7 +16,7 @@
 #topNavList li:first-child {
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 2.5rem;
+	font-size: var(--large1-size);
 	font-family: "Pacifico", Fallback, cursive;
 	color: var(--secondary-color);
 	margin-right: auto;
@@ -28,7 +28,7 @@
 	background-color: var(--button1-color);
 	border: 1px solid var(--font-color);
 	font-weight: bold;
-	font-size: 1.25rem;
+	font-size: var(--medium2-size);
 	padding: 10px 15px;
 	border-radius: 75px;
 }
