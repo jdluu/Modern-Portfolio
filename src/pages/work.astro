@@ -1,12 +1,12 @@
 ---
 import DefaultLayout from "../layouts/DefaultLayout.astro";
 import ExperiencePage from "../components/ExperiencePage.astro";
-import ProjectsPage from "../components/ProjectsPage.astro";
+import ProjectCards from "../components/ProjectCards.astro";
 
 const { pageTitle } = Astro.props;
 ---
 
 <DefaultLayout pageTitle={pageTitle}>
     <ExperiencePage />
-    <ProjectsPage />
+    <ProjectCards />
 </DefaultLayout>
