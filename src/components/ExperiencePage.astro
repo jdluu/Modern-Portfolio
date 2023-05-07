@@ -5,9 +5,9 @@
 <div id ="ExperienceTimeLine">
     <article class = "ExperienceItem">
         <div class = "ExperienceHeading">
-            <h3> Technical Program Manager Intern </h3>
-            <h4> CodePath </h4>
-            <h5> January 2022 - Present </h5>
+            <h3 id="role"> Technical Program Manager Intern </h3>
+            <h4 id="company"> CodePath </h4>
+            <h5 id="dates"> January 2022 - June 2022 </h5>
         </div>
 
         <ul class = "ExperienceItemDescription">
@@ -22,6 +22,14 @@
 
 
 <style>
+    #experience {
+        font-size: var(--medium3-size);
+    }
+
+    #role {
+        font-size: var(--medium2-size);
+    }
+
     #ExperienceTimeLine {
         display: flex;
         flex-direction: row;
@@ -33,7 +41,7 @@
         flex-direction: column;
         margin-bottom: 1rem;
         margin-right: 1rem;
-        width: 100%;
+        width: 50%;
     }
 
     .ExperienceItemBullet {
