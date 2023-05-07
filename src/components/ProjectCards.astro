@@ -1,0 +1,18 @@
+---
+import ProjectCard from "../components/ProjectCard.astro";
+const allProjects = await Astro.glob("../pages/projects/*.md");
+const pageTitle = "My Projects";
+---
+<section class="contentSection">
+    <h2 id="projects">Projects</h2>
+    <p id="workDesc">
+        <strong>Check out some of my most recent projects!</strong>
+    </p>
+    <ul>
+        {
+            allProjects.map((project) => (
+                    <ProjectCard url={project.url} title={project.card.title} />
+            ))
+        }
+    </ul>
+</section>
