@@ -11,8 +11,16 @@ const pageTitle = "My Projects";
     <ul>
         {
             allProjects.map((project) => (
-                    <ProjectCard url={project.url} title={project.card.title} />
+                    <ProjectCard url={project.url}/>
             ))
         }
     </ul>
 </section>
+
+<style>
+    #workDesc {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+</style>
