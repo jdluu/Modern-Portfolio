@@ -8,7 +8,7 @@ This portfolio was built off of the content from my original portfolio here: <ht
 
 ## 🚀 Project Structure
 
-Inside of my Astro project, you'll see the following folders and files:
+Inside my Astro project, you'll see the following folders and files:
 
 ```
 /
