@@ -6,11 +6,11 @@
 	"profile_pic": "../public/images/profile.webp",
 	"resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
 	"nav": [
-		{ "link": "../", "name": "Jeffrey Luu" },
-		{ "link": "../about", "name": "About" },
-		{ "link": "../work", "name": "Work" },
-		{ "link": "../blog", "name": "Blog" },
-		{ "link": "../contact", "name": "Contact" }
+		{ "link": "/", "name": "Jeffrey Luu" },
+		{ "link": "/about", "name": "About" },
+		{ "link": "/work", "name": "Work" },
+		{ "link": "/blog", "name": "Blog" },
+		{ "link": "/contact", "name": "Contact" }
 	],
 	"experience": [
 		{
