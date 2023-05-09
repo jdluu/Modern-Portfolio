@@ -34,7 +34,7 @@ const Navbar = () => {
 						<input type="checkbox" />
 						<span className="slider round"></span>
 					</label>
-					<script type="text/javascript" src="theme.js"></script>
+					<script type="text/javascript" src="/scripts/theme.js"></script>
 				</li>
 			</ul>
 		</header>
