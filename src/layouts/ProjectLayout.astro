@@ -1,44 +1,13 @@
 ---
 import DefaultLayout from "./DefaultLayout.astro";
-const { project } = Astro.props;
+const { frontmatter } = Astro.props;
 ---
 
-<DefaultLayout pageTitle={project.title}>
-    <h1>{project.title}</h1>
-    <h2>{project.intro}</h2>
-    <picture>
-        <source srcset={project.pUrl} type="image/webp" />
-        <source srcset={project.pUrl} type="image/jpeg" />
-        <img src={project.pUrl} alt={project.pAlt} />
-    </picture>
-    <div class = "content">
-        <section id ="problemSection">
-            <h3>Problem</h3>
-            <p>{project.problem}</p>
-        </section>
-        <section id ="toolSection">
-            <h3> Role</h3>
-            <p>{project.role}</p>
-            <h3>Technologies</h3>
-            <p>{project.technologies}</p>
-            <h3>Tools</h3>
-            <p>{project.tools}</p>
-        </section>
-        <section id ="solutionSection">
-            <h3>Solution</h3>
-            <p>{project.solution}</p>
-            <h3>Wireframes</h3>
-            <picture>
-                <source srcset={project.wfurl} type="image/webp" />
-                <source srcset={project.wfurl} type="image/jpeg" />
-                <img src={project.wfurl} alt={project.wfalt} />
-            </picture>
-        </section>
-        <section id ="reflectionSection">
-            <h3>{project.process}</h3>
-            <p>{project.description}</p>
-            <h3>Reflection</h3>
-            <p>{project.reflection}</p>
-        </section>
-    </div>
+<DefaultLayout pageTitle={frontmatter.title}>
+    <h2>{frontmatter.title}</h2>
+    <p>Written on {frontmatter.pubDate.slice(0, 10)}</p>
+    <article>
+        <p><strong>{frontmatter.intro}</strong></p>
+    </article>
+    <slot />
 </DefaultLayout>

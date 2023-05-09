@@ -1,5 +1,6 @@
 ---
 import ProjectCard from "../components/ProjectCard.astro";
+import ProjectCard from "./ProjectCard.astro";
 const allProjects = await Astro.glob("../pages/projects/*.md");
 const pageTitle = "My Projects";
 ---
@@ -10,8 +11,8 @@ const pageTitle = "My Projects";
     </p>
     <ul>
         {
-            allProjects.map((project) => (
-                    <ProjectCard url={project.url}/>
+            allProjects.map((post) => (
+                    <ProjectCard url={post.url} title={post.frontmatter.title} />
             ))
         }
     </ul>
