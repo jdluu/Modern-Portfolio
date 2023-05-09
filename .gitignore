@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # PHPStorm
 .idea/
+
+# Headers
+_headers
