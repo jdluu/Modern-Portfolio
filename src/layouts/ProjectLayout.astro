@@ -5,9 +5,51 @@ const { frontmatter } = Astro.props;
 
 <DefaultLayout pageTitle={frontmatter.title}>
     <h2>{frontmatter.title}</h2>
-    <p>Written on {frontmatter.pubDate.slice(0, 10)}</p>
-    <article>
-        <p><strong>{frontmatter.intro}</strong></p>
-    </article>
+    <p>Worked on from {frontmatter.date}</p>
+    <p>Role:{frontmatter.projectRole}</p>
+    <h3><strong>{frontmatter.intro}</strong></h3>
+    <picture>
+        <source srcset="{frontmatter.image}" type="image/png" />
+        <img src="{frontmatter.image}" alt="{Getting around the San Diego Zoo}" />
+    </picture>
+    <div class="projectContent">
+        <section>
+            <h4> Problem </h4>
+            <p>{frontmatter.problem}</p>
+        </section>
+        <section>
+            <h4> Solution </h4>
+            <p>{frontmatter.solution}</p>
+        </section>
+        <section>
+            <h4> Result </h4>
+            <p>{frontmatter.projectResults}</p>
+        </section>
+        <section>
+            <h4> Technologies </h4>
+            <p>{frontmatter.tech}</p>
+            <h4> Tools </h4>
+            <p>{frontmatter.tools}</p>
+        </section>
+
+
+        <section>
+            <h4> Software Development Process </h4>
+            <p>{frontmatter.process}</p>
+        </section>
+        <section>
+            <h4> Reflection </h4>
+            <p>{frontmatter.reflection}</p>
+        </section>
+    </div>
     <slot />
 </DefaultLayout>
+
+<style>
+    .projectContent {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: minmax(100px, auto);
+        gap: 20px;
+    }
+</style>
