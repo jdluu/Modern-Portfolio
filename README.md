@@ -2,13 +2,13 @@
 
 ## Design Philosophy
 
-For this portfolio, I focused more on making resuable components, making my website modular and easy to update. I am using Astro and minimizing Javascript to maintain a balance between interactivity and speed.
+For this portfolio, I focused more on making reusable components, making my website modular and easy to update. I am using Astro and minimizing Javascript to maintain a balance between interactivity and speed.
 
 This portfolio was built off of the content from my original portfolio here: <https://github.com/jdluu/portfolio>
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+Inside of my Astro project, you'll see the following folders and files:
 
 ```
 /
