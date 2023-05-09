@@ -3,8 +3,8 @@
 	"description": "Jeffrey Luu - Portfolio",
 	"url": "https://jeffreyluu.com",
 	"author": "Jeffrey Luu",
-	"profile_pic": "../public/images/profile.webp",
-	"resume": "../public/assets/Luu_Jeffrey_Resume.pdf",
+	"profile_pic": "/public/images/profile.webp",
+	"resume": "/public/assets/Luu_Jeffrey_Resume.pdf",
 	"nav": [
 		{ "link": "/", "name": "Jeffrey Luu" },
 		{ "link": "/about", "name": "About" },
