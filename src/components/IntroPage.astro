@@ -19,23 +19,25 @@
 			</figure>
 			<figure id="me">
 				<picture id="headshot">
-					<source srcset="../images/profile.webp" type="image/webp" />
+					<source srcset="/images/profile.webp" type="image/webp" />
 					<img
 						src="/images/profile.webp"
-						width="216"
-						height="453"
+						width=246
+						height=520
 						alt="A headshot of me, a 20 year old Vietnamese male!"
 					/>
 				</picture>
-				<figcaption class="imgDesc">A picture of me!</figcaption>
+				<figcaption class="imgDesc">
+					A picture of me!
+				</figcaption>
 			</figure>
 			<figure id="fractal">
 				<picture id="fractalImg">
-					<source srcset="../images/fractal.jpg" type="image/jpg" />
+					<source srcset="/images/fractal.jpg" type="image/jpg" />
 					<img
 						src="/images/fractal.jpg"
-						width="300"
-						height="300"
+						width="400"
+						height="400"
 						alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"
 					/>
 				</picture>
@@ -76,8 +78,7 @@
 	}
 
 	#intro {
-		margin-bottom: 6rem;
-		margin-right: 2rem;
+		margin: 0 1rem 0 0;
 	}
 
 	@media screen and (max-width: 1024px) {
@@ -93,7 +94,7 @@
 	}
 
 	#introDesc {
-		font-size: 2.5rem;
+		font-size: var(--large1-size);
 		font-weight: bold;
 		text-align: left;
 		color: var(--font-color);
@@ -101,14 +102,14 @@
 
 	@media screen and (max-width: 768px) {
 		#introDesc {
-			font-size: 2rem;
+			font-size: var(--medium3-size);
 			text-align: center;
 		}
 	}
 
 	@media screen and (max-width: 480px) {
 		#introDesc {
-			font-size: 1.5rem;
+			font-size: var(--medium2-size);
 			text-align: center;
 		}
 	}
@@ -117,14 +118,14 @@
 		padding-top: 0.5rem;
 		padding-bottom: 0.5rem;
 		padding-left: 2rem;
-		font-size: 1.25rem;
+		font-size: var(--medium2-size);
 		font-family: "Courier New", Courier, monospace;
 		color: var(--font-color);
 	}
 
 	@media screen and (max-width: 768px) {
 		#introDesc2 {
-			font-size: 0.9rem;
+			font-size: var(--medium1-size);
 			text-align: center;
 		}
 	}
@@ -139,11 +140,8 @@
 		width: -moz-fit-content;
 		width: fit-content;
 		margin: auto;
-		padding-top: 1rem;
-		padding-bottom: 1rem;
-		padding-left: 2rem;
-		padding-right: 2rem;
-		font-size: 1rem;
+		padding: 1rem 2rem 1rem 2rem;
+		font-size: var(--medium1-size);
 		border-radius: 6px;
 		border: 1px solid black;
 		background-image: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
@@ -159,16 +157,15 @@
 	}
 
 	#me {
+		margin: 0 1rem 0 0;
 		height: -moz-max-content;
 		height: max-content;
-		margin-right: 1rem;
 	}
 
 	#fractal {
-		margin: 0 auto;
+		margin: 0;
 		height: -moz-max-content;
 		height: max-content;
-		width: 20rem;
 	}
 
 	@media screen and (max-width: 1024px) {
@@ -199,7 +196,6 @@
 	.imgDesc {
 		font-size: 1.2rem;
 		text-align: center;
-		padding-left: 1rem;
 		font-family: "Courier New", Courier, monospace;
 		color: var(--font-color);
 	}
