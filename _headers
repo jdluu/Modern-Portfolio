@@ -1,1 +1,1 @@
-*.js  application/javascript
+Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com
