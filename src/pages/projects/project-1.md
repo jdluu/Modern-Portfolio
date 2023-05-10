@@ -1,13 +1,13 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
 title: "Zooseeker"
-date: "March 2022-June 2022"
+date: "March 2022-May 2022"
 projectRole: "Project Manager, Lead QA Tester, UI Designer"
 intro: "An android app to plan a trip to the San Diego Zoo, optimizing routes for minimal walking to desired exhibits."
 image: 
   url: 'https://github.com/jdluu/ZooSeeker/blob/main/zooseekerwf.png?raw=true'
   alt: "Zooseeker UI Flow Chart" 
-problem: "The San Diego Zoo\"s mobile application designed to aid visitors in navigating the zoo has been reported as cumbersome and challenging to use by users. Despite its existence, visitors have experienced difficulty following the directions provided by the app, resulting in frustration and confusion. As a result, some visitors have abandoned the app altogether and resorted to using traditional paper maps. This situation highlights the need for an improved navigation solution that is user-friendly, easy to follow, and enhances the overall visitor experience at the zoo."
+problem: "The San Diego Zoo\'s mobile application designed to aid visitors in navigating the zoo has been reported as cumbersome and challenging to use by users. Despite its existence, visitors have experienced difficulty following the directions provided by the app, resulting in frustration and confusion. As a result, some visitors have abandoned the app altogether and resorted to using traditional paper maps. This situation highlights the need for an improved navigation solution that is user-friendly, easy to follow, and enhances the overall visitor experience at the zoo."
 solution: "Our solution is a comprehensive and user-friendly mobile application that allows visitors to efficiently plan and navigate their visit to the zoo. The application offers various features to enhance the visitor experience, such as a search function that enables users to find exhibits quickly and easily, along with the option to filter exhibits by category. Additionally, visitors can create and manage their own exhibit plan, including the ability to mark exhibits as visited and view the total number of exhibits in their plan.
   To help visitors navigate the zoo effectively, the application provides directions for the shortest path to follow based on the exhibits in their plan. Visitors can advance forward or go backward in their plan, as well as adjust it if necessary. The application also offers the option to toggle between detailed and simple directions for each exhibit and provides the ability to redirect if a visitor deviates from their plan or wishes to skip an exhibit altogether.
 Furthermore, the application offers the ability to preserve or reset the plan, and visitors can view a summary of their route plan at any time. With this application, visitors can optimize their time at the zoo, reduce wait times, and enhance their overall experience."
