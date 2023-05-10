@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
-title:
+title: BlackJack
 date:
 projectRole:
 intro:
