@@ -10,8 +10,10 @@ image:
 problem:
 solution:
 projectResults:
+techTitle: "Technologies"
 tech:
 tools:
+processTitle: "Software Development Process"
 process:
 reflection: 
 ---
