@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://d33wubrfki0l68.cloudfront.net;
+Content-Security-Policy: default-src 'self' https://d33wubrfki0l68.cloudfront.net; img-src 'self' https://d33wubrfki0l68.cloudfront.net; style-src 'self' https://d33wubrfki0l68.cloudfront.net; script-src 'self' https://d33wubrfki0l68.cloudfront.net;
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   X-Frame-Options: SAMEORIGIN
