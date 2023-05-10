@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
-title:
+title: Placeholder
 date:
 projectRole:
 intro:

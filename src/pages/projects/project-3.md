@@ -1,8 +1,8 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
-title:
-date:
-projectRole:
+title: UrBenefit
+date: "March 2022-May 2022"
+projectRole: UX Designer/Researcher
 intro:
 image:
   url:
@@ -11,7 +11,7 @@ problem:
 solution:
 projectResults:
 tech:
-tools:
+tools: "Figma"
 process:
 reflection: 
 ---
