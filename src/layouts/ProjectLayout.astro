@@ -26,15 +26,13 @@ const { frontmatter } = Astro.props;
             <p>{frontmatter.projectResults}</p>
         </section>
         <section>
-            <h4> Technologies </h4>
+            <h4>{frontmatter.techTitle}</h4>
             <p>{frontmatter.tech}</p>
             <h4> Tools </h4>
             <p>{frontmatter.tools}</p>
         </section>
-
-
         <section>
-            <h4> Software Development Process </h4>
+            <h4>{frontmatter.processTitle}</h4>
             <p>{frontmatter.process}</p>
         </section>
         <section>

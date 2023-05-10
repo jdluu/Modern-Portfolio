@@ -10,8 +10,10 @@ image:
 problem:
 solution:
 projectResults:
+techTitle: "Technologies"
 tech: "Python, Pandas, Numpy, Matplotlib, Seaborn"
 tools: "Jupyter Notebook, Github"
+processTitle: "Data Science Process"
 process:
 reflection: 
 ---
