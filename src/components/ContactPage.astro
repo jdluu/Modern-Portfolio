@@ -5,7 +5,9 @@
 		id="contactForm"
 		method="POST"
 		data-netlify="true"
+		data-netlify-honeypot="bot-field"
 	>
+		<input type="hidden" name="form-name" value="contactForm" />
 		<span id="formTitle">Get in Touch!</span>
 
 		<label for="name">Name:</label>
@@ -15,6 +17,7 @@
 			name="name"
 			required
 			placeholder="Your name.."
+			minlength="2"
 		/>
 
 		<label for="email">Email:</label>
