@@ -1,7 +1,7 @@
-<section class="contentSection">
+<section class="content-section">
 	<h2 id="about">About</h2>
-	<div id="aboutWrapper">
-		<p id="aboutDesc">
+	<div id="about-wrapper">
+		<p id="about-desc">
 			<strong>Hi, I'm Jeffrey Luu!</strong>
 			I'm currently a 3rd year student studying Human Computer Interaction with a minor
 			in Computer Science at UCSD, set to graduate in June 2023.
@@ -29,11 +29,9 @@
 			<img src="/images/Placeholder.png" alt="Jeffrey Luu">
 		</picture>
 	</div>
-
 </section>
-
 <style>
-	#aboutWrapper {
+	#about-wrapper {
 		display: flex;
 		flex-direction: row;
 		flex-grow: 0;
@@ -41,7 +39,7 @@
 		flex-basis: 50%;
 	}
 
-	#aboutDesc {
+	#about-desc {
 		text-indent: 2rem;
 		margin-left: 1rem;
 		font-size: var(--medium2-size);
@@ -50,27 +48,27 @@
 	}
 
 	@media screen and (max-width: 480px) {
-		#aboutDesc {
+		#about-desc {
 			font-size: var(--medium1-size)
 		}
 	}
 </style>
 
 
-<section class="contentSection">
+<section class="content-section">
 	<h2 id="education">Education</h2>
-	<div id="educationDesc">
+	<div id="education-desc">
 		<!-- Add a graduation date to the right of the h3 tag -->
-		<div id="topLine">
-			<h3 id="universityTitle">University of California, San Diego</h3>
-			<p id="gradDate">June 2023</p>
+		<div id="top-line">
+			<h3 id="university-title">University of California, San Diego</h3>
+			<p id="grad-date">June 2023</p>
 		</div>
 		<p id="degree"> B.S. in Human Computer Interaction</p>
 		<p id="minor"> Minor in Computer Science </p>
 		<p id="gpa"> GPA: 3.5 </p>
-		<p id="descTitle"> Relevant Coursework: </p>
+		<p id="desc-title"> Relevant Coursework: </p>
 		<div id="coursework">
-			<ul class="classList">
+			<ul class="class-list">
 				<li>COGS 108 Data Science in Practice</li>
 				<li>COGS 123 Social Computing</li>
 				<li>COGS 187a Usability & Information Architecture</li>
@@ -83,19 +81,18 @@
 				<li>CSE 170 Interaction Design</li>
 			</ul>
 		</div>
-		<p id="advertLink"> For a complete list of classes I took at UCSD, check my blog out
+		<p id="advert-link"> For a complete list of classes I took at UCSD, check my blog out
 			<a href="/blog">here</a>!
 		</p>
 	</div>
 </section>
-
 <style>
 	#education {
 		margin-bottom: 0;
 		padding-bottom: 0;
 	}
 
-	#educationDesc {
+	#education-desc {
 		text-indent: 2rem;
 		margin-left: 1rem;
 		margin-right: 1rem;
@@ -103,17 +100,17 @@
 		color: var(--font-color);
 	}
 
-	#topLine {
+	#top-line {
 		display: flex;
 		flex-direction: row;
 	}
-	#topLine p {
+	#top-line p {
 		margin-left: auto;
 		margin-right: 1rem;
 		font-size: var(--medium2-size);
 	}
 
-	#universityTitle {
+	#university-title {
 		font-size: var(--medium3-size);
 		margin-bottom: 0.5rem;
 		padding-bottom: 0.5rem;
@@ -136,7 +133,7 @@
 		padding-top: 0;
 	}
 
-	#descTitle {
+	#desc-title {
 		font-size: var(--medium2-size);
 		margin: 0;
 		padding: 0;
@@ -147,15 +144,15 @@
 		flex-direction: row;
 	}
 
-	.classList {
+	.class-list {
 		list-style-position: inside;
 	}
 
-	.classList li {
+	.class-list li {
 		margin-bottom: 5px;
 	}
 
-	#advertLink {
+	#advert-link {
 		font-size: var(--medium2-size);
 		margin: 0;
 		padding: 0;
