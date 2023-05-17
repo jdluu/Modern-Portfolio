@@ -2,22 +2,23 @@
 
 ---
 <h2 id="experience">Work Experience</h2>
-<div id ="ExperienceTimeLine">
-    <article class = "ExperienceItem">
-        <div class = "ExperienceHeading">
-            <h3 id="role"> Role: Technical Program Manager Intern </h3>
-            <h3 id="company"> Company: CodePath </h3>
-            <h3 id="dates"> Duration: January 2022 - June 2022 </h3>
+<div class="experience-timeline">
+    <article class="experience-item">
+        <div class="experience-heading">
+            <h3 class="role">Technical Program Manager Intern</h3>
+            <h3 class="company">CodePath</h3>
+            <h3 class="dates">January 2022 - June 2022</h3>
         </div>
 
-        <ul class = "ExperienceItemDescription">
-            <li class= "ExperienceItemBullet">Enrolled 80+ students via student org presentations, info distribution, and personal CodePath experience.</li>
-            <li class= "ExperienceItemBullet">Managed course logistics, including scheduling sessions, reviewing submissions, and collaborating with managers.</li>
-            <li class= "ExperienceItemBullet">Created Kotlin-based instructional content for Android app fundamentals and provided technical support to students.</li>
-            <li class= "ExperienceItemBullet">Worked closely with Regional Program Manager and CodePath.org team to address student feedback and enhance learning experience.</li>
+        <ul class="experience-item-description">
+            <li class="experience-item-bullet">Enrolled 80+ students via student org presentations, info distribution, and personal CodePath experience.</li>
+            <li class="experience-item-bullet">Managed course logistics, including scheduling sessions, reviewing submissions, and collaborating with managers.</li>
+            <li class="experience-item-bullet">Created Kotlin-based instructional content for Android app fundamentals and provided technical support to students.</li>
+            <li class="experience-item-bullet">Worked closely with Regional Program Manager and CodePath.org team to address student feedback and enhance learning experience.</li>
         </ul>
     </article>
 </div>
+
 
 
 
@@ -26,25 +27,22 @@
         font-size: var(--medium3-size);
     }
 
-    #role {
+    .role {
         font-size: var(--medium2-size);
     }
 
-    #company {
+    .company,
+    .dates {
         font-size: var(--medium2-size);
     }
 
-    #dates {
-        font-size: var(--medium2-size);
-    }
-
-    #ExperienceTimeLine {
+    .experience-timeline {
         display: flex;
         flex-direction: row;
         margin-left: 1rem;
     }
 
-    .ExperienceItem {
+    .experience-item {
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
@@ -52,8 +50,9 @@
         width: 50%;
     }
 
-    .ExperienceItemBullet {
+    .experience-item-bullet {
         margin-bottom: 0.5rem;
         font-size: var(--medium1-size);
     }
+
 </style>
