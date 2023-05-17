@@ -1,15 +1,14 @@
-<section class="contentSection">
+<section class="content-section">
 	<h2 id="contact">Contact</h2>
 	<form
-		name="contactForm"
-		id="contactForm"
+		name="contact-form"
+		id="contact-form"
 		method="POST"
 		data-netlify="true"
 		data-netlify-honeypot="bot-field"
 	>
-		<input type="hidden" name="form-name" value="contactForm" />
-		<span id="formTitle">Get in Touch!</span>
-
+		<input type="hidden" name="form-name" value="contact-form" />
+		<span id="form-title">Get in Touch!</span>
 		<label for="name">Name:</label>
 		<input
 			type="text"
@@ -50,7 +49,7 @@
 </section>
 
 <style>
-	#contactForm {
+	#contact-form {
 		text-align: center;
 		background: #fff;
 		color: black;
@@ -65,33 +64,33 @@
 	}
 
 	@media screen and (max-width: 480px) {
-		#contactForm {
+		#contact-form {
 			width: 75%;
 		}
 	}
 
-	#formTitle {
+	#form-title {
 		font-size: 1.5rem;
 		font-weight: bold;
 		text-align: center;
 	}
-	#contactForm label {
+	#contact-form label {
 		display: block;
 		margin: 1rem;
 		text-align: left;
 	}
-	#contactForm input {
+	#contact-form input {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
 		width: 25rem;
 	}
-	#contactForm input:hover {
+	#contact-form input:hover {
 		border-bottom: 0.3125rem solid #0e3721;
 		height: 2rem;
 		transition: ease 0.5s;
 	}
-	#contactForm textarea {
+	#contact-form textarea {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
@@ -100,15 +99,15 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		#contactForm input {
+		#contact-form input {
 			width: 85%;
 		}
-		#contactForm textarea {
+		#contact-form textarea {
 			width: 85%;
 		}
 	}
 
-	#contactForm button {
+	#contact-form button {
 		min-width: 12rem;
 		height: 3rem;
 		border-radius: 24px;
@@ -132,13 +131,12 @@
 		transition: all 0.4s;
 		cursor: pointer;
 	}
-
-	#contactForm button:hover {
+	#contact-form button:hover {
 		transform: translateY(-3px);
 		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 	}
 
-	#contactForm button:active {
+	#contact-form button:active {
 		transform: translateY(-1px);
 		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	}

@@ -4,9 +4,9 @@ import ProjectCard from "./ProjectCard.astro";
 const allProjects = await Astro.glob("../pages/projects/*.md");
 const pageTitle = "My Projects";
 ---
-<section class="contentSection">
+<section class="content-section">
     <h2 id="projects">Projects</h2>
-    <p id="workDesc">
+    <p id="work-desc">
         <strong>Check out some of my most recent projects!</strong>
     </p>
     <ul>
@@ -19,9 +19,10 @@ const pageTitle = "My Projects";
 </section>
 
 <style>
-    #workDesc {
+    #work-desc {
         font-size: 1.5rem;
         margin-bottom: 1rem;
         text-align: center;
     }
 </style>
+
