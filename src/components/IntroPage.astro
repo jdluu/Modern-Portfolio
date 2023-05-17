@@ -1,61 +1,61 @@
-<section class="contentSection">
+<section class="content-section">
 	<h2 id="home">Home</h2>
-		<div id="homeRows">
-			<figure id="intro">
-				<p id="introDesc">Hi, I'm Jeffrey Luu, a Developer and Designer.</p>
-				<p id="introDesc2">
-					A 3rd year student at UCSD interested in mobile and web development.
-				</p>
-				<div id="resumeButton">
-					<a
-						id="resumeLink"
-						href="https://drive.google.com/file/d/1EoeGMWkAYc0bkgqGaV0kvbjnHjaKlKzW/view?usp=sharing"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Download Resume
-					</a>
-				</div>
-			</figure>
-			<figure id="me">
-				<picture id="headshot">
-					<source srcset="/images/profile.webp" type="image/webp" />
-					<img
-						src="/images/profile.webp"
-						width=246
-						height=520
-						alt="A headshot of me, a 20 year old Vietnamese male!"
-					/>
-				</picture>
-				<figcaption class="imgDesc">
-					A picture of me!
-				</figcaption>
-			</figure>
-			<figure id="fractal">
-				<picture id="fractalImg">
-					<source srcset="/images/fractal.jpg" type="image/jpg" />
-					<img
-						src="/images/fractal.jpg"
-						width="400"
-						height="400"
-						alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"
-					/>
-				</picture>
-				<figcaption class="imgDesc">
-					Mandelbrot fractal made in computer graphics!
-				</figcaption>
-			</figure>
-		</div>
+	<div id="home-rows">
+		<figure id="intro">
+			<p id="intro-desc">Hi, I'm Jeffrey Luu, a Developer and Designer.</p>
+			<p id="intro-desc2">
+				A 3rd year student at UCSD interested in mobile and web development.
+			</p>
+			<div id="resume-button">
+				<a
+					id="resume-link"
+					href="https://drive.google.com/file/d/1EoeGMWkAYc0bkgqGaV0kvbjnHjaKlKzW/view?usp=sharing"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Download Resume
+				</a>
+			</div>
+		</figure>
+		<figure id="me">
+			<picture id="headshot">
+				<source srcset="/images/profile.webp" type="image/webp" />
+				<img
+					src="/images/profile.webp"
+					width=246
+					height=520
+					alt="A headshot of me, a 20 year old Vietnamese male!"
+				/>
+			</picture>
+			<figcaption class="img-desc">
+				A picture of me!
+			</figcaption>
+		</figure>
+		<figure id="fractal">
+			<picture id="fractal-img">
+				<source srcset="/images/fractal.jpg" type="image/jpg" />
+				<img
+					src="/images/fractal.jpg"
+					width="400"
+					height="400"
+					alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"
+				/>
+			</picture>
+			<figcaption class="img-desc">
+				Mandelbrot fractal made in computer graphics!
+			</figcaption>
+		</figure>
+	</div>
 </section>
 
-<!--suppress CssInvalidPropertyValue -->
+<!--suppress css-invalid-property-value -->
 <style>
 	#home {
 		position: absolute;
 		left: -9999px;
 	}
 
-	#homeRows {
+	#home-rows {
 		display: flex;
 		flex-direction: row;
 		margin: 0 auto;
@@ -63,14 +63,14 @@
 	}
 
 	@media screen and (max-width: 1024px) {
-		#homeRows {
+		#home-rows {
 			max-width: 50rem;
 			margin-left: 3rem;
 		}
 	}
 
 	@media screen and (max-width: 768px) {
-		#homeRows {
+		#home-rows {
 			max-width: 40rem;
 			flex-direction: column;
 			justify-content: center;
@@ -80,18 +80,17 @@
 	}
 
 	@media screen and (max-width: 480px) {
-		#homeRows {
+		#home-rows {
 			max-width: 30rem;
 			margin: auto;
 		}
 	}
 
-	/*noinspection ALL*/
+	/*noinspection all*/
 	#intro {
 		margin-right: 1rem;
 		height: -moz-max-content;
 		height: max-content;
-
 	}
 
 	@media screen and (max-width: 1024px) {
@@ -107,55 +106,55 @@
 		}
 	}
 
-	#introDesc {
+	#intro-desc {
 		font-size: var(--large1-size);
 		font-weight: bold;
 		text-align: left;
 		color: var(--font-color);
 	}
-
 	@media screen and (max-width: 1024px) {
-		#introDesc {
+		#intro-desc {
 			font-size: var(--medium3-size);
 			text-align: center;
 		}
 	}
 
 	@media screen and (max-width: 768px) {
-		#introDesc {
+		#intro-desc {
 			font-size: var(--medium2-size);
 			text-align: center;
 		}
 	}
 
 	@media screen and (max-width: 480px) {
-		#introDesc {
+		#intro-desc {
 			font-size: var(--medium1-size);
 			text-align: center;
 		}
 	}
 
-	#introDesc2 {
+	#intro-desc2 {
 		font-size: var(--medium2-size);
 		font-family: "Courier New", Courier, monospace;
 		color: var(--font-color);
 	}
 
 	@media screen and (max-width: 1024px) {
-		#introDesc2 {
+		#intro-desc2 {
 			font-size: var(--medium1-size);
 			text-align: center;
 		}
 	}
 
 	@media screen and (max-width: 480px) {
-		#introDesc2 {
+		#intro-desc2 {
 			font-size: var(--small3-size);
 		}
 	}
 
+
 	/*noinspection CssInvalidPropertyValue*/
-	#resumeButton {
+	#resume-button {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -173,11 +172,11 @@
 		background-image: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
 	}
 
-	#resumeButton:hover {
+	#resume-button:hover {
 		background-image: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
 	}
 
-	#resumeLink {
+	#resume-link {
 		color: #fff;
 		text-decoration: none;
 	}
@@ -208,20 +207,20 @@
 		}
 	}
 
-	#fractalImg {
+	#fractal-img {
 		justify-content: center;
 		align-items: center;
 	}
 
 	@media screen and (max-width: 768px) {
-		#fractalImg img {
+		#fractal-img img {
 			width: 90%;
 			height: 90%;
 			margin-left: 0;
 		}
 	}
 
-	.imgDesc {
+	.img-desc {
 		font-size: 1.2rem;
 		text-align: center;
 		font-family: "Courier New", Courier, monospace;
@@ -229,15 +228,15 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.imgDesc {
+		.img-desc {
 			font-size: 1rem;
 			text-align: center;
 		}
 	}
 
 	@media screen and (max-width: 480px) {
-		.imgDesc {
-			text-align: left;
+		.img-desc {
+			text-align:left;
 		}
 	}
 </style>
