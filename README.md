@@ -21,31 +21,48 @@ Inside my Astro project, you'll see the following folders and files:
 │   |    └── ms-icon-310x310.png
 │   |    └── Placeholder.png
 │   |    └── profile.webp
+│   |    └── zooseekerwf.png
+│   ├── scripts/
+│   |    └── theme.js
 │   └── favicon.ico
 ├── src/
 │   ├── components/
-│   |    └── About.astro
-│   |    └── Contact.astro
-│   |    └── Experience.astro
-│   |    └── Footer.astro
-│   |    └── Header.astro
-│   |    └── Intro.astro
-│   |    └── Projects.astro
 │   |    ├── Navbar/
 │   |    |    └── Navbar.css
 │   |    |    └── Navbar.jsx
-│   |    ├── Temp/
-│   |    |    └── Card.astro
+│   |    └── AboutPage.astro
+│   |    └── BlogPost.astro
+│   |    └── ContactPage.astro
+│   |    └── ExperiencePage.astro
+│   |    └── Footer.astro
+│   |    └── Header.astro
+│   |    └── IntroPage.astro
+│   |    └── Projects.astro
+│   |    ├── ProjectCard.astro
+│   |    ├── ProjectCards.astro
 │   ├── data/
 │   |    └── site.json
 │   ├── layouts/
-│   │    └── BaseLayout.astro
+│   │    └── DefaultLayout.astro
 │   │    └── MarkdownPostLayout.astro
+│   │    └── ProjectLayout.astro
 │   └── pages/
 │   |    ├── posts/
 │   |    |    └── post-1.md
+│   |    |    └── post-2.md
+│   |    |    └── post-3.md
 │   |    ├── projects/
+│   |    |    └── project-1.md
+│   |    |    └── project-2.md
+│   |    |    └── project-3.md
+│   |    |    └── project-4.md
+│   |    |    └── project-5.md
+│   |    |    └── project-6.md
+│   |    └── about.astro
+│   |    └── blog.astro
+│   |    └── contact.astro
 │   |    └── index.astro
+│   |    └── work.astro
 └── package.json
 ```
 
