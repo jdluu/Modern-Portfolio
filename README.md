@@ -2,7 +2,7 @@
 
 ## Design Philosophy
 
-For this portfolio, I focused on making reusable components, making my website modular and easy to update. I am using Astro and minimizing Javascript to maintain a balance between interactivity and speed.
+For my portfolio, I decided to use Astro because of its content-focused, server first approach. Astro is optimized for performance and easy to use, using HTML, CSS, and JS syntax.
 
 This portfolio was built off of the content from my original portfolio here: <https://github.com/jdluu/portfolio>
 
