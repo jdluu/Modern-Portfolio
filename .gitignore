@@ -23,6 +23,6 @@ pnpm-debug.log*
 # vscode
 .vscode/
 
-# PHPStorm
+# JetBrains IDE
 .idea/
 
