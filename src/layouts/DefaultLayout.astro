@@ -1,12 +1,13 @@
 ---
-import Header from "../components/Header.astro";
+import MainHead from "../components/MainHead.astro";
+import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import Navbar from "../components/Navbar/Navbar.jsx";
+
 ---
 
 <html lang="en">
 	<head>
-		<Header />
+		<MainHead />
 		<!--CSS Reset -->
 		<style>
 			html {
@@ -154,7 +155,7 @@ import Navbar from "../components/Navbar/Navbar.jsx";
 		</style>
 	</head>
 	<body>
-		<Navbar client:load />
+		<Nav />
 		<main>
 			<slot />
 		</main>
