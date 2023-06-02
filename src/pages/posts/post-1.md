@@ -1,5 +1,5 @@
 ---
-layout: ../../layouts/MarkdownPostLayout.astro
+layout: ../../layouts/BlogPostLayout.astro
 title: 'Year 1 - Zoom University'
 pubDate: 2023-05-06
 description: 'This is a post about my first year at UCSD.'

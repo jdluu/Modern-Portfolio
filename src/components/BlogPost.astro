@@ -1,27 +1,31 @@
 ---
+export interface Props {
+	title: string;
+	url: string;
+}
+
 const { title, url } = Astro.props;
 ---
 
 <div class="blog-card">
-    <h3 class="blog-card-title">{title} </h3>
-    <a class="blog-card-link" href={url}>Read Here</a>
+	<h3 class="blog-card-title">{title}</h3>
+	<a class="blog-card-link" href={url}>Read Here</a>
 </div>
 
 <style>
-    .blog-card {
-    }
+	.blog-card {
+	}
 
-    .blog-card-title {
-        font-weight: bold;
-    }
+	.blog-card-title {
+		font-weight: bold;
+	}
 
-    .blog-card-link {
-        color: #007bff;
-        text-decoration: none;
-    }
+	.blog-card-link {
+		color: #007bff;
+		text-decoration: none;
+	}
 
-    .blog-card-link:hover {
-        text-decoration: underline;
-    }
+	.blog-card-link:hover {
+		text-decoration: underline;
+	}
 </style>
-
