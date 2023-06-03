@@ -4,18 +4,27 @@
 <footer id="footer">
 	<section class="footer-section">
 		<ul class="footer-ul">
-			<li class="footer-li"><a href="mailto:jluuruncs@gmail.com">Email</a></li>
 			<li class="footer-li">
-				<a href="https://www.linkedin.com/in/jeffrey-luu/">Linkedin</a>
+				<a class="footer-link" href="../contact" target="_blank">
+					<img class="icon" src="/icons/email.svg" alt="Email" />
+				</a>
 			</li>
-			<li class="footer-li"><a href="https://github.com/jdluu">Github</a></li>
-			<li class="footer-li"><p>Made with &hearts; by Jeffrey Luu</p></li>
+			<li class="footer-li">
+				<a class="footer-link" href="https://www.linkedin.com/in/jeffrey-luu/">
+					<img class="icon" src="/icons/linkedin.svg" alt="LinkedIn" />
+				</a>
+			</li>
+			<li class="footer-li">
+				<a class="footer-link" href="https://github.com/jdluu">
+					<img class="icon" src="/icons/github.svg" alt="Click here for my GitHub" />
+				</a>
+			</li>
 		</ul>
 	</section>
 </footer>
 
 <style>
-	#footer .footer-section {
+	.footer-section {
 		display: flex;
 		flex-direction: column;
 		text-align: center;
@@ -23,7 +32,7 @@
 		margin-bottom: 1rem;
 	}
 
-	#footer .footer-ul {
+	.footer-ul {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -32,44 +41,24 @@
 	}
 
 	@media screen and (min-width: 480px) {
-		#footer .footer-ul {
+		.footer-ul {
 			grid-auto-flow: column;
 		}
 	}
 
-	#footer a {
+	.footer-link {
 		color: var(--link-color);
 		font-weight: bold;
 		text-decoration: underline;
-		box-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, 0.4);
 	}
 
-	#footer a:hover {
-		box-shadow: inset 0 -1.2em 0 hsla(0, 0%, 100%, 0.4);
-	}
-
-	#footer .footer-li {
+	.footer-link {
 		margin: 0 0.5rem;
 	}
 
-	#footer .footer-li p {
-		text-align: center;
+	.icon {
+		width: 50px;
+		height: 50px;
 	}
 
-	#footer .footer-li:hover ~ .footer-li p {
-		animation: wave-animation 0.3s infinite;
-	}
-
-	@keyframes wave-animation {
-		0%,
-		25% {
-			transform: rotate(20deg);
-		}
-		75% {
-			transform: rotate(-15deg);
-		}
-		100% {
-			transform: rotate(0deg);
-		}
-	}
 </style>
