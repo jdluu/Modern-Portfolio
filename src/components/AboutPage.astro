@@ -1,53 +1,39 @@
 <section class="content-section">
-	<h2 id="about">About</h2>
-	<div id="about-wrapper">
-		<p id="about-desc">
-			<strong>Hi, I'm Jeffrey Luu!</strong>
-			I'm currently a 3rd year student studying Human Computer Interaction with a minor
-			in Computer Science at UCSD, set to graduate in June 2023.
-			<br />
-			<br />
-			Ever since I was young, I immersed myself into the world of technology, constantly
-			tinkering with my computer and learning new things. I also found joy in volunteering
-			spending 5 years at the same food bank helping every weekend.
-			<br />
-			<br />
-			Now, I'm working towards bridging the intersection between technology and human
-			interaction, making more functional and accessible web and mobile interfaces
-			for everyone.
-		</p>
-		<picture>
-			<source srcset="/images/Placeholder.png" media="(min-width: 480px)">
-			<img src="/images/Placeholder.png" alt="Jeffrey Luu">
-		</picture>
-		<figure id="running">
-			<picture id="running-img">
-				<source srcset="/images/running.png"/>
-				<img
-					src="/images/running.png"
-					width="347"
-					height="474"
-					alt="A picture of me running a cross country race in high school."
-				/>
-			</picture>
-			<figcaption class="img-desc">
-				I'm an avid runner, with a history of running cross country and track in high school.
-				Working towards my first marathon!
-			</figcaption>
-		</figure>
-		<picture>
-			<source srcset="/images/Placeholder.png" media="(min-width: 480px)">
-			<img src="/images/Placeholder.png" alt="Jeffrey Luu">
-		</picture>
+	<h2 id="about">About Me</h2>
+	<div id="flex-container">
+		<div id="about-wrapper">
+			<p id="about-desc">
+				<strong>Hi, I'm Jeffrey Luu!</strong>
+				I'm currently a 3rd year student studying Human Computer Interaction with a minor
+				in Computer Science at UCSD, set to graduate in June 2023.
+				<br/>
+				<br/>
+				Since childhood, my passion for technology has driven me to explore and expand my knowledge, constantly tinkering with computers. Alongside my technical endeavors, I have also found fulfillment in volunteering, dedicating five years of my weekends to a food bank, assisting those in need.
+				<br/>
+				<br/>
+				Now, my focus is on merging technology and human interaction. I am committed to creating functional, accessible web and mobile interfaces that elevate the user experience. By utilizing technology as a tool, I aim to bridge gaps and facilitate seamless interactions for people from all walks of life.
+			</p>
+		</div>
+		<div id="figma-wrapper">
+			<figure>
+				<iframe id="youtube-redesign" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FVTeXS7CWmqioKpqEBvy4DQ%2FCogs-187A-Hi-Fidelity-prototypes%3Ftype%3Ddesign%26node-id%3D22-997%26scaling%3Dscale-down%26page-id%3D7%253A233%26starting-point-node-id%3D22%253A997" allowfullscreen></iframe>
+				<figcaption id="figma-caption"><strong>A YouTube Live Redesign</strong> <a href="https://drive.google.com/file/d/1scRqM_Ie2mubrcM7FFgd1J2pSjgBCiVI/view?usp=sharing" target="_blank" rel="noreferrer">Click to learn more</a></figcaption>
+			</figure>
+		</div>
 	</div>
 </section>
 <style>
-	#about-wrapper {
+	#flex-container {
 		display: flex;
 		flex-direction: row;
-		flex-grow: 0;
-		flex-shrink: 0;
-		flex-basis: 50%;
+		flex-wrap: wrap;
+	}
+
+	#about-wrapper,
+	#figma-wrapper {
+		flex: 0 0 50%;
+		box-sizing: border-box;
+		padding: 10px;
 	}
 
 	#about-desc {
@@ -63,6 +49,19 @@
 			font-size: var(--medium1-size)
 		}
 	}
+
+	#youtube-redesign {
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		width: 650px;
+		height: 450px;
+	}
+
+	#figma-caption {
+		text-align: center;
+		font-size: var(--medium2-size);
+		color: var(--text-color);
+	}
+
 </style>
 
 
