@@ -62,31 +62,24 @@ import Footer from "../components/Footer.astro";
 				--large1-size: 2.5rem;
 				--large2-size: 3.5rem;
 				--large3-size: 4.5rem;
-				
+
 				/* Default Light Theme */
-				--bg-color: #f5e6d0;
-				--font-color: black;
-				--inverse-font-color: white;
-				--link-color: #0000ff;
+				--text-color: #020b0d;
+				--inverse-text-color: #fdf4f2;
+				--background-color: #d4f2f7;
+				--primary-button-color: #72d5e4;
+				--secondary-button-color: #e5f7fa;
+				--accent-color: #87dbe8;
 
-				--primary-color: #d1ebf5;
-				--secondary-color: #454545;
-
-				--button1-color: #d0dff5;
-				--button2-color: #b8c4d6;
 			}
 
 			[data-theme="dark"] {
-				--bg-color: #0a192f;
-				--font-color: #d1dff5;
-				--inverse-font-color: black;
-				--link-color: #0000ff;
-
-				--primary-color: #2f200a;
-				--secondary-color: #b3b3b3;
-
-				--button1-color: #3e4249;
-				--button2-color: #535962;
+				--text-color: #e6f9f3;
+				--inverse-text-color: #fdf4f2;
+				--background-color: #051510;
+				--primary-button-color: #4dbcd5;
+				--secondary-button-color: #0a1429;
+				--accent-color: #244999;
 			}
 
 			/* Fonts */
@@ -109,8 +102,8 @@ import Footer from "../components/Footer.astro";
 			}
 
 			body {
-				background-color: var(--bg-color);
-				color: var(--font-color);
+				background-color: var(--background-color);
+				color: var(--text-color);
 				font-family: "Lato", Fallback, sans-serif;
 				font-size: var(--medium1-size);
 				overflow-x: hidden;
@@ -126,7 +119,7 @@ import Footer from "../components/Footer.astro";
 				font-weight: bold;
 				font-size: var(--large1-size);
 				font-family: "Pacifico", Fallback, cursive;
-				color: var(--secondary-color);
+				color: var(--text-color);
 				margin-left: 1rem;
 			}
 
@@ -144,13 +137,20 @@ import Footer from "../components/Footer.astro";
 				margin-bottom: 0.5rem;
 				margin-left: 1rem;
 				text-decoration: underline;
-				color: var(--font-color);
+				color: var(--text-color);
 			}
 
 			@media screen and (max-width: 768px) {
 				h2 {
 					font-size: var(--medium2-size);
 				}
+			}
+
+			.svg-icon {
+				width: 50px;
+				height: 50px;
+				cursor: pointer;
+				fill: var(--text-color);
 			}
 		</style>
 	</head>
