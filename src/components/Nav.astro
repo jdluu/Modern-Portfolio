@@ -2,7 +2,7 @@
     <nav id=top-nav>
         <ul id="nav-list">
             <li class="list-item">
-                <a href="/" target="_self" rel="noreferrer" class="remove-underline">
+                <a href="/" target="_self" rel="noreferrer" class="button-link">
                     <button id="home-button">
                         <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="home-icon">
                             <path d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"/>
@@ -12,10 +12,10 @@
                 </a>
 
             </li>
-            <li class="list-item"><a href="../about" target="_self" rel="noreferrer">About</a></li>
-            <li class="list-item"><a href="../work" target="_self" rel="noreferrer">Work</a></li>
-            <li class="list-item"><a href="../blog" target="_self" rel="noreferrer">Blog</a></li>
-            <li class="list-item"><a href="../contact" target="_self" rel="noreferrer">Contact</a></li>
+            <li class="list-item"><a href="../about" target="_self" rel="noreferrer" class="button-link">About</a></li>
+            <li class="list-item"><a href="../work" target="_self" rel="noreferrer" class="button-link">Work</a></li>
+            <li class="list-item"><a href="../blog" target="_self" rel="noreferrer" class="button-link">Blog</a></li>
+            <li class="list-item"><a href="../contact" target="_self" rel="noreferrer" class="button-link">Contact</a></li>
             <li>
                 <label class="switch" aria-label="Toggle Switch">
                     <input type="checkbox" />
@@ -36,14 +36,17 @@
         padding-bottom: 0;
         list-style: none;
     }
+    #nav-list li:first-child {
+        margin-right: auto;
+    }
+    .button-link {
+        text-decoration:none;
+    }
 
     .list-item {
         margin-right: 1rem;
         margin-top: 0.5rem;
-    }
-
-    #nav-list li:first-child {
-        margin-right: auto;
+        text-decoration: none;
     }
 
     #home-button {
@@ -64,10 +67,6 @@
         width:75px;
         height:75px;
         fill: var(--text-color);
-    }
-
-    .remove-underline {
-        text-decoration: none;
     }
 
     #nav-list li:not(:first-child):not(:last-child) {
