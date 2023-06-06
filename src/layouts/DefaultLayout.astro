@@ -10,40 +10,37 @@ import Footer from "../components/Footer.astro";
 		<MainHead />
 		<!--CSS Reset -->
 		<style>
-			html {
-				box-sizing: border-box;
-				font-size: 16px;
-			}
-
+			/* Reset Box Model */
 			*,
-			*:before,
-			*:after {
-				box-sizing: inherit;
-			}
-
-			body,
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6,
-			p,
-			ol,
-			ul {
+			*::before,
+			*::after {
 				margin: 0;
 				padding: 0;
-				font-weight: normal;
+				box-sizing: border-box;
 			}
 
-			ol,
-			ul {
+			/* Remove List Styles */
+			ul, ol {
 				list-style: none;
 			}
 
-			img {
-				max-width: 100%;
-				height: auto;
+			/* Reset Heading Margins */
+			h1, h2, h3, h4, h5, h6 {
+				margin: 0;
+			}
+
+			/* Reset Link Styles */
+			a {
+				text-decoration: none;
+			}
+
+			/* Reset Form Styles */
+			input, textarea, button {
+				margin: 0;
+				padding: 0;
+				border: none;
+				background: none;
+				font-family: inherit;
 			}
 		</style>
 
