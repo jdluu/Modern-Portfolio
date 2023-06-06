@@ -1,7 +1,17 @@
 <header id="header">
     <nav id=top-nav>
         <ul id="nav-list">
-            <li class="list-item"><a href="../" target="_self" rel="noreferrer">Home</a></li>
+            <li class="list-item">
+                <a href="/" target="_self" rel="noreferrer" class="remove-underline">
+                    <button id="home-button">
+                        <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="home-icon">
+                            <path d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"/>
+                        </svg>
+                        <span>Home</span>
+                    </button>
+                </a>
+
+            </li>
             <li class="list-item"><a href="../about" target="_self" rel="noreferrer">About</a></li>
             <li class="list-item"><a href="../work" target="_self" rel="noreferrer">Work</a></li>
             <li class="list-item"><a href="../blog" target="_self" rel="noreferrer">Blog</a></li>
@@ -20,7 +30,7 @@
 <style>
     #nav-list {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         align-items: center;
         margin-top: 0;
         padding-bottom: 0;
@@ -30,23 +40,41 @@
     .list-item {
         margin-right: 1rem;
         margin-top: 0.5rem;
-        border-radius: 0.5rem;
     }
 
     #nav-list li:first-child {
+        margin-right: auto;
+    }
+
+    #home-button {
+        all: unset;
         text-decoration: none;
         font-weight: bold;
         font-size: var(--large1-size);
         font-family: "Pacifico", Fallback, cursive;
-        color: var(--secondary-color);
-        margin-right: auto;
+        color: var(--text-color);
+        background-color: var(--background-color);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+
+    }
+
+    .home-icon {
+        width:75px;
+        height:75px;
+        fill: var(--text-color);
+    }
+
+    .remove-underline {
+        text-decoration: none;
     }
 
     #nav-list li:not(:first-child):not(:last-child) {
         text-decoration: none;
-        color: var(--font-color);
-        background-color: var(--button1-color);
-        border: 1px solid var(--font-color);
+        color: var(--text-color);
+        background-color: var(--primary-button-color);
+        border: 1px solid var(--text-color);
         font-weight: bold;
         font-size: var(--medium2-size);
         padding: 10px 15px;
