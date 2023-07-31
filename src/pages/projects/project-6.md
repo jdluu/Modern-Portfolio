@@ -1,8 +1,8 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
-title: Placeholder
-date:
-projectRole:
+title: "Web Analytics Dashboard and Collector Script"
+date: "May 2023-June 2023"
+projectRole: "Web Developer"
 intro:
 image:
   url:
@@ -15,5 +15,5 @@ tech:
 tools:
 processTitle:
 process:
-reflection: 
+reflection:
 ---
