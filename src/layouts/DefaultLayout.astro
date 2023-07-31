@@ -2,7 +2,6 @@
 import MainHead from "../components/MainHead.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-
 ---
 
 <html lang="en">
@@ -20,12 +19,18 @@ import Footer from "../components/Footer.astro";
 			}
 
 			/* Remove List Styles */
-			ul, ol {
+			ul,
+			ol {
 				list-style: none;
 			}
 
 			/* Reset Heading Margins */
-			h1, h2, h3, h4, h5, h6 {
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
 				margin: 0;
 			}
 
@@ -35,7 +40,9 @@ import Footer from "../components/Footer.astro";
 			}
 
 			/* Reset Form Styles */
-			input, textarea, button {
+			input,
+			textarea,
+			button {
 				margin: 0;
 				padding: 0;
 				border: none;
@@ -67,12 +74,11 @@ import Footer from "../components/Footer.astro";
 				--primary-button-color: #72d5e4;
 				--secondary-button-color: #e5f7fa;
 				--accent-color: #87dbe8;
-
 			}
 
 			[data-theme="dark"] {
 				--text-color: #e6f9f3;
-				--inverse-text-color: #fdf4f2;
+				--inverse-text-color: #19060c;
 				--background-color: #051510;
 				--primary-button-color: #4dbcd5;
 				--secondary-button-color: #0a1429;
