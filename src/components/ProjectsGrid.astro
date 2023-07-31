@@ -2,52 +2,58 @@
 import ProjectCard from "../components/ProjectCard.astro";
 const allProjects = await Astro.glob("../pages/projects/*.md");
 ---
+
 <section class="content-section">
-    <h2 id="projects">Projects</h2>
-    <p id="work-desc">
-        <strong>Check out some of my most recent projects!</strong>
-    </p>
-    <div id="project-grid">
-        {allProjects.map((post) => (
-                <ProjectCard url={post.url} title={post.frontmatter.title} />
-        ))}
-    </div>
+	<h2 id="projects">Projects</h2>
+	<p id="work-desc">
+		<strong>Check out some of my most recent projects!</strong>
+	</p>
+	<div id="project-grid">
+		{
+			allProjects.map((post) => (
+				<ProjectCard
+					title={post.frontmatter.title}
+					intro={post.frontmatter.intro}
+					url={post.url}
+				/>
+			))
+		}
+	</div>
 </section>
 
 <style>
-    #work-desc {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-    #project-grid {
-        max-width: 75%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        grid-gap: 2rem;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    @media screen and (max-width: 1024px) {
-        #project-grid {
-            justify-content: center;
-            align-items: center;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            grid-gap: 1rem;
-            padding: 0 0 2rem;
-        }
-    }
-    @media screen and (max-width: 768px) {
-        #project-grid {
-            justify-content: center;
-            align-items: center;
-            grid-template-columns: 1fr;
-            grid-template-rows: repeat(6, 1fr);
-            grid-gap: 1rem;
-            padding: 0 0 2rem;
-        }
-    }
+	#work-desc {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+	#project-grid {
+		max-width: 75%;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		grid-gap: 2rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	@media screen and (max-width: 1024px) {
+		#project-grid {
+			justify-content: center;
+			align-items: center;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(3, 1fr);
+			grid-gap: 1rem;
+			padding: 0 0 2rem;
+		}
+	}
+	@media screen and (max-width: 768px) {
+		#project-grid {
+			justify-content: center;
+			align-items: center;
+			grid-template-columns: 1fr;
+			grid-template-rows: repeat(6, 1fr);
+			grid-gap: 1rem;
+			padding: 0 0 2rem;
+		}
+	}
 </style>
-
