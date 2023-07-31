@@ -10,11 +10,11 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 	</p>
 	<div id="project-grid">
 		{
-			allProjects.map((post) => (
+			allProjects.map((project) => (
 				<ProjectCard
-					title={post.frontmatter.title}
-					intro={post.frontmatter.intro}
-					url={post.url}
+					title={project.frontmatter.title}
+					intro={project.frontmatter.intro}
+					url={project.url}
 				/>
 			))
 		}
