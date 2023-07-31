@@ -1,10 +1,95 @@
 ---
 export interface Props {
 	title: string;
+	intro: string;
 	url: string;
 }
 
-const { title, url } = Astro.props;
+const { title, intro, url } = Astro.props;
 ---
 
-<li><a href={url}>{title}</a></li>
+<section class="background">
+	<div class="project-container">
+		<section class="more-info">
+			<span class="project-title">{title}</span>
+			<p class="project-description">
+				{intro}
+			</p>
+			<!-- <img src="assets/images/projects/code.png" alt="A placeholder image" width="200" height="200"/> -->
+			<a class="learn-more" href={url}>Learn More</a>
+		</section>
+	</div>
+</section>
+
+<style>
+	.background {
+		background-color: var(--text-color);
+	}
+
+	.project-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-width: 20rem;
+		min-height: 15rem;
+	}
+
+	/* If the screen is 768px or less, lower the min-width */
+	@media screen and (max-width: 768px) {
+		.project-container {
+			min-width: 15rem;
+		}
+	}
+
+	.project-title {
+		margin-left: auto;
+		margin-right: auto;
+		font-weight: bold;
+		font-size: 1.3rem;
+		color: var(--inverse-text-color);
+	}
+
+	.more-info {
+		text-align: center;
+		opacity: 0;
+		color: var(--inverse-text-color);
+	}
+
+	.more-info:hover {
+		opacity: 1;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	@media screen and (max-width: 768px) {
+		.more-info {
+			opacity: 1;
+		}
+	}
+
+	.learn-more {
+		font-size: var(--medium2-size);
+		font-family: Trebuchet MS;
+		text-decoration: none;
+		cursor: pointer;
+		color: var(--text-color);
+		border-color: #333029;
+		border-width: 10px;
+		border-top-left-radius: 0.33rem;
+		border-top-right-radius: 0.33rem;
+		border-bottom-left-radius: 0.33rem;
+		border-bottom-right-radius: 0.33rem;
+		background: linear-gradient(
+			var(--primary-button-color),
+			var(--secondary-button-color)
+		);
+	}
+
+	.learn-more:hover {
+		background: linear-gradient(
+			var(--secondary-button-color),
+			var(--primary-button-color)
+		);
+	}
+</style>
