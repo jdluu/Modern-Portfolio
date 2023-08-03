@@ -4,7 +4,7 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 ---
 
 <section class="content-section">
-	<h2 id="projects">Projects</h2>
+	<h2 id="projects" class="page-h2">Projects</h2>
 	<p id="work-desc">
 		<strong>Check out some of my most recent projects!</strong>
 	</p>
@@ -22,6 +22,22 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 </section>
 
 <style>
+	.page-h2{
+		font-size: var(--medium3-size);
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		margin-left: 1rem;
+		text-decoration: underline;
+		color: var(--text-color);
+
+	}
+
+	@media screen and (max-width: 768px) {
+		.page-h2 {
+			font-size: var(--medium2-size);
+		}
+	}
+
 	#work-desc {
 		font-size: 1.5rem;
 		margin-bottom: 1rem;
