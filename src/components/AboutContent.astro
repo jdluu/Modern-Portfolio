@@ -1,5 +1,5 @@
 <section class="content-section">
-	<h2 id="about">About Me</h2>
+	<h2 id="about" class="page-h2">About Me</h2>
 	<div id="flex-container">
 		<div id="about-wrapper">
 			<p id="about-desc">
@@ -23,6 +23,22 @@
 	</div>
 </section>
 <style>
+	.page-h2{
+		font-size: var(--medium3-size);
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		margin-left: 1rem;
+		text-decoration: underline;
+		color: var(--text-color);
+
+	}
+
+	@media screen and (max-width: 768px) {
+		.page-h2 {
+			font-size: var(--medium2-size);
+		}
+	}
+
 	#flex-container {
 		display: flex;
 		flex-direction: row;
@@ -66,7 +82,7 @@
 
 
 <section class="content-section">
-	<h2 id="education">Education</h2>
+	<h2 id="education" class="page-h2">Education</h2>
 	<div id="education-desc">
 		<!-- Add a graduation date to the right of the h3 tag -->
 		<div id="top-line">
