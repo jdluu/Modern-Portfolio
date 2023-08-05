@@ -20,9 +20,9 @@ tools: "Discord, Figjam"
 roles: "UX Researcher & Designer"
 
 responsibilities:
-  - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  - Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit.
-  - Vel bibendum justo sapien in diam.
+  - Conduct user research and interviews to understand the problem space.
+  - Brainstorm and ideate solutions to the problem.
+  - Create wireframes and prototypes to test with users.
 
 background: "You just moved into a new city, maybe for an internship, college, job, or simply just for a fresh start, the reason doesn’t matter, but you want to know what is going around you. You’re the type of person who always want to help others. You want to get to know like-minded people or just want to know where you can help out. That’s where UrBenefit, a centralized hub for community events comes into play."
 
@@ -33,14 +33,15 @@ solution: 'Our goal with Urbenefit ("your-benefit") was to create an accessible 
 processTitle: "Design Process"
 
 process:
-  - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit.
-  - Vel bibendum justo sapien in diam.
+  - We began by identifying the problem space and conducting research to understand the problem and the users.
+  - We used a technique called piggyback prototyping to test our ideas with users.
+  - We iterated on our ideas based on the feedback we received from users.
 
 wireframe: "../images/wireframeUB.png"
 
 wireframeAlt: "Low Fidelity Wireframes for UrBenefit"
 
-finalDesc:
+finalDesc: "After 2 rounds of user testing with over 80 participants, we were able to create high fidelity mockups of the final product where we strived to keep a clean, modern, and organic aesthetic."
 
 finalImg: "../images/finalUB.png"
 
