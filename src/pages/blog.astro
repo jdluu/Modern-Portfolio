@@ -6,15 +6,24 @@ const pageTitle = "My Blog";
 ---
 
 <DefaultLayout pageTitle={pageTitle}>
-	<h2> A collection of posts written about school and tech!</h2>
-	<p> In progress! Check back later! </p>
+	<section class="blog-page-container">
+		<h2>A collection of posts written about school and tech!</h2>
+		<p>In progress! Check back later!</p>
 
-	<ul>
-		{
-			allPosts.map((post) => (
-				<BlogPost url={post.url} title={post.frontmatter.title} />
-			))
-		}
-	</ul>
-
+		<ul>
+			{
+				allPosts.map((post) => (
+					<BlogPost url={post.url} title={post.frontmatter.title} />
+				))
+			}
+		</ul>
+	</section>
 </DefaultLayout>
+
+<style>
+	.blog-page-container {
+		display: block;
+		margin-left: 20%;
+		margin-right: 20%;
+	}
+</style>
