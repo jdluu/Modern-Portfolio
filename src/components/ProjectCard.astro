@@ -2,20 +2,20 @@
 export interface Props {
 	title: string;
 	intro: string;
+	thumbnail: string;
 	url: string;
 }
 
-const { title, intro, url } = Astro.props;
+const { title, intro, thumbnail, url } = Astro.props;
 ---
 
-<section class="background">
+<section class="background" style={{ backgroundImage: `url('${thumbnail}')` }}>
 	<div class="project-container">
 		<section class="more-info">
 			<span class="project-title">{title}</span>
 			<p class="project-description">
 				{intro}
 			</p>
-			<!-- <img src="assets/images/projects/code.png" alt="A placeholder image" width="200" height="200"/> -->
 			<a class="learn-more" href={url}>Learn More</a>
 		</section>
 	</div>
@@ -23,73 +23,62 @@ const { title, intro, url } = Astro.props;
 
 <style>
 	.background {
-		background-color: var(--text-color);
+		background-size: cover;
+		background-position: center;
+		position: relative;
+		border: 1px solid var(--text-color);
+		transition: background-image 0.3s;
+		width: 100%;
+		height: 300px; /* Set the desired height for each section */
 	}
 
 	.project-container {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		justify-content: center;
-		min-width: 20rem;
-		min-height: 15rem;
+		align-items: center;
+		opacity: 0;
+		transition: opacity 0.3s;
 	}
 
-	/* If the screen is 768px or less, lower the min-width */
-	@media screen and (max-width: 768px) {
-		.project-container {
-			min-width: 15rem;
-		}
-	}
-
-	.project-title {
-		margin-left: auto;
-		margin-right: auto;
-		font-weight: bold;
-		font-size: 1.3rem;
-		color: var(--inverse-text-color);
+	.project-container:hover {
+		background-color: var(--text-color);
+		opacity: 1;
 	}
 
 	.more-info {
 		text-align: center;
-		opacity: 0;
+	}
+
+	.project-title {
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 10px;
 		color: var(--inverse-text-color);
 	}
 
-	.more-info:hover {
-		opacity: 1;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	@media screen and (max-width: 768px) {
-		.more-info {
-			opacity: 1;
-		}
+	.project-description {
+		font-size: 16px;
+		margin-bottom: 20px;
+		color: var(--inverse-text-color);
 	}
 
 	.learn-more {
-		font-size: var(--medium2-size);
-		font-family: Trebuchet MS;
+		font-size: 18px;
 		text-decoration: none;
-		cursor: pointer;
-		color: var(--text-color);
-		border-color: #333029;
-		border-width: 10px;
-		border-top-left-radius: 0.33rem;
-		border-top-right-radius: 0.33rem;
-		border-bottom-left-radius: 0.33rem;
-		border-bottom-right-radius: 0.33rem;
-		background: linear-gradient(
-			var(--primary-button-color),
-			var(--secondary-button-color)
-		);
+		color: var(--inverse-text-color);
+		background-color: var(--primary-button-color);
+		padding: 10px 20px;
+		border-radius: 5px;
+		transition: background-color 0.3s;
 	}
 
 	.learn-more:hover {
-		background: linear-gradient(
-			var(--secondary-button-color),
-			var(--primary-button-color)
-		);
+		opacity: 0.6;
 	}
 </style>
