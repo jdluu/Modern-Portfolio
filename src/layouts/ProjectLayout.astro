@@ -1,53 +1,305 @@
 ---
 import DefaultLayout from "./DefaultLayout.astro";
-const { frontmatter } = Astro.props;
+import type { MarkdownLayoutProps } from "astro";
+
+type Props = MarkdownLayoutProps<{
+	title: string;
+	intro: string;
+	homeImg: string;
+	homeImgAlt: string;
+	date: string;
+	techTitle: string;
+	tech: string;
+	tools: string;
+	roles: string;
+	responsibilities: string[];
+	background: string;
+	problem: string;
+	solution: string;
+	processTitle: string;
+	process: string[];
+	wireframe: string;
+	wireframeAlt: string;
+	finalDesc: string;
+	finalImg: string;
+	finalImgAlt: string;
+	reflection: string[];
+	sourceTitle: string;
+	sourceLink: string;
+}>;
+const { frontmatter, url } = Astro.props;
 ---
 
 <DefaultLayout pageTitle={frontmatter.title}>
-    <h2>{frontmatter.title}</h2>
-    <p>Worked on from {frontmatter.date}</p>
-    <p>Role:{frontmatter.projectRole}</p>
-    <h3><strong>{frontmatter.intro}</strong></h3>
-    <picture>
-        <source srcset="{frontmatter.image}" type="image/png" />
-        <img src="{frontmatter.image}" alt="{Getting around the San Diego Zoo}" />
-    </picture>
-    <div class="projectContent">
-        <section>
-            <h4> Problem </h4>
-            <p>{frontmatter.problem}</p>
-        </section>
-        <section>
-            <h4> Solution </h4>
-            <p>{frontmatter.solution}</p>
-        </section>
-        <section>
-            <h4> Result </h4>
-            <p>{frontmatter.projectResults}</p>
-        </section>
-        <section>
-            <h4>{frontmatter.techTitle}</h4>
-            <p>{frontmatter.tech}</p>
-            <h4> Tools </h4>
-            <p>{frontmatter.tools}</p>
-        </section>
-        <section>
-            <h4>{frontmatter.processTitle}</h4>
-            <p>{frontmatter.process}</p>
-        </section>
-        <section>
-            <h4> Reflection </h4>
-            <p>{frontmatter.reflection}</p>
-        </section>
-    </div>
-    <slot />
+	<div id="left-tray">
+		<ul id="table-of-contents">
+			<li>
+				<a href="#overview" id="ido" class="nav-item">Overview</a>
+			</li>
+			<li>
+				<a href="#background" id="idb" class="nav-item">Background</a>
+			</li>
+			<li>
+				<a href="#process" id="idd" class="nav-item"
+					>{frontmatter.processTitle}</a
+				>
+			</li>
+			<li>
+				<a href="#results" id="idf" class="nav-item">Final Product</a>
+			</li>
+			<li>
+				<a href="#reflection" id="idr" class="nav-item">Reflection</a>
+			</li>
+			<li>
+				<button id="hide-button">Hide Table of Contents ◀</button>
+			</li>
+		</ul>
+		<button id="show-button">Show Table of Contents ≡</button>
+	</div>
+	<script>
+		const tableOfContents = document.getElementById("table-of-contents");
+		const hideButton = document.getElementById("hide-button");
+		const showButton = document.getElementById("show-button");
+		const navItems = tableOfContents.getElementsByClassName("nav-item");
+
+		// Function to hide the table of contents
+		function hideTableOfContents() {
+			tableOfContents.style.display = "none";
+			showButton.style.visibility = "visible";
+		}
+
+		// Function to show the table of contents
+		function showTableOfContents() {
+			tableOfContents.style.display = "block";
+			showButton.style.visibility = "hidden";
+		}
+
+		// Function to handle nav-item click
+		function handleNavItemClick(event) {
+			const clickedNavItem = event.target;
+			// Remove 'active' class from all nav-items
+			for (const navItem of navItems) {
+				navItem.classList.remove("link-active");
+			}
+			// Add 'active' class to the clicked nav-item
+			clickedNavItem.classList.add("link-active");
+		}
+
+		// Add click event listener to each nav-item
+		for (const navItem of navItems) {
+			navItem.addEventListener("click", handleNavItemClick);
+		}
+
+		hideButton.addEventListener("click", () => {
+			hideTableOfContents();
+		});
+
+		showButton.addEventListener("click", () => {
+			showTableOfContents();
+		});
+	</script>
+	<div class="project-page-container">
+		<div class="project-page-div">
+			<section id="overview">
+				<h1 class="project-title">{frontmatter.title}</h1>
+				<p class="section-content">{frontmatter.intro}</p>
+				<img
+					class="project-image"
+					src={frontmatter.homeImg}
+					alt={frontmatter.homeImgAlt}
+				/>
+				<div class="flex-container">
+					<div>
+						<p class="section-content">
+							<strong>Timeline</strong>
+							<br />
+							{frontmatter.date}
+						</p>
+					</div>
+					<div>
+						<p class="section-content">
+							<strong>{frontmatter.techTitle}</strong>
+							<br />
+							{frontmatter.tech}
+						</p>
+					</div>
+					<div>
+						<p class="section-content">
+							<strong>Tools</strong>
+							<br />
+							{frontmatter.tools}
+						</p>
+					</div>
+				</div>
+				<h3><strong>My Responsibilities as {frontmatter.roles}</strong></h3>
+				<ul>
+					{
+						frontmatter.responsibilities.map((responsibility, index) => (
+							<li class="role-bullet-item" key={index}>
+								{responsibility}
+							</li>
+						))
+					}
+				</ul>
+			</section>
+			<section id="background">
+				<h2>Background</h2>
+				<p class="section-content">
+					{frontmatter.background}
+				</p>
+				<h2>Problem</h2>
+				<p class="section-content">
+					{frontmatter.problem}
+				</p>
+				<h2>Solution</h2>
+				<p class="section-content">
+					{frontmatter.solution}
+				</p>
+			</section>
+			<section id="process">
+				<h2>{frontmatter.processTitle}</h2>
+				{
+					frontmatter.process.map((process, index) => (
+						<p class="section-content" key={index}>
+							{process}
+						</p>
+					))
+				}
+				<img
+					class="project-image"
+					src={frontmatter.wireframe}
+					alt={frontmatter.wireframeAlt}
+				/>
+			</section>
+			<section id="results">
+				<h2>Final Product</h2>
+				<p class="section-content">{frontmatter.finalDesc}</p>
+				<img
+					class="project-image"
+					src={frontmatter.finalImg}
+					alt={frontmatter.finalImgAlt}
+				/>
+			</section>
+			<section id="reflection">
+				<h2>Reflection</h2>
+				{
+					frontmatter.reflection.map((reflection, index) => (
+						<p class="section-content" key={index}>
+							{reflection}
+						</p>
+					))
+				}
+				<a
+					href={frontmatter.sourceLink}
+					id="source-link"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<strong>{frontmatter.sourceTitle}</strong>
+				</a>
+			</section>
+		</div>
+	</div>
 </DefaultLayout>
 
 <style>
-    .projectContent {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-auto-rows: minmax(100px, auto);
-        gap: 20px;
-    }
+	#left-tray {
+		position: fixed;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		padding: 20px;
+		border-radius: 8px;
+		z-index: 50;
+		background-color: var(--background-color);
+	}
+
+	#table-of-contents {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.link-active {
+		font-weight: bold;
+	}
+
+	#table-of-contents li {
+		margin-bottom: 10px;
+	}
+
+	.nav-item {
+		text-decoration: none;
+		color: var(--text-color);
+	}
+
+	.nav-item:hover {
+		text-decoration: underline;
+	}
+
+	#hide-button {
+		visiblity: visible;
+	}
+
+	#show-button {
+		visibility: hidden;
+	}
+
+	@media (max-width: 1380px) {
+		#left-tray {
+			padding: 10px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		#left-tray {
+			box-shadow: 5px 0px 10px #d0dbdf;
+		}
+	}
+
+	.project-page-container {
+		display: block;
+		margin-left: 20%;
+		margin-right: 20%;
+	}
+
+	.project-page-div {
+		text-align: left;
+	}
+
+	.project-title {
+		font-weight: bold;
+		font-size: var(--large1-size);
+	}
+
+	.project-image {
+		max-width: 100%;
+		height: auto;
+		display: block;
+		margin: auto;
+		/* preserve aspect ratio */
+		object-fit: cover;
+	}
+
+	.flex-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 20px;
+	}
+
+	.role-bullet-item {
+		list-style-type: disc;
+		margin-bottom: 0.5rem;
+		font-size: var(--medium1-size);
+	}
+
+	.section-content {
+		font-size: var(--medium2-size);
+		line-height: 30px;
+	}
+
+	#source-link {
+		text-decoration: none;
+	}
 </style>
