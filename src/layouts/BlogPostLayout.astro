@@ -4,10 +4,20 @@ const { frontmatter } = Astro.props;
 ---
 
 <DefaultLayout pageTitle={frontmatter.title}>
-	<h2>{frontmatter.title}</h2>
-	<p>Written on {frontmatter.pubDate.slice(0, 10)}</p>
-	<article>
-		<p><strong>{frontmatter.description}</strong></p>
-	</article>
-	<slot />
+	<section class="blog-page-container">
+		<h2>{frontmatter.title}</h2>
+		<p>Written on {frontmatter.pubDate.slice(0, 10)}</p>
+		<article>
+			<p><strong>{frontmatter.description}</strong></p>
+		</article>
+		<slot />
+	</section>
 </DefaultLayout>
+
+<style>
+	.blog-page-container {
+		display: block;
+		margin-left: 20%;
+		margin-right: 20%;
+	}
+</style>
