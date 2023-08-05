@@ -15,10 +15,11 @@ Inside my Astro project, you'll see the following folders and files:
 ├── public/
 │   ├── assets/
 │   |    └── Luu_Jeffrey_Resume.pdf
-│   ├── images/
-│   |    └── fractal.jpg
+│   ├── icons/
 │   |    └── ms-icon-150x150.png
 │   |    └── ms-icon-310x310.png
+│   ├── images/
+│   |    └── fractal.jpg
 │   |    └── Placeholder.png
 │   |    └── profile.webp
 │   |    └── zooseekerwf.png
@@ -27,24 +28,19 @@ Inside my Astro project, you'll see the following folders and files:
 │   └── favicon.ico
 ├── src/
 │   ├── components/
-│   |    ├── Navbar/
-│   |    |    └── Navbar.css
-│   |    |    └── Navbar.jsx
-│   |    └── AboutPage.astro
+│   |    └── AboutContent.astro
 │   |    └── BlogPost.astro
-│   |    └── ContactPage.astro
-│   |    └── ExperiencePage.astro
+│   |    └── ContactForm.astro
+│   |    └── ExperienceContent.astro
 │   |    └── Footer.astro
-│   |    └── Header.astro
-│   |    └── IntroPage.astro
-│   |    └── Projects.astro
+│   |    └── IntroContent.astro
+│   |    └── MainHead.astro
+│   |    └── Navbar.astro
 │   |    ├── ProjectCard.astro
-│   |    ├── ProjectCards.astro
-│   ├── data/
-│   |    └── site.json
+│   |    ├── ProjectCardGrid.astro
 │   ├── layouts/
 │   │    └── DefaultLayout.astro
-│   │    └── MarkdownPostLayout.astro
+│   │    └── BlogPostLayout.astro
 │   │    └── ProjectLayout.astro
 │   └── pages/
 │   |    ├── posts/
@@ -71,7 +67,7 @@ Inside my Astro project, you'll see the following folders and files:
 All commands are run from the root of the project, from a terminal:
 
 | Command                | Action                                           |
-|:-----------------------|:-------------------------------------------------|
+| :--------------------- | :----------------------------------------------- |
 | `npm install`          | Installs dependencies                            |
 | `npm run dev`          | Starts local dev server at `localhost:3000`      |
 | `npm run build`        | Build your production site to `./dist/`          |
