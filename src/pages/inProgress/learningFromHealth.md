@@ -5,6 +5,8 @@ title: "Learning From Health"
 
 intro: "A data science project that leverages data from the Centers for Disease Control and Prevention (CDC) to develop predictive models for income, based on health statistics such as diabetes, cholesterol, and kidney disease."
 
+thumbnail:
+
 homeImg:
 
 homeImgAlt: "Lorem ipsum dolor sit amet"

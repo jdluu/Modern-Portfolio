@@ -5,6 +5,8 @@ title: "Temp Project"
 
 intro: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit, vel bibendum justo sapien in diam."
 
+thumbnail:
+
 homeImg:
 
 homeImgAlt: "Lorem ipsum dolor sit amet"
