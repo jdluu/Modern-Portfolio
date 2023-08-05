@@ -14,6 +14,7 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 				<ProjectCard
 					title={project.frontmatter.title}
 					intro={project.frontmatter.intro}
+					thumbnail={project.frontmatter.thumbnail}
 					url={project.url}
 				/>
 			))
