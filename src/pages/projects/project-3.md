@@ -39,13 +39,13 @@ process:
 
   - Our initial wireframe was created using Figma, and we used Android Studio to develop our application. We used JUnit, Robolectric, and Espresso to test our application. We also used GitHub Actions for continuous integration.
 
-wireframe: ../images/wireframeZS.png
+wireframe: "../images/wireframeZS.png"
 
 wireframeAlt: "Initial Zooseeker Wireframe"
 
-finalDesc:
+finalDesc: "Our final product in action."
 
-finalImg:
+finalImg: "../images/finalZS.gif"
 
 finalImgAlt: "Our MVP product"
 
