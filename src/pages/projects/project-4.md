@@ -15,7 +15,7 @@ techTitle: "Technologies"
 
 tech: "Figma"
 
-tools: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+tools: "Discord, Figjam"
 
 roles: "UX Researcher & Designer"
 
