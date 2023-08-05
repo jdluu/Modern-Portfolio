@@ -5,6 +5,8 @@ title: "UrBenefit"
 
 intro: "An accessible platform/social application for crowdsourcing volunteers for humanitarian and art-based community efforts."
 
+thumbnail: "../images/thumbnailUB.png"
+
 homeImg: "../images/homeUB.png"
 
 homeImgAlt: "Lorem ipsum dolor sit amet"

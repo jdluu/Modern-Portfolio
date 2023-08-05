@@ -5,6 +5,8 @@ title: "Simple BlackJack"
 
 intro: "A web application that utilizes the Deck of Cards API to generate cards used for BlackJack."
 
+thumbnail:
+
 homeImg:
 
 homeImgAlt: "Lorem ipsum dolor sit amet"

@@ -5,6 +5,8 @@ title: "Zooseeker"
 
 intro: "An android app to plan a trip to the San Diego Zoo, optimizing routes for minimal walking to desired exhibits."
 
+thumbnail: "../images/thumbnailZS.png"
+
 homeImg: "../images/homeZS.png"
 
 homeImgAlt: "Our High Fidelity Prototype"
