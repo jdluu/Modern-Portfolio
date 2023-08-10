@@ -11,18 +11,33 @@ This portfolio was built off of the content from my original portfolio here: <ht
 Inside my Astro project, you'll see the following folders and files:
 
 ```
-/
 ├── public/
 │   ├── assets/
 │   |    └── Luu_Jeffrey_Resume.pdf
 │   ├── icons/
+│   |    └── email.svg
+│   |    └── github.svg
+│   |    └── home.svg
+│   |    └── linkedin.svg
 │   |    └── ms-icon-150x150.png
 │   |    └── ms-icon-310x310.png
 │   ├── images/
+│   |    └── finalUB.png
+│   |    └── finalWAD.png
+│   |    └── finalZS.gif
 │   |    └── fractal.jpg
-│   |    └── Placeholder.png
+│   |    └── homeUB.png
+│   |    └── homeWAD.png
+│   |    └── homeZS.png
+│   |    └── placeholder.png
 │   |    └── profile.webp
-│   |    └── zooseekerwf.png
+│   |    └── projectPlaceholder.png
+│   |    └── thumbnailUB.png
+│   |    └── thumbnailWAD.png
+│   |    └── thumbnailZS.png
+│   |    └── wireframeUB.png
+│   |    └── wireframeWAD.png
+│   |    └── wireframeZS.png
 │   ├── scripts/
 │   |    └── theme.js
 │   └── favicon.ico
