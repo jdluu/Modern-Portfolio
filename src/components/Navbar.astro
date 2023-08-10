@@ -1,8 +1,8 @@
 <header id="header">
 	<nav id="top-nav">
 		<ul id="nav-list">
-			<li class="list-item">
-				<a href="/" target="_self" rel="noreferrer" class="button-link">
+			<li class="nav-list-item list-item">
+				<a href="/" target="_self" rel="noreferrer" class="a-link">
 					<button id="home-button">
 						<svg
 							fill="#000000"
@@ -18,23 +18,22 @@
 					</button>
 				</a>
 			</li>
-			<li class="list-item">
-				<a href="/about" target="_self" rel="noreferrer" class="button-link"
-					>About</a>
+			<li class="nav-list-item list-item button-link">
+				<a href="/about" target="_self" rel="noreferrer" class="a-link">About</a
+				>
+			</li>
+			<li class="nav-list-item list-item button-link">
+				<a href="/work" target="_self" rel="noreferrer" class="a-link">Work</a>
+			</li>
+			<li class="nav-list-item list-item button-link">
+				<a href="/blog" target="_self" rel="noreferrer" class="a-link">Blog</a>
+			</li>
+			<li class="nav-list-item list-item button-link">
+				<a href="/contact" target="_self" rel="noreferrer" class="a-link"
+					>Contact</a
+				>
 			</li>
 			<li class="list-item">
-				<a href="/work" target="_self" rel="noreferrer" class="button-link"
-					>Work</a>
-			</li>
-			<li class="list-item">
-				<a href="/blog" target="_self" rel="noreferrer" class="button-link"
-					>Blog</a>
-			</li>
-			<li class="list-item">
-				<a href="/contact" target="_self" rel="noreferrer" class="button-link"
-					>Contact</a>
-			</li>
-			<li>
 				<label class="switch" aria-label="Toggle Switch">
 					<input type="checkbox" />
 					<span class="slider round"></span>
@@ -46,36 +45,7 @@
 </header>
 
 <style>
-	#nav-list {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 0;
-		padding-bottom: 0;
-		list-style: none;
-	}
-	#nav-list li:first-child {
-		margin-right: auto;
-	}
-	.button-link {
-		text-decoration: none;
-		color: var(--text-color);
-	}
-	.button-link:visited {
-		color: var(--text-color);
-	}
-
-	.list-item {
-		margin-right: 1rem;
-		margin-top: 0.5rem;
-		text-decoration: none;
-		color: var(--text-color);
-		transition: transform 0.3s ease;
-	}
-	.list-item:hover {
-		transform: translateY(-8px);
-	}
-
+	/* DeskTop Nav */
 	#home-button {
 		all: unset;
 		text-decoration: none;
@@ -95,7 +65,33 @@
 		fill: var(--text-color);
 	}
 
-	#nav-list li:not(:first-child):not(:last-child) {
+	#nav-list {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 0;
+		padding-bottom: 0;
+		list-style: none;
+	}
+	#nav-list li:first-child {
+		margin-right: auto;
+	}
+
+	.nav-list-item {
+		transition: transform 0.3s ease;
+	}
+	.nav-list-item:hover {
+		transform: translateY(-8px);
+	}
+
+	.list-item {
+		margin-right: 1rem;
+		margin-top: 0.5rem;
+		text-decoration: none;
+		color: var(--text-color);
+	}
+
+	.button-link {
 		text-decoration: none;
 		color: var(--text-color);
 		background-color: var(--primary-button-color);
@@ -104,6 +100,14 @@
 		font-size: var(--medium2-size);
 		padding: 10px 15px;
 		border-radius: 75px;
+	}
+
+	.a-link {
+		text-decoration: none;
+		color: var(--text-color);
+	}
+	.a-link:visited {
+		color: var(--text-color);
 	}
 
 	/*Simple css to style it like a toggle switch*/
@@ -170,4 +174,6 @@
 	.slider.round:before {
 		border-radius: 50%;
 	}
+
+	/* Mobile Nav */
 </style>
