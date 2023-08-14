@@ -1,53 +1,89 @@
 <header id="header">
-	<nav id="top-nav">
-		<ul id="nav-list">
-			<li class="nav-list-item list-item">
-				<a href="/" target="_self" rel="noreferrer" class="a-link">
-					<button id="home-button">
-						<svg
-							fill="#000000"
-							viewBox="0 0 32 32"
-							xmlns="http://www.w3.org/2000/svg"
-							class="home-icon"
-						>
-							<path
-								d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
-							></path>
-						</svg>
-						<span>Home</span>
-					</button>
-				</a>
-			</li>
-			<li class="nav-list-item list-item button-link">
-				<a href="/about" target="_self" rel="noreferrer" class="a-link">About</a
+	<nav id="navbar-container">
+		<div id="home-container" class="hover">
+			<a href="/" target="_self" rel="noreferrer" class="home-link">
+				<svg
+					fill="#000000"
+					viewBox="0 0 32 32"
+					xmlns="http://www.w3.org/2000/svg"
+					class="home-icon"
 				>
-			</li>
-			<li class="nav-list-item list-item button-link">
-				<a href="/work" target="_self" rel="noreferrer" class="a-link">Work</a>
-			</li>
-			<li class="nav-list-item list-item button-link">
-				<a href="/blog" target="_self" rel="noreferrer" class="a-link">Blog</a>
-			</li>
-			<li class="nav-list-item list-item button-link">
-				<a href="/contact" target="_self" rel="noreferrer" class="a-link"
-					>Contact</a
-				>
-			</li>
-			<li class="list-item">
-				<label class="switch" aria-label="Toggle Switch">
-					<input type="checkbox" />
-					<span class="slider round"></span>
-				</label>
-				<script type="text/javascript" src="/scripts/theme.js"></script>
-			</li>
-		</ul>
+					<path
+						d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
+					></path>
+				</svg>
+				Home
+			</a>
+		</div>
+		<div id="toggle-container">
+			<button
+				type="button"
+				id="navbar-toggle"
+				aria-controls="navbar-menu"
+				aria-label="Toggle menu"
+				aria-expanded="false"
+			>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<div id="navbar-menu" aria-labelledby="navbar-toggle">
+			<ul id="nav-list">
+				<li class="hover list-item button-link">
+					<a href="/about" target="_self" rel="noreferrer" class="a-link"
+						>About</a
+					>
+				</li>
+				<li class="hover list-item button-link">
+					<a href="/work" target="_self" rel="noreferrer" class="a-link">Work</a
+					>
+				</li>
+				<li class="hover list-item button-link">
+					<a href="/blog" target="_self" rel="noreferrer" class="a-link">Blog</a
+					>
+				</li>
+				<li class="hover list-item button-link">
+					<a href="/contact" target="_self" rel="noreferrer" class="a-link"
+						>Contact</a
+					>
+				</li>
+				<li class="list-item">
+					<label class="switch" aria-label="Toggle Switch">
+						<input type="checkbox" />
+						<span class="slider round"></span>
+					</label>
+				</li>
+			</ul>
+		</div>
 	</nav>
 </header>
 
 <style>
 	/* DeskTop Nav */
-	#home-button {
-		all: unset;
+	#navbar-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 1rem;
+		padding-bottom: 1rem;
+	}
+
+	#home-container {
+		margin-left: 2rem;
+	}
+
+	.home-icon {
+		width: 75px;
+		height: 75px;
+		fill: var(--text-color);
+		margin-right: 0.5rem;
+	}
+
+	.home-link {
+		display: flex;
+		align-items: center;
 		text-decoration: none;
 		font-weight: bold;
 		font-size: var(--large1-size);
@@ -55,14 +91,50 @@
 		color: var(--text-color);
 		background-color: var(--background-color);
 		cursor: pointer;
-		display: flex;
-		justify-content: center;
 	}
 
-	.home-icon {
-		width: 75px;
-		height: 75px;
-		fill: var(--text-color);
+	#toggle-container {
+		display: none;
+	}
+
+	#navbar-toggle {
+		cursor: pointer;
+		border: none;
+		background-color: transparent;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.icon-bar {
+		display: block;
+		width: 25px;
+		height: 4px;
+		margin: 2px;
+		transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out,
+			opacity 0.2s ease-in-out;
+		background-color: var(--text-color);
+	}
+
+	#navbar-toggle[aria-expanded="true"] .icon-bar:is(:first-child, :last-child) {
+		position: absolute;
+		margin: 0;
+		width: 30px;
+	}
+
+	#navbar-toggle[aria-expanded="true"] .icon-bar:first-child {
+		transform: rotate(45deg);
+	}
+
+	#navbar-toggle[aria-expanded="true"] .icon-bar:nth-child(2) {
+		opacity: 0;
+	}
+
+	#navbar-toggle[aria-expanded="true"] .icon-bar:last-child {
+		transform: rotate(-45deg);
 	}
 
 	#nav-list {
@@ -73,15 +145,20 @@
 		padding-bottom: 0;
 		list-style: none;
 	}
-	#nav-list li:first-child {
-		margin-right: auto;
-	}
 
-	.nav-list-item {
+	.hover {
 		transition: transform 0.3s ease;
 	}
-	.nav-list-item:hover {
+	.hover:hover {
 		transform: translateY(-8px);
+	}
+
+	.a-link {
+		text-decoration: none;
+		color: var(--text-color);
+	}
+	.a-link:visited {
+		color: var(--text-color);
 	}
 
 	.list-item {
@@ -100,14 +177,6 @@
 		font-size: var(--medium2-size);
 		padding: 10px 15px;
 		border-radius: 75px;
-	}
-
-	.a-link {
-		text-decoration: none;
-		color: var(--text-color);
-	}
-	.a-link:visited {
-		color: var(--text-color);
 	}
 
 	/*Simple css to style it like a toggle switch*/
@@ -174,6 +243,4 @@
 	.slider.round:before {
 		border-radius: 50%;
 	}
-
-	/* Mobile Nav */
 </style>
