@@ -15,21 +15,7 @@
 				Home
 			</a>
 		</div>
-		<div id="toggle-container">
-			<button
-				type="button"
-				id="navbar-toggle"
-				aria-controls="navbar-menu"
-				aria-label="Toggle menu"
-				aria-expanded="false"
-			>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-		</div>
-
-		<div id="navbar-menu" aria-labelledby="navbar-toggle">
+		<div id="navbar-menu">
 			<ul id="nav-list">
 				<li class="hover list-item button-link">
 					<a href="/about" target="_self" rel="noreferrer" class="a-link"
@@ -61,7 +47,7 @@
 </header>
 
 <style>
-	/* DeskTop Nav */
+	/* NavBar Container */
 	#navbar-container {
 		display: flex;
 		justify-content: space-between;
@@ -70,6 +56,7 @@
 		padding-bottom: 1rem;
 	}
 
+	/* Home Button Section */
 	#home-container {
 		margin-left: 2rem;
 	}
@@ -93,50 +80,7 @@
 		cursor: pointer;
 	}
 
-	#toggle-container {
-		display: none;
-	}
-
-	#navbar-toggle {
-		cursor: pointer;
-		border: none;
-		background-color: transparent;
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-	}
-
-	.icon-bar {
-		display: block;
-		width: 25px;
-		height: 4px;
-		margin: 2px;
-		transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out,
-			opacity 0.2s ease-in-out;
-		background-color: var(--text-color);
-	}
-
-	#navbar-toggle[aria-expanded="true"] .icon-bar:is(:first-child, :last-child) {
-		position: absolute;
-		margin: 0;
-		width: 30px;
-	}
-
-	#navbar-toggle[aria-expanded="true"] .icon-bar:first-child {
-		transform: rotate(45deg);
-	}
-
-	#navbar-toggle[aria-expanded="true"] .icon-bar:nth-child(2) {
-		opacity: 0;
-	}
-
-	#navbar-toggle[aria-expanded="true"] .icon-bar:last-child {
-		transform: rotate(-45deg);
-	}
-
+	/* NavBar Menu Section */
 	#nav-list {
 		display: flex;
 		justify-content: space-between;
@@ -179,9 +123,7 @@
 		border-radius: 75px;
 	}
 
-	/*Simple css to style it like a toggle switch*/
-	/* The switch - the box around the slider */
-
+	/* Theme Toggle Switch */
 	.switch {
 		position: relative;
 		display: inline-block;
