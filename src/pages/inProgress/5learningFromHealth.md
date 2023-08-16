@@ -15,11 +15,11 @@ date: "March 2022-May 2022"
 
 techTitle: "Technologies"
 
-tech: "Lorem ipsum dolor sit amet"
+tech: "Python, Pandas, Matplotlib, Seaborn, Scikit-learn"
 
-tools: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+tools: "Jupyter Notebook"
 
-roles: "Lorem ipsum dolor sit amet"
+roles: "Data Scientist"
 
 responsibilities:
   - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
