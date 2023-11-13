@@ -30,7 +30,11 @@ background: "Imagine you are visiting the San Diego Zoo, one of the largest and 
 
 problem: "The official San Diego Zoo's mobile application has been reported as cumbersome and challenging to use by users. Visitors have experienced difficulty following the directions provided by the app, resulting in frustration and confusion. As a result, some visitors have abandoned the app and reported more success with paper maps."
 
+problemTitle: "Problem Statement"
+
 solution: "Zooseeker is an Android application that focuses on enhancing the visitor experience through enhanced navigation. Visitors can create and manage their own exhibit plan, through enahnced search and filtering options. After a plan is created, Zooseeker provides directions for the shortest path to visit all exhibits in their plan. Visitors can adjust their plan, and the app will automatically redirect and re-route. "
+
+solutionTitle: "Solution"
 
 processTitle: "Development Process"
 

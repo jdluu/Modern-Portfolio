@@ -30,7 +30,11 @@ background: "Data driven decision making is a key component of any successful bu
 
 problem: "Data can be interpreted in many ways, many of which are not accurate. Poorly gathered data can lead to poor decisions and results. It is easy to justify a decision based on data that is not accurate. For example, if a website has a high bounce rate, it is easy to assume that the website is not performing well. However, if the website is a single page application, a high bounce rate is expected. The bounce rate is not an accurate measure of the website's performance. The problem is that many web developers do not know how to properly interpret data, and therefore make decisions based on inaccurate data."
 
+problemTitle: "Problem Statement"
+
 solution: "The application of analytics to measure user behavior and website performance enables us to shift our web development standards from assumptions to evidence based on data. Correctly interpreting data allows us to make better decisions and achieve better results. The goal of this project is to create a web analytics dashboard that will allow us to collect, interpret, and analyze data in order to make better decisions and achieve better results."
+
+solutionTitle: "Solution"
 
 processTitle: "Development Process"
 
