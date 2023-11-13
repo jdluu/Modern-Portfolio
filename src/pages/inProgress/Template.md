@@ -30,7 +30,11 @@ background: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismo
 
 problem: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit, vel bibendum justo sapien in diam."
 
+problemTitle: "Problem Statement"
+
 solution: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit, vel bibendum justo sapien in diam."
+
+solutionTitle: "Solution"
 
 processTitle: "Development Process"
 
