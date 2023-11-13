@@ -5,11 +5,11 @@ title: "Learning From Health"
 
 intro: "A data science project that leverages data from the Centers for Disease Control and Prevention (CDC) to develop predictive models for income, based on health statistics such as diabetes, cholesterol, and kidney disease."
 
-thumbnail:
+thumbnail: "../images/thumbnailLH.png"
 
-homeImg:
+homeImg: "../images/homeLH.png"
 
-homeImgAlt: "Lorem ipsum dolor sit amet"
+homeImgAlt: "The home page of our Learning From Health data analysis report"
 
 date: "March 2022-May 2022"
 
@@ -54,7 +54,7 @@ reflection:
   - Sed euismod, velit vel luctus tincidunt, justo nisl ultricies velit.
   - Vel bibendum justo sapien in diam.
 
-sourceTitle:
+sourceTitle: "Complete report"
 
-sourceLink:
+sourceLink: "https://drive.google.com/file/d/1scRqM_Ie2mubrcM7FFgd1J2pSjgBCiVI/view?usp=sharing"
 ---
