@@ -30,7 +30,11 @@ background: "You just moved into a new city, maybe for an internship, college, j
 
 problem: "Although there are people who want to become involved in humanitarian efforts, many find it difficult, citing that it's difficult to do so without a club or organization who sets everything up. Outside of these organizations, there aren't any advertisements or flyers to go out and help out somewhere."
 
+problemTitle: "Problem Statement"
+
 solution: 'Our goal with Urbenefit ("your-benefit") was to create an accessible platform/social application oriented around crowdsourcing possible volunteers of humanitarian and art-based community efforts (ie. park clean-ups, large scale murals, trash compost groups, etc.). UrBenefit strives to provide a platform in which there is an easily accessible, centralized hub for those with a desire to participate in humanitarian efforts and better the community around them.'
+
+solutionTitle: "Solution"
 
 processTitle: "Design Process"
 
