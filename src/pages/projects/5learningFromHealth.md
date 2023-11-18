@@ -7,7 +7,7 @@ intro: "A data science project that leverages data from the Centers for Disease 
 
 thumbnail: "../images/thumbnailLH.png"
 
-homeImg: "../images/homeLH.png"
+homeImg: "../images/homelh.png"
 
 homeImgAlt: "The home page of our Learning From Health data analysis report"
 
