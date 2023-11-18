@@ -7,7 +7,7 @@ intro: "A web application with a custom, secured web analytics dashboard and rep
 
 thumbnail: "../images/thumbnailWAD.png"
 
-homeImg: "public/images/homeWAD.png"
+homeImg: "../images/homeWAD.png"
 
 homeImgAlt: "The home page of our Admin Dashboard web application."
 
