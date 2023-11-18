@@ -5,9 +5,9 @@ title: "UrBenefit"
 
 intro: "An accessible platform/social application for crowdsourcing volunteers for humanitarian and art-based community efforts."
 
-thumbnail: "../images/thumbnailUB.png"
+thumbnail: "/images/thumbnailUB.png"
 
-homeImg: "../images/homeUB.png"
+homeImg: "/images/homeUB.png"
 
 homeImgAlt: "Lorem ipsum dolor sit amet"
 
@@ -43,13 +43,13 @@ process:
   - We used a technique called piggyback prototyping to test our ideas with users.
   - We iterated on our ideas based on the feedback we received from users.
 
-wireframe: "../images/wireframeUB.png"
+wireframe: "/images/wireframeUB.png"
 
 wireframeAlt: "Low Fidelity Wireframes for UrBenefit"
 
 finalDesc: "After 2 rounds of user testing with over 80 participants, we were able to create high fidelity mockups of the final product where we strived to keep a clean, modern, and organic aesthetic."
 
-finalImg: "../images/finalUB.png"
+finalImg: "/images/finalUB.png"
 
 finalImgAlt: "Lorem ipsum dolor sit amet"
 
