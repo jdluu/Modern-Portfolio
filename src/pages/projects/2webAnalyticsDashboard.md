@@ -5,9 +5,9 @@ title: "Web Analytics Dashboard"
 
 intro: "A web application with a custom, secured web analytics dashboard and reporting system."
 
-thumbnail: "/images/thumbnailWAD.png"
+thumbnail: "../images/thumbnailWAD.png"
 
-homeImg: "../images/homeWAD.png"
+homeImg: "public/images/homeWAD.png"
 
 homeImgAlt: "The home page of our Admin Dashboard web application."
 
