@@ -11,7 +11,7 @@ homeImg: "../images/homeLH.png"
 
 homeImgAlt: "The home page of our Learning From Health data analysis report"
 
-date: "March 2022-May 2022"
+date: "January 2022-March 2022"
 
 techTitle: "Technologies"
 
