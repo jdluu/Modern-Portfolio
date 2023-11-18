@@ -5,9 +5,9 @@ title: "Learning From Health"
 
 intro: "A data science project that leverages data from the Centers for Disease Control and Prevention (CDC) to develop predictive models for income, based on health statistics such as diabetes, cholesterol, and kidney disease."
 
-thumbnail: "../images/thumbnailLH.png"
+thumbnail: "/images/thumbnailLH.png"
 
-homeImg: "../images/homeLH.png"
+homeImg: "/images/homeLH.png"
 
 homeImgAlt: "The home page of our Learning From Health data analysis report"
 
@@ -43,13 +43,13 @@ process:
   - Then, we moved on to data cleaning and pre-processing to prepare the data for analysis.
   - Finally, we carried out Exploratory Data Analysis (EDA), performed relevant analysis, and interpreted the results in the notebook. Below, we can see our initial model, a multivariate linear regression model, and our final model using a random forest regressor.
 
-wireframe: "../images/wireframeLH.png"
+wireframe: "/images/wireframeLH.png"
 
 wireframeAlt: "A multivariate linear regression model that shows poor correlation between income and health conditions."
 
 finalDesc: "Using a random forest regressor, we were able to predict income with an accuracy of 99.62% with an equally low mean squared error value of 7.4462. As shown in the plot, the relationship between true income and predicted income seems to be linear, with a few outliers."
 
-finalImg: "../images/finalLH.png"
+finalImg: "/images/finalLH.png"
 
 finalImgAlt: "A near linear random forest regressor model showing a strong correlation between predicted income and true income."
 

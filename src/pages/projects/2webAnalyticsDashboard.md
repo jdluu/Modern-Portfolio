@@ -43,13 +43,13 @@ process:
   - Then, we moved on to designing the database schema and creating the database. Addtionally, we planned out our REST API and created the API endpoints.
   - After we had our database and API endpoints, we moved on to creating the front-end of the application. We used ZingChart and ZingGrid to create the charts, tables, graphs, and grids of the dashboard.
 
-wireframe: "../images/wireframeWAD.png"
+wireframe: "/images/wireframeWAD.png"
 
 wireframeAlt: "Initial API endpoints"
 
 finalDesc: "Beyond the home page, I also created a user management page, building our own REST API where admins can add, edit, and delete users."
 
-finalImg: "../images/finalWAD.png"
+finalImg: "/images/finalWAD.png"
 
 finalImgAlt: "Our User Management page, where admins can add, edit, and delete users."
 
