@@ -1,12 +1,16 @@
 {
-  "extends": "astro/tsconfigs/base",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "jsxImportSource": "react"
-  }
+	"extends": "astro/tsconfigs/base",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@components/*": ["src/components/*"]
+		},
+		"jsx": "react-jsx",
+		"module": "ESNext",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"allowImportingTsExtensions": true,
+		"jsxImportSource": "react"
+	}
 }
