@@ -2,6 +2,11 @@
 	"extends": "astro/tsconfigs/base",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-		"jsxImportSource": "@builder.io/qwik"
+		"module": "ESNext",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"allowImportingTsExtensions": true
+		// Other options...
 	}
 }
