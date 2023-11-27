@@ -5,12 +5,8 @@
 		"paths": {
 			"@components/*": ["src/components/*"]
 		},
-		"jsx": "react-jsx",
 		"module": "ESNext",
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
-		"allowImportingTsExtensions": true,
-		"jsxImportSource": "react"
+		"allowImportingTsExtensions": true
 	}
 }
