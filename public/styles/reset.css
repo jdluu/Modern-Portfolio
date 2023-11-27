@@ -1,0 +1,40 @@
+/* Reset Box Model */
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Remove List Styles */
+ul,
+ol {
+	list-style: none;
+}
+
+/* Reset Heading Margins */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+}
+
+/* Reset Link Styles */
+a {
+	text-decoration: none;
+}
+
+/* Reset Form Styles */
+input,
+textarea,
+button {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none;
+	font-family: inherit;
+}

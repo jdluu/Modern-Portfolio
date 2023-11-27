@@ -1,10 +1,10 @@
 ---
-import DefaultLayout from "../layouts/DefaultLayout.astro";
+import Layout from "../layouts/Layout.astro";
 import AboutPage from "../components/AboutContent.astro";
 
-const { pageTitle } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<DefaultLayout pageTitle={pageTitle}>
-    <AboutPage />
-</DefaultLayout>
+<Layout title={title}>
+	<AboutPage />
+</Layout>

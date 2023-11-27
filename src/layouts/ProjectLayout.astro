@@ -1,5 +1,5 @@
 ---
-import DefaultLayout from "./DefaultLayout.astro";
+import Layout from "./Layout.astro";
 import type { MarkdownLayoutProps } from "astro";
 
 type Props = MarkdownLayoutProps<{
@@ -32,7 +32,7 @@ type Props = MarkdownLayoutProps<{
 const { frontmatter, url } = Astro.props;
 ---
 
-<DefaultLayout pageTitle={frontmatter.title}>
+<Layout title={frontmatter.title}>
 	<div id="left-tray">
 		<ul id="table-of-contents">
 			<li>
@@ -202,7 +202,7 @@ const { frontmatter, url } = Astro.props;
 			</section>
 		</div>
 	</div>
-</DefaultLayout>
+</Layout>
 
 <style>
 	#left-tray {
