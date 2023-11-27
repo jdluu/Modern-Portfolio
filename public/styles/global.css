@@ -7,6 +7,7 @@
 	--secondary-button-color: #e5f7fa;
 	--accent-color: #87dbe8;
 	--icon-color: #020b0d;
+
 	/* Dark Theme */
 	[data-theme="dark"] {
 		--text-color: #e6f9f3;
@@ -65,5 +66,13 @@
 		font-weight: normal;
 		font-style: normal;
 		font-display: swap;
+	}
+
+	body {
+		background-color: var(--background-color);
+		color: var(--text-color);
+		font-family: var(--font-primary);
+		font-size: var(--font-medium);
+		overflow-x: hidden;
 	}
 }
