@@ -1,5 +1,5 @@
 ---
-import Navbar from "../components/Navbar.astro";
+import NavBar from "../components/Navbar.tsx";
 import Footer from "../components/Footer.astro";
 
 interface Props {
@@ -41,7 +41,7 @@ const { title } = Astro.props;
 		<script src="/scripts/theme.js" defer></script>
 	</head>
 	<body>
-		<Navbar />
+		<NavBar />
 		<main>
 			<slot />
 		</main>
