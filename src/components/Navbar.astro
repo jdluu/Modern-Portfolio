@@ -5,7 +5,7 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 <header class="lg:flex p-5 gap-5">
 	<Astronav>
 		<div class="flex w-full justify-between">
-			<a href="/" target="_self" rel="noreferrer">
+			<a href="/" target="_self" rel="noreferrer" class="hover">
 				<svg
 					fill="#000000"
 					viewBox="0 0 32 32"
@@ -24,19 +24,19 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		</div>
 		<MenuItems class="hidden lg:flex">
 			<ul class="flex flex-col lg:flex-row lg:gap-5">
-				<li>
+				<li class="hover list-item btn-link">
 					<a href="/about" target="_self" rel="noreferrer">About</a>
 				</li>
-				<li>
+				<li class="hover list-item btn-link">
 					<a href="/work" target="_self" rel="noreferrer">Work</a>
 				</li>
-				<li>
+				<li class="hover list-item btn-link">
 					<a href="/blog" target="_self" rel="noreferrer">Blog</a>
 				</li>
-				<li>
+				<li class="hover list-item btn-link">
 					<a href="/contact" target="_self" rel="noreferrer">Contact</a>
 				</li>
-				<li>
+				<li class="list-item">
 					<label class="switch" aria-label="Toggle Switch">
 						<input type="checkbox" />
 						<span class="slider round"></span>
@@ -48,6 +48,30 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 </header>
 
 <style>
+	.hover {
+		transition: transform 0.3s ease;
+	}
+	.hover:hover {
+		transform: translateY(-8px);
+	}
+	.list-item {
+		margin-right: 1rem;
+		margin-top: 0.5rem;
+		text-decoration: none;
+		color: var(--text-color);
+	}
+
+	.btn-link {
+		text-decoration: none;
+		color: var(--text-color);
+		background-color: var(--primary-button-color);
+		border: 1px solid var(--text-color);
+		font-weight: bold;
+		font-size: var(--font-large);
+		padding: 10px 15px;
+		border-radius: 75px;
+	}
+
 	/* Theme Toggle Switch */
 	.switch {
 		position: relative;
