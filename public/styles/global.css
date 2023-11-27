@@ -6,6 +6,7 @@
 	--primary-button-color: #72d5e4;
 	--secondary-button-color: #e5f7fa;
 	--accent-color: #87dbe8;
+	--icon-color: #020b0d;
 	/* Dark Theme */
 	[data-theme="dark"] {
 		--text-color: #e6f9f3;
@@ -14,6 +15,7 @@
 		--primary-button-color: #4dbcd5;
 		--secondary-button-color: #0a1429;
 		--accent-color: #244999;
+		--icon-color: #e6f9f3;
 	}
 
 	/* Font Sizes */
