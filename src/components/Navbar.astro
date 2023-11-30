@@ -4,7 +4,7 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 
 <header class="lg:flex p-5 gap-5">
 	<Astronav>
-		<div class="flex w-full justify-between">
+		<div class="flex w-full justify-between lg:ml-8">
 			<a href="/" target="_self" rel="noreferrer" class="hover home-text">
 				<svg
 					fill="#000000"
@@ -23,21 +23,21 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 			</div>
 		</div>
 		<MenuItems class="hidden lg:flex">
-			<ul class="flex flex-col lg:flex-row lg:gap-5">
+			<ul class="flex flex-col lg:flex-row lg:gap-5 items-center">
 				<li class="hover list-item btn-link">
 					<a href="/about" target="_self" rel="noreferrer">About</a>
 				</li>
 				<li class="hover list-item btn-link">
 					<a href="/work" target="_self" rel="noreferrer">Work</a>
 				</li>
-				<li class="hover list-item btn-link">
+				<!-- <li class="hover list-item btn-link">
 					<a href="/blog" target="_self" rel="noreferrer">Blog</a>
-				</li>
+				</li> -->
 				<li class="hover list-item btn-link">
 					<a href="/contact" target="_self" rel="noreferrer">Contact</a>
 				</li>
 				<li class="list-item">
-					<label class="switch" aria-label="Toggle Switch">
+					<label class="switch" aria-label="Toggle Theme Switch">
 						<input type="checkbox" />
 						<span class="slider round"></span>
 					</label>
@@ -70,12 +70,13 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 	.btn-link {
 		text-decoration: none;
 		color: var(--text-color);
-		background-color: var(--primary-button-color);
+		background-color: var(--primary-btn-color);
 		border: 1px solid var(--text-color);
-		font-weight: bold;
 		font-size: var(--font-large);
-		padding: 10px 15px;
-		border-radius: 75px;
+		font-weight: bold;
+		margin: auto;
+		padding: 10px 20px;
+		border-radius: 30px;
 	}
 
 	/* Theme Toggle Switch */
