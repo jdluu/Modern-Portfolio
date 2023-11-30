@@ -220,6 +220,7 @@ const { frontmatter, url } = Astro.props;
 		padding: 0;
 		margin: 0;
 		list-style: none;
+		font-family: var(--font-secondary);
 	}
 
 	.link-active {
@@ -270,8 +271,21 @@ const { frontmatter, url } = Astro.props;
 	}
 
 	.project-title {
+		font-family: var(--font-heading);
 		font-weight: bold;
 		font-size: var(--font-xlarge);
+	}
+
+	h2 {
+		font-family: var(--font-heading);
+		font-weight: bold;
+		font-size: var(--font-large);
+	}
+
+	h3 {
+		font-family: var(--font-heading);
+		font-weight: bold;
+		font-size: var(--font-medium);
 	}
 
 	.project-image {
