@@ -48,6 +48,20 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 </header>
 
 <style>
+	.home-icon {
+		width: 60px;
+		height: 60px;
+		fill: var(--icon-color);
+		margin-right: 10px;
+		transition: transform 0.3s ease; /* Smooth transition */
+	}
+
+	.home-icon:hover {
+		transform: scale(
+			1.2
+		); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+	}
+
 	.home-text {
 		font-size: var(--font-xlarge);
 		font-weight: bold;
