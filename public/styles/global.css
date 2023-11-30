@@ -3,8 +3,8 @@
 	--text-color: #020b0d;
 	--inverse-text-color: #fdf4f2;
 	--background-color: #d4f2f7;
-	--primary-button-color: #72d5e4;
-	--secondary-button-color: #e5f7fa;
+	--primary-btn-color: #72d5e4;
+	--secondary-btn-color: #e5f7fa;
 	--accent-color: #87dbe8;
 	--icon-color: #020b0d;
 
@@ -13,8 +13,8 @@
 		--text-color: #e6f9f3;
 		--inverse-text-color: #19060c;
 		--background-color: #051510;
-		--primary-button-color: #4dbcd5;
-		--secondary-button-color: #0a1429;
+		--primary-btn-color: #4dbcd5;
+		--secondary-btn-color: #0a1429;
 		--accent-color: #244999;
 		--icon-color: #e6f9f3;
 	}
