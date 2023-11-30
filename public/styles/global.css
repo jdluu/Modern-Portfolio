@@ -1,13 +1,4 @@
 :root {
-	/* Default Light Theme */
-	--text-color: #020b0d;
-	--inverse-text-color: #fdf4f2;
-	--background-color: #d4f2f7;
-	--primary-btn-color: #72d5e4;
-	--secondary-btn-color: #e5f7fa;
-	--accent-color: #87dbe8;
-	--icon-color: #020b0d;
-
 	/* Font Sizes */
 	--font-small: 0.8rem;
 	--font-medium: 1rem;
@@ -19,6 +10,17 @@
 	--font-secondary: "Open Sans", sans-serif;
 	--font-heading: "Montserrat", sans-serif;
 	--font-cursive: "Pacifico", cursive;
+}
+
+/* Default Light Theme */
+[data-theme="light"] {
+	--text-color: #020b0d;
+	--inverse-text-color: #fdf4f2;
+	--background-color: #d4f2f7;
+	--primary-btn-color: #72d5e4;
+	--secondary-btn-color: #e5f7fa;
+	--accent-color: #87dbe8;
+	--icon-color: #020b0d;
 }
 
 /* Dark Theme */
