@@ -39,6 +39,57 @@
 	</div>
 </section>
 
+<style>
+	.page-h2 {
+		font-size: var(--font-large);
+		font-family: var(--font-heading);
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		margin-left: 1rem;
+		text-decoration: underline;
+		color: var(--text-color);
+	}
+
+	#flex-container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	#about-wrapper,
+	#figma-wrapper {
+		flex: 0 0 50%;
+		box-sizing: border-box;
+		padding: 10px;
+	}
+
+	#figma-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#about-desc {
+		text-indent: 2rem;
+		margin-left: 1rem;
+		font-size: var(--font-large);
+		text-align: left;
+		color: var(--text-color);
+	}
+
+	#youtube-redesign {
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		width: 650px;
+		height: 450px;
+	}
+
+	#figma-caption {
+		text-align: center;
+		font-size: var(--font-large);
+		color: var(--text-color);
+	}
+</style>
+
 <section class="content-section">
 	<h2 id="education" class="page-h2">Education</h2>
 	<div id="education-desc">
@@ -71,3 +122,76 @@
 		</p>
 	</div>
 </section>
+
+<style>
+	#education {
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	#education-desc {
+		text-indent: 2rem;
+		margin-left: 1rem;
+		margin-right: 1rem;
+		text-align: left;
+		color: var(--text-color);
+	}
+
+	#top-line {
+		display: flex;
+		flex-direction: row;
+	}
+	#top-line p {
+		margin-left: auto;
+		margin-right: 1rem;
+		font-size: var(--font-large);
+	}
+
+	#university-title {
+		font-size: var(--font-xlarge);
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+
+	#degree {
+		font-size: var(--font-large);
+		margin: 0;
+	}
+
+	#minor {
+		font-size: var(--font-large);
+		margin: 0 0 1rem;
+		padding-top: 0;
+	}
+
+	#gpa {
+		font-size: var(--font-large);
+		margin: 0 0 1rem;
+		padding-top: 0;
+	}
+
+	#desc-title {
+		font-size: var(--font-large);
+		margin: 0;
+		padding: 0;
+	}
+
+	#coursework {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.class-list {
+		list-style-position: inside;
+	}
+
+	.class-list li {
+		margin-bottom: 5px;
+	}
+
+	#advert-link {
+		font-size: var(--font-large);
+		margin: 0;
+		padding: 0;
+	}
+</style>
