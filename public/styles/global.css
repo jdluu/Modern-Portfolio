@@ -34,8 +34,7 @@
 	/* Fonts */
 	@font-face {
 		font-family: "Lato";
-		src: url("https://fonts.gstatic.com/s/lato/v17/S6uyw4BMUTPHjx4wWw.ttf")
-			format("truetype");
+		src: url("/fonts/Lato-Regular.ttf") format("truetype");
 		font-weight: normal;
 		font-style: normal;
 		font-display: swap;
@@ -43,8 +42,7 @@
 
 	@font-face {
 		font-family: "Open Sans";
-		src: url("https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0e.ttf")
-			format("truetype");
+		src: url("/fonts/static/OpenSans-Regular.ttf") format("truetype");
 		font-weight: normal;
 		font-style: normal;
 		font-display: swap;
@@ -52,7 +50,7 @@
 
 	@font-face {
 		font-family: "Montserrat";
-		src: url("https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf")
+		src: url("/fonts/static/Montserrat-Regular.ttf") format("truetype");
 			format("truetype");
 		font-weight: normal;
 		font-style: normal;
@@ -61,7 +59,7 @@
 
 	@font-face {
 		font-family: "Pacifico";
-		src: url("https://fonts.gstatic.com/s/pacifico/v17/FwZY7-Qmy14u9lezJ96A.ttf")
+		src: url("/fonts/Pacifico-Regular.ttf") format("truetype");
 			format("truetype");
 		font-weight: normal;
 		font-style: normal;
