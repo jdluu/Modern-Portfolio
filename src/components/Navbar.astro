@@ -1,7 +1,11 @@
-<header id="header">
-	<nav id="navbar-container">
-		<div id="home-container" class="hover">
-			<a href="/" target="_self" rel="noreferrer" class="home-link">
+---
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+---
+
+<header class="lg:flex p-5 gap-5">
+	<Astronav>
+		<div class="flex w-full justify-between lg:ml-8">
+			<a href="/" target="_self" rel="noreferrer" class="hover home-text">
 				<svg
 					fill="#000000"
 					viewBox="0 0 32 32"
@@ -14,80 +18,54 @@
 				</svg>
 				Home
 			</a>
+			<div class="block lg:hidden">
+				<MenuIcon class="w-4 h-4 text-gray-800" />
+			</div>
 		</div>
-		<div id="navbar-menu">
-			<ul id="nav-list">
-				<li class="hover list-item button-link">
-					<a href="/about" target="_self" rel="noreferrer" class="a-link"
-						>About</a
-					>
+		<MenuItems class="hidden lg:flex">
+			<ul class="flex flex-col lg:flex-row lg:gap-5 items-center">
+				<li class="hover list-item btn-link">
+					<a href="/about" target="_self" rel="noreferrer">About</a>
 				</li>
-				<li class="hover list-item button-link">
-					<a href="/work" target="_self" rel="noreferrer" class="a-link">Work</a
-					>
+				<li class="hover list-item btn-link">
+					<a href="/work" target="_self" rel="noreferrer">Work</a>
 				</li>
-				<!-- <li class="hover list-item button-link">
-					<a href="/blog" target="_self" rel="noreferrer" class="a-link">Blog</a
-					>
+				<!-- <li class="hover list-item btn-link">
+					<a href="/blog" target="_self" rel="noreferrer">Blog</a>
 				</li> -->
-				<li class="hover list-item button-link">
-					<a href="/contact" target="_self" rel="noreferrer" class="a-link"
-						>Contact</a
-					>
+				<li class="hover list-item btn-link">
+					<a href="/contact" target="_self" rel="noreferrer">Contact</a>
 				</li>
 				<li class="list-item">
-					<label class="switch" aria-label="Toggle Switch">
+					<label class="switch" aria-label="Toggle Theme Switch">
 						<input type="checkbox" />
 						<span class="slider round"></span>
 					</label>
 				</li>
 			</ul>
-		</div>
-	</nav>
+		</MenuItems>
+	</Astronav>
 </header>
 
 <style>
-	/* NavBar Container */
-	#navbar-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 1rem;
-		padding-bottom: 1rem;
-	}
-
-	/* Home Button Section */
-	#home-container {
-		margin-left: 2rem;
-	}
-
 	.home-icon {
-		width: 75px;
-		height: 75px;
-		fill: var(--text-color);
-		margin-right: 0.5rem;
+		width: 60px;
+		height: 60px;
+		fill: var(--icon-color);
+		margin-right: 10px;
+		transition: transform 0.3s ease; /* Smooth transition */
 	}
 
-	.home-link {
-		display: flex;
-		align-items: center;
-		text-decoration: none;
+	.home-icon:hover {
+		transform: scale(
+			1.2
+		); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+	}
+
+	.home-text {
+		font-size: var(--font-xlarge);
 		font-weight: bold;
-		font-size: var(--large1-size);
-		font-family: "Pacifico", Fallback, cursive;
-		color: var(--text-color);
-		background-color: var(--background-color);
-		cursor: pointer;
-	}
-
-	/* NavBar Menu Section */
-	#nav-list {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 0;
-		padding-bottom: 0;
-		list-style: none;
+		font-family: var(--font-cursive);
 	}
 
 	.hover {
@@ -96,15 +74,6 @@
 	.hover:hover {
 		transform: translateY(-8px);
 	}
-
-	.a-link {
-		text-decoration: none;
-		color: var(--text-color);
-	}
-	.a-link:visited {
-		color: var(--text-color);
-	}
-
 	.list-item {
 		margin-right: 1rem;
 		margin-top: 0.5rem;
@@ -112,23 +81,25 @@
 		color: var(--text-color);
 	}
 
-	.button-link {
+	.btn-link {
 		text-decoration: none;
 		color: var(--text-color);
-		background-color: var(--primary-button-color);
+		background-color: var(--primary-btn-color);
 		border: 1px solid var(--text-color);
+		font-size: var(--font-large);
 		font-weight: bold;
-		font-size: var(--medium2-size);
-		padding: 10px 15px;
-		border-radius: 75px;
+		margin: auto;
+		padding: 10px 20px;
+		border-radius: 30px;
 	}
 
 	/* Theme Toggle Switch */
 	.switch {
 		position: relative;
 		display: inline-block;
-		width: 3.75rem;
-		height: 2.25rem;
+		width: 4rem;
+		height: 3rem;
+		margin-bottom: 0.5rem;
 	}
 
 	/* Hide default HTML checkbox */
@@ -154,8 +125,8 @@
 	.slider:before {
 		position: absolute;
 		content: "";
-		height: 1.625rem;
-		width: 1.625rem;
+		height: 2rem;
+		width: 2rem;
 		left: 4px;
 		bottom: 4px;
 		background-color: white;

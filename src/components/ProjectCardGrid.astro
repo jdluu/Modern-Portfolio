@@ -24,7 +24,8 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 
 <style>
 	.page-h2 {
-		font-size: var(--medium3-size);
+		font-size: var(--font-large);
+		font-family: var(--font-heading);
 		margin-top: 0.5rem;
 		margin-bottom: 0.5rem;
 		margin-left: 1rem;
@@ -34,7 +35,7 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 
 	@media screen and (max-width: 768px) {
 		.page-h2 {
-			font-size: var(--medium2-size);
+			font-size: var(--font-medium);
 		}
 	}
 
@@ -64,7 +65,7 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 		#project-grid {
 			justify-content: center;
 			align-items: center;
-			grid-template-columns: repeat(1, 1fr)
+			grid-template-columns: repeat(1, 1fr);
 			grid-gap: 1rem;
 			padding: 0 0 2rem;
 		}

@@ -43,10 +43,15 @@
 	</div>
 </section>
 
-<!--suppress css-invalid-property-value -->
 <style>
+	#home {
+		position: absolute;
+		left: -9999px;
+	}
+
 	.page-h2 {
-		font-size: var(--medium3-size);
+		font-size: var(--font-large);
+		font-family: var(--font-heading);
 		margin-top: 0.5rem;
 		margin-bottom: 0.5rem;
 		margin-left: 1rem;
@@ -56,12 +61,8 @@
 
 	@media screen and (max-width: 768px) {
 		.page-h2 {
-			font-size: var(--medium2-size);
+			font-size: var(--font-medium);
 		}
-	}
-	#home {
-		position: absolute;
-		left: -9999px;
 	}
 
 	#home-rows {
@@ -95,7 +96,6 @@
 		}
 	}
 
-	/*noinspection all*/
 	#intro {
 		margin-right: 1rem;
 		height: -moz-max-content;
@@ -116,52 +116,20 @@
 	}
 
 	#intro-desc {
-		font-size: var(--large1-size);
+		font-size: var(--font-large);
+		font-family: var(--font-secondary);
 		font-weight: bold;
 		text-align: left;
 		color: var(--text-color);
 	}
-	@media screen and (max-width: 1024px) {
-		#intro-desc {
-			font-size: var(--medium3-size);
-			text-align: center;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#intro-desc {
-			font-size: var(--medium2-size);
-			text-align: center;
-		}
-	}
-
-	@media screen and (max-width: 480px) {
-		#intro-desc {
-			font-size: var(--medium1-size);
-			text-align: center;
-		}
-	}
-
-	#intro-desc2 {
-		font-size: var(--medium2-size);
-		font-family: "Courier New", Courier, monospace;
-		color: var(--text-color);
-	}
 
 	@media screen and (max-width: 1024px) {
-		#intro-desc2 {
-			font-size: var(--medium1-size);
+		#intro-desc {
+			font-size: var(--font-medium);
 			text-align: center;
 		}
 	}
 
-	@media screen and (max-width: 480px) {
-		#intro-desc2 {
-			font-size: var(--small3-size);
-		}
-	}
-
-	/*noinspection CssInvalidPropertyValue*/
 	#resume-button {
 		display: flex;
 		justify-content: center;
@@ -174,7 +142,7 @@
 		width: fit-content; /* For modern browsers */
 		margin: auto;
 		padding: 1rem 2rem 1rem 2rem;
-		font-size: var(--medium1-size);
+		font-size: var(--font-medium);
 		border-radius: 30px;
 		border: 1px solid black;
 		background-image: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
@@ -189,30 +157,16 @@
 		text-decoration: none;
 	}
 
-	/*noinspection CssInvalidPropertyValue*/
 	#me {
 		margin: 0 1rem 0 0;
 		height: -moz-max-content;
 		height: max-content;
 	}
 
-	/*noinspection CssInvalidPropertyValue*/
 	#fractal {
 		margin: 0;
 		height: -moz-max-content;
 		height: max-content;
-	}
-
-	@media screen and (max-width: 1024px) {
-		#fractal {
-			width: 18rem;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#fractal {
-			width: 15rem;
-		}
 	}
 
 	#fractal-img {
@@ -220,31 +174,10 @@
 		align-items: center;
 	}
 
-	@media screen and (max-width: 768px) {
-		#fractal-img img {
-			width: 90%;
-			height: 90%;
-			margin-left: 0;
-		}
-	}
-
 	.img-desc {
 		font-size: 1.2rem;
 		text-align: center;
-		font-family: "Courier New", Courier, monospace;
+		font-family: var(--font-secondary);
 		color: var(--text-color);
-	}
-
-	@media screen and (max-width: 768px) {
-		.img-desc {
-			font-size: 1rem;
-			text-align: center;
-		}
-	}
-
-	@media screen and (max-width: 480px) {
-		.img-desc {
-			text-align: left;
-		}
 	}
 </style>
