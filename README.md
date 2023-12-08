@@ -2,7 +2,7 @@
 
 ## Design Philosophy
 
-For my portfolio, I decided to use Astro because of its content-focused, server first approach. Astro is optimized for performance and easy to use, using HTML, CSS, and JS syntax.
+For my portfolio, I decided to use Astro because of its content-focused, islands approach. Astro is optimized for performance and easy to use, using HTML, CSS, and JS syntax.
 
 This portfolio was built off of the content from my original portfolio here: <https://github.com/jdluu/portfolio>
 
