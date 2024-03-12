@@ -1,9 +1,9 @@
 ---
-import Layout from "./Layout.astro";
+import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={frontmatter.title}>
+<BaseLayout title={frontmatter.title}>
 	<section class="blog-page-container">
 		<h2>{frontmatter.title}</h2>
 		<p>Written on {frontmatter.pubDate.slice(0, 10)}</p>
@@ -12,7 +12,7 @@ const { frontmatter } = Astro.props;
 		</article>
 		<slot />
 	</section>
-</Layout>
+</BaseLayout>
 
 <style>
 	.blog-page-container {

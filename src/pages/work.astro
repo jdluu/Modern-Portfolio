@@ -1,12 +1,12 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import ExperiencePage from "../components/ExperienceContent.astro";
 import ProjectsGrid from "../components/ProjectCardGrid.astro";
 
 const title = "Experience & Projects"
 ---
 
-<Layout title={title}>
+<BaseLayout title={title}>
 	<ExperiencePage />
 	<ProjectsGrid />
-</Layout>
+</BaseLayout>

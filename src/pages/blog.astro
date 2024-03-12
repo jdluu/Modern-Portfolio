@@ -1,11 +1,11 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 const title = "Jeffrey Luu's Blog";
 ---
 
-<Layout title={title}>
+<BaseLayout title={title}>
 	<section class="blog-page-container">
 		<h2>A collection of posts written about school and tech!</h2>
 		<p>In progress! Check back later!</p>
@@ -18,7 +18,7 @@ const title = "Jeffrey Luu's Blog";
 			}
 		</ul>
 	</section>
-</Layout>
+</BaseLayout>
 
 <style>
 	.blog-page-container {
