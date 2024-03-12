@@ -3,7 +3,13 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@components/*": ["src/components/*"]
+			"@components/*": ["src/components/*"],
+			"@layouts/*": ["src/layouts/*"],
+			"@pages/*": ["src/pages/*"],
+			"@assets/*": ["public/assets/*"],
+			"@fonts/*": ["public/assets/fonts/*"],
+			"@icons/*": ["public/assets/icons/*"],
+			"@images/*": ["public/assets/images/*"]
 		},
 		"module": "ESNext",
 		"moduleResolution": "node",
