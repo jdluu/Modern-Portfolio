@@ -37,7 +37,7 @@
 /* Fonts */
 @font-face {
 	font-family: "Lato";
-	src: url("/fonts/Lato/Lato-Regular.ttf") format("truetype");
+	src: url("/assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -45,7 +45,8 @@
 
 @font-face {
 	font-family: "Open Sans";
-	src: url("/fonts/Open_Sans/static/OpenSans-Regular.ttf") format("truetype");
+	src: url("/assets/fonts/Open_Sans/static/OpenSans-Regular.ttf")
+		format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -53,7 +54,8 @@
 
 @font-face {
 	font-family: "Montserrat";
-	src: url("/fonts/Montserrat/static/Montserrat-Regular.ttf") format("truetype");
+	src: url("/assets/fonts/Montserrat/static/Montserrat-Regular.ttf")
+		format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -61,7 +63,7 @@
 
 @font-face {
 	font-family: "Pacifico";
-	src: url("/fonts/Pacifico/Pacifico-Regular.ttf") format("truetype");
+	src: url("/assets/fonts/Pacifico/Pacifico-Regular.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
