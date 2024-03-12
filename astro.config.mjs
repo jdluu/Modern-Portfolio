@@ -1,14 +1,12 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 import storyblok from "@storyblok/astro";
 import { loadEnv } from "vite";
-
+import tailwind from "@astrojs/tailwind";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 const env = loadEnv("", process.cwd(), "STORYBLOK");
 
-// https://astro.build/config
 export default defineConfig({
 	integrations: [
-		tailwind(),
 		storyblok({
 			accessToken: env.STORYBLOK_TOKEN,
 			components: {
@@ -20,9 +18,16 @@ export default defineConfig({
 				region: "us",
 			},
 		}),
+		tailwind(),
 	],
 	i18n: {
 		defaultLocale: "en",
 		locales: ["en", "fr", "pt-br", "es"],
+	},
+	vite: {
+		plugins: [basicSsl()],
+		server: {
+			https: true,
+		},
 	},
 });
