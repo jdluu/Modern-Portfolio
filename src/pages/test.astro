@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getTests } from '../lib/cosmic'
+
+const data = await getTests()
+
+
+const title = "Testing CMS"
+
+---
+
+<BaseLayout title={title}>
+	<section>
+		<ul class="grid gap-8 md:grid-cols-2">
+			{
+				data.map((test) => (
+					<li>{test.title}</li>
+				))
+			}
+		</ul>
+	</section>
+</BaseLayout>
