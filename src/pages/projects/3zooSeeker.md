@@ -5,9 +5,9 @@ title: "Zooseeker"
 
 intro: "An android app to plan a trip to the San Diego Zoo, optimizing routes for minimal walking to desired exhibits."
 
-thumbnail: "/images/thumbnailZS.png"
+thumbnail: "/assets/images/thumbnailZS.png"
 
-homeImg: "/images/homeZS.png"
+homeImg: "/assets/images/homeZS.png"
 
 homeImgAlt: "Our High Fidelity Prototype"
 
@@ -45,13 +45,13 @@ process:
 
   - Our initial wireframe was created using Figma, and we used Android Studio to develop our application. We used JUnit, Robolectric, and Espresso to test our application. We also used GitHub Actions for continuous integration.
 
-wireframe: "/images/wireframeZS.png"
+wireframe: "/assets/images/wireframeZS.png"
 
 wireframeAlt: "Initial Zooseeker Wireframe"
 
 finalDesc: "Our final product in action."
 
-finalImg: "/images/finalZS.gif"
+finalImg: "/assets/images/finalZS.gif"
 
 finalImgAlt: "Our MVP product"
 
