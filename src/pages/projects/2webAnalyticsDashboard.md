@@ -5,9 +5,9 @@ title: "Web Analytics Dashboard"
 
 intro: "A web application with a custom, secured web analytics dashboard and reporting system."
 
-thumbnail: "/images/thumbnailWAD.png"
+thumbnail: "/assets/images/thumbnailWAD.png"
 
-homeImg: "/images/homeWAD.png"
+homeImg: "/assets/images/homeWAD.png"
 
 homeImgAlt: "The home page of our Admin Dashboard web application."
 
@@ -43,13 +43,13 @@ process:
   - Then, we moved on to designing the database schema and creating the database. Addtionally, we planned out our REST API and created the API endpoints.
   - After we had our database and API endpoints, we moved on to creating the front-end of the application. We used ZingChart and ZingGrid to create the charts, tables, graphs, and grids of the dashboard.
 
-wireframe: "/images/wireframeWAD.png"
+wireframe: "/assets/images/wireframeWAD.png"
 
 wireframeAlt: "Initial API endpoints"
 
 finalDesc: "Beyond the home page, I also created a user management page, building our own REST API where admins can add, edit, and delete users."
 
-finalImg: "/images/finalWAD.png"
+finalImg: "/assets/images/finalWAD.png"
 
 finalImgAlt: "Our User Management page, where admins can add, edit, and delete users."
 
