@@ -1,0 +1,20 @@
+---
+import { getAllProjects } from '../../lib/cosmic'
+import BaseLayout from "../../layouts/BaseLayout.astro"
+
+export async function getStaticPaths() {
+    const data = (await getAllProjects()) || []
+
+    return data.map((project) => {
+        return {
+            params: { slug: project.slug },
+            props: { project }
+        }
+    })
+}
+
+const { project } = Astro.props;
+---
+
+
+
