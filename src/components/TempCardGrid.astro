@@ -1,9 +1,9 @@
 ---
 import TempCard from "../components/TempCard.astro";
 
-import { getCards } from '../lib/cosmic'
+import { getAllCards } from '../lib/cosmic'
 
-const data = await getCards()
+const data = await getAllCards()
 ---
 
 <section class="content-section">
