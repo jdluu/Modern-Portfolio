@@ -1,6 +1,9 @@
 ---
-import ProjectCard from "../components/ProjectCard.astro";
-const allProjects = await Astro.glob("../pages/projects/*.md");
+import TempCard from "./ProjectCard.astro";
+
+import { getAllCards } from '../lib/cosmic'
+
+const data = await getAllCards()
 ---
 
 <section class="content-section">
@@ -10,14 +13,15 @@ const allProjects = await Astro.glob("../pages/projects/*.md");
 	</p>
 	<div id="project-grid">
 		{
-			allProjects.map((project) => (
-				<ProjectCard
-					title={project.frontmatter.title}
-					intro={project.frontmatter.intro}
-					thumbnail={project.frontmatter.thumbnail}
-					url={project.url}
+			data.map((card) => (
+				<TempCard
+					title={card.title}
+					intro={card.metadata.description}
+					thumbnail={card.metadata.thumbnail.url}
+					url={card.slug}
 				/>
 			))
+            
 		}
 	</div>
 </section>
