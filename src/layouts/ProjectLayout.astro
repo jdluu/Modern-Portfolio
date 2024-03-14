@@ -59,45 +59,63 @@ const { frontmatter, url } = Astro.props;
 		<button id="show-button">Show Table of Contents ≡</button>
 	</div>
 	<script>
-		const tableOfContents = document.getElementById("table-of-contents");
-		const hideButton = document.getElementById("hide-button");
-		const showButton = document.getElementById("show-button");
-		const navItems = tableOfContents.getElementsByClassName("nav-item");
+		// Wait for the DOM content to be fully loaded
+		document.addEventListener("DOMContentLoaded", function () {
+			const tableOfContents = document.getElementById("table-of-contents");
+			const hideButton = document.getElementById("hide-button");
+			const showButton = document.getElementById("show-button");
 
-		// Function to hide the table of contents
-		function hideTableOfContents() {
-			tableOfContents.style.display = "none";
-			showButton.style.visibility = "visible";
-		}
+			// Check if all required elements are present
+			if (tableOfContents && hideButton && showButton) {
+				const navItems = tableOfContents.getElementsByClassName("nav-item");
 
-		// Function to show the table of contents
-		function showTableOfContents() {
-			tableOfContents.style.display = "block";
-			showButton.style.visibility = "hidden";
-		}
+				function hideTableOfContents() {
+					console.log("Hiding table of contents...");
+					if (tableOfContents && showButton) {
+						tableOfContents.style.display = "none";
+						showButton.style.visibility = "visible";
+						console.log("Table of contents hidden.");
+					} else {
+						console.error(
+							"Table of contents or showButton is null or undefined."
+						);
+					}
+				}
 
-		// Function to handle nav-item click
-		function handleNavItemClick(event) {
-			const clickedNavItem = event.target;
-			// Remove 'active' class from all nav-items
-			for (const navItem of navItems) {
-				navItem.classList.remove("link-active");
+				function showTableOfContents() {
+					console.log("Showing table of contents...");
+					if (tableOfContents && showButton) {
+						tableOfContents.style.display = "block";
+						showButton.style.visibility = "hidden";
+						console.log("Table of contents shown.");
+					} else {
+						console.error(
+							"Table of contents or showButton is null or undefined."
+						);
+					}
+				}
+
+				// Function to handle nav-item click
+				function handleNavItemClick(event) {
+					const clickedNavItem = event.target;
+					// Remove 'active' class from all nav-items
+					for (const navItem of navItems) {
+						navItem.classList.remove("link-active");
+					}
+					// Add 'active' class to the clicked nav-item
+					clickedNavItem.classList.add("link-active");
+				}
+
+				// Add click event listener to each nav-item
+				for (const navItem of navItems) {
+					navItem.addEventListener("click", handleNavItemClick);
+				}
+
+				hideButton.addEventListener("click", hideTableOfContents);
+				showButton.addEventListener("click", showTableOfContents);
+			} else {
+				console.error("One or more elements not found!");
 			}
-			// Add 'active' class to the clicked nav-item
-			clickedNavItem.classList.add("link-active");
-		}
-
-		// Add click event listener to each nav-item
-		for (const navItem of navItems) {
-			navItem.addEventListener("click", handleNavItemClick);
-		}
-
-		hideButton.addEventListener("click", () => {
-			hideTableOfContents();
-		});
-
-		showButton.addEventListener("click", () => {
-			showTableOfContents();
 		});
 	</script>
 	<div class="project-page-container">
