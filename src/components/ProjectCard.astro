@@ -6,7 +6,7 @@ export interface Props {
 	url: string;
 }
 
-const { title, intro, thumbnail, url } = Astro.props;
+const { title, intro, thumbnail, url} = Astro.props;
 ---
 
 <section class="background" style={{ backgroundImage: `url('${thumbnail}')` }}>
@@ -16,8 +16,8 @@ const { title, intro, thumbnail, url } = Astro.props;
 			<p class="project-description">
 				{intro}
 			</p>
-			<a class="learn-more" href={url}>Learn More</a>
 		</section>
+		<a class="learn-more" href={`/projects/${url}`}>Learn More</a>
 	</div>
 </section>
 

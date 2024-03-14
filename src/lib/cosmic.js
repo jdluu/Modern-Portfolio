@@ -5,20 +5,45 @@ const cosmic = createBucketClient({
 	readKey: import.meta.env.PUBLIC_COSMIC_READ_KEY,
 });
 
-export async function getTests() {
-	const data = await cosmic.objects
-		.find({
-			type: "tests",
-		})
-		.props("title, slug");
-	return data.objects;
-}
-
-export async function getCards() {
+// Return All Card Objects
+export async function getAllCards() {
 	const data = await cosmic.objects
 		.find({
 			type: "cards",
 		})
-		.props("title, slug, metadata.description, metadata.thumbnail");
+		.props("slug, title, metadata");
 	return data.objects;
+}
+
+// Return All Project Objects
+export async function getAllProjects() {
+	const data = await cosmic.objects
+		.find({
+			type: "projects",
+		})
+		.props("slug, title, metadata");
+	return data.objects;
+}
+
+// Return All Project Slugs
+export async function getAllProjectSlugs() {
+	const data = await cosmic.objects
+		.find({
+			type: "projects",
+		})
+		.props("slug");
+
+	return data.objects;
+}
+
+export async function getProjectBySlug(slug) {
+	const data = await cosmic.objects
+		.findOne({
+			type: "projects",
+			slug,
+		})
+		.props("title, metadata");
+
+	console.log("Project:", data); // Log the project object
+	return data;
 }
