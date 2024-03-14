@@ -1,3 +1,10 @@
+---
+import { Image } from 'astro:assets';
+import Profile from '../assets/images/profile.webp';
+import Fractal from '../assets/images/fractal.jpg';
+---
+
+
 <section class="content-section">
 	<h2 id="home" class="page-h2">Home</h2>
 	<div id="home-rows">
@@ -15,27 +22,11 @@
 			</div>
 		</figure>
 		<figure id="me">
-			<picture id="headshot">
-				<source srcset="/assets/images/profile.webp" type="image/webp" />
-				<img
-					src="/assets/images/profile.webp"
-					width="229.6"
-					height="485.52"
-					alt="A headshot of me, a 21 year old Vietnamese male!"
-				/>
-			</picture>
+			<Image src={Profile} alt="A headshot of me, a 21 year old Vietnamese male!"/>
 			<figcaption class="img-desc">A picture of me!</figcaption>
 		</figure>
 		<figure id="fractal">
-			<picture id="fractal-img">
-				<source srcset="/assets/images/fractal.jpg" type="image/jpg" />
-				<img
-					src="/assets/images/fractal.jpg"
-					width="400"
-					height="400"
-					alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"
-				/>
-			</picture>
+			<Image src={Fractal} alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"/>
 			<figcaption class="img-desc">
 				Mandelbrot fractal made in computer graphics!
 			</figcaption>
@@ -158,20 +149,13 @@
 	}
 
 	#me {
-		margin: 0 1rem 0 0;
-		height: -moz-max-content;
-		height: max-content;
+		max-width: 30%;
+		max-height: 30%;
 	}
 
 	#fractal {
-		margin: 0;
-		height: -moz-max-content;
-		height: max-content;
-	}
-
-	#fractal-img {
-		justify-content: center;
-		align-items: center;
+		max-width: 50%;
+		max-height: 50%;
 	}
 
 	.img-desc {
