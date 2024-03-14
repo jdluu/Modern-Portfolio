@@ -1,0 +1,387 @@
+---
+import {getAllProjects} from "../../lib/cosmic";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+interface Metadata {
+  description: string;
+  home: {
+    image: {
+      url: string;
+      imgix_url: string;
+    };
+    imagealt: string;
+  };
+  logistics: {
+    date: string;
+    techtitle: string;
+    technologies: string;
+    tools: string;
+  };
+  work: {
+    role: string;
+    responsibilities: { duties: string }[];
+  };
+  background: {
+    description: string;
+  };
+  problem: {
+    description: string;
+  };
+  solution: {
+    title: string;
+    description: string;
+  };
+  process: {
+    title: string;
+    plan: { steps: string }[];
+  };
+  prototype: {
+    image: {
+      url: string;
+      imgix_url: string;
+    };
+    imagealt: string;
+  };
+  final: {
+    description: string;
+    image: {
+      url: string;
+      imgix_url: string;
+    };
+    imagealt: string;
+  };
+  reflection: {
+    points: { point: string }[];
+  };
+  source: {
+    title: string;
+    link: string;
+  };
+}
+
+
+interface PageProps {
+  title: string;
+  metadata: Metadata;
+}
+
+// Adjusted getStaticPaths function
+export async function getStaticPaths() {
+    const projects: { slug: string; title: string; metadata: Metadata }[] = await getAllProjects();
+
+	return projects.map(({slug, title, metadata}) => {
+		return {
+			params: { slug },
+			props: { title, metadata },
+		};
+	});
+}
+
+const {title, metadata} = Astro.props;
+---
+
+<BaseLayout title={title}>
+	<div id="left-tray">
+		<ul id="table-of-contents">
+			<li>
+				<a href="#overview" id="ido" class="nav-item">Overview</a>
+			</li>
+			<li>
+				<a href="#background" id="idb" class="nav-item">Background</a>
+			</li>
+			<li>
+				<a href="#process" id="idd" class="nav-item"
+					>{metadata.process.title}</a
+				>
+			</li>
+			<li>
+				<a href="#results" id="idf" class="nav-item">Final Product</a>
+			</li>
+			<li>
+				<a href="#reflection" id="idr" class="nav-item">Reflection</a>
+			</li>
+			<li>
+				<button id="hide-button">Hide Table of Contents ◀</button>
+			</li>
+		</ul>
+		<button id="show-button">Show Table of Contents ≡</button>
+	</div>
+	<script>
+		// Wait for the DOM content to be fully loaded
+		document.addEventListener("DOMContentLoaded", function () {
+			const tableOfContents = document.getElementById("table-of-contents");
+			const hideButton = document.getElementById("hide-button");
+			const showButton = document.getElementById("show-button");
+
+			// Check if all required elements are present
+			if (tableOfContents && hideButton && showButton) {
+				const navItems = tableOfContents.getElementsByClassName("nav-item");
+
+				function hideTableOfContents() {
+					console.log("Hiding table of contents...");
+					if (tableOfContents && showButton) {
+						tableOfContents.style.display = "none";
+						showButton.style.visibility = "visible";
+						console.log("Table of contents hidden.");
+					} else {
+						console.error(
+							"Table of contents or showButton is null or undefined."
+						);
+					}
+				}
+
+				function showTableOfContents() {
+					console.log("Showing table of contents...");
+					if (tableOfContents && showButton) {
+						tableOfContents.style.display = "block";
+						showButton.style.visibility = "hidden";
+						console.log("Table of contents shown.");
+					} else {
+						console.error(
+							"Table of contents or showButton is null or undefined."
+						);
+					}
+				}
+
+				// Function to handle nav-item click
+				function handleNavItemClick(event) {
+					const clickedNavItem = event.target;
+					// Remove 'active' class from all nav-items
+					for (const navItem of navItems) {
+						navItem.classList.remove("link-active");
+					}
+					// Add 'active' class to the clicked nav-item
+					clickedNavItem.classList.add("link-active");
+				}
+
+				// Add click event listener to each nav-item
+				for (const navItem of navItems) {
+					navItem.addEventListener("click", handleNavItemClick);
+				}
+
+				hideButton.addEventListener("click", hideTableOfContents);
+				showButton.addEventListener("click", showTableOfContents);
+			} else {
+				console.error("One or more elements not found!");
+			}
+		});
+	</script>
+	<div class="project-page-container">
+		<div class="project-page-div">
+			<section id="overview">
+				<h1 class="project-title">{title}</h1>
+				<p class="section-content">{metadata.description}</p>
+				<img
+					class="project-image"
+					src={metadata.home.image.url}
+					alt={metadata.home.imagealt}
+				/>
+				<div class="flex-container">
+					<div>
+						<p class="section-content">
+							<strong>Timeline</strong>
+							<br />
+							{metadata.logistics.date}
+						</p>
+					</div>
+					<div>
+						<p class="section-content">
+							<strong>{metadata.logistics.techtitle}</strong>
+							<br />
+							{metadata.logistics.technologies}
+						</p>
+					</div>
+					<div>
+						<p class="section-content">
+							<strong>Tools</strong>
+							<br />
+							{metadata.logistics.tools}
+						</p>
+					</div>
+				</div>
+				<h3><strong>My Responsibilities as {metadata.work.role}</strong></h3>
+				<ul>
+					{
+						metadata.work.responsibilities.map((responsibility, index) => (
+							<li class="role-bullet-item" key={index}>
+								{responsibility.duties}
+							</li>
+						))
+					}
+				</ul>
+			</section>
+			<section id="background">
+				<h2>Background</h2>
+				<p class="section-content">
+					{metadata.background.description}
+				</p>
+				<h2>Problem Statement</h2>
+				<p class="section-content">
+					{metadata.problem.description}
+				</p>
+				<h2>{metadata.solution.title}</h2>
+				<p class="section-content">
+					{metadata.solution.description}
+				</p>
+			</section>
+			<section id="process">
+				<h2>{metadata.process.title}</h2>
+				{
+					metadata.process.plan.map((plan, index) => (
+						<p class="section-content" key={index}>
+							{plan.steps}
+						</p>
+					))
+				}
+				<img
+					class="project-image"
+					src={metadata.prototype.image.url}
+					alt={metadata.prototype.imagealt}
+				/>
+			</section>
+			<section id="results">
+				<h2>Final Product</h2>
+				<p class="section-content">{metadata.final.description}</p>
+				<img
+					class="project-image"
+					src={metadata.final.image.url}
+					alt={metadata.final.imagealt}
+				/>
+			</section>
+			<section id="reflection">
+				<h2>Reflection</h2>
+				{
+					metadata.reflection.points.map((reflection, index) => (
+						<p class="section-content" key={index}>
+							{reflection.point}
+						</p>
+					))
+				}
+				<a
+					href={metadata.source.link}
+					id="source-link"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<strong>{metadata.source.title}</strong>
+				</a>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	#left-tray {
+		position: fixed;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		padding: 20px;
+		border-radius: 8px;
+		z-index: 50;
+		background-color: var(--background-color);
+	}
+
+	#table-of-contents {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		font-family: var(--font-secondary);
+	}
+
+	.link-active {
+		font-weight: bold;
+	}
+
+	#table-of-contents li {
+		margin-bottom: 10px;
+	}
+
+	.nav-item {
+		text-decoration: none;
+		color: var(--text-color);
+	}
+
+	.nav-item:hover {
+		text-decoration: underline;
+	}
+
+	#hide-button {
+		visiblity: visible;
+	}
+
+	#show-button {
+		visibility: hidden;
+	}
+
+	@media (max-width: 1380px) {
+		#left-tray {
+			padding: 10px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		#left-tray {
+			box-shadow: 5px 0px 10px #d0dbdf;
+		}
+	}
+
+	.project-page-container {
+		display: block;
+		margin-left: 20%;
+		margin-right: 20%;
+	}
+
+	.project-page-div {
+		text-align: left;
+	}
+
+	.project-title {
+		font-family: var(--font-heading);
+		font-weight: bold;
+		font-size: var(--font-xlarge);
+	}
+
+	h2 {
+		font-family: var(--font-heading);
+		font-weight: bold;
+		font-size: var(--font-large);
+	}
+
+	h3 {
+		font-family: var(--font-heading);
+		font-weight: bold;
+		font-size: var(--font-medium);
+	}
+
+	.project-image {
+		max-width: 100%;
+		height: auto;
+		display: block;
+		margin: auto;
+		/* preserve aspect ratio */
+		object-fit: cover;
+	}
+
+	.flex-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 20px;
+	}
+
+	.role-bullet-item {
+		list-style-type: disc;
+		margin-bottom: 0.5rem;
+		font-size: var(--font-large);
+	}
+
+	.section-content {
+		font-size: var(--font-medium);
+		line-height: 30px;
+	}
+
+	#source-link {
+		text-decoration: none;
+	}
+</style>
