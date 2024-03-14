@@ -6,10 +6,9 @@
 			"@components/*": ["src/components/*"],
 			"@layouts/*": ["src/layouts/*"],
 			"@pages/*": ["src/pages/*"],
-			"@assets/*": ["public/assets/*"],
-			"@fonts/*": ["public/assets/fonts/*"],
-			"@icons/*": ["public/assets/icons/*"],
-			"@images/*": ["public/assets/images/*"]
+			"@images/*": ["src/assets/images/*"],
+			"@fonts/*": ["public/fonts/*"],
+			"@icons/*": ["public/icons/*"]
 		},
 		"module": "ESNext",
 		"moduleResolution": "node",
