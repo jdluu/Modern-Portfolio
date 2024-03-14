@@ -11,7 +11,7 @@ export async function getAllCards() {
 		.find({
 			type: "cards",
 		})
-		.props("title, slug, metadata");
+		.props("slug, title, metadata");
 	return data.objects;
 }
 
@@ -21,7 +21,7 @@ export async function getAllProjects() {
 		.find({
 			type: "projects",
 		})
-		.props("title, slug, metadata");
+		.props("slug, title, metadata");
 	return data.objects;
 }
 
