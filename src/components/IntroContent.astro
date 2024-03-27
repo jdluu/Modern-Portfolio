@@ -1,10 +1,3 @@
----
-import { Image } from 'astro:assets';
-import Profile from '../assets/images/profile.webp';
-import Fractal from '../assets/images/fractal.jpg';
----
-
-
 <section class="content-section">
 	<h2 id="home" class="page-h2">Home</h2>
 	<div id="home-rows">
@@ -22,12 +15,34 @@ import Fractal from '../assets/images/fractal.jpg';
 			</div>
 		</figure>
 		<figure id="me">
-			<Image src={Profile} alt="A headshot of me, a 21 year old Vietnamese male!"/>
+			<!-- Use the picture element for responsive images -->
+			<picture>
+			  <!-- Specify the smallest image for small screens or low-resolution devices -->
+			  <source srcset="/images/profile-400w.avif" media="(max-width: 400px)">
+			  <!-- Specify larger images for higher-resolution screens or larger devices -->
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 401px) and (max-width: 800px)">
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 801px) and (max-width: 1200px)">
+			  <!-- Default image for larger screens or if none of the media conditions match -->
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 1201px)">
+			  <!-- Fallback image for browsers that do not support the <picture> element -->
+			  <img src="/images/profile.webp" alt="A picture of me!" class="img-responsive">
+			</picture>
+			<!-- Add a caption for the image -->
 			<figcaption class="img-desc">A picture of me!</figcaption>
-		</figure>
+		  </figure>
 		<figure id="fractal">
-			<Image src={Fractal} alt="A Mandelbrot fractal, with a red background, black centers, and blue along the edges"/>
 			<figcaption class="img-desc">
+				<picture>
+					<!-- Specify the smallest image for small screens or low-resolution devices -->
+					<source srcset="/images/fractal.jpg" media="(max-width: 400px)">
+					<!-- Specify larger images for higher-resolution screens or larger devices -->
+					<source srcset="/images/fractal.jpg" media="(min-width: 401px) and (max-width: 800px)">
+					<source srcset="/images/fractal.jpg" media="(min-width: 801px) and (max-width: 1200px)">
+					<!-- Default image for larger screens or if none of the media conditions match -->
+					<source srcset="/images/fractal.jpg" media="(min-width: 1201px)">
+					<!-- Fallback image for browsers that do not support the <picture> element -->
+					<img src="/images/fractal.jpg" alt="A Mandelbrot Fractal, a fractal generated from math!">
+				  </picture>
 				Mandelbrot fractal made in computer graphics!
 			</figcaption>
 		</figure>
@@ -146,16 +161,6 @@ import Fractal from '../assets/images/fractal.jpg';
 	#resume-link {
 		color: #fff;
 		text-decoration: none;
-	}
-
-	#me {
-		max-width: 30%;
-		max-height: 30%;
-	}
-
-	#fractal {
-		max-width: 50%;
-		max-height: 50%;
 	}
 
 	.img-desc {
