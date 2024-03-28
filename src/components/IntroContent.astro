@@ -18,12 +18,12 @@
 			<!-- Use the picture element for responsive images -->
 			<picture>
 			  <!-- Specify the smallest image for small screens or low-resolution devices -->
-			  <source srcset="/images/profile-400w.avif" media="(max-width: 400px)">
+			  <source srcset="/images/profile-400w.avif" media="(max-width: 400px)" width=400 height=846>
 			  <!-- Specify larger images for higher-resolution screens or larger devices -->
-			  <source srcset="/images/profile-400w.avif" media="(min-width: 401px) and (max-width: 800px)">
-			  <source srcset="/images/profile-400w.avif" media="(min-width: 801px) and (max-width: 1200px)">
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 401px) and (max-width: 800px)" width=400 height=846>
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 801px) and (max-width: 1200px)" width=400 height=846>
 			  <!-- Default image for larger screens or if none of the media conditions match -->
-			  <source srcset="/images/profile-400w.avif" media="(min-width: 1201px)">
+			  <source srcset="/images/profile-400w.avif" media="(min-width: 1201px)" width=400 height=846>
 			  <!-- Fallback image for browsers that do not support the <picture> element -->
 			  <img src="/images/profile.webp" alt="A picture of me!" class="img-responsive">
 			</picture>
@@ -34,14 +34,14 @@
 			<figcaption class="img-desc">
 				<picture>
 					<!-- Specify the smallest image for small screens or low-resolution devices -->
-					<source srcset="/images/fractal.jpg" media="(max-width: 400px)">
+					<source srcset="/images/fractal.jpg" media="(max-width: 400px)" width=500 height=500>
 					<!-- Specify larger images for higher-resolution screens or larger devices -->
-					<source srcset="/images/fractal.jpg" media="(min-width: 401px) and (max-width: 800px)">
-					<source srcset="/images/fractal.jpg" media="(min-width: 801px) and (max-width: 1200px)">
+					<source srcset="/images/fractal.jpg" media="(min-width: 401px) and (max-width: 800px)" width=500 height=500>
+					<source srcset="/images/fractal.jpg" media="(min-width: 801px) and (max-width: 1200px)" width=500 height=500>
 					<!-- Default image for larger screens or if none of the media conditions match -->
-					<source srcset="/images/fractal.jpg" media="(min-width: 1201px)">
+					<source srcset="/images/fractal.jpg" media="(min-width: 1201px)" width=500 height=500>
 					<!-- Fallback image for browsers that do not support the <picture> element -->
-					<img src="/images/fractal.jpg" alt="A Mandelbrot Fractal, a fractal generated from math!">
+					<img src="/images/fractal.jpg" alt="A Mandelbrot Fractal, a fractal generated from math!" width=500 height=500>
 				  </picture>
 				Mandelbrot fractal made in computer graphics!
 			</figcaption>
