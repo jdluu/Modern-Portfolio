@@ -169,4 +169,11 @@
 		font-family: var(--font-secondary);
 		color: var(--text-color);
 	}
+
+	.img-responsive {
+		max-width: 400px; /* Set the maximum width */
+		max-height: calc(400px * (846 / 400)); /* Calculate the maximum height based on the aspect ratio */
+		width: 100%; /* Ensure the image fills its container */
+		height: auto; /* Maintain aspect ratio */
+	}
 </style>
