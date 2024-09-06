@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllPosts } from "../lib/cosmic";
+
+const title = "Blog";
+const posts = await getAllPosts();
+---
+
+<BaseLayout title={title}>
+	<main class="container mx-auto px-4 py-8">
+		<h1 class="text-4xl font-bold mb-8">{title}</h1>
+		<ul class="space-y-4">
+			{
+				posts.map((post) => (
+					<li>
+						<a
+							href={`/posts/${post.slug}`}
+							class="text-blue-600 hover:text-blue-800 text-lg font-semibold"
+						>
+							{post.title}
+						</a>
+						{post.metadata && post.metadata.date && (
+							<p class="text-sm text-gray-500">
+								{new Date(post.metadata.date).toLocaleDateString()}
+							</p>
+						)}
+					</li>
+				))
+			}
+		</ul>
+	</main>
+</BaseLayout>
