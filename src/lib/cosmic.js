@@ -44,7 +44,7 @@ export async function getProjectBySlug(slug) {
 		})
 		.props("title, metadata");
 
-	console.log("Project:", data); // Log the project object
+	console.log("Project:", data);
 	return data;
 }
 
@@ -77,7 +77,7 @@ export async function getPostBySlug(slug) {
 		})
 		.props("title, content, metadata");
 
-	console.log("Post:", data); // Log the post object
+	console.log("Post:", data);
 	return data;
 }
 
