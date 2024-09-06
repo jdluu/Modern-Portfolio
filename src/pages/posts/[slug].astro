@@ -1,9 +1,13 @@
 ---
 import { getAllPosts } from "../../lib/cosmic";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+
 interface Metadata {
 	date: string;
 	description: string;
+	content: string;
+	source_code: string;
+	website: string;
 }
 
 interface PageProps {
@@ -22,4 +26,53 @@ export async function getStaticPaths() {
 		};
 	});
 }
+
+const { title, metadata } = Astro.props;
 ---
+
+<BaseLayout title={title}>
+	<article class="max-w-3xl mx-auto px-4 py-8">
+		<h1 class="text-4xl font-bold mb-4">{title}</h1>
+		<p class="text-gray-600 mb-2">
+			Published on {metadata.date}
+		</p>
+		<p class="text-gray-700 mb-4">{metadata.description}</p>
+
+		<div class="prose lg:prose-xl">
+			<Fragment set:html={metadata.content} />
+		</div>
+		<div
+			class="flex flex-col sm:flex-row justify-start items-start sm:items-center mt-8"
+		>
+			<a href={metadata.website} class="project-link mb-4 sm:mb-0 sm:mr-6">
+				Visit Website
+			</a>
+			<a href={metadata.source_code} class="project-link"> View Source Code </a>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.prose {
+		@apply text-gray-800 leading-relaxed;
+	}
+	.prose h2 {
+		@apply text-2xl font-semibold mt-8 mb-4;
+	}
+	.prose p {
+		@apply mb-4;
+	}
+	.prose a {
+		@apply text-blue-700 hover:underline;
+	}
+	.prose ul,
+	.prose ol {
+		@apply ml-6 mb-4;
+	}
+	.prose li {
+		@apply mb-2;
+	}
+	.project-link {
+		@apply inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition duration-300 ease-in-out;
+	}
+</style>
