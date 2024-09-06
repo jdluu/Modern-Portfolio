@@ -1,0 +1,25 @@
+---
+import { getAllPosts } from "../../lib/cosmic";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+interface Metadata {
+	date: string;
+	description: string;
+}
+
+interface PageProps {
+	title: string;
+	metadata: Metadata;
+}
+
+export async function getStaticPaths() {
+	const posts: { slug: string; title: string; metadata: Metadata }[] =
+		await getAllPosts();
+
+	return posts.map(({ slug, title, metadata }) => {
+		return {
+			params: { slug },
+			props: { title, metadata },
+		};
+	});
+}
+---
