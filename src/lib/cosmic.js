@@ -47,3 +47,38 @@ export async function getProjectBySlug(slug) {
 	console.log("Project:", data); // Log the project object
 	return data;
 }
+
+// Return All Post Objects
+export async function getAllPosts() {
+	const data = await cosmic.objects
+		.find({
+			type: "posts",
+		})
+		.props("slug, title, content, metadata");
+	return data.objects;
+}
+
+// Return All Post Slugs
+export async function getAllPostSlugs() {
+	const data = await cosmic.objects
+		.find({
+			type: "posts",
+		})
+		.props("slug");
+
+	return data.objects;
+}
+
+export async function getPostBySlug(slug) {
+	const data = await cosmic.objects
+		.findOne({
+			type: "posts",
+			slug,
+		})
+		.props("title, content, metadata");
+
+	console.log("Post:", data); // Log the post object
+	return data;
+}
+
+export { cosmic };
