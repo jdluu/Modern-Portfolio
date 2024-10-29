@@ -1,4 +1,4 @@
-<section class="content-section">
+<section class="content-section" aria-labelledby="contact">
 	<h2 id="contact" class="page-h2">Contact</h2>
 	<form
 		name="contact-form"
@@ -6,154 +6,312 @@
 		method="POST"
 		data-netlify="true"
 		data-netlify-honeypot="bot-field"
+		aria-labelledby="form-title"
+		novalidate
 	>
 		<input type="hidden" name="form-name" value="contact-form" />
-		<span id="form-title">Get in Touch!</span>
-		<label for="name">Name:</label>
-		<input
-			type="text"
-			id="name"
-			name="name"
-			required
-			placeholder="Your name.."
-			minlength="2"
-		/>
+		<h3 id="form-title">Get in Touch!</h3>
 
-		<label for="email">Email:</label>
-		<input
-			type="email"
-			id="email"
-			name="email"
-			required
-			placeholder="Your email.."
-		/>
+		<div class="form-group">
+			<label for="name" class="required">Name:</label>
+			<input
+				type="text"
+				id="name"
+				name="name"
+				required
+				aria-required="true"
+				placeholder="Enter your name"
+				minlength="2"
+				autocomplete="name"
+				aria-describedby="name-error"
+			/>
+			<span id="name-error" class="error-message" aria-live="polite"></span>
+		</div>
 
-		<label for="subject">Subject:</label>
-		<input
-			type="text"
-			id="subject"
-			name="subject"
-			required
-			placeholder="Subject.."
-		/>
+		<div class="form-group">
+			<label for="email" class="required">Email:</label>
+			<input
+				type="email"
+				id="email"
+				name="email"
+				required
+				aria-required="true"
+				placeholder="Enter your email"
+				autocomplete="email"
+				aria-describedby="email-error"
+			/>
+			<span id="email-error" class="error-message" aria-live="polite"></span>
+		</div>
 
-		<label for="message">Message:</label>
-		<textarea
-			id="message"
-			name="message"
-			required
-			placeholder="Write something.."></textarea>
+		<div class="form-group">
+			<label for="subject" class="required">Subject:</label>
+			<input
+				type="text"
+				id="subject"
+				name="subject"
+				required
+				aria-required="true"
+				placeholder="Enter message subject"
+				aria-describedby="subject-error"
+			/>
+			<span id="subject-error" class="error-message" aria-live="polite"></span>
+		</div>
 
-		<button type="submit">Send Email!</button>
+		<div class="form-group">
+			<label for="message" class="required">Message:</label>
+			<textarea
+				id="message"
+				name="message"
+				required
+				aria-required="true"
+				placeholder="Write your message here"
+				aria-describedby="message-error"
+				rows="5"></textarea>
+			<span id="message-error" class="error-message" aria-live="polite"></span>
+		</div>
+
+		<button type="submit" aria-label="Send message">Send Email!</button>
 	</form>
 </section>
 
 <style>
-	.page-h2 {
-		font-size: var(--font-large);
-		font-family: var(--font-heading);
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
-		margin-left: 1rem;
-		text-decoration: underline;
-		color: var(--text-color);
+	.content-section {
+		padding: clamp(1rem, 3vw, 2rem);
+		max-width: 1400px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
-	@media screen and (max-width: 768px) {
-		.page-h2 {
-			font-size: var(--font-medium);
-		}
+	.page-h2 {
+		font-size: clamp(1.5rem, 3vw, var(--font-large));
+		font-family: var(--font-heading);
+		margin: 0.5rem 0 1.5rem;
+		text-decoration: underline;
+		color: var(--text-color);
+		text-align: center;
+		width: 100%;
 	}
 
 	#contact-form {
 		text-align: center;
 		background: #fff;
 		color: black;
-		border-radius: 5px;
-		width: 30rem;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 1rem;
-		padding-top: 5px;
-		padding-bottom: 5px;
-		box-shadow: 0 30px 60px 0 rgba(90, 116, 148, 0.4);
-	}
-
-	@media screen and (max-width: 480px) {
-		#contact-form {
-			width: 75%;
-		}
+		border-radius: 12px;
+		width: min(100%, 35rem);
+		margin: 0 auto;
+		padding: clamp(1.5rem, 4vw, 2.5rem);
+		box-shadow: 0 10px 30px rgba(90, 116, 148, 0.2);
 	}
 
 	#form-title {
-		font-size: 1.5rem;
+		font-size: clamp(1.25rem, 2.5vw, 1.5rem);
 		font-weight: bold;
 		text-align: center;
+		margin-bottom: clamp(1.5rem, 4vw, 2rem);
+		color: var(--text-color);
 	}
-	#contact-form label {
-		display: block;
-		margin: 1rem;
+
+	.form-group {
+		margin-bottom: clamp(1.25rem, 3vw, 1.5rem);
 		text-align: left;
 	}
-	#contact-form input {
+
+	.form-group label {
 		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 25rem;
-	}
-	#contact-form input:hover {
-		border-bottom: 0.3125rem solid #0e3721;
-		height: 2rem;
-		transition: ease 0.5s;
-	}
-	#contact-form textarea {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 25rem;
-		height: 10rem;
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+		font-size: clamp(0.9rem, 2vw, 1rem);
 	}
 
-	@media screen and (max-width: 768px) {
-		#contact-form input {
-			width: 85%;
-		}
-		#contact-form textarea {
-			width: 85%;
-		}
+	.required::after {
+		content: "*";
+		color: #e32;
+		margin-left: 0.25rem;
 	}
 
-	#contact-form button {
-		min-width: 12rem;
-		height: 3rem;
-		border-radius: 24px;
+	.form-group input,
+	.form-group textarea {
+		width: 100%;
+		padding: clamp(0.75rem, 2vw, 1rem);
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		font-size: clamp(0.9rem, 2vw, 1rem);
+		transition: all 0.3s ease;
+		background-color: #fff;
+	}
+
+	.form-group textarea {
+		min-height: 120px;
+		resize: vertical;
+	}
+
+	.form-group input:focus,
+	.form-group textarea:focus {
+		outline: none;
+		border-color: #57b846;
+		box-shadow: 0 0 0 3px rgba(87, 184, 70, 0.2);
+	}
+
+	.form-group input:hover,
+	.form-group textarea:hover {
+		border-color: #57b846;
+	}
+
+	.error-message {
+		display: block;
+		color: #e32;
+		font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+		margin-top: 0.25rem;
+		min-height: 1.25rem;
+	}
+
+	button {
+		width: min(100%, 16rem);
+		height: clamp(3rem, 6vw, 3.5rem);
+		border: none;
+		border-radius: 999px;
 		background: #57b846;
 		font-weight: bold;
-		line-height: 1.5;
+		font-size: clamp(0.9rem, 2vw, 1rem);
 		color: #fff;
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -moz-box;
-		display: -ms-flexbox;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin-top: 1rem;
-		margin-left: auto;
-		margin-right: auto;
-		-webkit-transition: all 0.4s;
-		-o-transition: all 0.4s;
-		-moz-transition: all 0.4s;
-		transition: all 0.4s;
+		margin: clamp(1.5rem, 4vw, 2rem) auto 0;
+		padding: 0 clamp(1.5rem, 4vw, 2rem);
 		cursor: pointer;
-	}
-	#contact-form button:hover {
-		transform: translateY(-3px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
 	}
 
-	#contact-form button:active {
-		transform: translateY(-1px);
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	button:hover {
+		background: #4ca83d;
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	button:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(87, 184, 70, 0.4);
+	}
+
+	button:active {
+		transform: translateY(1px);
+	}
+
+	button:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	@media (max-width: 480px) {
+		.content-section {
+			padding: 1rem 0.5rem;
+		}
+
+		#contact-form {
+			border-radius: 8px;
+			box-shadow: 0 5px 15px rgba(90, 116, 148, 0.1);
+		}
+
+		.form-group input,
+		.form-group textarea {
+			font-size: 16px; /* Prevent iOS zoom on focus */
+		}
+
+		button {
+			width: 100%;
+			margin-top: 1.5rem;
+		}
+	}
+
+	@media (hover: none) {
+		.form-group input:hover,
+		.form-group textarea:hover {
+			border-color: #ccc;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		button,
+		input,
+		textarea {
+			transition: none;
+		}
 	}
 </style>
+
+<script is:inline>
+	document.addEventListener("DOMContentLoaded", () => {
+		const form = document.getElementById("contact-form");
+		if (!form || !(form instanceof HTMLFormElement)) return;
+
+		const inputs = form.querySelectorAll("input[required], textarea[required]");
+
+		inputs.forEach((input) => {
+			const errorSpan = document.getElementById(`${input.id}-error`);
+			if (!errorSpan) return;
+
+			input.addEventListener("invalid", (event) => {
+				event.preventDefault();
+				if (!input.value) {
+					errorSpan.textContent = "This field is required";
+				} else if (
+					input instanceof HTMLInputElement &&
+					input.type === "email" &&
+					!input.validity.valid
+				) {
+					errorSpan.textContent = "Please enter a valid email address";
+				} else if (
+					input instanceof HTMLInputElement &&
+					input.minLength &&
+					input.value.length < input.minLength
+				) {
+					errorSpan.textContent = `Must be at least ${input.minLength} characters`;
+				}
+			});
+
+			input.addEventListener("input", () => {
+				if (input.validity.valid) {
+					errorSpan.textContent = "";
+				}
+			});
+		});
+
+		form.addEventListener("submit", async (event) => {
+			event.preventDefault();
+
+			if (!form.checkValidity()) {
+				return;
+			}
+
+			const button = form.querySelector("button");
+			if (!button) return;
+
+			button.disabled = true;
+			button.textContent = "Sending...";
+
+			try {
+				const response = await fetch(form.action, {
+					method: form.method,
+					body: new FormData(form),
+				});
+
+				if (response.ok) {
+					form.reset();
+					alert("Message sent successfully!");
+				} else {
+					throw new Error("Failed to send message");
+				}
+			} catch (error) {
+				alert("Failed to send message. Please try again.");
+			} finally {
+				button.disabled = false;
+				button.textContent = "Send Email!";
+			}
+		});
+	});
+</script>

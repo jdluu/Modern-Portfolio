@@ -1,6 +1,6 @@
-<section class="content-section">
+<section class="content-section" aria-labelledby="about">
 	<h2 id="about" class="page-h2">About Me</h2>
-	<div id="flex-container">
+	<div id="flex-container" role="main">
 		<div id="about-wrapper">
 			<p id="about-desc">
 				<strong>Hi, I'm Jeffrey Luu!</strong>
@@ -24,18 +24,24 @@
 			</p>
 		</div>
 		<div id="figma-wrapper">
-			<figure>
-				<iframe
-					id="youtube-redesign"
-					title="High-Fidelity Prototypes created in Figma of a Youtube Redesign"
-					src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FVTeXS7CWmqioKpqEBvy4DQ%2FCogs-187A-Hi-Fidelity-prototypes%3Ftype%3Ddesign%26node-id%3D22-997%26scaling%3Dscale-down%26page-id%3D7%253A233%26starting-point-node-id%3D22%253A997"
-					allowfullscreen></iframe>
+			<figure class="figma-container">
+				<div class="iframe-wrapper">
+					<iframe
+						id="youtube-redesign"
+						title="YouTube Live Mobile App Redesign - Interactive Prototype"
+						src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FVTeXS7CWmqioKpqEBvy4DQ%2FCogs-187A-Hi-Fidelity-prototypes%3Ftype%3Ddesign%26node-id%3D22-997%26scaling%3Dscale-down%26page-id%3D7%253A233%26starting-point-node-id%3D22%253A997"
+						allowfullscreen
+						aria-label="Interactive prototype of YouTube Live mobile app redesign"
+						loading="lazy"></iframe>
+				</div>
 				<figcaption id="figma-caption">
 					<strong>YouTube Live Redesign for Mobile</strong>
 					<a
 						href="https://drive.google.com/file/d/1scRqM_Ie2mubrcM7FFgd1J2pSjgBCiVI/view?usp=sharing"
 						target="_blank"
-						rel="noreferrer">Complete Write-up Here</a
+						rel="noopener noreferrer"
+						aria-label="View complete write-up of YouTube Live Redesign (opens in new tab)"
+						class="write-up-link">Complete Write-up Here</a
 					>
 				</figcaption>
 			</figure>
@@ -44,58 +50,131 @@
 </section>
 
 <style>
+	.content-section {
+		padding: clamp(1rem, 3vw, 2rem);
+		max-width: 1400px;
+		margin: 0 auto;
+	}
+
 	.page-h2 {
-		font-size: var(--font-large);
+		font-size: clamp(1.5rem, 3vw, var(--font-large));
 		font-family: var(--font-heading);
-		margin-top: 0.5rem;
-		margin-bottom: 0.5rem;
-		margin-left: 1rem;
+		margin: 0.5rem 0 1.5rem;
 		text-decoration: underline;
 		color: var(--text-color);
 	}
 
-	@media screen and (max-width: 768px) {
-		.page-h2 {
-			font-size: var(--font-medium);
-		}
-	}
-
 	#flex-container {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+		gap: clamp(1.5rem, 4vw, 3rem);
+		align-items: start;
+		padding: clamp(0.5rem, 2vw, 1.5rem);
 	}
 
-	#about-wrapper,
-	#figma-wrapper {
-		flex: 0 0 50%;
-		box-sizing: border-box;
-		padding: 10px;
-	}
-
-	#figma-wrapper {
+	#about-wrapper {
 		display: flex;
-		justify-content: center;
-		align-items: center;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
 	#about-desc {
-		text-indent: 2rem;
-		margin-left: 1rem;
-		font-size: var(--font-large);
-		text-align: left;
+		font-size: clamp(1rem, 2vw, var(--font-large));
 		color: var(--text-color);
+		line-height: 1.6;
+		max-width: 65ch;
+		margin: 0 auto;
+		padding: 0 clamp(0.5rem, 2vw, 1rem);
+	}
+
+	#about-desc strong {
+		display: block;
+		margin-bottom: 1rem;
+		font-size: 1.2em;
+	}
+
+	.figma-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		width: 100%;
+	}
+
+	.iframe-wrapper {
+		position: relative;
+		width: 100%;
+		padding-bottom: 75%; /* 4:3 Aspect Ratio */
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 
 	#youtube-redesign {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		border: 1px solid rgba(0, 0, 0, 0.1);
-		width: 650px;
-		height: 450px;
+		border-radius: 8px;
 	}
 
 	#figma-caption {
 		text-align: center;
-		font-size: var(--font-large);
+		font-size: clamp(1rem, 1.5vw, var(--font-large));
 		color: var(--text-color);
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.write-up-link {
+		color: var(--text-color);
+		text-decoration: underline;
+		transition: color 0.3s ease;
+		padding: 0.5rem 1rem;
+		border-radius: 4px;
+	}
+
+	.write-up-link:hover {
+		color: #3b82f6;
+	}
+
+	.write-up-link:focus {
+		outline: 2px solid var(--text-color);
+		outline-offset: 2px;
+	}
+
+	@media (max-width: 768px) {
+		.content-section {
+			padding: 1rem 0.5rem;
+		}
+
+		#flex-container {
+			gap: 2rem;
+			padding: 0.5rem;
+		}
+
+		#about-desc {
+			text-align: left;
+			padding: 0;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.iframe-wrapper {
+			padding-bottom: 100%; /* 1:1 Aspect Ratio for mobile */
+		}
+
+		#figma-caption {
+			font-size: 1rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.write-up-link {
+			transition: none;
+		}
 	}
 </style>
