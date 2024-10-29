@@ -2,7 +2,7 @@
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 ---
 
-<header class="header" role="banner">
+<header class="header">
 	<Astronav>
 		<nav class="nav-container" aria-label="Main navigation">
 			<div class="nav-content">
@@ -345,52 +345,3 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		}
 	}
 </style>
-
-<script is:inline>
-	document.addEventListener("DOMContentLoaded", () => {
-		const menuButton = document.querySelector(".menu-button");
-		const navMenu = document.querySelector(".nav-menu");
-		const navLinks = document.querySelectorAll(".nav-link");
-
-		if (menuButton && navMenu) {
-			menuButton.addEventListener("click", () => {
-				const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
-				menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
-				navMenu.classList.toggle("show");
-			});
-
-			// Close menu when clicking outside
-			document.addEventListener("click", (event) => {
-				const target = event.target;
-				if (!(target.closest(".menu-button") || target.closest(".nav-menu"))) {
-					menuButton.setAttribute("aria-expanded", "false");
-					navMenu.classList.remove("show");
-				}
-			});
-
-			// Handle escape key
-			document.addEventListener("keydown", (event) => {
-				if (event.key === "Escape" && navMenu.classList.contains("show")) {
-					menuButton.setAttribute("aria-expanded", "false");
-					navMenu.classList.remove("show");
-					menuButton.focus();
-				}
-			});
-
-			// Add keyboard navigation for menu items
-			navLinks.forEach((link, index) => {
-				link.addEventListener("keydown", (event) => {
-					if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-						event.preventDefault();
-						const nextIndex = (index + 1) % navLinks.length;
-						navLinks[nextIndex].focus();
-					} else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-						event.preventDefault();
-						const prevIndex = (index - 1 + navLinks.length) % navLinks.length;
-						navLinks[prevIndex].focus();
-					}
-				});
-			});
-		}
-	});
-</script>
