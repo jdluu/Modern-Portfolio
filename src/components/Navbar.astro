@@ -84,6 +84,7 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 						<li class="nav-item theme-switch" role="menuitem">
 							<div class="theme-switch-wrapper">
 								<label class="switch" for="themeSwitch">
+									<span class="visually-hidden">Toggle dark theme</span>
 									<input
 										id="themeSwitch"
 										type="checkbox"
@@ -268,6 +269,18 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 
 	.slider.round:before {
 		border-radius: 50%;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	@media (max-width: 1024px) {
