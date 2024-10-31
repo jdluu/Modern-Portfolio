@@ -12,69 +12,69 @@ Inside my Astro project, you'll see the following folders and files:
 
 ```
 ├── public/
-│   ├── assets/
-│   |    └── Luu_Jeffrey_Resume.pdf
+│   ├── fonts/
+│   │   ├── Lato/
+│   │   ├── Montserrat/
+│   │   ├── Open_Sans/
+│   │   └── Pacifico/
 │   ├── icons/
-│   |    └── email.svg
-│   |    └── github.svg
-│   |    └── home.svg
-│   |    └── linkedin.svg
-│   |    └── ms-icon-150x150.png
-│   |    └── ms-icon-310x310.png
+│   │   ├── email.svg
+│   │   ├── github.svg
+│   │   ├── hamburger.svg
+│   │   ├── home.svg
+│   │   ├── linkedin.svg
+│   │   ├── ms-icon-150x150.png
+│   │   └── ms-icon-310x310.png
 │   ├── images/
-│   |    └── finalUB.png
-│   |    └── finalWAD.png
-│   |    └── finalZS.gif
-│   |    └── fractal.jpg
-│   |    └── homeUB.png
-│   |    └── homeWAD.png
-│   |    └── homeZS.png
-│   |    └── placeholder.png
-│   |    └── profile.webp
-│   |    └── projectPlaceholder.png
-│   |    └── thumbnailUB.png
-│   |    └── thumbnailWAD.png
-│   |    └── thumbnailZS.png
-│   |    └── wireframeUB.png
-│   |    └── wireframeWAD.png
-│   |    └── wireframeZS.png
+│   │   ├── fractal.avif
+│   │   ├── fractal.jpg
+│   │   ├── fractal.webp
+│   │   ├── Placeholder.png
+│   │   ├── profile-400w.avif
+│   │   ├── profile-600w.avif
+│   │   ├── profile-800w.avif
+│   │   ├── profile-1000w.avif
+│   │   ├── profile-1200w.avif
+│   │   ├── profile-1600w.avif
+│   │   └── profile.webp
 │   ├── scripts/
-│   |    └── theme.js
-│   └── favicon.ico
+│   │   └── theme.js
+│   ├── styles/
+│   │   ├── global.css
+│   │   └── reset.css
+│   ├── favicon.ico
+│   └── Jeffrey_Luu_Resume.pdf
+├── scripts/
+│   └── optimize-images.js
 ├── src/
 │   ├── components/
-│   |    └── AboutContent.astro
-│   |    └── BlogPost.astro
-│   |    └── ContactForm.astro
-│   |    └── ExperienceContent.astro
-│   |    └── Footer.astro
-│   |    └── IntroContent.astro
-│   |    └── MainHead.astro
-│   |    └── Navbar.astro
-│   |    ├── ProjectCard.astro
-│   |    ├── ProjectCardGrid.astro
+│   │   ├── AboutContent.astro
+│   │   ├── ContactForm.astro
+│   │   ├── ExperienceContent.astro
+│   │   ├── Footer.astro
+│   │   ├── IntroContent.astro
+│   │   ├── Navbar.astro
+│   │   ├── ProjectCard.astro
+│   │   └── ProjectCardGrid.astro
 │   ├── layouts/
-│   │    └── DefaultLayout.astro
-│   │    └── BlogPostLayout.astro
-│   │    └── ProjectLayout.astro
+│   │   └── BaseLayout.astro
+│   ├── lib/
+│   │   └── cosmic.js
 │   └── pages/
-│   |    ├── posts/
-│   |    |    └── post-1.md
-│   |    |    └── post-2.md
-│   |    |    └── post-3.md
-│   |    ├── projects/
-│   |    |    └── project-1.md
-│   |    |    └── project-2.md
-│   |    |    └── project-3.md
-│   |    |    └── project-4.md
-│   |    |    └── project-5.md
-│   |    |    └── project-6.md
-│   |    └── about.astro
-│   |    └── blog.astro
-│   |    └── contact.astro
-│   |    └── index.astro
-│   |    └── work.astro
-└── package.json
+│       ├── posts/
+│       │   └── [slug].astro
+│       ├── projects/
+│       │   └── [slug].astro
+│       ├── about.astro
+│       ├── blog.astro
+│       ├── contact.astro
+│       ├── index.astro
+│       ├── robots.txt.ts
+│       └── work.astro
+├── astro.config.mjs
+├── package.json
+├── tailwind.config.js
+└── tsconfig.json
 ```
 
 ## 🧞 Commands
