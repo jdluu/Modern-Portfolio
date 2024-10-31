@@ -1,5 +1,5 @@
 ---
-import {getAllProjects} from "../../lib/cosmic";
+import {getAllProjects} from "../../lib/cosmic.js";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 interface Metadata {
@@ -59,329 +59,507 @@ interface Metadata {
   };
 }
 
-
 interface PageProps {
   title: string;
   metadata: Metadata;
 }
 
-// Adjusted getStaticPaths function
 export async function getStaticPaths() {
     const projects: { slug: string; title: string; metadata: Metadata }[] = await getAllProjects();
 
-	return projects.map(({slug, title, metadata}) => {
-		return {
-			params: { slug },
-			props: { title, metadata },
-		};
-	});
+    return projects.map(({slug, title, metadata}) => {
+        return {
+            params: { slug },
+            props: { title, metadata },
+        };
+    });
 }
 
 const {title, metadata} = Astro.props;
 ---
 
 <BaseLayout title={title}>
-	<div id="left-tray">
-		<ul id="table-of-contents">
-			<li>
-				<a href="#overview" id="ido" class="nav-item">Overview</a>
-			</li>
-			<li>
-				<a href="#background" id="idb" class="nav-item">Background</a>
-			</li>
-			<li>
-				<a href="#process" id="idd" class="nav-item"
-					>{metadata.process.title}</a
-				>
-			</li>
-			<li>
-				<a href="#results" id="idf" class="nav-item">Final Product</a>
-			</li>
-			<li>
-				<a href="#reflection" id="idr" class="nav-item">Reflection</a>
-			</li>
-			<li>
-				<button id="hide-button">Hide Table of Contents ◀</button>
-			</li>
-		</ul>
-		<button id="show-button">Show Table of Contents ≡</button>
-	</div>
-	<script>
-		// Wait for the DOM content to be fully loaded
-		document.addEventListener("DOMContentLoaded", function () {
-			const tableOfContents = document.getElementById("table-of-contents");
-			const hideButton = document.getElementById("hide-button");
-			const showButton = document.getElementById("show-button");
+    <nav id="left-tray" aria-label="Table of Contents">
+        <ul id="table-of-contents" role="navigation">
+            <li>
+                <a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a>
+            </li>
+            <li>
+                <a href="#background" id="idb" class="nav-item" aria-current="false">Background</a>
+            </li>
+            <li>
+                <a href="#process" id="idd" class="nav-item" aria-current="false">{metadata.process.title}</a>
+            </li>
+            <li>
+                <a href="#results" id="idf" class="nav-item" aria-current="false">Final Product</a>
+            </li>
+            <li>
+                <a href="#reflection" id="idr" class="nav-item" aria-current="false">Reflection</a>
+            </li>
+            <li>
+                <button id="hide-button" aria-label="Hide Table of Contents" class="toc-button">
+                    Hide Table of Contents ◀
+                </button>
+            </li>
+        </ul>
+        <button id="show-button" aria-label="Show Table of Contents" class="toc-button">
+            Show Table of Contents ≡
+        </button>
+    </nav>
 
-			// Check if all required elements are present
-			if (tableOfContents && hideButton && showButton) {
-				const navItems = tableOfContents.getElementsByClassName("nav-item");
+    <main class="project-page-container">
+        <article class="project-page-div">
+            <section id="overview" aria-labelledby="project-title">
+                <h1 id="project-title" class="project-title">{title}</h1>
+                <p class="section-content lead">{metadata.description}</p>
+                <figure class="project-figure">
+                    <img
+                        class="project-image"
+                        src={metadata.home.image.imgix_url + '?w=800'}
+                        srcset={`${metadata.home.image.imgix_url}?w=400 400w,
+                                ${metadata.home.image.imgix_url}?w=800 800w,
+                                ${metadata.home.image.imgix_url}?w=1200 1200w`}
+                        sizes="(max-width: 768px) 100vw, 80vw"
+                        alt={metadata.home.imagealt}
+                        loading="eager"
+                    />
+                </figure>
 
-				function hideTableOfContents() {
-					console.log("Hiding table of contents...");
-					if (tableOfContents && showButton) {
-						tableOfContents.style.display = "none";
-						showButton.style.visibility = "visible";
-						console.log("Table of contents hidden.");
-					} else {
-						console.error(
-							"Table of contents or showButton is null or undefined."
-						);
-					}
-				}
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Timeline</h3>
+                        <p>{metadata.logistics.date}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>{metadata.logistics.techtitle}</h3>
+                        <p>{metadata.logistics.technologies}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Tools</h3>
+                        <p>{metadata.logistics.tools}</p>
+                    </div>
+                </div>
 
-				function showTableOfContents() {
-					console.log("Showing table of contents...");
-					if (tableOfContents && showButton) {
-						tableOfContents.style.display = "block";
-						showButton.style.visibility = "hidden";
-						console.log("Table of contents shown.");
-					} else {
-						console.error(
-							"Table of contents or showButton is null or undefined."
-						);
-					}
-				}
+                <div class="responsibilities">
+                    <h2>My Responsibilities as {metadata.work.role}</h2>
+                    <ul>
+                        {metadata.work.responsibilities.map((responsibility, index) => (
+                            <li class="role-bullet-item" key={index}>
+                                {responsibility.duties}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
 
-				// Function to handle nav-item click
-				function handleNavItemClick(event) {
-					const clickedNavItem = event.target;
-					// Remove 'active' class from all nav-items
-					for (const navItem of navItems) {
-						navItem.classList.remove("link-active");
-					}
-					// Add 'active' class to the clicked nav-item
-					clickedNavItem.classList.add("link-active");
-				}
+            <section id="background" class="content-section">
+                <h2>Background</h2>
+                <p class="section-content">{metadata.background.description}</p>
+                
+                <h2>Problem Statement</h2>
+                <p class="section-content">{metadata.problem.description}</p>
+                
+                <h2>{metadata.solution.title}</h2>
+                <p class="section-content">{metadata.solution.description}</p>
+            </section>
 
-				// Add click event listener to each nav-item
-				for (const navItem of navItems) {
-					navItem.addEventListener("click", handleNavItemClick);
-				}
+            <section id="process" class="content-section">
+                <h2>{metadata.process.title}</h2>
+                {metadata.process.plan.map((plan, index) => (
+                    <p class="section-content" key={index}>{plan.steps}</p>
+                ))}
+                <figure class="project-figure">
+                    <img
+                        class="project-image"
+                        src={metadata.prototype.image.imgix_url + '?w=800'}
+                        srcset={`${metadata.prototype.image.imgix_url}?w=400 400w,
+                                ${metadata.prototype.image.imgix_url}?w=800 800w,
+                                ${metadata.prototype.image.imgix_url}?w=1200 1200w`}
+                        sizes="(max-width: 768px) 100vw, 80vw"
+                        alt={metadata.prototype.imagealt}
+                        loading="lazy"
+                    />
+                </figure>
+            </section>
 
-				hideButton.addEventListener("click", hideTableOfContents);
-				showButton.addEventListener("click", showTableOfContents);
-			} else {
-				console.error("One or more elements not found!");
-			}
-		});
-	</script>
-	<div class="project-page-container">
-		<div class="project-page-div">
-			<section id="overview">
-				<h1 class="project-title">{title}</h1>
-				<p class="section-content">{metadata.description}</p>
-				<img
-					class="project-image"
-					src={metadata.home.image.url}
-					alt={metadata.home.imagealt}
-				/>
-				<div class="flex-container">
-					<div>
-						<p class="section-content">
-							<strong>Timeline</strong>
-							<br />
-							{metadata.logistics.date}
-						</p>
-					</div>
-					<div>
-						<p class="section-content">
-							<strong>{metadata.logistics.techtitle}</strong>
-							<br />
-							{metadata.logistics.technologies}
-						</p>
-					</div>
-					<div>
-						<p class="section-content">
-							<strong>Tools</strong>
-							<br />
-							{metadata.logistics.tools}
-						</p>
-					</div>
-				</div>
-				<h3><strong>My Responsibilities as {metadata.work.role}</strong></h3>
-				<ul>
-					{
-						metadata.work.responsibilities.map((responsibility, index) => (
-							<li class="role-bullet-item" key={index}>
-								{responsibility.duties}
-							</li>
-						))
-					}
-				</ul>
-			</section>
-			<section id="background">
-				<h2>Background</h2>
-				<p class="section-content">
-					{metadata.background.description}
-				</p>
-				<h2>Problem Statement</h2>
-				<p class="section-content">
-					{metadata.problem.description}
-				</p>
-				<h2>{metadata.solution.title}</h2>
-				<p class="section-content">
-					{metadata.solution.description}
-				</p>
-			</section>
-			<section id="process">
-				<h2>{metadata.process.title}</h2>
-				{
-					metadata.process.plan.map((plan, index) => (
-						<p class="section-content" key={index}>
-							{plan.steps}
-						</p>
-					))
-				}
-				<img
-					class="project-image"
-					src={metadata.prototype.image.url}
-					alt={metadata.prototype.imagealt}
-				/>
-			</section>
-			<section id="results">
-				<h2>Final Product</h2>
-				<p class="section-content">{metadata.final.description}</p>
-				<img
-					class="project-image"
-					src={metadata.final.image.url}
-					alt={metadata.final.imagealt}
-				/>
-			</section>
-			<section id="reflection">
-				<h2>Reflection</h2>
-				{
-					metadata.reflection.points.map((reflection, index) => (
-						<p class="section-content" key={index}>
-							{reflection.point}
-						</p>
-					))
-				}
-				<a
-					href={metadata.source.link}
-					id="source-link"
-					target="_blank"
-					rel="noreferrer"
-				>
-					<strong>{metadata.source.title}</strong>
-				</a>
-			</section>
-		</div>
-	</div>
+            <section id="results" class="content-section">
+                <h2>Final Product</h2>
+                <p class="section-content">{metadata.final.description}</p>
+                <figure class="project-figure">
+                    <img
+                        class="project-image"
+                        src={metadata.final.image.imgix_url + '?w=800'}
+                        srcset={`${metadata.final.image.imgix_url}?w=400 400w,
+                                ${metadata.final.image.imgix_url}?w=800 800w,
+                                ${metadata.final.image.imgix_url}?w=1200 1200w`}
+                        sizes="(max-width: 768px) 100vw, 80vw"
+                        alt={metadata.final.imagealt}
+                        loading="lazy"
+                    />
+                </figure>
+            </section>
+
+            <section id="reflection" class="content-section">
+                <h2>Reflection</h2>
+                {metadata.reflection.points.map((reflection, index) => (
+                    <p class="section-content" key={index}>{reflection.point}</p>
+                ))}
+                <a
+                    href={metadata.source.link}
+                    class="source-link"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`View source: ${metadata.source.title}`}
+                >
+                    <strong>{metadata.source.title}</strong>
+                </a>
+            </section>
+        </article>
+    </main>
 </BaseLayout>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableOfContents = document.getElementById("table-of-contents");
+        const hideButton = document.getElementById("hide-button");
+        const showButton = document.getElementById("show-button");
+        const navItems = document.getElementsByClassName("nav-item");
+
+        // Intersection Observer for sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Update nav items
+                    Array.from(navItems).forEach(item => {
+                        if (!item || !item.getAttribute) return;
+                        
+                        const href = item.getAttribute('href');
+                        if (!href) return;
+
+                        const targetId = entry.target.id;
+                        const itemHref = href.substring(1);
+                        
+                        if (itemHref === targetId) {
+                            item.setAttribute('aria-current', 'true');
+                            item.classList.add('link-active');
+                        } else {
+                            item.setAttribute('aria-current', 'false');
+                            item.classList.remove('link-active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            if (section) observer.observe(section);
+        });
+
+        // Table of Contents Toggle
+        function toggleTableOfContents(show) {
+            if (tableOfContents && showButton) {
+                tableOfContents.style.display = show ? 'block' : 'none';
+                showButton.style.visibility = show ? 'hidden' : 'visible';
+                
+                // Add animation class
+                tableOfContents.classList.toggle('toc-visible', show);
+            }
+        }
+
+        toggleTableOfContents(true);
+
+        hideButton?.addEventListener("click", () => toggleTableOfContents(false));
+        showButton?.addEventListener("click", () => toggleTableOfContents(true));
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (!href) return;
+
+                const targetElement = document.querySelector(href);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    // Update URL without jumping
+                    history.pushState(null, '', href);
+                }
+
+                // Auto-hide TOC on mobile after clicking
+                if (window.innerWidth <= 768) {
+                    toggleTableOfContents(false);
+                }
+            });
+        });
+    });
+</script>
+
 <style>
-	#left-tray {
-		position: fixed;
-		left: 0;
-		top: 50%;
-		transform: translateY(-50%);
-		padding: 20px;
-		border-radius: 8px;
-		z-index: 50;
-		background-color: var(--background-color);
-	}
+    /* CSS Variables for theme consistency */
+    :root {
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 4rem;
+        
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 16px;
 
-	#table-of-contents {
-		padding: 0;
-		margin: 0;
-		list-style: none;
-		font-family: var(--font-secondary);
-	}
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 
-	.link-active {
-		font-weight: bold;
-	}
+        --transition-fast: 150ms ease;
+        --transition-normal: 300ms ease;
+    }
 
-	#table-of-contents li {
-		margin-bottom: 10px;
-	}
+    /* Layout & Container Styles */
+    .project-page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-lg);
+        margin-left: clamp(5%, 20%, 25%);
+        margin-right: clamp(5%, 20%, 25%);
+    }
 
-	.nav-item {
-		text-decoration: none;
-		color: var(--text-color);
-	}
+    .project-page-div {
+        text-align: left;
+    }
 
-	.nav-item:hover {
-		text-decoration: underline;
-	}
+    /* Typography */
+    .project-title {
+        font-family: var(--font-heading);
+        font-weight: bold;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        line-height: 1.2;
+        margin-bottom: var(--spacing-lg);
+        color: var(--text-color);
+    }
 
-	#hide-button {
-		visibility: visible;
-	}
+    h2 {
+        font-family: var(--font-heading);
+        font-weight: bold;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        margin: var(--spacing-lg) 0 var(--spacing-md);
+        color: var(--text-color);
+    }
 
-	#show-button {
-		visibility: hidden;
-	}
+    h3 {
+        font-family: var(--font-heading);
+        font-weight: bold;
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+        margin: var(--spacing-md) 0;
+        color: var(--text-color);
+    }
 
-	@media (max-width: 1380px) {
-		#left-tray {
-			padding: 10px;
-		}
-	}
+    .section-content {
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-md);
+        color: var(--text-color);
+    }
 
-	@media (max-width: 768px) {
-		#left-tray {
-			box-shadow: 5px 0px 10px #d0dbdf;
-		}
-	}
+    .lead {
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        margin-bottom: var(--spacing-lg);
+    }
 
-	.project-page-container {
-		display: block;
-		margin-left: 20%;
-		margin-right: 20%;
-	}
+    /* Navigation */
+    #left-tray {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        background-color: var(--background-color);
+        box-shadow: var(--shadow-md);
+        z-index: 50;
+        transition: transform var(--transition-normal);
+    }
 
-	.project-page-div {
-		text-align: left;
-	}
+    #table-of-contents {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        font-family: var(--font-secondary);
+    }
 
-	.project-title {
-		font-family: var(--font-heading);
-		font-weight: bold;
-		font-size: var(--font-xlarge);
-	}
+    .nav-item {
+        display: block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        color: var(--text-color);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
 
-	h2 {
-		font-family: var(--font-heading);
-		font-weight: bold;
-		font-size: var(--font-large);
-	}
+    .nav-item:hover,
+    .nav-item:focus {
+        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+        transform: translateX(var(--spacing-xs));
+    }
 
-	h3 {
-		font-family: var(--font-heading);
-		font-weight: bold;
-		font-size: var(--font-medium);
-	}
+    .link-active {
+        font-weight: bold;
+        background-color: color-mix(in srgb, var(--text-color) 15%, transparent);
+    }
 
-	.project-image {
-		max-width: 100%;
-		height: auto;
-		display: block;
-		margin: auto;
-		/* preserve aspect ratio */
-		object-fit: cover;
-	}
+    /* Buttons */
+    .toc-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border: none;
+        border-radius: var(--radius-sm);
+        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+        color: var(--text-color);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
 
-	.flex-container {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		gap: 20px;
-	}
+    .toc-button:hover,
+    .toc-button:focus {
+        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
+    }
 
-	.role-bullet-item {
-		list-style-type: disc;
-		margin-bottom: 0.5rem;
-		font-size: var(--font-large);
-	}
+    /* Images */
+    .project-figure {
+        margin: var(--spacing-lg) 0;
+    }
 
-	.section-content {
-		font-size: var(--font-medium);
-		line-height: 30px;
-	}
+    .project-image {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+    }
 
-	#source-link {
-		text-decoration: none;
-	}
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-md);
+        margin: var(--spacing-lg) 0;
+    }
+
+    .info-card {
+        padding: var(--spacing-md);
+        background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* Lists */
+    .role-bullet-item {
+        list-style-type: disc;
+        margin-bottom: var(--spacing-sm);
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        line-height: 1.6;
+        color: var(--text-color);
+    }
+
+    /* Links */
+    .source-link {
+        display: inline-block;
+        margin-top: var(--spacing-lg);
+        padding: var(--spacing-sm) var(--spacing-md);
+        color: var(--text-color);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+        transition: all var(--transition-fast);
+    }
+
+    .source-link:hover,
+    .source-link:focus {
+        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
+        transform: translateY(-2px);
+    }
+
+    /* Sections */
+    .content-section {
+        margin: var(--spacing-xl) 0;
+        scroll-margin-top: var(--spacing-xl);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1380px) {
+        .project-page-container {
+            margin-left: 15%;
+            margin-right: 15%;
+        }
+
+        #left-tray {
+            padding: var(--spacing-sm);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .project-page-container {
+            margin-left: var(--spacing-md);
+            margin-right: var(--spacing-md);
+            padding: var(--spacing-md);
+        }
+
+        #left-tray {
+            top: auto;
+            bottom: var(--spacing-md);
+            transform: none;
+            width: auto;
+            background-color: var(--background-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        #table-of-contents {
+            display: none;
+        }
+
+        #show-button {
+            visibility: visible;
+        }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .toc-visible {
+        animation: fadeIn var(--transition-normal);
+    }
+
+    /* Focus Styles */
+    :focus {
+        outline: 2px solid var(--text-color);
+        outline-offset: 2px;
+    }
+
+    /* Print Styles */
+    @media print {
+        #left-tray {
+            display: none;
+        }
+
+        .project-page-container {
+            margin: 0;
+            padding: 0;
+        }
+
+        .project-image {
+            max-width: 100%;
+            page-break-inside: avoid;
+        }
+    }
 </style>
