@@ -282,9 +282,14 @@ const {title, metadata} = Astro.props;
                 const targetElement = document.querySelector(href);
                 
                 if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const navHeight = parseInt(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--nav-height')) || 64; // fallback to 64px
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = targetPosition - navHeight - 32; // 32px additional buffer
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
                     });
 
                     // Update URL without jumping
@@ -308,6 +313,7 @@ const {title, metadata} = Astro.props;
         --spacing-md: 1rem;
         --spacing-lg: 2rem;
         --spacing-xl: 4rem;
+        --nav-height: 4rem; /* Add this variable for navbar height */
         
         --radius-sm: 4px;
         --radius-md: 8px;
@@ -484,9 +490,13 @@ const {title, metadata} = Astro.props;
     }
 
     /* Sections */
+    section {
+        scroll-margin-top: var(--nav-height);
+        padding-top: calc(var(--nav-height));
+    }
+
     .content-section {
         margin: var(--spacing-xl) 0;
-        scroll-margin-top: var(--spacing-xl);
     }
 
     /* Responsive Design */
