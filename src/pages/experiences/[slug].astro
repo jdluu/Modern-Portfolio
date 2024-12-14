@@ -66,26 +66,11 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 ---
 
 <BaseLayout title={title}>
-    <nav id="left-tray" aria-label="Table of Contents">
-        <ul id="table-of-contents" role="navigation">
-            <li><a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a></li>
-            {responsibilities.length > 0 && (
-                <li><a href="#responsibilities" id="idr" class="nav-item" aria-current="false">Responsibilities</a></li>
-            )}
-            {achievements.length > 0 && (
-                <li><a href="#achievements" id="ida" class="nav-item" aria-current="false">Key Achievements</a></li>
-            )}
-            {showcase.length > 0 && (
-                <li><a href="#showcase" id="ids" class="nav-item" aria-current="false">Showcase</a></li>
-            )}
-        </ul>
-    </nav>
-
     <main class="experience-page-container">
         <article class="experience-page-div">
             <section id="overview" aria-labelledby="experience-title">
                 <div class="experience-header">
-                    <div class="company-info">
+                    <div class="company-info" role="banner">
                         <img 
                             src={companyLogo}
                             alt={`${companyName} logo`}
@@ -94,42 +79,43 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                             width="80"
                             height="80"
                             loading="lazy"
+                            aria-hidden="true"
                         />
                         <div class="title-container">
-                            <h1 id="experience-title" class="experience-title">{title}</h1>
+                            <h1 id="experience-title" class="experience-title" tabindex="-1">{title}</h1>
                             <p class="company-name"><strong>{companyName}</strong></p>
                         </div>
                     </div>
                     <div class="experience-meta">
                         <div class="meta-item">
-                            <span class="meta-label">Role</span>
-                            <span class="meta-value"><strong>{role}</strong></span>
+                            <span class="meta-label" id="role-label">Role</span>
+                            <span class="meta-value" aria-labelledby="role-label"><strong>{role}</strong></span>
                         </div>
                         <div class="meta-item">
-                            <span class="meta-label">Duration</span>
-                            <span class="meta-value"><strong>{duration}</strong></span>
+                            <span class="meta-label" id="duration-label">Duration</span>
+                            <span class="meta-value" aria-labelledby="duration-label"><strong>{duration}</strong></span>
                         </div>
                     </div>
                 </div>
                 <p class="section-content lead">{description}</p>
-                <div class="tech-section">
+                <div class="tech-section" role="complementary" aria-label="Technical details">
                     <div class="tech-item">
-                        <h3>Tools & Technologies</h3>
-                        <p><strong>{tools}</strong></p>
+                        <h3 id="tools-title">Tools & Technologies</h3>
+                        <p aria-labelledby="tools-title"><strong>{tools}</strong></p>
                     </div>
                     <div class="tech-item">
-                        <h3>Skills</h3>
-                        <p><strong>{skills}</strong></p>
+                        <h3 id="skills-title">Skills</h3>
+                        <p aria-labelledby="skills-title"><strong>{skills}</strong></p>
                     </div>
                 </div>
             </section>
 
             {responsibilities.length > 0 && (
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
-                    <h2 id="responsibilities-title">Key Responsibilities</h2>
+                    <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
                     <ul class="responsibilities-list" role="list">
-                        {responsibilities.map((item) => (
-                            <li><span class="highlight">{item.duties}</span></li>
+                        {responsibilities.map((item, index) => (
+                            <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
                         ))}
                     </ul>
                 </section>
@@ -137,10 +123,10 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 
             {achievements.length > 0 && (
                 <section id="achievements" aria-labelledby="achievements-title">
-                    <h2 id="achievements-title">Notable Achievements</h2>
+                    <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
                     <ul class="achievements-list" role="list">
-                        {achievements.map((item) => (
-                            <li><strong>{item.points}</strong></li>
+                        {achievements.map((item, index) => (
+                            <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
                         ))}
                     </ul>
                 </section>
@@ -148,7 +134,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 
             {showcase.length > 0 && (
                 <section id="showcase" aria-labelledby="showcase-title">
-                    <h2 id="showcase-title">Project Showcase</h2>
+                    <h2 id="showcase-title" tabindex="-1">Project Showcase</h2>
                     <div class="showcase-grid">
                         {showcase.map((item) => (
                             <a href={item.link} 
@@ -157,7 +143,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                                rel="noopener noreferrer"
                                aria-label={`View project: ${item.description}`}>
                                 <p><strong>{item.description}</strong></p>
-                                <span class="showcase-link">View Project →</span>
+                                <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
                             </a>
                         ))}
                     </div>
@@ -172,8 +158,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .experience-page-container {
         max-width: min(1200px, 95%);
         margin: 0 auto;
-        padding: clamp(1rem, 2vw, var(--spacing-lg));
-        margin-left: 250px;
+        padding: var(--spacing-lg);
     }
 
     .experience-page-div {
@@ -181,19 +166,21 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         border-radius: 12px;
         padding: clamp(1rem, 3vw, var(--spacing-lg));
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        width: 100%;
     }
 
     /* Header Styles */
     .experience-header {
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
         border-bottom: 1px solid var(--border-color);
-        padding-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-lg);
     }
 
     .company-info {
         display: flex;
         align-items: center;
-        gap: clamp(0.5rem, 2vw, var(--spacing-md));
+        gap: clamp(1rem, 2vw, var(--spacing-lg));
         margin-bottom: var(--spacing-md);
     }
 
@@ -204,54 +191,63 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         border-radius: 8px;
         background: white;
         padding: 8px;
+        flex-shrink: 0;
     }
 
     .title-container {
         flex: 1;
+        min-width: 0;
     }
 
     .experience-title {
         font-size: clamp(1.5rem, 4vw, 2rem);
         margin: 0;
         color: var(--text-color);
+        line-height: 1.2;
+        word-wrap: break-word;
     }
 
     .company-name {
         font-size: clamp(1rem, 3vw, 1.25rem);
         color: var(--text-muted);
-        margin: 0.25rem 0;
+        margin: 0.5rem 0;
+        word-wrap: break-word;
     }
 
     .experience-meta {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--spacing-md);
+        gap: var(--spacing-lg);
+        align-items: flex-start;
     }
 
     .meta-item {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.5rem;
+        min-width: 150px;
     }
 
     .meta-label {
         font-size: 0.875rem;
         color: var(--text-muted);
         text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     .meta-value {
         color: var(--text-color);
+        line-height: 1.4;
     }
 
     .tech-section {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: var(--spacing-md);
-        margin: var(--spacing-md) 0;
-        padding: var(--spacing-md);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-lg) 0;
+        padding: var(--spacing-lg);
         background: var(--bg-primary);
-        border-radius: 8px;
+        border-radius: var(--radius-lg);
     }
 
     .tech-item {
@@ -259,7 +255,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
 
     .tech-item h3 {
-        font-size: var(--text-md);
+        font-size: var(--font-large);
         margin-bottom: var(--spacing-sm);
         color: var(--text-color);
     }
@@ -267,6 +263,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .tech-item p {
         color: var(--text-muted);
         line-height: 1.6;
+        word-wrap: break-word;
     }
 
     /* Lists Styles */
@@ -274,14 +271,14 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .achievements-list {
         list-style: none;
         padding: 0;
-        margin: var(--spacing-md) 0;
+        margin: var(--spacing-lg) 0;
     }
 
     .responsibilities-list li,
     .achievements-list li {
         position: relative;
         padding-left: 1.5em;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
         line-height: 1.6;
     }
 
@@ -302,78 +299,86 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .highlight {
         background: linear-gradient(transparent 60%, var(--accent-color-transparent) 40%);
         padding: 0 0.2em;
+        word-wrap: break-word;
     }
 
     /* Section Titles */
     h2 {
-        font-size: clamp(1.25rem, 3vw, var(--text-xl));
+        font-size: clamp(1.25rem, 3vw, var(--font-xlarge));
         color: var(--text-color);
-        margin: var(--spacing-md) 0 var(--spacing-md);
+        margin: var(--spacing-lg) 0;
         padding-bottom: var(--spacing-sm);
         border-bottom: 2px solid var(--accent-color);
+        line-height: 1.3;
     }
 
-    /* Navigation Styles */
-    #left-tray {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 250px;
-        height: calc(100vh - 80px);
-        padding: var(--spacing-lg);
-        background: var(--bg-secondary);
-        border-right: 1px solid var(--border-color);
-        overflow-y: auto;
-        transition: transform 0.3s ease;
-        z-index: 100;
+    /* Accessibility */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Focus Styles */
+    :focus {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
+
+    :focus:not(:focus-visible) {
+        outline: none;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
     }
 
     /* Responsive Styles */
-    @media (max-width: 1200px) {
+    @media (max-width: 768px) {
         .experience-page-container {
-            margin-left: 200px;
-        }
-        
-        #left-tray {
-            width: 200px;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        .experience-page-container {
-            margin-left: 0;
             padding: var(--spacing-md);
         }
 
-        #left-tray {
-            transform: translateX(-100%);
-        }
-
-        #left-tray.active {
-            transform: translateX(0);
-        }
-    }
-
-    @media (max-width: 768px) {
         .experience-header {
-            flex-direction: column;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
         }
 
         .company-info {
             flex-direction: column;
             text-align: center;
+            gap: var(--spacing-md);
         }
 
         .tech-section {
             grid-template-columns: 1fr;
+            padding: var(--spacing-md);
+            gap: var(--spacing-md);
         }
 
         .experience-meta {
             justify-content: center;
+            gap: var(--spacing-md);
+        }
+
+        .meta-item {
+            text-align: center;
+            min-width: 140px;
         }
     }
 
     @media (max-width: 480px) {
+        .experience-page-container {
+            padding: var(--spacing-sm);
+        }
+
         .experience-page-div {
             padding: var(--spacing-md);
         }
@@ -381,69 +386,89 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         .tech-item {
             padding: var(--spacing-sm);
         }
+
+        .responsibilities-list li,
+        .achievements-list li {
+            margin-bottom: var(--spacing-sm);
+        }
+    }
+
+    /* High Contrast & Reduced Motion */
+    @media (prefers-contrast: more) {
+        .highlight {
+            background: var(--accent-color);
+            color: var(--inverse-text-color);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation: none !important;
+            transition: none !important;
+        }
     }
 
     /* Print Styles */
     @media print {
-        #left-tray {
-            display: none;
+        .experience-page-container {
+            margin: 0;
+            max-width: 100%;
+            padding: 0;
         }
 
-        .experience-page-container {
-            margin-left: 0;
-            max-width: 100%;
+        .experience-page-div {
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .tech-section {
+            break-inside: avoid;
+        }
+
+        a[href^="http"]::after {
+            content: " (" attr(href) ")";
         }
     }
 </style>
 
 <script>
-    // Intersection Observer for active section highlighting
-    document.addEventListener("DOMContentLoaded", function () {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.id;
-                    document.querySelectorAll('a[href^="#"]').forEach(item => {
-                        if (item.getAttribute('href') === `#${id}`) {
-                            item.setAttribute('aria-current', 'true');
-                            item.classList.add('link-active');
-                        } else {
-                            item.setAttribute('aria-current', 'false');
-                            item.classList.remove('link-active');
-                        }
-                    });
-                }
-            });
-        }, { threshold: 0.2 });
-
-        document.querySelectorAll('section[id]').forEach((section) => {
-            observer.observe(section);
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+    // Smooth scrolling for navigation links with keyboard support
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', handleSmoothScroll);
+        anchor.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
                 e.preventDefault();
-                const href = this.getAttribute('href');
-                if (!href) return;
-
-                const targetElement = document.querySelector(href);
-                
-                if (targetElement) {
-                    const navHeight = parseInt(getComputedStyle(document.documentElement)
-                        .getPropertyValue('--nav-height')) || 64; // fallback to 64px
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                    const offsetPosition = targetPosition - navHeight - 32; // 32px additional buffer
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    // Update URL without jumping
-                    history.pushState(null, '', href);
-                }
-            });
+                handleSmoothScroll(e);
+            }
         });
     });
+
+    function handleSmoothScroll(e) {
+        e.preventDefault();
+        const href = e.currentTarget.getAttribute('href');
+        if (!href) return;
+
+        const targetElement = document.querySelector(href);
+        
+        if (targetElement) {
+            const navHeight = parseInt(getComputedStyle(document.documentElement)
+                .getPropertyValue('--nav-height')) || 64;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = targetPosition - navHeight - 32;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // Set focus to the target heading
+            const heading = targetElement.querySelector('h1, h2');
+            if (heading) {
+                heading.focus();
+            }
+
+            // Update URL without jumping
+            history.pushState(null, '', href);
+        }
+    }
 </script>
