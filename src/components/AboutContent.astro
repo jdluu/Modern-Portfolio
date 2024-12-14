@@ -18,27 +18,90 @@
 			<div class="skills-grid">
 				<div class="domain-section">
 					<h4>Web Development</h4>
-					<ul>
-						<li>HTML/CSS</li>
-						<li>JavaScript/TypeScript</li>
-						<li>React & Node.js</li>
-					</ul>
+					<div class="tech-grid">
+						<div class="tech-row">
+							<div class="tech-item" title="HTML5">
+								<img src="/icons/tech/html5.svg" alt="HTML5" />
+							</div>
+							<div class="tech-item" title="CSS3">
+								<img src="/icons/tech/css3.svg" alt="CSS3" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="JavaScript">
+								<img src="/icons/tech/javascript.svg" alt="JavaScript" />
+							</div>
+							<div class="tech-item" title="TypeScript">
+								<img src="/icons/tech/typescript.svg" alt="TypeScript" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="React">
+								<img src="/icons/tech/react.svg" alt="React" />
+							</div>
+							<div class="tech-item" title="Node.js">
+								<img src="/icons/tech/nodejs.svg" alt="Node.js" />
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="domain-section">
 					<h4>Software & Mobile</h4>
-					<ul>
-						<li>Android Dev (Java, Kotlin)</li>
-						<li>Game Dev (Unity, C#)</li>
-						<li>C/C++</li>
-					</ul>
+					<div class="tech-grid">
+						<div class="tech-row">
+							<div class="tech-item" title="Android">
+								<img src="/icons/tech/android.svg" alt="Android" />
+							</div>
+							<div class="tech-item" title="Java">
+								<img src="/icons/tech/java.svg" alt="Java" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="Unity">
+								<img src="/icons/tech/unity.svg" alt="Unity" />
+							</div>
+							<div class="tech-item" title="C#">
+								<img src="/icons/tech/csharp.svg" alt="C#" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="C">
+								<img src="/icons/tech/c.svg" alt="C" />
+							</div>
+							<div class="tech-item" title="C++">
+								<img src="/icons/tech/cpp.svg" alt="C++" />
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="domain-section">
 					<h4>Data Science & AI</h4>
-					<ul>
-						<li>Python (Pandas, Numpy)</li>
-						<li>Data Visualization (Matplotlib, Seaborn)</li>
-						<li>Machine Learning (Pytorch, TensorFlow)</li>
-					</ul>
+					<div class="tech-grid">
+						<div class="tech-row">
+							<div class="tech-item" title="Python">
+								<img src="/icons/tech/python.svg" alt="Python" />
+							</div>
+							<div class="tech-item" title="Pandas">
+								<img src="/icons/tech/pandas.svg" alt="Pandas" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="SQL">
+								<img src="/icons/tech/sql.svg" alt="SQL" />
+							</div>
+							<div class="tech-item" title="R">
+								<img src="/icons/tech/r.svg" alt="R" />
+							</div>
+						</div>
+						<div class="tech-row">
+							<div class="tech-item" title="TensorFlow">
+								<img src="/icons/tech/tensorflow.svg" alt="TensorFlow" />
+							</div>
+							<div class="tech-item" title="PyTorch">
+								<img src="/icons/tech/pytorch.svg" alt="PyTorch" />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="projects-link-wrapper">
@@ -148,24 +211,83 @@
 		text-align: center;
 	}
 
-	.domain-section ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+	.tech-grid {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		flex-grow: 1;
+		gap: 3.5rem;
+		padding: 1.5rem;
+		background: var(--bg-primary);
+		border-radius: 8px;
+		margin: 0.5rem 0;
+	}
+
+	.tech-row {
+		display: flex;
+		justify-content: center;
+		gap: 3rem;
+		position: relative;
+		min-height: 3rem;
+	}
+
+	.tech-item {
+		position: relative;
+		width: 3rem;
+		height: 3rem;
+		transition: transform 0.2s ease-in-out;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
 		justify-content: center;
 	}
 
-	.domain-section li {
-		font-size: clamp(0.85rem, 1.4vw, 0.95rem);
-		color: var(--text-color);
-		padding: 0.35rem;
-		text-align: center;
-		border-radius: 4px;
+	.tech-item img {
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		object-fit: contain;
+		padding: 0;
+		max-width: 2.5rem;
+		max-height: 2.5rem;
+		min-width: 2.5rem;
+		min-height: 2.5rem;
+	}
+
+	.tech-item img[alt="Android"],
+	.tech-item img[alt="Python"],
+	.tech-item img[alt="Pandas"],
+	.tech-item img[alt="Java"] {
+		transform: scale(0.8);
+		transform-origin: center;
+	}
+
+	.tech-item:hover {
+		transform: scale(1.1);
+		z-index: 20;
+	}
+
+	.tech-item::after {
+		content: attr(title);
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		left: 50%;
+		transform: translateX(-50%);
+		padding: 0.4rem 0.6rem;
 		background: var(--bg-secondary);
+		color: var(--text-color);
+		border-radius: 4px;
+		font-size: 0.75rem;
+		white-space: nowrap;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.2s ease-in-out;
+		z-index: 30;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		pointer-events: none;
+		backdrop-filter: blur(4px);
+	}
+
+	.tech-item:hover::after {
+		opacity: 1;
+		visibility: visible;
 	}
 
 	.projects-link-wrapper {
@@ -220,6 +342,30 @@
 
 		.domain-section {
 			padding: 0.75rem;
+		}
+
+		.tech-grid {
+			gap: 3rem;
+			padding: 1.25rem;
+		}
+
+		.tech-row {
+			gap: 2.5rem;
+			min-height: 2.5rem;
+		}
+
+		.tech-item {
+			width: 2.5rem;
+			height: 2.5rem;
+		}
+
+		.tech-item img {
+			width: 2rem !important;
+			height: 2rem !important;
+			max-width: 2rem;
+			max-height: 2rem;
+			min-width: 2rem;
+			min-height: 2rem;
 		}
 	}
 

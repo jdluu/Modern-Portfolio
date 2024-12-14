@@ -1,0 +1,474 @@
+---
+import {getAllExperiences} from '../../lib/cosmic';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+interface Metadata {
+    description?: string;
+    company?: {
+        name?: string;
+        image?: {
+            url?: string;
+            imgix_url?: string;
+        } | null;
+        imagealt?: string | null;
+    };
+    logistics?: {
+        duration?: string;
+        role?: string;
+    };
+    technologies?: {
+        tools?: string;
+        skills?: string;
+    };
+    work?: {
+        responsibilities?: { duties: string }[];
+        achievements?: { points: string }[];
+    };
+    showcase?: {
+        link?: string | null;
+        description?: string | null;
+    };
+}
+
+interface PageProps {
+    title: string;
+    metadata: Metadata;
+}
+
+export async function getStaticPaths() {
+    try {
+        const experiences = await getAllExperiences();
+        return experiences.map(({slug, title, metadata}) => ({
+            params: { slug },
+            props: { title, metadata }
+        }));
+    } catch (error) {
+        console.error('Error in getStaticPaths:', error);
+        return [];
+    }
+}
+
+const { title, metadata } = Astro.props;
+
+// Safely access nested properties with null checks
+const companyName = metadata?.company?.name ?? 'Company Name Not Available';
+const companyLogo = metadata?.company?.image?.imgix_url ?? '/placeholder-logo.png';
+const role = metadata?.logistics?.role ?? 'Role Not Specified';
+const duration = metadata?.logistics?.duration ?? 'Duration Not Specified';
+const description = metadata?.description ?? 'No description available';
+const tools = metadata?.technologies?.tools ?? 'Not specified';
+const skills = metadata?.technologies?.skills ?? 'Not specified';
+const responsibilities = metadata?.work?.responsibilities?.filter(r => r?.duties) ?? [];
+const achievements = metadata?.work?.achievements?.filter(a => a?.points) ?? [];
+const showcase = metadata?.showcase && metadata.showcase.link && metadata.showcase.description 
+    ? [metadata.showcase] 
+    : [];
+---
+
+<BaseLayout title={title}>
+    <main class="experience-page-container">
+        <article class="experience-page-div">
+            <section id="overview" aria-labelledby="experience-title">
+                <div class="experience-header">
+                    <div class="company-info" role="banner">
+                        <img 
+                            src={companyLogo}
+                            alt={`${companyName} logo`}
+                            class="company-logo"
+                            onerror="this.src='/placeholder-logo.png'"
+                            width="80"
+                            height="80"
+                            loading="lazy"
+                            aria-hidden="true"
+                        />
+                        <div class="title-container">
+                            <h1 id="experience-title" class="experience-title" tabindex="-1">{title}</h1>
+                            <p class="company-name"><strong>{companyName}</strong></p>
+                        </div>
+                    </div>
+                    <div class="experience-meta">
+                        <div class="meta-item">
+                            <span class="meta-label" id="role-label">Role</span>
+                            <span class="meta-value" aria-labelledby="role-label"><strong>{role}</strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label" id="duration-label">Duration</span>
+                            <span class="meta-value" aria-labelledby="duration-label"><strong>{duration}</strong></span>
+                        </div>
+                    </div>
+                </div>
+                <p class="section-content lead">{description}</p>
+                <div class="tech-section" role="complementary" aria-label="Technical details">
+                    <div class="tech-item">
+                        <h3 id="tools-title">Tools & Technologies</h3>
+                        <p aria-labelledby="tools-title"><strong>{tools}</strong></p>
+                    </div>
+                    <div class="tech-item">
+                        <h3 id="skills-title">Skills</h3>
+                        <p aria-labelledby="skills-title"><strong>{skills}</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            {responsibilities.length > 0 && (
+                <section id="responsibilities" aria-labelledby="responsibilities-title">
+                    <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
+                    <ul class="responsibilities-list" role="list">
+                        {responsibilities.map((item, index) => (
+                            <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+
+            {achievements.length > 0 && (
+                <section id="achievements" aria-labelledby="achievements-title">
+                    <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
+                    <ul class="achievements-list" role="list">
+                        {achievements.map((item, index) => (
+                            <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+
+            {showcase.length > 0 && (
+                <section id="showcase" aria-labelledby="showcase-title">
+                    <h2 id="showcase-title" tabindex="-1">Project Showcase</h2>
+                    <div class="showcase-grid">
+                        {showcase.map((item) => (
+                            <a href={item.link} 
+                               class="showcase-item" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               aria-label={`View project: ${item.description}`}>
+                                <p><strong>{item.description}</strong></p>
+                                <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )}
+        </article>
+    </main>
+</BaseLayout>
+
+<style>
+    /* Layout & Container Styles */
+    .experience-page-container {
+        max-width: min(1200px, 95%);
+        margin: 0 auto;
+        padding: var(--spacing-lg);
+    }
+
+    .experience-page-div {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: clamp(1rem, 3vw, var(--spacing-lg));
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* Header Styles */
+    .experience-header {
+        margin-bottom: var(--spacing-lg);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: var(--spacing-lg);
+    }
+
+    .company-info {
+        display: flex;
+        align-items: center;
+        gap: clamp(1rem, 2vw, var(--spacing-lg));
+        margin-bottom: var(--spacing-md);
+    }
+
+    .company-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: white;
+        padding: 8px;
+        flex-shrink: 0;
+    }
+
+    .title-container {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .experience-title {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        margin: 0;
+        color: var(--text-color);
+        line-height: 1.2;
+        word-wrap: break-word;
+    }
+
+    .company-name {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        color: var(--text-muted);
+        margin: 0.5rem 0;
+        word-wrap: break-word;
+    }
+
+    .experience-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-lg);
+        align-items: flex-start;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 150px;
+    }
+
+    .meta-label {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .meta-value {
+        color: var(--text-color);
+        line-height: 1.4;
+    }
+
+    .tech-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-lg) 0;
+        padding: var(--spacing-lg);
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+    }
+
+    .tech-item {
+        padding: var(--spacing-md);
+    }
+
+    .tech-item h3 {
+        font-size: var(--font-large);
+        margin-bottom: var(--spacing-sm);
+        color: var(--text-color);
+    }
+
+    .tech-item p {
+        color: var(--text-muted);
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
+
+    /* Lists Styles */
+    .responsibilities-list,
+    .achievements-list {
+        list-style: none;
+        padding: 0;
+        margin: var(--spacing-lg) 0;
+    }
+
+    .responsibilities-list li,
+    .achievements-list li {
+        position: relative;
+        padding-left: 1.5em;
+        margin-bottom: var(--spacing-md);
+        line-height: 1.6;
+    }
+
+    .responsibilities-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+    }
+
+    .achievements-list li::before {
+        content: "★";
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+    }
+
+    .highlight {
+        background: linear-gradient(transparent 60%, var(--accent-color-transparent) 40%);
+        padding: 0 0.2em;
+        word-wrap: break-word;
+    }
+
+    /* Section Titles */
+    h2 {
+        font-size: clamp(1.25rem, 3vw, var(--font-xlarge));
+        color: var(--text-color);
+        margin: var(--spacing-lg) 0;
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid var(--accent-color);
+        line-height: 1.3;
+    }
+
+    /* Accessibility */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Focus Styles */
+    :focus {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
+
+    :focus:not(:focus-visible) {
+        outline: none;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .experience-page-container {
+            padding: var(--spacing-md);
+        }
+
+        .experience-header {
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .company-info {
+            flex-direction: column;
+            text-align: center;
+            gap: var(--spacing-md);
+        }
+
+        .tech-section {
+            grid-template-columns: 1fr;
+            padding: var(--spacing-md);
+            gap: var(--spacing-md);
+        }
+
+        .experience-meta {
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+
+        .meta-item {
+            text-align: center;
+            min-width: 140px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .experience-page-container {
+            padding: var(--spacing-sm);
+        }
+
+        .experience-page-div {
+            padding: var(--spacing-md);
+        }
+
+        .tech-item {
+            padding: var(--spacing-sm);
+        }
+
+        .responsibilities-list li,
+        .achievements-list li {
+            margin-bottom: var(--spacing-sm);
+        }
+    }
+
+    /* High Contrast & Reduced Motion */
+    @media (prefers-contrast: more) {
+        .highlight {
+            background: var(--accent-color);
+            color: var(--inverse-text-color);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .experience-page-container {
+            margin: 0;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .experience-page-div {
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .tech-section {
+            break-inside: avoid;
+        }
+
+        a[href^="http"]::after {
+            content: " (" attr(href) ")";
+        }
+    }
+</style>
+
+<script>
+    // Smooth scrolling for navigation links with keyboard support
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', handleSmoothScroll);
+        anchor.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSmoothScroll(e);
+            }
+        });
+    });
+
+    function handleSmoothScroll(e) {
+        e.preventDefault();
+        const href = e.currentTarget.getAttribute('href');
+        if (!href) return;
+
+        const targetElement = document.querySelector(href);
+        
+        if (targetElement) {
+            const navHeight = parseInt(getComputedStyle(document.documentElement)
+                .getPropertyValue('--nav-height')) || 64;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = targetPosition - navHeight - 32;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // Set focus to the target heading
+            const heading = targetElement.querySelector('h1, h2');
+            if (heading) {
+                heading.focus();
+            }
+
+            // Update URL without jumping
+            history.pushState(null, '', href);
+        }
+    }
+</script>

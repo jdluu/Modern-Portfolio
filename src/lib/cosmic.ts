@@ -28,6 +28,7 @@ export interface ExperienceCard {
       url: string;
     };
     content?: string;
+    date: string;
   };
 }
 
@@ -45,7 +46,7 @@ export interface BlogPost {
 }
 
 // Return All Project Card Objects
-export async function getAllCards(): Promise<ProjectCard[]> {
+export async function getAllProjectCards(): Promise<ProjectCard[]> {
   try {
     const data = await cosmic.objects
       .find({
@@ -116,7 +117,7 @@ export async function getProjectBySlug(
 }
 
 // Return All Experience Card Objects
-export async function getAllExperiences(): Promise<ExperienceCard[]> {
+export async function getAllExperienceCards(): Promise<ExperienceCard[]> {
   try {
     const data = await cosmic.objects
       .find({
@@ -133,13 +134,13 @@ export async function getAllExperiences(): Promise<ExperienceCard[]> {
 }
 
 // Return All Experience Objects
-export async function getAllExperience(): Promise<ExperienceCard[]> {
+export async function getAllExperiences(): Promise<ExperienceCard[]> {
   try {
     const data = await cosmic.objects
       .find({
         type: "experiences",
       })
-      .props("id,title,metadata")
+      .props("slug,title,metadata")
       .depth(1);
 
     return data.objects;

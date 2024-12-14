@@ -1,8 +1,10 @@
 # My Modern Web Portfolio
 
+Welcome to my Modern Web Portfolio, built using Astro. This project showcases my skills and projects in a performance-optimized and visually appealing manner.
+
 ## Design Philosophy
 
-For my portfolio, I decided to use Astro because of its content-focused, islands approach. Astro is optimized for performance and easy to use, using HTML, CSS, and JS syntax.
+I chose Astro for its content-focused, islands architecture, which enhances performance and usability. This portfolio emphasizes clean design and efficient loading, using HTML, CSS, and JavaScript.
 
 This portfolio was built off of the content from my original portfolio here: <https://github.com/jdluu/portfolio>
 
@@ -50,6 +52,8 @@ Inside my Astro project, you'll see the following folders and files:
 │   ├── components/
 │   │   ├── AboutContent.astro
 │   │   ├── ContactForm.astro
+│   │   ├── ExperienceCard.astro
+│   │   ├── ExperienceCardGrid.astro
 │   │   ├── ExperienceContent.astro
 │   │   ├── Footer.astro
 │   │   ├── IntroContent.astro
@@ -59,8 +63,11 @@ Inside my Astro project, you'll see the following folders and files:
 │   ├── layouts/
 │   │   └── BaseLayout.astro
 │   ├── lib/
-│   │   └── cosmic.js
+│   │   └── cosmic.ts
+│   ├── env.d.ts
 │   └── pages/
+│       ├── experiences/
+│       │   └── [slug].astro
 │       ├── posts/
 │       │   └── [slug].astro
 │       ├── projects/
@@ -71,8 +78,13 @@ Inside my Astro project, you'll see the following folders and files:
 │       ├── index.astro
 │       ├── robots.txt.ts
 │       └── work.astro
+├── _headers
+├── .env
+├── .gitignore
 ├── astro.config.mjs
+├── package-lock.json
 ├── package.json
+├── README.md
 ├── tailwind.config.js
 └── tsconfig.json
 ```
@@ -92,4 +104,8 @@ All commands are run from the root of the project, from a terminal:
 
 ## Deployment
 
+This project is continuously deployed on Netlify, ensuring that the latest updates are always live. You can view the deployment status and access the live site using the link below:
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5b79e3ed-5748-4cbd-9609-a93a4967c79e/deploy-status)](https://app.netlify.com/sites/spectacular-basbousa-817044/deploys)
+
+Explore the portfolio to see my work and feel free to reach out with any questions or opportunities!
