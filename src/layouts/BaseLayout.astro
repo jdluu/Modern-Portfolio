@@ -68,36 +68,89 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<!-- Preload Critical Assets -->
 		<link
 			rel="preload"
-			href="/fonts/Montserrat/Montserrat-VariableFont_wght.ttf"
+			href="/fonts/Montserrat/static/Montserrat-Regular.ttf"
 			as="font"
 			type="font/ttf"
 			crossorigin
 		/>
 		<link
 			rel="preload"
-			href="/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf"
+			href="/fonts/Open_Sans/static/OpenSans-Regular.ttf"
+			as="font"
+			type="font/ttf"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/Lato/Lato-Regular.ttf"
+			as="font"
+			type="font/ttf"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/Pacifico/Pacifico-Regular.ttf"
 			as="font"
 			type="font/ttf"
 			crossorigin
 		/>
 		<link rel="preload" href="/styles/reset.css" as="style" />
 		<link rel="preload" href="/styles/global.css" as="style" />
-		<link rel="preload" href="/scripts/theme.js" as="script" />
 
 		<!-- Styles -->
 		<link rel="stylesheet" href="/styles/reset.css" />
 		<link rel="stylesheet" href="/styles/global.css" />
-		<script type="text/javascript" src="/scripts/theme.js" defer></script>
 	</head>
-	<body>
+	<body class="no-transitions">
 		<a href="#main-content" class="skip-link">Skip to main content</a>
 		<Navbar role="banner" />
 		<main id="main-content" aria-label="Main content">
 			<slot />
 		</main>
 		<Footer />
+		<script is:inline>
+			// Immediately set theme from localStorage to prevent flash
+			const savedTheme = localStorage.getItem('theme');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+			document.documentElement.setAttribute('data-theme', theme);
+			document.body.classList.remove('no-transitions');
+		</script>
+		<script>
+			import "../scripts/theme.ts";
+		</script>
 	</body>
 </html>
+
+<style is:global>
+	:root {
+		/* Add transition properties for theme switching */
+		--theme-transition-duration: 200ms;
+		--theme-transition-easing: ease;
+	}
+
+	/* Add transition for theme-related properties */
+	body,
+	body *:not(script):not(style) {
+		transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+					color var(--theme-transition-duration) var(--theme-transition-easing),
+					border-color var(--theme-transition-duration) var(--theme-transition-easing),
+					box-shadow var(--theme-transition-duration) var(--theme-transition-easing);
+	}
+
+	/* Disable transitions when user prefers reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		body,
+		body *:not(script):not(style) {
+			transition: none !important;
+		}
+	}
+
+	/* Prevent transition on page load */
+	.no-transitions * {
+		transition: none !important;
+	}
+</style>
 
 <style>
 	.skip-link {
