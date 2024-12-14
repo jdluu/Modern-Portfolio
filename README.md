@@ -27,27 +27,11 @@ Inside my Astro project, you'll see the following folders and files:
 │   │   ├── linkedin.svg
 │   │   ├── ms-icon-150x150.png
 │   │   └── ms-icon-310x310.png
-│   ├── images/
-│   │   ├── fractal.avif
-│   │   ├── fractal.jpg
-│   │   ├── fractal.webp
-│   │   ├── Placeholder.png
-│   │   ├── profile-400w.avif
-│   │   ├── profile-600w.avif
-│   │   ├── profile-800w.avif
-│   │   ├── profile-1000w.avif
-│   │   ├── profile-1200w.avif
-│   │   ├── profile-1600w.avif
-│   │   └── profile.webp
-│   ├── scripts/
-│   │   └── theme.js
 │   ├── styles/
 │   │   ├── global.css
 │   │   └── reset.css
 │   ├── favicon.ico
 │   └── Jeffrey_Luu_Resume.pdf
-├── scripts/
-│   └── optimize-images.js
 ├── src/
 │   ├── components/
 │   │   ├── AboutContent.astro
@@ -64,6 +48,8 @@ Inside my Astro project, you'll see the following folders and files:
 │   │   └── BaseLayout.astro
 │   ├── lib/
 │   │   └── cosmic.ts
+│   ├── scripts/
+│   │   └── theme.ts
 │   ├── env.d.ts
 │   └── pages/
 │       ├── experiences/
