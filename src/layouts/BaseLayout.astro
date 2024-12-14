@@ -101,7 +101,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<link rel="stylesheet" href="/styles/reset.css" />
 		<link rel="stylesheet" href="/styles/global.css" />
 	</head>
-	<body>
+	<body class="no-transitions">
 		<a href="#main-content" class="skip-link">Skip to main content</a>
 		<Navbar role="banner" />
 		<main id="main-content" aria-label="Main content">
@@ -114,12 +114,43 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const theme = savedTheme || (prefersDark ? 'dark' : 'light');
 			document.documentElement.setAttribute('data-theme', theme);
+			document.body.classList.remove('no-transitions');
 		</script>
 		<script>
 			import "../scripts/theme.ts";
 		</script>
 	</body>
 </html>
+
+<style is:global>
+	:root {
+		/* Add transition properties for theme switching */
+		--theme-transition-duration: 200ms;
+		--theme-transition-easing: ease;
+	}
+
+	/* Add transition for theme-related properties */
+	body,
+	body *:not(script):not(style) {
+		transition: background-color var(--theme-transition-duration) var(--theme-transition-easing),
+					color var(--theme-transition-duration) var(--theme-transition-easing),
+					border-color var(--theme-transition-duration) var(--theme-transition-easing),
+					box-shadow var(--theme-transition-duration) var(--theme-transition-easing);
+	}
+
+	/* Disable transitions when user prefers reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		body,
+		body *:not(script):not(style) {
+			transition: none !important;
+		}
+	}
+
+	/* Prevent transition on page load */
+	.no-transitions * {
+		transition: none !important;
+	}
+</style>
 
 <style>
 	.skip-link {

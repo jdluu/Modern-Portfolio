@@ -10,6 +10,7 @@ class ThemeController implements ThemeManager {
     private readonly htmlElement: HTMLElement;
     private readonly themeSwitch: HTMLInputElement | null;
     private readonly mediaQuery: MediaQueryList;
+    private isTransitioning: boolean = false;
     
     constructor() {
         this.htmlElement = document.documentElement;
@@ -42,20 +43,40 @@ class ThemeController implements ThemeManager {
                 this.setTheme(newTheme);
             }
         });
+
+        // Remove no-transitions class after a small delay to prevent initial transition
+        setTimeout(() => {
+            document.body.classList.remove('no-transitions');
+        }, 50);
     }
 
     public toggle(): void {
+        if (this.isTransitioning) return;
+        
         const newTheme: Theme = this.currentTheme === 'light' ? 'dark' : 'light';
         this.setTheme(newTheme);
     }
 
     public setTheme(theme: Theme): void {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
+        // Add transition class
+        document.body.classList.add('theme-transitioning');
+        
+        // Set the new theme
         this.htmlElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         
         if (this.themeSwitch) {
             this.themeSwitch.checked = theme === 'dark';
         }
+
+        // Remove transition class after animation completes
+        setTimeout(() => {
+            document.body.classList.remove('theme-transitioning');
+            this.isTransitioning = false;
+        }, 200); // Match this with --theme-transition-duration
     }
 }
 
