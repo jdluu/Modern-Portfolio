@@ -3,30 +3,31 @@ import {getAllExperiences} from '../../lib/cosmic';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 interface Metadata {
-    description: string;
-    company: {
-        name: string;
-        logo: {
-            url: string;
-            imgix_url: string;
-        };
+    description?: string;
+    company?: {
+        name?: string;
+        image?: {
+            url?: string;
+            imgix_url?: string;
+        } | null;
+        imagealt?: string | null;
     };
-    logistics: {
-        duration: string;
-        role: string;
+    logistics?: {
+        duration?: string;
+        role?: string;
     };
-    technologies: {
-        tools: string;
-        skills: string;
+    technologies?: {
+        tools?: string;
+        skills?: string;
     };
-    work: {
-        responsibilities: { duties: string }[];
-        achievements: { points: string }[];
+    work?: {
+        responsibilities?: { duties: string }[];
+        achievements?: { points: string }[];
     };
     showcase?: {
-        link: string;
-        description: string;
-    }[];
+        link?: string | null;
+        description?: string | null;
+    };
 }
 
 interface PageProps {
@@ -35,26 +36,46 @@ interface PageProps {
 }
 
 export async function getStaticPaths() {
-    const experiences: { slug: string; title: string; metadata: Metadata }[] = await getAllExperiences();
-
-    return experiences.map(({slug, title, metadata}) => {
-        return {
+    try {
+        const experiences = await getAllExperiences();
+        return experiences.map(({slug, title, metadata}) => ({
             params: { slug },
-            props: { title, metadata },
-        };
-    });
+            props: { title, metadata }
+        }));
+    } catch (error) {
+        console.error('Error in getStaticPaths:', error);
+        return [];
+    }
 }
 
-const {title, metadata} = Astro.props;
+const { title, metadata } = Astro.props;
+
+// Safely access nested properties with null checks
+const companyName = metadata?.company?.name ?? 'Company Name Not Available';
+const companyLogo = metadata?.company?.image?.imgix_url ?? '/placeholder-logo.png';
+const role = metadata?.logistics?.role ?? 'Role Not Specified';
+const duration = metadata?.logistics?.duration ?? 'Duration Not Specified';
+const description = metadata?.description ?? 'No description available';
+const tools = metadata?.technologies?.tools ?? 'Not specified';
+const skills = metadata?.technologies?.skills ?? 'Not specified';
+const responsibilities = metadata?.work?.responsibilities?.filter(r => r?.duties) ?? [];
+const achievements = metadata?.work?.achievements?.filter(a => a?.points) ?? [];
+const showcase = metadata?.showcase && metadata.showcase.link && metadata.showcase.description 
+    ? [metadata.showcase] 
+    : [];
 ---
 
 <BaseLayout title={title}>
     <nav id="left-tray" aria-label="Table of Contents">
         <ul id="table-of-contents" role="navigation">
             <li><a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a></li>
-            <li><a href="#responsibilities" id="idr" class="nav-item" aria-current="false">Responsibilities</a></li>
-            <li><a href="#achievements" id="ida" class="nav-item" aria-current="false">Key Achievements</a></li>
-            {metadata.showcase && (
+            {responsibilities.length > 0 && (
+                <li><a href="#responsibilities" id="idr" class="nav-item" aria-current="false">Responsibilities</a></li>
+            )}
+            {achievements.length > 0 && (
+                <li><a href="#achievements" id="ida" class="nav-item" aria-current="false">Key Achievements</a></li>
+            )}
+            {showcase.length > 0 && (
                 <li><a href="#showcase" id="ids" class="nav-item" aria-current="false">Showcase</a></li>
             )}
         </ul>
@@ -66,64 +87,76 @@ const {title, metadata} = Astro.props;
                 <div class="experience-header">
                     <div class="company-info">
                         <img 
-                            src={metadata.company.logo.imgix_url} 
-                            alt={`${metadata.company.name} logo`}
+                            src={companyLogo}
+                            alt={`${companyName} logo`}
                             class="company-logo"
+                            onerror="this.src='/placeholder-logo.png'"
+                            width="80"
+                            height="80"
+                            loading="lazy"
                         />
                         <div class="title-container">
                             <h1 id="experience-title" class="experience-title">{title}</h1>
-                            <p class="company-name">{metadata.company.name}</p>
+                            <p class="company-name"><strong>{companyName}</strong></p>
                         </div>
                     </div>
                     <div class="experience-meta">
                         <div class="meta-item">
                             <span class="meta-label">Role</span>
-                            <span class="meta-value">{metadata.logistics.role}</span>
+                            <span class="meta-value"><strong>{role}</strong></span>
                         </div>
                         <div class="meta-item">
                             <span class="meta-label">Duration</span>
-                            <span class="meta-value">{metadata.logistics.duration}</span>
+                            <span class="meta-value"><strong>{duration}</strong></span>
                         </div>
                     </div>
                 </div>
-                <p class="section-content lead">{metadata.description}</p>
+                <p class="section-content lead">{description}</p>
                 <div class="tech-section">
                     <div class="tech-item">
                         <h3>Tools & Technologies</h3>
-                        <p>{metadata.technologies.tools}</p>
+                        <p><strong>{tools}</strong></p>
                     </div>
                     <div class="tech-item">
                         <h3>Skills</h3>
-                        <p>{metadata.technologies.skills}</p>
+                        <p><strong>{skills}</strong></p>
                     </div>
                 </div>
             </section>
 
-            <section id="responsibilities" aria-labelledby="responsibilities-title">
-                <h2 id="responsibilities-title">Key Responsibilities</h2>
-                <ul class="responsibilities-list">
-                    {metadata.work.responsibilities.map((item) => (
-                        <li>{item.duties}</li>
-                    ))}
-                </ul>
-            </section>
+            {responsibilities.length > 0 && (
+                <section id="responsibilities" aria-labelledby="responsibilities-title">
+                    <h2 id="responsibilities-title">Key Responsibilities</h2>
+                    <ul class="responsibilities-list" role="list">
+                        {responsibilities.map((item) => (
+                            <li><span class="highlight">{item.duties}</span></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
 
-            <section id="achievements" aria-labelledby="achievements-title">
-                <h2 id="achievements-title">Notable Achievements</h2>
-                <ul class="achievements-list">
-                    {metadata.work.achievements.map((item) => (
-                        <li>{item.points}</li>
-                    ))}
-                </ul>
-            </section>
+            {achievements.length > 0 && (
+                <section id="achievements" aria-labelledby="achievements-title">
+                    <h2 id="achievements-title">Notable Achievements</h2>
+                    <ul class="achievements-list" role="list">
+                        {achievements.map((item) => (
+                            <li><strong>{item.points}</strong></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
 
-            {metadata.showcase && (
+            {showcase.length > 0 && (
                 <section id="showcase" aria-labelledby="showcase-title">
                     <h2 id="showcase-title">Project Showcase</h2>
                     <div class="showcase-grid">
-                        {metadata.showcase.map((item) => (
-                            <a href={item.link} class="showcase-item" target="_blank" rel="noopener noreferrer">
-                                <p>{item.description}</p>
+                        {showcase.map((item) => (
+                            <a href={item.link} 
+                               class="showcase-item" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               aria-label={`View project: ${item.description}`}>
+                                <p><strong>{item.description}</strong></p>
                                 <span class="showcase-link">View Project →</span>
                             </a>
                         ))}
@@ -137,30 +170,30 @@ const {title, metadata} = Astro.props;
 <style>
     /* Layout & Container Styles */
     .experience-page-container {
-        max-width: 1200px;
+        max-width: min(1200px, 95%);
         margin: 0 auto;
-        padding: var(--spacing-lg);
+        padding: clamp(1rem, 2vw, var(--spacing-lg));
         margin-left: 250px;
     }
 
     .experience-page-div {
         background: var(--bg-secondary);
         border-radius: 12px;
-        padding: var(--spacing-lg);
+        padding: clamp(1rem, 3vw, var(--spacing-lg));
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     /* Header Styles */
     .experience-header {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
         border-bottom: 1px solid var(--border-color);
-        padding-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
     }
 
     .company-info {
         display: flex;
         align-items: center;
-        gap: var(--spacing-md);
+        gap: clamp(0.5rem, 2vw, var(--spacing-md));
         margin-bottom: var(--spacing-md);
     }
 
@@ -174,58 +207,48 @@ const {title, metadata} = Astro.props;
     }
 
     .title-container {
-        flex-grow: 1;
+        flex: 1;
     }
 
     .experience-title {
-        font-size: var(--text-2xl);
+        font-size: clamp(1.5rem, 4vw, 2rem);
         margin: 0;
         color: var(--text-color);
     }
 
     .company-name {
-        font-size: var(--text-lg);
+        font-size: clamp(1rem, 3vw, 1.25rem);
         color: var(--text-muted);
-        margin: var(--spacing-xs) 0 0;
+        margin: 0.25rem 0;
     }
 
     .experience-meta {
         display: flex;
-        gap: var(--spacing-lg);
         flex-wrap: wrap;
+        gap: var(--spacing-md);
     }
 
     .meta-item {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-xs);
+        gap: 0.25rem;
     }
 
     .meta-label {
-        font-size: var(--text-sm);
+        font-size: 0.875rem;
         color: var(--text-muted);
         text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
     .meta-value {
-        font-size: var(--text-md);
         color: var(--text-color);
-    }
-
-    /* Content Styles */
-    .lead {
-        font-size: var(--text-lg);
-        line-height: 1.6;
-        color: var(--text-muted);
-        margin: var(--spacing-md) 0;
     }
 
     .tech-section {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: var(--spacing-md);
-        margin: var(--spacing-lg) 0;
+        margin: var(--spacing-md) 0;
         padding: var(--spacing-md);
         background: var(--bg-primary);
         border-radius: 8px;
@@ -276,41 +299,16 @@ const {title, metadata} = Astro.props;
         color: var(--accent-color);
     }
 
-    /* Showcase Styles */
-    .showcase-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: var(--spacing-md);
-        margin-top: var(--spacing-md);
-    }
-
-    .showcase-item {
-        background: var(--bg-primary);
-        padding: var(--spacing-md);
-        border-radius: 8px;
-        text-decoration: none;
-        color: var(--text-color);
-        transition: all 0.3s ease;
-        border: 1px solid var(--border-color);
-    }
-
-    .showcase-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .showcase-link {
-        display: inline-block;
-        margin-top: var(--spacing-sm);
-        color: var(--accent-color);
-        font-weight: 500;
+    .highlight {
+        background: linear-gradient(transparent 60%, var(--accent-color-transparent) 40%);
+        padding: 0 0.2em;
     }
 
     /* Section Titles */
     h2 {
-        font-size: var(--text-xl);
+        font-size: clamp(1.25rem, 3vw, var(--text-xl));
         color: var(--text-color);
-        margin: var(--spacing-xl) 0 var(--spacing-md);
+        margin: var(--spacing-md) 0 var(--spacing-md);
         padding-bottom: var(--spacing-sm);
         border-bottom: 2px solid var(--accent-color);
     }
@@ -326,36 +324,21 @@ const {title, metadata} = Astro.props;
         background: var(--bg-secondary);
         border-right: 1px solid var(--border-color);
         overflow-y: auto;
-    }
-
-    #table-of-contents {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .nav-item {
-        display: block;
-        padding: var(--spacing-sm);
-        margin-bottom: var(--spacing-xs);
-        color: var(--text-muted);
-        text-decoration: none;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-    }
-
-    .nav-item:hover {
-        background: var(--bg-primary);
-        color: var(--text-color);
-    }
-
-    .nav-item[aria-current="true"] {
-        background: var(--bg-primary);
-        color: var(--accent-color);
-        font-weight: 500;
+        transition: transform 0.3s ease;
+        z-index: 100;
     }
 
     /* Responsive Styles */
+    @media (max-width: 1200px) {
+        .experience-page-container {
+            margin-left: 200px;
+        }
+        
+        #left-tray {
+            width: 200px;
+        }
+    }
+
     @media (max-width: 1024px) {
         .experience-page-container {
             margin-left: 0;
@@ -363,7 +346,11 @@ const {title, metadata} = Astro.props;
         }
 
         #left-tray {
-            display: none;
+            transform: translateX(-100%);
+        }
+
+        #left-tray.active {
+            transform: translateX(0);
         }
     }
 
@@ -377,53 +364,86 @@ const {title, metadata} = Astro.props;
             text-align: center;
         }
 
-        .experience-meta {
-            justify-content: center;
-        }
-
         .tech-section {
             grid-template-columns: 1fr;
         }
 
-        .showcase-grid {
-            grid-template-columns: 1fr;
+        .experience-meta {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .experience-page-div {
+            padding: var(--spacing-md);
+        }
+
+        .tech-item {
+            padding: var(--spacing-sm);
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        #left-tray {
+            display: none;
+        }
+
+        .experience-page-container {
+            margin-left: 0;
+            max-width: 100%;
         }
     }
 </style>
 
 <script>
+    // Intersection Observer for active section highlighting
     document.addEventListener("DOMContentLoaded", function () {
-        const tableOfContents = document.getElementById("table-of-contents");
-        const sections = document.querySelectorAll("section[id]");
-        const navItems = document.querySelectorAll(".nav-item");
-
-        const observerOptions = {
-            rootMargin: "-20% 0px -75%",
-            threshold: 0,
-        };
-
-        function resetCurrentNav() {
-            navItems.forEach(item => {
-                item.setAttribute("aria-current", "false");
-            });
-        }
-
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
+            entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute("id");
-                    const navItem = document.getElementById(`id${id.charAt(0)}`);
-                    
-                    if (navItem) {
-                        resetCurrentNav();
-                        navItem.setAttribute("aria-current", "true");
-                    }
+                    const id = entry.target.id;
+                    document.querySelectorAll('a[href^="#"]').forEach(item => {
+                        if (item.getAttribute('href') === `#${id}`) {
+                            item.setAttribute('aria-current', 'true');
+                            item.classList.add('link-active');
+                        } else {
+                            item.setAttribute('aria-current', 'false');
+                            item.classList.remove('link-active');
+                        }
+                    });
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.2 });
 
-        sections.forEach((section) => {
+        document.querySelectorAll('section[id]').forEach((section) => {
             observer.observe(section);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (!href) return;
+
+                const targetElement = document.querySelector(href);
+                
+                if (targetElement) {
+                    const navHeight = parseInt(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--nav-height')) || 64; // fallback to 64px
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = targetPosition - navHeight - 32; // 32px additional buffer
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Update URL without jumping
+                    history.pushState(null, '', href);
+                }
+            });
         });
     });
 </script>
