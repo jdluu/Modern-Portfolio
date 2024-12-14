@@ -1,23 +1,24 @@
 ---
-import TempCard from "./ProjectCard.astro";
-import { getAllProjectCards } from '../lib/cosmic'
+import ExperienceCard from "./ExperienceCard.astro";
+import { getAllExperienceCards } from '../lib/cosmic';
 
-const data = await getAllProjectCards()
+const experiences = await getAllExperienceCards();
 ---
 
 <section class="content-section">
-    <h2 id="projects" class="page-h2">Projects</h2>
+    <h2 id="experience" class="page-h2">Experience</h2>
     <p class="section-desc">
-        <strong>Check out some of my most recent projects!</strong>
+        <strong>My professional journey and key achievements</strong>
     </p>
     <div class="card-grid">
         {
-            data.map((card) => (
-                <TempCard
-                    title={card.title}
-                    intro={card.metadata.description}
-                    thumbnail={card.metadata.thumbnail.url}
-                    url={card.slug}
+            experiences.map((exp) => (
+                <ExperienceCard
+                    title={exp.title}
+                    description={exp.metadata.description}
+                    thumbnail={exp.metadata.thumbnail?.url || ""}
+                    slug={exp.slug}
+                    date={exp.metadata.date}
                 />
             ))
         }
@@ -25,27 +26,26 @@ const data = await getAllProjectCards()
 </section>
 
 <style>
+    .content-section {
+        padding: clamp(2rem, 5vw, 4rem) 0;
+    }
+
     .page-h2 {
         font-size: var(--font-large);
         font-family: var(--font-heading);
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        margin-left: 1rem;
+        margin: 0.5rem 0;
         text-decoration: underline;
         color: var(--text-color);
-    }
-
-    @media screen and (max-width: 768px) {
-        .page-h2 {
-            font-size: var(--font-medium);
-        }
+        text-align: center;
     }
 
     .section-desc {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        margin: 1rem 0 2rem;
         text-align: center;
+        color: var(--text-color);
     }
+
     .card-grid {
         max-width: 75%;
         display: grid;
@@ -54,6 +54,7 @@ const data = await getAllProjectCards()
         margin-left: auto;
         margin-right: auto;
     }
+
     @media screen and (max-width: 1024px) {
         .card-grid {
             justify-content: center;
@@ -63,6 +64,7 @@ const data = await getAllProjectCards()
             padding: 0 0 2rem;
         }
     }
+
     @media screen and (max-width: 768px) {
         .card-grid {
             justify-content: center;
