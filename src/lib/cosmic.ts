@@ -140,7 +140,7 @@ export async function getAllExperiences(): Promise<ExperienceCard[]> {
       .find({
         type: "experiences",
       })
-      .props("id,title,metadata")
+      .props("slug,title,metadata")
       .depth(1);
 
     return data.objects;
