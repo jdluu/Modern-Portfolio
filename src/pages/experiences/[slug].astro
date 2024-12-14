@@ -51,120 +51,81 @@ const {title, metadata} = Astro.props;
 <BaseLayout title={title}>
     <nav id="left-tray" aria-label="Table of Contents">
         <ul id="table-of-contents" role="navigation">
-            <li>
-                <a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a>
-            </li>
-            <li>
-                <a href="#responsibilities" id="idr" class="nav-item" aria-current="false">Responsibilities</a>
-            </li>
-            <li>
-                <a href="#achievements" id="ida" class="nav-item" aria-current="false">Achievements</a>
-            </li>
-            <li>
-                <a href="#skills" id="ids" class="nav-item" aria-current="false">Skills</a>
-            </li>
+            <li><a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a></li>
+            <li><a href="#responsibilities" id="idr" class="nav-item" aria-current="false">Responsibilities</a></li>
+            <li><a href="#achievements" id="ida" class="nav-item" aria-current="false">Key Achievements</a></li>
             {metadata.showcase && (
-                <li>
-                    <a href="#showcase" id="idsh" class="nav-item" aria-current="false">Showcase</a>
-                </li>
+                <li><a href="#showcase" id="ids" class="nav-item" aria-current="false">Showcase</a></li>
             )}
-            <li>
-                <button id="hide-button" aria-label="Hide Table of Contents" class="toc-button">
-                    Hide Table of Contents ◀
-                </button>
-            </li>
         </ul>
-        <button id="show-button" aria-label="Show Table of Contents" class="toc-button">
-            Show Table of Contents ≡
-        </button>
     </nav>
 
-    <main class="project-page-container">
-        <article class="project-page-div">
+    <main class="experience-page-container">
+        <article class="experience-page-div">
             <section id="overview" aria-labelledby="experience-title">
                 <div class="experience-header">
                     <div class="company-info">
                         <img 
-                            src={metadata.company.logo.imgix_url + '?w=100'} 
+                            src={metadata.company.logo.imgix_url} 
                             alt={`${metadata.company.name} logo`}
                             class="company-logo"
-                            width="100"
-                            height="100"
                         />
-                        <h1 id="experience-title" class="project-title">
-                            {metadata.logistics.role} at {metadata.company.name}
-                        </h1>
+                        <div class="title-container">
+                            <h1 id="experience-title" class="experience-title">{title}</h1>
+                            <p class="company-name">{metadata.company.name}</p>
+                        </div>
                     </div>
-                    <p class="section-content lead">{metadata.description}</p>
+                    <div class="experience-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Role</span>
+                            <span class="meta-value">{metadata.logistics.role}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Duration</span>
+                            <span class="meta-value">{metadata.logistics.duration}</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>Duration</h3>
-                        <p>{metadata.logistics.duration}</p>
-                    </div>
-                    <div class="info-card">
+                <p class="section-content lead">{metadata.description}</p>
+                <div class="tech-section">
+                    <div class="tech-item">
                         <h3>Tools & Technologies</h3>
                         <p>{metadata.technologies.tools}</p>
                     </div>
-                    <div class="info-card">
+                    <div class="tech-item">
                         <h3>Skills</h3>
                         <p>{metadata.technologies.skills}</p>
                     </div>
                 </div>
             </section>
 
-            <section id="responsibilities" class="content-section">
-                <h2>Key Responsibilities</h2>
+            <section id="responsibilities" aria-labelledby="responsibilities-title">
+                <h2 id="responsibilities-title">Key Responsibilities</h2>
                 <ul class="responsibilities-list">
-                    {metadata.work.responsibilities.map(({duties}) => (
-                        <li class="role-bullet-item">{duties}</li>
+                    {metadata.work.responsibilities.map((item) => (
+                        <li>{item.duties}</li>
                     ))}
                 </ul>
             </section>
 
-            <section id="achievements" class="content-section">
-                <h2>Key Achievements</h2>
+            <section id="achievements" aria-labelledby="achievements-title">
+                <h2 id="achievements-title">Notable Achievements</h2>
                 <ul class="achievements-list">
-                    {metadata.work.achievements.map(({points}) => (
-                        <li class="role-bullet-item">{points}</li>
+                    {metadata.work.achievements.map((item) => (
+                        <li>{item.points}</li>
                     ))}
                 </ul>
-            </section>
-
-            <section id="skills" class="content-section">
-                <h2>Skills & Technologies</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>Tools & Technologies</h3>
-                        <div class="tag-container">
-                            {metadata.technologies.tools.split(',').map((tool) => (
-                                <span class="tech-tag">{tool.trim()}</span>
-                            ))}
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <h3>Skills Developed</h3>
-                        <div class="tag-container">
-                            {metadata.technologies.skills.split(',').map((skill) => (
-                                <span class="tech-tag">{skill.trim()}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
             </section>
 
             {metadata.showcase && (
-                <section id="showcase" class="content-section">
-                    <h2>Project Showcase</h2>
-                    <div class="info-grid">
-                        {metadata.showcase.map((project) => (
-                            <div class="info-card">
-                                <p class="section-content">{project.description}</p>
-                                <a href={project.link} class="source-link" target="_blank" rel="noopener noreferrer">
-                                    View Project
-                                </a>
-                            </div>
+                <section id="showcase" aria-labelledby="showcase-title">
+                    <h2 id="showcase-title">Project Showcase</h2>
+                    <div class="showcase-grid">
+                        {metadata.showcase.map((item) => (
+                            <a href={item.link} class="showcase-item" target="_blank" rel="noopener noreferrer">
+                                <p>{item.description}</p>
+                                <span class="showcase-link">View Project →</span>
+                            </a>
                         ))}
                     </div>
                 </section>
@@ -175,214 +136,256 @@ const {title, metadata} = Astro.props;
 
 <style>
     /* Layout & Container Styles */
-    .project-page-container {
+    .experience-page-container {
         max-width: 1200px;
         margin: 0 auto;
         padding: var(--spacing-lg);
-        margin-left: clamp(5%, 20%, 25%);
-        margin-right: clamp(5%, 20%, 25%);
+        margin-left: 250px;
     }
 
-    .project-page-div {
-        text-align: left;
+    .experience-page-div {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Company Header */
+    /* Header Styles */
     .experience-header {
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: var(--spacing-lg);
     }
 
     .company-info {
         display: flex;
         align-items: center;
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
     }
 
     .company-logo {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         object-fit: contain;
-        border-radius: var(--radius-md);
+        border-radius: 8px;
+        background: white;
+        padding: 8px;
     }
 
-    /* Typography */
-    .project-title {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        line-height: 1.2;
-        color: var(--text-color);
+    .title-container {
+        flex-grow: 1;
     }
 
-    h2 {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-        margin: var(--spacing-lg) 0 var(--spacing-md);
-        color: var(--text-color);
-    }
-
-    h3 {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(1.25rem, 3vw, 1.75rem);
-        margin: var(--spacing-md) 0;
-        color: var(--text-color);
-    }
-
-    .section-content {
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        line-height: 1.6;
-        margin-bottom: var(--spacing-md);
-        color: var(--text-color);
-    }
-
-    .lead {
-        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-        margin-bottom: var(--spacing-lg);
-    }
-
-    /* Navigation */
-    #left-tray {
-        position: fixed;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: var(--spacing-md);
-        border-radius: var(--radius-md);
-        background-color: var(--background-color);
-        box-shadow: var(--shadow-md);
-        z-index: 50;
-        transition: transform var(--transition-normal);
-    }
-
-    #table-of-contents {
-        padding: 0;
+    .experience-title {
+        font-size: var(--text-2xl);
         margin: 0;
-        list-style: none;
-        font-family: var(--font-secondary);
-    }
-
-    .nav-item {
-        display: block;
-        padding: var(--spacing-xs) var(--spacing-sm);
         color: var(--text-color);
-        text-decoration: none;
-        border-radius: var(--radius-sm);
-        transition: all var(--transition-fast);
     }
 
-    .nav-item:hover,
-    .nav-item:focus {
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        transform: translateX(var(--spacing-xs));
+    .company-name {
+        font-size: var(--text-lg);
+        color: var(--text-muted);
+        margin: var(--spacing-xs) 0 0;
     }
 
-    .link-active {
-        font-weight: bold;
-        background-color: color-mix(in srgb, var(--text-color) 15%, transparent);
+    .experience-meta {
+        display: flex;
+        gap: var(--spacing-lg);
+        flex-wrap: wrap;
     }
 
-    /* Buttons */
-    .toc-button {
-        padding: var(--spacing-sm) var(--spacing-md);
-        border: none;
-        border-radius: var(--radius-sm);
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .meta-label {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .meta-value {
+        font-size: var(--text-md);
         color: var(--text-color);
-        cursor: pointer;
-        transition: all var(--transition-fast);
     }
 
-    .toc-button:hover,
-    .toc-button:focus {
-        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
+    /* Content Styles */
+    .lead {
+        font-size: var(--text-lg);
+        line-height: 1.6;
+        color: var(--text-muted);
+        margin: var(--spacing-md) 0;
     }
 
-    /* Info Grid */
-    .info-grid {
+    .tech-section {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: var(--spacing-md);
         margin: var(--spacing-lg) 0;
-    }
-
-    .info-card {
         padding: var(--spacing-md);
-        background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
+        background: var(--bg-primary);
+        border-radius: 8px;
     }
 
-    /* Lists */
-    .role-bullet-item {
-        list-style-type: disc;
-        margin-left: var(--spacing-lg);
+    .tech-item {
+        padding: var(--spacing-md);
+    }
+
+    .tech-item h3 {
+        font-size: var(--text-md);
         margin-bottom: var(--spacing-sm);
-        font-size: clamp(1rem, 2vw, 1.25rem);
+        color: var(--text-color);
+    }
+
+    .tech-item p {
+        color: var(--text-muted);
         line-height: 1.6;
-        color: var(--text-color);
     }
 
-    /* Tags */
-    .tag-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-xs);
-        margin-top: var(--spacing-sm);
+    /* Lists Styles */
+    .responsibilities-list,
+    .achievements-list {
+        list-style: none;
+        padding: 0;
+        margin: var(--spacing-md) 0;
     }
 
-    .tech-tag {
-        display: inline-block;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        border-radius: var(--radius-sm);
-        font-size: 0.9rem;
-        color: var(--text-color);
+    .responsibilities-list li,
+    .achievements-list li {
+        position: relative;
+        padding-left: 1.5em;
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.6;
     }
 
-    /* Links */
-    .source-link {
-        display: inline-block;
-        margin-top: var(--spacing-lg);
-        padding: var(--spacing-sm) var(--spacing-md);
-        color: var(--text-color);
+    .responsibilities-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+    }
+
+    .achievements-list li::before {
+        content: "★";
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+    }
+
+    /* Showcase Styles */
+    .showcase-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-md);
+    }
+
+    .showcase-item {
+        background: var(--bg-primary);
+        padding: var(--spacing-md);
+        border-radius: 8px;
         text-decoration: none;
-        border-radius: var(--radius-sm);
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        transition: all var(--transition-fast);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
     }
 
-    .source-link:hover,
-    .source-link:focus {
-        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
+    .showcase-item:hover {
         transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Sections */
-    section {
-        scroll-margin-top: var(--nav-height);
-        padding-top: calc(var(--nav-height));
+    .showcase-link {
+        display: inline-block;
+        margin-top: var(--spacing-sm);
+        color: var(--accent-color);
+        font-weight: 500;
     }
 
-    .content-section {
-        margin: var(--spacing-xl) 0;
+    /* Section Titles */
+    h2 {
+        font-size: var(--text-xl);
+        color: var(--text-color);
+        margin: var(--spacing-xl) 0 var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    /* Navigation Styles */
+    #left-tray {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 250px;
+        height: calc(100vh - 80px);
+        padding: var(--spacing-lg);
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border-color);
+        overflow-y: auto;
+    }
+
+    #table-of-contents {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-item {
+        display: block;
+        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-xs);
+        color: var(--text-muted);
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+        background: var(--bg-primary);
+        color: var(--text-color);
+    }
+
+    .nav-item[aria-current="true"] {
+        background: var(--bg-primary);
+        color: var(--accent-color);
+        font-weight: 500;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+        .experience-page-container {
+            margin-left: 0;
+            padding: var(--spacing-md);
+        }
+
+        #left-tray {
+            display: none;
+        }
     }
 
     @media (max-width: 768px) {
-        .project-page-container {
-            margin-left: var(--spacing-lg);
-            margin-right: var(--spacing-lg);
+        .experience-header {
+            flex-direction: column;
         }
 
         .company-info {
             flex-direction: column;
             text-align: center;
-            gap: var(--spacing-md);
         }
 
-        .info-grid {
+        .experience-meta {
+            justify-content: center;
+        }
+
+        .tech-section {
+            grid-template-columns: 1fr;
+        }
+
+        .showcase-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -391,81 +394,36 @@ const {title, metadata} = Astro.props;
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const tableOfContents = document.getElementById("table-of-contents");
-        const hideButton = document.getElementById("hide-button");
-        const showButton = document.getElementById("show-button");
-        const navItems = document.getElementsByClassName("nav-item");
+        const sections = document.querySelectorAll("section[id]");
+        const navItems = document.querySelectorAll(".nav-item");
 
-        // Intersection Observer for sections
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Update nav items
-                    Array.from(navItems).forEach(item => {
-                        if (!item || !item.getAttribute) return;
-                        
-                        const href = item.getAttribute('href');
-                        if (!href) return;
+        const observerOptions = {
+            rootMargin: "-20% 0px -75%",
+            threshold: 0,
+        };
 
-                        const targetId = entry.target.id;
-                        const itemHref = href.substring(1);
-                        
-                        if (itemHref === targetId) {
-                            item.setAttribute('aria-current', 'true');
-                            item.classList.add('link-active');
-                        } else {
-                            item.setAttribute('aria-current', 'false');
-                            item.classList.remove('link-active');
-                        }
-                    });
-                }
+        function resetCurrentNav() {
+            navItems.forEach(item => {
+                item.setAttribute("aria-current", "false");
             });
-        }, { threshold: 0.2 });
-
-        // Observe all sections
-        document.querySelectorAll('section').forEach(section => {
-            if (section) observer.observe(section);
-        });
-
-        // Table of Contents Toggle
-        function toggleTableOfContents(show) {
-            if (tableOfContents && showButton) {
-                tableOfContents.style.display = show ? 'block' : 'none';
-                showButton.style.visibility = show ? 'hidden' : 'visible';
-                
-                // Add animation class
-                tableOfContents.classList.toggle('toc-visible', show);
-            }
         }
 
-        toggleTableOfContents(true);
-
-        hideButton?.addEventListener("click", () => toggleTableOfContents(false));
-        showButton?.addEventListener("click", () => toggleTableOfContents(true));
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const href = this.getAttribute('href');
-                if (!href) return;
-
-                const targetElement = document.querySelector(href);
-                
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-                    // Update URL without jumping
-                    history.pushState(null, '', href);
-                }
-
-                // Auto-hide TOC on mobile after clicking
-                if (window.innerWidth <= 768) {
-                    toggleTableOfContents(false);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute("id");
+                    const navItem = document.getElementById(`id${id.charAt(0)}`);
+                    
+                    if (navItem) {
+                        resetCurrentNav();
+                        navItem.setAttribute("aria-current", "true");
+                    }
                 }
             });
+        }, observerOptions);
+
+        sections.forEach((section) => {
+            observer.observe(section);
         });
     });
 </script>
