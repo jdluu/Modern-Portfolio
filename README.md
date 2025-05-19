@@ -92,6 +92,6 @@ All commands are run from the root of the project, from a terminal:
 
 This project is continuously deployed on Netlify, ensuring that the latest updates are always live. You can view the deployment status and access the live site using the link below:
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/5b79e3ed-5748-4cbd-9609-a93a4967c79e/deploy-status)](https://app.netlify.com/sites/spectacular-basbousa-817044/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/640139f3-99cf-4263-8334-f33ac202e7fd/deploy-status)](https://app.netlify.com/projects/jdluucs/deploys)
 
 Explore the portfolio to see my work and feel free to reach out with any questions or opportunities!
