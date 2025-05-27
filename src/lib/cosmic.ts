@@ -15,7 +15,8 @@ export interface ProjectCard {
 			url: string;
 		};
 		content?: string;
-		tags?: string[]; // Added tags array for filtering
+		programmingLanguages?: string[];
+		domains?: string[];
 	};
 }
 
