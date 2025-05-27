@@ -1,5 +1,11 @@
 ---
-import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import {
+	Astronav,
+	MenuItems,
+	MenuIcon,
+	OpenIcon,
+	CloseIcon,
+} from "astro-navbar";
 ---
 
 <header class="header">
@@ -21,22 +27,43 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 					<span class="home-text">Home</span>
 				</a>
 
-				<button
-					type="button"
-					class="menu-button"
-					aria-label="Toggle navigation menu"
-					aria-expanded="false"
-					aria-controls="nav-menu"
-				>
-					<span class="hamburger">
-						<span class="hamburger-line"></span>
-						<span class="hamburger-line"></span>
-						<span class="hamburger-line"></span>
-					</span>
-				</button>
+				<div class="menu-icon-container">
+					<MenuIcon class="menu-icon-svg">
+						<OpenIcon>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="2.5"
+								stroke="currentColor"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+							</svg>
+						</OpenIcon>
+						<CloseIcon>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="2.5"
+								stroke="currentColor"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M6 18L18 6M6 6l12 12"></path>
+							</svg>
+						</CloseIcon>
+					</MenuIcon>
+				</div>
 
-				<MenuItems class="nav-menu">
-					<ul class="nav-list" role="menubar" id="nav-menu">
+				<MenuItems class="nav-menu hidden">
+					<ul class="nav-list" role="menubar" id="nav-menu-list">
 						<li class="nav-item" role="menuitem">
 							<a
 								href="/about"
@@ -97,7 +124,6 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
 											fill="none"
-											stroke="currentColor"
 											stroke-width="2"
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -117,7 +143,6 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
 											fill="none"
-											stroke="currentColor"
 											stroke-width="2"
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -135,6 +160,12 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		</nav>
 	</Astronav>
 </header>
+
+<style is:global>
+	.hidden {
+		display: none !important;
+	}
+</style>
 
 <style>
 	.header {
@@ -156,7 +187,7 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 clamp(1rem, 3vw, 2rem);
-		gap: 2rem;
+		gap: 1rem;
 	}
 
 	.home-link {
@@ -181,47 +212,49 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		font-family: var(--font-cursive);
 	}
 
-	.menu-button {
+	/* Styling for the MenuIcon container and the icon SVG itself */
+	.menu-icon-container {
 		display: none;
-		padding: 0.5rem;
-		background: transparent;
-		border: none;
 		cursor: pointer;
+		padding: 0.5rem;
 	}
 
-	.hamburger {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		width: 30px;
-		height: 24px;
+	.menu-icon-svg {
+		width: 1.75rem; /* Approx 28px */
+		height: 1.75rem;
+		color: var(--text-color); /* SVG stroke color will inherit this */
 	}
-
-	.hamburger-line {
+	.menu-icon-svg svg {
+		display: block;
 		width: 100%;
-		height: 2px;
-		background-color: var(--text-color);
-		transition: all 0.3s ease;
+		height: 100%;
 	}
 
 	.nav-menu {
-		flex: 1;
-		display: flex;
-		justify-content: flex-end;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: var(--primary-btn-color);
+		padding: 1rem;
+		border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 
 	.nav-list {
 		display: flex;
-		align-items: center;
-		gap: clamp(1rem, 2vw, 1.5rem);
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
 	.nav-link {
-		display: inline-block;
-		padding: 0.75rem 1.5rem;
+		display: block;
+		text-align: center;
+		padding: 0.75rem 1rem;
 		color: var(--text-color);
 		text-decoration: none;
 		font-size: clamp(1rem, 1.5vw, var(--font-large));
@@ -242,18 +275,18 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		color: var(--primary-btn-color);
 	}
 
-	/* Theme Toggle Switch */
 	.theme-switch-wrapper {
 		display: flex;
 		align-items: center;
-		margin-left: 1rem;
+		margin: 1rem auto;
 	}
 
 	.switch {
 		position: relative;
 		display: inline-block;
-		width: 3.5rem;
+		width: 3.75rem;
 		height: 2rem;
+		cursor: pointer;
 	}
 
 	.switch input {
@@ -264,15 +297,19 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 
 	.slider {
 		position: absolute;
-		cursor: pointer;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #ccc;
-		transition: 0.4s;
-		border: 2px solid transparent;
-		overflow: hidden;
+		background-color: #73c0fc;
+		border: 1px solid transparent;
+		border-radius: 2rem;
+		transition:
+			background-color 0.4s ease,
+			border-color 0.2s ease;
+		display: flex;
+		align-items: center;
+		padding: 0 0.25rem;
 	}
 
 	.slider:before {
@@ -281,65 +318,67 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		height: 1.5rem;
 		width: 1.5rem;
 		left: 0.25rem;
-		bottom: 0.25rem;
+		top: 50%;
+		transform: translateY(-50%);
 		background-color: white;
-		transition: 0.4s;
-		z-index: 2;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		border-radius: 50%;
+		transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		z-index: 1;
+		box-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.2),
+			0 1px 1px rgba(0, 0, 0, 0.14),
+			0 2px 1px -1px rgba(0, 0, 0, 0.12);
+	}
+
+	input:checked + .slider {
+		background-color: #424242;
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(1.75rem) translateY(-50%);
+	}
+
+	input:focus-visible + .slider {
+		border-color: var(--accent-color);
+		box-shadow: 0 0 0 2px
+			color-mix(in srgb, var(--accent-color) 30%, transparent);
 	}
 
 	.sun-icon,
 	.moon-icon {
 		position: absolute;
-		width: 1rem;
-		height: 1rem;
+		width: 1.125rem;
+		height: 1.125rem;
 		top: 50%;
-		transform: translateY(-50%);
-		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		transform: translateY(-50%) scale(0.9);
+		transition:
+			opacity 0.3s ease,
+			transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		z-index: 0;
+		stroke-width: 2;
 	}
 
 	.sun-icon {
-		left: 0.45rem;
-		stroke: #333;
-		stroke-width: 2.5;
-	}
-
-	.moon-icon {
-		right: 0.45rem;
-		stroke: #fff;
-		stroke-width: 2.5;
-		opacity: 0;
-		transform: translateY(-50%) scale(0.5);
-	}
-
-	input:checked + .slider {
-		background-color: #2196f3;
-	}
-
-	input:checked + .slider .sun-icon {
-		opacity: 0;
-		transform: translateY(-50%) scale(0.5);
-	}
-
-	input:checked + .slider .moon-icon {
+		left: 0.4rem;
+		stroke: #ffc400;
 		opacity: 1;
 		transform: translateY(-50%) scale(1);
 	}
 
-	input:focus + .slider {
-		border-color: var(--text-color);
+	.moon-icon {
+		right: 0.4rem;
+		stroke: #b0bec5;
+		opacity: 0;
 	}
 
-	input:checked + .slider:before {
-		transform: translateX(1.5rem);
+	input:checked + .slider .sun-icon {
+		opacity: 0;
+		transform: translateY(-50%) scale(0.5) rotate(-90deg);
 	}
 
-	.slider.round {
-		border-radius: 2rem;
-	}
-
-	.slider.round:before {
-		border-radius: 50%;
+	input:checked + .slider .moon-icon {
+		opacity: 1;
+		transform: translateY(-50%) scale(1) rotate(0deg);
 	}
 
 	.visually-hidden {
@@ -354,54 +393,33 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		border: 0;
 	}
 
-	@media (max-width: 1024px) {
-		.menu-button {
-			display: block;
-			order: 1;
+	/* Media Queries for Desktop Layout */
+	@media (min-width: 1025px) {
+		.menu-icon-container {
+			display: none !important;
 		}
 
 		.nav-menu {
-			display: none;
-			position: absolute;
-			top: 100%;
-			left: 0;
-			right: 0;
-			background: var(--primary-btn-color);
-			padding: 1rem;
-			border-top: 1px solid rgba(0, 0, 0, 0.1);
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		}
-
-		.nav-menu.show {
-			display: block;
+			display: flex !important;
+			position: static;
+			background: transparent;
+			padding: 0;
+			border-top: none;
+			box-shadow: none;
 		}
 
 		.nav-list {
-			flex-direction: column;
-			align-items: stretch;
-			gap: 1rem;
+			flex-direction: row;
+			align-items: center;
+			gap: clamp(1rem, 2vw, 1.5rem);
 		}
 
 		.nav-link {
-			display: block;
-			text-align: center;
+			display: inline-block;
+			text-align: left;
 		}
-
-		.theme-switch {
-			margin: 1rem auto;
-		}
-
-		/* Hamburger animation */
-		.menu-button[aria-expanded="true"] .hamburger-line:nth-child(1) {
-			transform: translateY(8px) rotate(45deg);
-		}
-
-		.menu-button[aria-expanded="true"] .hamburger-line:nth-child(2) {
-			opacity: 0;
-		}
-
-		.menu-button[aria-expanded="true"] .hamburger-line:nth-child(3) {
-			transform: translateY(-8px) rotate(-45deg);
+		.theme-switch-wrapper {
+			margin: 0 0 0 1rem;
 		}
 	}
 
@@ -420,8 +438,10 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 		.nav-link,
 		.slider,
 		.slider:before,
-		.hamburger-line {
-			transition: none;
+		.sun-icon,
+		.moon-icon,
+		.nav-menu {
+			transition: none !important;
 		}
 	}
 </style>
