@@ -1,75 +1,405 @@
 ---
-import TempCard from "./ProjectCard.astro";
-import { getAllProjectCards } from '../lib/cosmic'
+import ProjectCard from "./ProjectCard.astro";
+import { getAllProjectCards } from "../lib/cosmic";
 
-const data = await getAllProjectCards()
+const allProjects = (await getAllProjectCards()) || []; // Ensure allProjects is an array
+
+// Extract all unique programming languages and domains
+const allLanguages = new Set<string>();
+const allDomains = new Set<string>();
+
+allProjects.forEach((project) => {
+	if (
+		project.metadata.programming_languages &&
+		Array.isArray(project.metadata.programming_languages)
+	) {
+		project.metadata.programming_languages.forEach((lang) =>
+			allLanguages.add(lang)
+		);
+	}
+	if (project.metadata.domains && Array.isArray(project.metadata.domains)) {
+		project.metadata.domains.forEach((domain) => allDomains.add(domain));
+	}
+});
+
+const uniqueLanguages = Array.from(allLanguages).sort();
+const uniqueDomains = Array.from(allDomains).sort();
 ---
 
 <section class="content-section">
-    <h2 id="projects" class="page-h2">Projects</h2>
-    <p class="section-desc">
-        <strong>Check out some of my most recent projects!</strong>
-    </p>
-    <div class="card-grid">
-        {
-            data.map((card) => (
-                <TempCard
-                    title={card.title}
-                    intro={card.metadata.description}
-                    thumbnail={card.metadata.thumbnail.url}
-                    url={card.slug}
-                />
-            ))
-        }
-    </div>
+	<h2 id="projects" class="page-h2">Projects</h2>
+	<p class="section-desc">
+		<strong
+			>Explore my projects. Use the filters below to narrow your search.</strong
+		>
+	</p>
+
+	{
+		uniqueLanguages.length > 0 && (
+			<div class="filter-group">
+				<h3 class="filter-group-title">Filter by Language:</h3>
+				<div
+					id="language-filters"
+					class="filter-container"
+					role="menubar"
+					aria-label="Filter projects by programming language"
+				>
+					<button
+						class="filter-button active"
+						data-filter-type="language"
+						data-tag="all"
+						role="menuitemradio"
+						aria-checked="true"
+						tabindex="0"
+					>
+						All Languages
+					</button>
+					{uniqueLanguages.map((lang) => (
+						<button
+							class="filter-button"
+							data-filter-type="language"
+							data-tag={lang}
+							role="menuitemradio"
+							aria-checked="false"
+							tabindex="-1"
+						>
+							{lang}
+						</button>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	{
+		uniqueDomains.length > 0 && (
+			<div class="filter-group">
+				<h3 class="filter-group-title">Filter by Domain:</h3>
+				<div
+					id="domain-filters"
+					class="filter-container"
+					role="menubar"
+					aria-label="Filter projects by domain"
+				>
+					<button
+						class="filter-button active"
+						data-filter-type="domain"
+						data-tag="all"
+						role="menuitemradio"
+						aria-checked="true"
+						tabindex="0"
+					>
+						All Domains
+					</button>
+					{uniqueDomains.map((domain) => (
+						<button
+							class="filter-button"
+							data-filter-type="domain"
+							data-tag={domain}
+							role="menuitemradio"
+							aria-checked="false"
+							tabindex="-1"
+						>
+							{domain}
+						</button>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	<div id="project-card-grid" class="card-grid">
+		{
+			allProjects.map((card) => (
+				<div
+					class="project-card-wrapper"
+					data-languages={(card.metadata.programming_languages || [])
+						.join(" ")
+						.toLowerCase()}
+					data-domains={(card.metadata.domains || []).join(" ").toLowerCase()}
+				>
+					<ProjectCard
+						title={card.title}
+						intro={card.metadata.description}
+						thumbnail={card.metadata.thumbnail?.url || ""}
+						url={card.slug}
+					/>
+				</div>
+			))
+		}
+		<p
+			id="no-results-message"
+			class="no-results-message"
+			style="display: none;"
+		>
+			No projects match your current filter selection.
+		</p>
+	</div>
 </section>
 
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const languageFilterContainer = document.getElementById("language-filters");
+		const domainFilterContainer = document.getElementById("domain-filters");
+		const projectCardGrid = document.getElementById("project-card-grid");
+		const noResultsMessage = document.getElementById("no-results-message");
+
+		if (!projectCardGrid || !noResultsMessage) return;
+
+		const projectCardWrappers = Array.from(
+			projectCardGrid.querySelectorAll(".project-card-wrapper")
+		);
+
+		let activeLanguageFilter = "all";
+		let activeDomainFilter = "all";
+
+		function applyFilters() {
+			let resultsFound = false;
+			projectCardWrappers.forEach((wrapper) => {
+				if (!(wrapper instanceof HTMLElement)) return;
+
+				const projectLanguagesAttr = wrapper.dataset.languages || "";
+				const projectDomainsAttr = wrapper.dataset.domains || "";
+
+				const projectLangs = projectLanguagesAttr.split(" ");
+				const projectDoms = projectDomainsAttr.split(" ");
+
+				const languageMatch =
+					activeLanguageFilter === "all" ||
+					projectLangs.includes(activeLanguageFilter.toLowerCase());
+				const domainMatch =
+					activeDomainFilter === "all" ||
+					projectDoms.includes(activeDomainFilter.toLowerCase());
+
+				if (languageMatch && domainMatch) {
+					wrapper.style.display = "";
+					resultsFound = true;
+				} else {
+					wrapper.style.display = "none";
+				}
+			});
+			noResultsMessage.style.display = resultsFound ? "none" : "block";
+		}
+
+		function setupFilterGroup(filterContainer, filterType) {
+			if (!filterContainer) return;
+
+			const filterButtons = Array.from(
+				filterContainer.querySelectorAll(".filter-button")
+			);
+			let currentActiveButton = filterContainer.querySelector(
+				".filter-button.active"
+			);
+
+			filterButtons.forEach((button) => {
+				if (!(button instanceof HTMLButtonElement)) return;
+
+				button.addEventListener("click", (e) => {
+					const clickedButton = e.currentTarget;
+					if (!(clickedButton instanceof HTMLButtonElement)) return;
+
+					const newFilter = clickedButton.dataset.tag;
+					if (newFilter === undefined) return;
+
+					if (currentActiveButton === clickedButton && newFilter !== "all")
+						return; // Allow re-clicking 'all'
+
+					if (
+						currentActiveButton &&
+						currentActiveButton instanceof HTMLButtonElement
+					) {
+						currentActiveButton.classList.remove("active");
+						currentActiveButton.setAttribute("aria-checked", "false");
+						currentActiveButton.setAttribute("tabindex", "-1");
+					}
+
+					clickedButton.classList.add("active");
+					clickedButton.setAttribute("aria-checked", "true");
+					clickedButton.setAttribute("tabindex", "0");
+					currentActiveButton = clickedButton;
+
+					if (filterType === "language") {
+						activeLanguageFilter = newFilter;
+					} else if (filterType === "domain") {
+						activeDomainFilter = newFilter;
+					}
+					applyFilters();
+				});
+
+				button.addEventListener("keydown", (e) => {
+					if (
+						!(e.target instanceof HTMLButtonElement) ||
+						!(e.currentTarget instanceof HTMLButtonElement)
+					)
+						return;
+
+					const currentButtonIndex = filterButtons.indexOf(e.currentTarget);
+					let targetButtonIndex = currentButtonIndex;
+
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						e.currentTarget.click();
+					} else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+						e.preventDefault();
+						targetButtonIndex = (currentButtonIndex + 1) % filterButtons.length;
+					} else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+						e.preventDefault();
+						targetButtonIndex =
+							(currentButtonIndex - 1 + filterButtons.length) %
+							filterButtons.length;
+					}
+
+					if (
+						filterButtons[targetButtonIndex] &&
+						filterButtons[targetButtonIndex] instanceof HTMLButtonElement
+					) {
+						(filterButtons[targetButtonIndex] as HTMLButtonElement).focus();
+					}
+				});
+			});
+		}
+
+		setupFilterGroup(languageFilterContainer, "language");
+		setupFilterGroup(domainFilterContainer, "domain");
+
+		applyFilters(); // Initial filter application on page load
+	});
+</script>
+
 <style>
-    .page-h2 {
-        font-size: var(--font-large);
-        font-family: var(--font-heading);
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-        text-decoration: underline;
-        color: var(--text-color);
-    }
+	.page-h2 {
+		font-size: var(--font-large);
+		font-family: var(--font-heading);
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		text-align: center;
+		text-decoration: underline;
+		color: var(--text-color);
+	}
 
-    @media screen and (max-width: 768px) {
-        .page-h2 {
-            font-size: var(--font-medium);
-        }
-    }
+	@media screen and (max-width: 768px) {
+		.page-h2 {
+			font-size: var(--font-medium);
+		}
+	}
 
-    .section-desc {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-    .card-grid {
-        max-width: 75%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 2rem;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    @media screen and (max-width: 1024px) {
-        .card-grid {
-            justify-content: center;
-            align-items: center;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 1rem;
-            padding: 0 0 2rem;
-        }
-    }
-    @media screen and (max-width: 768px) {
-        .card-grid {
-            justify-content: center;
-            align-items: center;
-            grid-template-columns: repeat(1, 1fr);
-            grid-gap: 1rem;
-            padding: 0 0 2rem;
-        }
-    }
+	.section-desc {
+		font-size: 1.5rem;
+		margin-bottom: 1.5rem; /* Increased space */
+		text-align: center;
+		color: var(--text-color);
+	}
+
+	.filter-group {
+		margin-bottom: 2rem; /* Space between filter groups */
+		padding: 0 1rem;
+	}
+
+	.filter-group-title {
+		font-size: 1.2rem; /* Size for "Filter by Language:" */
+		font-family: var(--font-heading);
+		color: var(--text-color);
+		text-align: center;
+		margin-bottom: 0.75rem;
+	}
+
+	.filter-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+		margin-bottom: 1rem; /* Space below buttons within a group */
+	}
+
+	.filter-button {
+		padding: 0.6rem 1.2rem;
+		font-size: clamp(0.85rem, 1.5vw, 1rem);
+		font-family: var(--font-secondary);
+		border: 1.5px solid var(--accent-color);
+		background-color: transparent;
+		color: var(--text-color);
+		border-radius: 25px;
+		cursor: pointer;
+		transition: all 0.25s ease-in-out;
+		font-weight: 500;
+	}
+
+	.filter-button:hover,
+	.filter-button:focus {
+		background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+		color: var(--text-color);
+		transform: translateY(-2px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		outline: none;
+	}
+
+	.filter-button.active {
+		background-color: var(--accent-color);
+		color: var(--inverse-text-color);
+		font-weight: 700;
+		border-color: var(--accent-color);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.filter-button:focus-visible {
+		outline: 2px solid var(--primary-btn-color);
+		outline-offset: 2px;
+	}
+
+	.card-grid {
+		max-width: 75%;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 2rem;
+		margin-left: auto;
+		margin-right: auto;
+		position: relative; /* For positioning no-results message */
+	}
+
+	.project-card-wrapper {
+		display: block;
+	}
+
+	.no-results-message {
+		grid-column: 1 / -1; /* Span all columns */
+		text-align: center;
+		font-size: 1.2rem;
+		color: var(--text-color);
+		padding: 2rem 0;
+	}
+
+	@media screen and (max-width: 1024px) {
+		.card-grid {
+			grid-template-columns: repeat(2, 1fr);
+			grid-gap: 1.5rem;
+			padding: 0 1rem 2rem;
+			max-width: 90%;
+		}
+		.filter-button {
+			padding: 0.5rem 1rem;
+			font-size: clamp(0.8rem, 1.4vw, 0.9rem);
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		.card-grid {
+			grid-template-columns: 1fr;
+			grid-gap: 1.5rem;
+			padding: 0 0.5rem 2rem;
+			max-width: 95%;
+		}
+		.section-desc {
+			font-size: 1.2rem;
+		}
+		.filter-group {
+			padding: 0 0.5rem;
+		}
+		.filter-container {
+			gap: 0.5rem;
+		}
+		.filter-button {
+			padding: 0.4rem 0.8rem;
+			font-size: clamp(0.75rem, 1.3vw, 0.85rem);
+		}
+	}
 </style>
