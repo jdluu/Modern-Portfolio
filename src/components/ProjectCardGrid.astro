@@ -2,9 +2,8 @@
 import ProjectCard from "./ProjectCard.astro";
 import { getAllProjectCards } from "../lib/cosmic";
 
-const allProjects = (await getAllProjectCards()) || []; // Ensure allProjects is an array
+const allProjects = (await getAllProjectCards()) || [];
 
-// Extract all unique programming languages and domains
 const allLanguages = new Set<string>();
 const allDomains = new Set<string>();
 
@@ -37,18 +36,20 @@ const uniqueDomains = Array.from(allDomains).sort();
 	{
 		uniqueLanguages.length > 0 && (
 			<div class="filter-group">
-				<h3 class="filter-group-title">Filter by Language:</h3>
+				<h3 class="filter-group-title" id="language-filter-label">
+					Filter by Language:
+				</h3>
 				<div
 					id="language-filters"
 					class="filter-container"
-					role="menubar"
-					aria-label="Filter projects by programming language"
+					role="radiogroup"
+					aria-labelledby="language-filter-label"
 				>
 					<button
 						class="filter-button active"
 						data-filter-type="language"
 						data-tag="all"
-						role="menuitemradio"
+						role="radio"
 						aria-checked="true"
 						tabindex="0"
 					>
@@ -59,7 +60,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 							class="filter-button"
 							data-filter-type="language"
 							data-tag={lang}
-							role="menuitemradio"
+							role="radio"
 							aria-checked="false"
 							tabindex="-1"
 						>
@@ -74,18 +75,20 @@ const uniqueDomains = Array.from(allDomains).sort();
 	{
 		uniqueDomains.length > 0 && (
 			<div class="filter-group">
-				<h3 class="filter-group-title">Filter by Domain:</h3>
+				<h3 class="filter-group-title" id="domain-filter-label">
+					Filter by Domain:
+				</h3>
 				<div
 					id="domain-filters"
 					class="filter-container"
-					role="menubar"
-					aria-label="Filter projects by domain"
+					role="radiogroup"
+					aria-labelledby="domain-filter-label"
 				>
 					<button
 						class="filter-button active"
 						data-filter-type="domain"
 						data-tag="all"
-						role="menuitemradio"
+						role="radio"
 						aria-checked="true"
 						tabindex="0"
 					>
@@ -96,7 +99,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 							class="filter-button"
 							data-filter-type="domain"
 							data-tag={domain}
-							role="menuitemradio"
+							role="radio"
 							aria-checked="false"
 							tabindex="-1"
 						>
@@ -187,9 +190,6 @@ const uniqueDomains = Array.from(allDomains).sort();
 			const filterButtons = Array.from(
 				filterContainer.querySelectorAll(".filter-button")
 			);
-			let currentActiveButton = filterContainer.querySelector(
-				".filter-button.active"
-			);
 
 			filterButtons.forEach((button) => {
 				if (!(button instanceof HTMLButtonElement)) return;
@@ -201,22 +201,18 @@ const uniqueDomains = Array.from(allDomains).sort();
 					const newFilter = clickedButton.dataset.tag;
 					if (newFilter === undefined) return;
 
-					if (currentActiveButton === clickedButton && newFilter !== "all")
-						return; // Allow re-clicking 'all'
-
-					if (
-						currentActiveButton &&
-						currentActiveButton instanceof HTMLButtonElement
-					) {
-						currentActiveButton.classList.remove("active");
-						currentActiveButton.setAttribute("aria-checked", "false");
-						currentActiveButton.setAttribute("tabindex", "-1");
-					}
-
-					clickedButton.classList.add("active");
-					clickedButton.setAttribute("aria-checked", "true");
-					clickedButton.setAttribute("tabindex", "0");
-					currentActiveButton = clickedButton;
+					// Update ARIA states and classes for all buttons in this group
+					filterButtons.forEach((btn) => {
+						if (!(btn instanceof HTMLButtonElement)) return;
+						const isClicked = btn === clickedButton;
+						btn.setAttribute("aria-checked", String(isClicked));
+						btn.setAttribute("tabindex", isClicked ? "0" : "-1");
+						if (isClicked) {
+							btn.classList.add("active");
+						} else {
+							btn.classList.remove("active");
+						}
+					});
 
 					if (filterType === "language") {
 						activeLanguageFilter = newFilter;
@@ -226,34 +222,35 @@ const uniqueDomains = Array.from(allDomains).sort();
 					applyFilters();
 				});
 
+				// Keyboard navigation for radiogroup
 				button.addEventListener("keydown", (e) => {
-					if (
-						!(e.target instanceof HTMLButtonElement) ||
-						!(e.currentTarget instanceof HTMLButtonElement)
-					)
-						return;
+					if (!(e.currentTarget instanceof HTMLButtonElement)) return;
 
-					const currentButtonIndex = filterButtons.indexOf(e.currentTarget);
-					let targetButtonIndex = currentButtonIndex;
+					let currentButtonIndex = filterButtons.indexOf(e.currentTarget);
+					let targetButton: HTMLButtonElement | null = null;
 
 					if (e.key === "Enter" || e.key === " ") {
 						e.preventDefault();
-						e.currentTarget.click();
+						e.currentTarget.click(); // This will trigger the click handler to update state
 					} else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
 						e.preventDefault();
-						targetButtonIndex = (currentButtonIndex + 1) % filterButtons.length;
+						currentButtonIndex =
+							(currentButtonIndex + 1) % filterButtons.length;
+						targetButton = filterButtons[
+							currentButtonIndex
+						] as HTMLButtonElement;
 					} else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
 						e.preventDefault();
-						targetButtonIndex =
+						currentButtonIndex =
 							(currentButtonIndex - 1 + filterButtons.length) %
 							filterButtons.length;
+						targetButton = filterButtons[
+							currentButtonIndex
+						] as HTMLButtonElement;
 					}
 
-					if (
-						filterButtons[targetButtonIndex] &&
-						filterButtons[targetButtonIndex] instanceof HTMLButtonElement
-					) {
-						(filterButtons[targetButtonIndex] as HTMLButtonElement).focus();
+					if (targetButton) {
+						targetButton.focus();
 					}
 				});
 			});
@@ -262,7 +259,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		setupFilterGroup(languageFilterContainer, "language");
 		setupFilterGroup(domainFilterContainer, "domain");
 
-		applyFilters(); // Initial filter application on page load
+		applyFilters();
 	});
 </script>
 
@@ -285,18 +282,18 @@ const uniqueDomains = Array.from(allDomains).sort();
 
 	.section-desc {
 		font-size: 1.5rem;
-		margin-bottom: 1.5rem; /* Increased space */
+		margin-bottom: 1.5rem;
 		text-align: center;
 		color: var(--text-color);
 	}
 
 	.filter-group {
-		margin-bottom: 2rem; /* Space between filter groups */
+		margin-bottom: 2rem;
 		padding: 0 1rem;
 	}
 
 	.filter-group-title {
-		font-size: 1.2rem; /* Size for "Filter by Language:" */
+		font-size: 1.2rem;
 		font-family: var(--font-heading);
 		color: var(--text-color);
 		text-align: center;
@@ -308,7 +305,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 0.75rem;
-		margin-bottom: 1rem; /* Space below buttons within a group */
+		margin-bottom: 1rem;
 	}
 
 	.filter-button {
@@ -333,8 +330,9 @@ const uniqueDomains = Array.from(allDomains).sort();
 		outline: none;
 	}
 
-	.filter-button.active {
-		background-color: var(--accent-color);
+	.filter-button.active, 
+    .filter-button[aria-checked="true"] {
+=		background-color: var(--accent-color);
 		color: var(--inverse-text-color);
 		font-weight: 700;
 		border-color: var(--accent-color);
@@ -353,7 +351,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		grid-gap: 2rem;
 		margin-left: auto;
 		margin-right: auto;
-		position: relative; /* For positioning no-results message */
+		position: relative;
 	}
 
 	.project-card-wrapper {
@@ -361,7 +359,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 	}
 
 	.no-results-message {
-		grid-column: 1 / -1; /* Span all columns */
+		grid-column: 1 / -1;
 		text-align: center;
 		font-size: 1.2rem;
 		color: var(--text-color);
