@@ -1,5 +1,14 @@
-<section class="content-section" aria-labelledby="contact">
-	<h2 id="contact" class="page-h2">Contact</h2>
+<section class="content-section" aria-labelledby="contact-heading">
+	<h2 id="contact-heading" class="page-h2">Contact</h2>
+
+	<div
+		id="form-status-message"
+		role="status"
+		aria-live="assertive"
+		class="form-status"
+	>
+	</div>
+
 	<form
 		name="contact-form"
 		id="contact-form"
@@ -10,7 +19,7 @@
 		novalidate
 	>
 		<input type="hidden" name="form-name" value="contact-form" />
-		<h3 id="form-title">Get in Touch!</h3>
+		<h3 id="form-title" class="form-main-title">Get in Touch!</h3>
 
 		<div class="form-group">
 			<label for="name" class="required">Name:</label>
@@ -70,7 +79,9 @@
 			<span id="message-error" class="error-message" aria-live="polite"></span>
 		</div>
 
-		<button type="submit" aria-label="Send message">Send Email!</button>
+		<button type="submit" aria-label="Send message" id="submit-button"
+			>Send Email!</button
+		>
 	</form>
 </section>
 
@@ -94,18 +105,55 @@
 		width: 100%;
 	}
 
+	/* Styles for the form status message */
+	.form-status {
+		width: min(100%, 35rem);
+		margin: 0 auto var(--spacing-md);
+		padding: var(--spacing-sm) var(--spacing-md);
+		border-radius: var(--radius-md);
+		font-size: var(--font-medium);
+		text-align: center;
+		display: none;
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s ease;
+	}
+
+	.form-status.success {
+		background-color: color-mix(
+			in srgb,
+			#57b846 20%,
+			transparent
+		); /* Light green */
+		color: color-mix(in srgb, #14530d 90%, #fff); /* Dark green text */
+		border: 1px solid #57b846;
+		display: block;
+	}
+
+	.form-status.error {
+		background-color: color-mix(
+			in srgb,
+			#e32b2b 15%,
+			transparent
+		); /* Light red */
+		color: color-mix(in srgb, #901414 90%, #fff); /* Dark red text */
+		border: 1px solid #e32b2b;
+		display: block;
+	}
+
 	#contact-form {
 		text-align: center;
-		background: #fff;
-		color: black;
-		border-radius: 12px;
+		background: var(--background-color);
+		color: var(--text-color);
+		border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+		border-radius: var(--radius-lg);
 		width: min(100%, 35rem);
 		margin: 0 auto;
 		padding: clamp(1.5rem, 4vw, 2.5rem);
-		box-shadow: 0 10px 30px rgba(90, 116, 148, 0.2);
+		box-shadow: var(--shadow-md);
 	}
 
-	#form-title {
+	.form-main-title {
 		font-size: clamp(1.25rem, 2.5vw, 1.5rem);
 		font-weight: bold;
 		text-align: center;
@@ -120,26 +168,33 @@
 
 	.form-group label {
 		display: block;
-		margin-bottom: 0.5rem;
+		margin-bottom: var(--spacing-sm);
 		font-weight: 500;
 		font-size: clamp(0.9rem, 2vw, 1rem);
+		color: var(--text-color);
 	}
 
 	.required::after {
 		content: "*";
 		color: #e32;
-		margin-left: 0.25rem;
+		margin-left: var(--spacing-xs);
 	}
 
 	.form-group input,
 	.form-group textarea {
 		width: 100%;
 		padding: clamp(0.75rem, 2vw, 1rem);
-		border: 1px solid #ccc;
-		border-radius: 8px;
+		border: 1px solid color-mix(in srgb, var(--text-color) 30%, transparent);
+		border-radius: var(--radius-md);
 		font-size: clamp(0.9rem, 2vw, 1rem);
 		transition: all 0.3s ease;
-		background-color: #fff;
+		background-color: var(--background-color);
+		color: var(--text-color);
+	}
+	.form-group input::placeholder,
+	.form-group textarea::placeholder {
+		color: color-mix(in srgb, var(--text-color) 60%, transparent);
+		opacity: 1;
 	}
 
 	.form-group textarea {
@@ -150,24 +205,25 @@
 	.form-group input:focus,
 	.form-group textarea:focus {
 		outline: none;
-		border-color: #57b846;
-		box-shadow: 0 0 0 3px rgba(87, 184, 70, 0.2);
+		border-color: var(--accent-color);
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--accent-color) 30%, transparent);
 	}
 
 	.form-group input:hover,
 	.form-group textarea:hover {
-		border-color: #57b846;
+		border-color: var(--accent-color);
 	}
 
 	.error-message {
 		display: block;
 		color: #e32;
 		font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-		margin-top: 0.25rem;
+		margin-top: var(--spacing-xs);
 		min-height: 1.25rem;
 	}
 
-	button {
+	button[type="submit"] {
 		width: min(100%, 16rem);
 		height: clamp(3rem, 6vw, 3.5rem);
 		border: none;
@@ -185,22 +241,22 @@
 		transition: all 0.3s ease;
 	}
 
-	button:hover {
+	button[type="submit"]:hover {
 		background: #4ca83d;
 		transform: translateY(-2px);
 		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 	}
 
-	button:focus {
+	button[type="submit"]:focus {
 		outline: none;
 		box-shadow: 0 0 0 3px rgba(87, 184, 70, 0.4);
 	}
 
-	button:active {
+	button[type="submit"]:active {
 		transform: translateY(1px);
 	}
 
-	button:disabled {
+	button[type="submit"]:disabled {
 		background: #ccc;
 		cursor: not-allowed;
 		transform: none;
@@ -213,16 +269,16 @@
 		}
 
 		#contact-form {
-			border-radius: 8px;
-			box-shadow: 0 5px 15px rgba(90, 116, 148, 0.1);
+			border-radius: var(--radius-md);
+			box-shadow: var(--shadow-sm);
 		}
 
 		.form-group input,
 		.form-group textarea {
-			font-size: 16px; /* Prevent iOS zoom on focus */
+			font-size: 16px;
 		}
 
-		button {
+		button[type="submit"] {
 			width: 100%;
 			margin-top: 1.5rem;
 		}
@@ -231,12 +287,12 @@
 	@media (hover: none) {
 		.form-group input:hover,
 		.form-group textarea:hover {
-			border-color: #ccc;
+			border-color: color-mix(in srgb, var(--text-color) 30%, transparent);
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		button,
+		button[type="submit"],
 		input,
 		textarea {
 			transition: none;
@@ -250,6 +306,8 @@
 		if (!form || !(form instanceof HTMLFormElement)) return;
 
 		const inputs = form.querySelectorAll("input[required], textarea[required]");
+		const submitButton = document.getElementById("submit-button");
+		const formStatusMessage = document.getElementById("form-status-message");
 
 		inputs.forEach((input) => {
 			const errorSpan = document.getElementById(`${input.id}-error`);
@@ -257,7 +315,7 @@
 
 			input.addEventListener("invalid", (event) => {
 				event.preventDefault();
-				if (!input.value) {
+				if (!input.value.trim()) {
 					errorSpan.textContent = "This field is required";
 				} else if (
 					input instanceof HTMLInputElement &&
@@ -267,10 +325,14 @@
 					errorSpan.textContent = "Please enter a valid email address";
 				} else if (
 					input instanceof HTMLInputElement &&
-					input.minLength &&
+					input.minLength > 0 &&
 					input.value.length < input.minLength
 				) {
 					errorSpan.textContent = `Must be at least ${input.minLength} characters`;
+				}
+				if (formStatusMessage) {
+					formStatusMessage.textContent = "";
+					formStatusMessage.className = "form-status";
 				}
 			});
 
@@ -278,21 +340,41 @@
 				if (input.validity.valid) {
 					errorSpan.textContent = "";
 				}
+				if (formStatusMessage) {
+					formStatusMessage.textContent = "";
+					formStatusMessage.className = "form-status";
+				}
 			});
 		});
 
 		form.addEventListener("submit", async (event) => {
 			event.preventDefault();
 
-			if (!form.checkValidity()) {
+			if (formStatusMessage) {
+				formStatusMessage.textContent = "";
+				formStatusMessage.className = "form-status";
+			}
+
+			let isFormValid = true;
+			inputs.forEach((input) => {
+				if (!input.validity.valid) {
+					isFormValid = false;
+				}
+			});
+
+			if (!isFormValid) {
+				if (formStatusMessage) {
+					formStatusMessage.textContent = "Please correct the errors above.";
+					formStatusMessage.className = "form-status error";
+					formStatusMessage.style.display = "block";
+				}
 				return;
 			}
 
-			const button = form.querySelector("button");
-			if (!button) return;
+			if (!submitButton || !(submitButton instanceof HTMLButtonElement)) return;
 
-			button.disabled = true;
-			button.textContent = "Sending...";
+			submitButton.disabled = true;
+			submitButton.textContent = "Sending...";
 
 			try {
 				const response = await fetch(form.action, {
@@ -302,15 +384,52 @@
 
 				if (response.ok) {
 					form.reset();
-					alert("Message sent successfully!");
+					inputs.forEach((input) => {
+						const errorSpan = document.getElementById(`${input.id}-error`);
+						if (errorSpan) errorSpan.textContent = "";
+					});
+					if (formStatusMessage) {
+						formStatusMessage.textContent = "Message sent successfully!";
+						formStatusMessage.className = "form-status success";
+						formStatusMessage.style.display = "block";
+					}
+					formStatusMessage.focus(); // Focus for screen readers
+					setTimeout(() => {
+						if (
+							formStatusMessage &&
+							formStatusMessage.classList.contains("success")
+						) {
+							formStatusMessage.textContent = "";
+							formStatusMessage.className = "form-status";
+						}
+					}, 5000); // Hide success message after 5 seconds
 				} else {
-					throw new Error("Failed to send message");
+					// Attempt to get error message from Netlify if available
+					let errorMessage = "Failed to send message. Please try again.";
+					try {
+						const errorData = await response.json();
+						if (errorData && errorData.message) {
+							errorMessage = errorData.message;
+						}
+					} catch (e) {
+						// Could not parse JSON, stick to default error
+					}
+					if (formStatusMessage) {
+						formStatusMessage.textContent = errorMessage;
+						formStatusMessage.className = "form-status error";
+						formStatusMessage.style.display = "block";
+					}
 				}
 			} catch (error) {
-				alert("Failed to send message. Please try again.");
+				if (formStatusMessage) {
+					formStatusMessage.textContent =
+						"An unexpected error occurred. Please try again.";
+					formStatusMessage.className = "form-status error";
+					formStatusMessage.style.display = "block";
+				}
 			} finally {
-				button.disabled = false;
-				button.textContent = "Send Email!";
+				submitButton.disabled = false;
+				submitButton.textContent = "Send Email!";
 			}
 		});
 	});
