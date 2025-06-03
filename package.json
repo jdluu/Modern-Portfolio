@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "optimize:svgs-inplace": "svgo -f public/icons -o public/icons --recursive",
+    "build": "npm run optimize:svgs-inplace && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -22,6 +23,7 @@
     "vite": "^6.3.5"
   },
   "devDependencies": {
+    "svgo": "^3.3.2",
     "typescript": "^5.8.3"
   }
 }
