@@ -74,8 +74,12 @@
 	.shape {
 		position: absolute;
 		border-radius: 50%;
-		background-color: color-mix(in srgb, var(--text-color) 5%, transparent);
-		opacity: 0.15;
+		background-color: color-mix(
+			in srgb,
+			var(--primary-btn-color) 10%,
+			transparent
+		);
+		opacity: 0.2;
 		animation: float 20s infinite ease-in-out alternate;
 	}
 
