@@ -18,9 +18,9 @@ import {
 						xmlns="http://www.w3.org/2000/svg"
 						class="home-icon"
 						aria-hidden="true"
-						focusable="false"
 					>
 						<path
+							fill="currentColor"
 							d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
 						></path>
 					</svg>
@@ -32,16 +32,14 @@ import {
 						<OpenIcon>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="2.5"
-								stroke="currentColor"
+								viewBox="0 0 50 50"
+								class="hamburger-icon-img"
 								aria-hidden="true"
 							>
 								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+									fill="currentColor"
+									d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
+								></path>
 							</svg>
 						</OpenIcon>
 						<CloseIcon>
@@ -195,7 +193,6 @@ import {
 		display: flex;
 		align-items: center;
 		text-decoration: none;
-		color: var(--text-color);
 		gap: 0.5rem;
 		flex-shrink: 0;
 	}
@@ -211,9 +208,9 @@ import {
 		font-size: clamp(1.5rem, 3vw, var(--font-xlarge));
 		font-weight: bold;
 		font-family: var(--font-cursive);
+		color: var(--text-color);
 	}
 
-	/* Styling for the MenuIcon container and the icon SVG itself */
 	.menu-icon-container {
 		display: none;
 		cursor: pointer;
@@ -221,14 +218,15 @@ import {
 	}
 
 	.menu-icon-svg {
-		width: 1.75rem; /* Approx 28px */
+		width: 1.75rem;
 		height: 1.75rem;
-		color: var(--text-color); /* SVG stroke color will inherit this */
 	}
-	.menu-icon-svg svg {
+
+	.hamburger-icon-img {
 		display: block;
 		width: 100%;
 		height: 100%;
+		fill: var(--text-color);
 	}
 
 	.nav-menu {
