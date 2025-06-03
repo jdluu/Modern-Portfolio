@@ -9,7 +9,7 @@ import {
 ---
 
 <header class="header">
-	<Astronav>
+	<Astronav closeOnClick>
 		<nav class="nav-container" aria-label="Main navigation">
 			<div class="nav-content">
 				<a href="/" class="home-link" aria-label="Home">
@@ -27,17 +27,16 @@ import {
 					<span class="home-text">Home</span>
 				</a>
 
-				<div class="menu-icon-container">
-					<MenuIcon class="menu-icon-svg">
+				<div class="menu-icon-wrapper">
+					<MenuIcon class="menu-icon-button">
 						<OpenIcon>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 50 50"
-								class="hamburger-icon-img"
 								aria-hidden="true"
+								fill="currentColor"
 							>
 								<path
-									fill="currentColor"
 									d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
 								></path>
 							</svg>
@@ -60,8 +59,8 @@ import {
 					</MenuIcon>
 				</div>
 
-				<MenuItems class="nav-menu hidden">
-					<ul class="nav-list" role="menubar" id="nav-menu-list">
+				<MenuItems class="nav-menu-styles lg:flex">
+					<ul class="nav-list">
 						<li class="nav-item" role="menuitem">
 							<a
 								href="/about"
@@ -171,9 +170,7 @@ import {
 		top: 0;
 		z-index: 100;
 		background: var(--primary-btn-color);
-		padding: clamp(0.5rem, 2vw, 1rem);
-		border-bottom: 1px solid color-mix(in srgb, var(--accent-color) 80%, black);
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+		padding: clamp(0.5rem, 2vw, 1rem) 0;
 	}
 
 	.nav-container {
@@ -202,6 +199,7 @@ import {
 		height: clamp(40px, 5vw, 60px);
 		fill: var(--icon-color);
 		transition: transform 0.3s ease;
+		flex-shrink: 0;
 	}
 
 	.home-text {
@@ -209,27 +207,38 @@ import {
 		font-weight: bold;
 		font-family: var(--font-cursive);
 		color: var(--text-color);
+		white-space: nowrap;
 	}
 
-	.menu-icon-container {
-		display: none;
-		cursor: pointer;
-		padding: 0.5rem;
+	.menu-icon-wrapper {
+		display: block;
+		flex-shrink: 0;
+	}
+	@media (min-width: 1024px) {
+		.menu-icon-wrapper {
+			display: none !important;
+		}
 	}
 
-	.menu-icon-svg {
+	.menu-icon-button {
 		width: 1.75rem;
 		height: 1.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--text-color);
+		background: transparent;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		border-radius: var(--radius-sm);
+	}
+	.menu-icon-button:focus-visible {
+		outline: 2px solid var(--text-color);
+		outline-offset: 2px;
 	}
 
-	.hamburger-icon-img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		fill: var(--text-color);
-	}
-
-	.nav-menu {
+	.nav-menu-styles {
 		position: absolute;
 		top: 100%;
 		left: 0;
@@ -238,6 +247,16 @@ import {
 		padding: 1rem;
 		border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		z-index: 90;
+	}
+	@media (min-width: 1024px) {
+		.nav-menu-styles {
+			position: static;
+			background: transparent;
+			padding: 0;
+			border-top: none;
+			box-shadow: none;
+		}
 	}
 
 	.nav-list {
@@ -248,6 +267,13 @@ import {
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+	@media (min-width: 1024px) {
+		.nav-list {
+			flex-direction: row;
+			align-items: center;
+			gap: clamp(1rem, 2vw, 1.5rem);
+		}
 	}
 
 	.nav-link {
@@ -262,6 +288,11 @@ import {
 		border: 1px solid var(--text-color);
 		transition: all 0.3s ease;
 		white-space: nowrap;
+	}
+	@media (min-width: 1024px) {
+		.nav-link {
+			text-align: left;
+		}
 	}
 
 	.nav-link:hover {
@@ -278,6 +309,11 @@ import {
 		display: flex;
 		align-items: center;
 		margin: 1rem auto;
+	}
+	@media (min-width: 1024px) {
+		.theme-switch-wrapper {
+			margin: 0 0 0 1rem;
+		}
 	}
 
 	.switch {
@@ -392,43 +428,20 @@ import {
 		border: 0;
 	}
 
-	/* Media Queries for Desktop Layout */
-	@media (min-width: 1025px) {
-		.menu-icon-container {
-			display: none !important;
-		}
-
-		.nav-menu {
-			display: flex !important;
-			position: static;
-			background: transparent;
-			padding: 0;
-			border-top: none;
-			box-shadow: none;
-		}
-
-		.nav-list {
-			flex-direction: row;
-			align-items: center;
-			gap: clamp(1rem, 2vw, 1.5rem);
-		}
-
-		.nav-link {
-			display: inline-block;
-			text-align: left;
-		}
-		.theme-switch-wrapper {
-			margin: 0 0 0 1rem;
-		}
-	}
-
 	@media (max-width: 480px) {
 		.nav-content {
 			padding: 0 0.5rem;
 		}
-
 		.home-text {
 			display: none;
+		}
+		.home-icon {
+			width: 28px;
+			height: 28px;
+		}
+		.menu-icon-button {
+			width: 1.75rem;
+			height: 1.75rem;
 		}
 	}
 
@@ -439,7 +452,7 @@ import {
 		.slider:before,
 		.sun-icon,
 		.moon-icon,
-		.nav-menu {
+		.nav-menu-styles {
 			transition: none !important;
 		}
 	}
