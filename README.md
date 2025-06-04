@@ -94,8 +94,6 @@ This project is continuously deployed on Netlify, ensuring that the latest updat
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/640139f3-99cf-4263-8334-f33ac202e7fd/deploy-status)](https://app.netlify.com/projects/jdluucs/deploys)
 
-Explore the portfolio to see my work and feel free to reach out with any questions or opportunities!
-
 ## Repomix Command
 
 ```bash
