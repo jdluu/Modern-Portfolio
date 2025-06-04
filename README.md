@@ -88,12 +88,6 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro --help` | Get help using the Astro CLI                     |
 
-## Repomix Command
-
-```bash
-repomix --ignore "dist/**,.astro/**,node_modules/**,npm-debug.log*,yarn-debug.log*,yarn-error.log*,pnpm-debug.log*,.env,.env.production,.DS_Store,.vscode/**,.idea/**"
-```
-
 ## Deployment
 
 This project is continuously deployed on Netlify, ensuring that the latest updates are always live. You can view the deployment status and access the live site using the link below:
@@ -101,3 +95,9 @@ This project is continuously deployed on Netlify, ensuring that the latest updat
 [![Netlify Status](https://api.netlify.com/api/v1/badges/640139f3-99cf-4263-8334-f33ac202e7fd/deploy-status)](https://app.netlify.com/projects/jdluucs/deploys)
 
 Explore the portfolio to see my work and feel free to reach out with any questions or opportunities!
+
+## Repomix Command
+
+```bash
+repomix --ignore "dist/**,.astro/**,node_modules/**,npm-debug.log*,yarn-debug.log*,yarn-error.log*,pnpm-debug.log*,.env,.env.production,.DS_Store,.vscode/**,.idea/**"
+```
