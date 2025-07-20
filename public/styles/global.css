@@ -34,6 +34,19 @@
 	/* Transitions */
 	--transition-fast: 150ms ease;
 	--transition-normal: 300ms ease;
+	/* Z-indexes */
+	--z-sticky: 50;
+	--z-dropdown: 40;
+
+	/* Form & Status Colors */
+	--success-bg: #e6f9f3;
+	--success-text: #0d3d2b;
+	--error-bg: #fff0f0;
+	--error-text: #c02929;
+	--error-color: #e53e3e;
+
+	/* Shape Backgrounds */
+	--shape-bg: color-mix(in srgb, var(--primary-btn-color) 10%, transparent);
 }
 
 /* Default Light Theme */
@@ -41,7 +54,7 @@
 	--text-color: #020b0d;
 	--inverse-text-color: #fdf4f2;
 	--background-color: #d4f2f7;
-	--primary-btn-color: #72d5e4;
+	--primary-btn-color: #007bff;
 	--secondary-btn-color: #e5f7fa;
 	--accent-color: #87dbe8;
 	--icon-color: #020b0d;
@@ -100,7 +113,6 @@ body {
 	color: var(--text-color);
 	font-family: var(--font-primary);
 	font-size: var(--font-medium);
-	overflow-x: hidden;
 }
 
 /* Common Layout Classes */
@@ -112,13 +124,12 @@ body {
 	font-size: var(--font-large);
 	font-family: var(--font-heading);
 	margin: var(--spacing-sm) 0;
-	text-decoration: underline;
 	color: var(--text-color);
 	text-align: center;
 }
 
 .section-desc {
-	font-size: clamp(1.1rem, 2vw, 1.5rem);
+	font-size: clamp(1.4rem, 1.2rem + 0.5vw, 1.8rem);
 	margin: var(--spacing-md) 0 var(--spacing-lg);
 	text-align: center;
 	color: var(--text-color);
@@ -137,8 +148,7 @@ body {
 .project-page-container {
 	max-width: var(--container-max-width);
 	padding: var(--spacing-lg);
-	margin-left: clamp(5%, 20%, 25%);
-	margin-right: clamp(5%, 20%, 25%);
+	margin-inline: auto;
 }
 
 .project-page-div {
@@ -169,4 +179,10 @@ body {
 		font-size: var(--font-medium);
 		margin: 0.75rem 0 1.5rem;
 	}
+}
+
+a:focus-visible,
+button:focus-visible {
+	outline: 3px solid var(--accent-color);
+	outline-offset: 2px;
 }
