@@ -51,8 +51,8 @@
 
 <style>
 	.content-section.homepage-intro-section {
-		padding: clamp(1rem, 3vw, 2rem);
-		max-width: 1400px;
+		padding: var(--spacing-lg);
+		max-width: var(--container-max-width);
 		margin: 0 auto;
 		min-height: 80vh;
 		display: flex;
@@ -77,26 +77,22 @@
 	.shape {
 		position: absolute;
 		border-radius: var(--radius-lg);
-		background-color: color-mix(
-			in srgb,
-			var(--primary-btn-color) 10%,
-			transparent
-		);
+		background-color: var(--shape-bg);
 		opacity: 0.2;
 		animation: float 20s infinite ease-in-out alternate;
 	}
 
 	.shape1 {
-		width: 300px;
-		height: 300px;
+		width: 30rem;
+		height: 30rem;
 		top: 10%;
 		left: 5%;
 		animation-duration: 25s;
 	}
 
 	.shape2 {
-		width: 200px;
-		height: 200px;
+		width: 20rem;
+		height: 20rem;
 		top: 60%;
 		right: 10%;
 		animation-duration: 30s;
@@ -105,8 +101,8 @@
 	}
 
 	.shape3 {
-		width: 150px;
-		height: 150px;
+		width: 15rem;
+		height: 15rem;
 		bottom: 5%;
 		left: 40%;
 		animation-duration: 20s;
@@ -115,13 +111,13 @@
 
 	@keyframes float {
 		0% {
-			transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+			transform: translateY(0) translateX(0) rotate(0deg) scale(1);
 		}
 		50% {
-			transform: translateY(-20px) translateX(15px) rotate(180deg) scale(1.1);
+			transform: translateY(-2rem) translateX(1.5rem) rotate(180deg) scale(1.1);
 		}
 		100% {
-			transform: translateY(0px) translateX(0px) rotate(360deg) scale(1);
+			transform: translateY(0) translateX(0) rotate(360deg) scale(1);
 		}
 	}
 
@@ -133,7 +129,7 @@
 	.intro-content {
 		display: flex;
 		flex-direction: column;
-		gap: clamp(2.5rem, 6vw, 4rem);
+		gap: var(--spacing-xl);
 		align-items: center;
 		text-align: center;
 		position: relative;
@@ -144,29 +140,29 @@
 	.intro-text-wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: clamp(0.8rem, 2vw, 1.5rem);
+		gap: var(--spacing-lg);
 	}
 
 	.intro-greeting {
-		font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+		font-size: var(--font-xlarge);
 		font-family: var(--font-primary);
 		font-weight: 500;
 		color: var(--text-color);
 		line-height: 1.2;
 		opacity: 0;
-		transform: translateY(20px);
+		transform: translateY(2rem);
 		animation: fadeInUp 0.6s ease-out 0.2s forwards;
 		text-shadow: var(--shadow-sm);
 	}
 
 	.intro-role {
-		font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+		font-size: 4.5rem;
 		font-family: var(--font-heading);
 		font-weight: 700;
 		line-height: 1.1;
 		letter-spacing: -0.02em;
 		opacity: 0;
-		transform: translateY(20px);
+		transform: translateY(2rem);
 		color: var(--text-color);
 		text-shadow: var(--shadow-sm);
 		animation: fadeInUp 0.7s ease-out 0.4s forwards;
@@ -178,7 +174,7 @@
 	}
 
 	.intro-tagline {
-		font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+		font-size: var(--font-large);
 		font-family: var(--font-secondary);
 		font-weight: 400;
 		color: var(--text-color);
@@ -188,7 +184,7 @@
 		max-width: 35ch;
 		margin: 0 auto;
 		animation: fadeInUp 0.8s ease-out 0.6s forwards;
-		transform: translateY(20px);
+		transform: translateY(2rem);
 		text-shadow: var(--shadow-sm);
 	}
 
@@ -196,7 +192,7 @@
 		display: flex;
 		justify-content: center;
 		opacity: 0;
-		transform: translateY(20px);
+		transform: translateY(2rem);
 		animation: fadeInUp 0.8s ease-out 0.8s forwards;
 	}
 
@@ -204,11 +200,15 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: clamp(0.9rem, 2.2vw, 1.1rem) clamp(1.8rem, 3.5vw, 2.2rem);
-		font-size: clamp(1rem, 2vw, 1.1rem);
-		color: #fff;
+		padding: var(--spacing-md) var(--spacing-lg);
+		font-size: var(--font-medium);
+		color: var(--inverse-text-color);
 		text-decoration: none;
-		background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+		background-image: linear-gradient(
+			135deg,
+			var(--accent-color) 0%,
+			var(--primary-btn-color) 100%
+		);
 		border-radius: var(--radius-lg);
 		border: none;
 		transition: all var(--transition-normal) cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -238,10 +238,10 @@
 	}
 
 	.resume-link:hover {
-		transform: translateY(-3px) scale(1.03);
+		transform: translateY(-0.3rem) scale(1.03);
 		box-shadow:
-			0 6px 20px rgba(6, 182, 212, 0.35),
-			0 3px 10px rgba(59, 130, 246, 0.25);
+			0 0.6rem 2rem rgba(6, 182, 212, 0.35),
+			0 0.3rem 1rem rgba(59, 130, 246, 0.25);
 	}
 
 	.resume-link:hover::before {
@@ -269,19 +269,19 @@
 			min-height: 70vh;
 		}
 		.intro-role {
-			font-size: clamp(2.2rem, 7vw, 3.5rem);
+			font-size: 3.5rem;
 		}
 		.shape1 {
-			width: 200px;
-			height: 200px;
+			width: 20rem;
+			height: 20rem;
 		}
 		.shape2 {
-			width: 150px;
-			height: 150px;
+			width: 15rem;
+			height: 15rem;
 		}
 		.shape3 {
-			width: 100px;
-			height: 100px;
+			width: 10rem;
+			height: 10rem;
 		}
 	}
 
@@ -291,19 +291,19 @@
 			min-height: 60vh;
 		}
 		.intro-greeting {
-			font-size: clamp(1.5rem, 6vw, 2rem);
+			font-size: 2rem;
 		}
 		.intro-role {
-			font-size: clamp(2rem, 8vw, 3rem);
+			font-size: 3rem;
 		}
 		.intro-tagline {
-			font-size: clamp(1rem, 4vw, 1.3rem);
+			font-size: 1.3rem;
 		}
 		.resume-link {
 			width: 90%;
-			max-width: 320px;
-			padding: clamp(0.8rem, 3vw, 1rem) clamp(1.5rem, 5vw, 2rem);
-			font-size: clamp(0.9rem, 3vw, 1rem);
+			max-width: 32rem;
+			padding: var(--spacing-sm) var(--spacing-lg);
+			font-size: var(--font-medium);
 		}
 		.shape {
 			display: none;
