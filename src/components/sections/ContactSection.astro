@@ -87,209 +87,122 @@
 
 <style>
 	.content-section {
-		padding: var(--spacing-lg);
-		max-width: var(--container-max-width);
+		padding: 4.8rem 2.4rem;
+		max-width: 720px;
 		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 	}
 
 	.page-h2 {
-		font-size: var(--font-large);
-		font-family: var(--font-heading);
-		margin: var(--spacing-sm) 0 var(--spacing-lg);
-		text-decoration: underline;
-		color: var(--text-color);
+		font-size: var(--m3-font-display-small);
+		font-family: var(--m3-font-family-display);
+		color: var(--m3-color-on-background);
 		text-align: center;
-		width: 100%;
+		margin-bottom: 3.2rem;
 	}
 
-	/* Styles for the form status message */
 	.form-status {
-		width: min(100%, 35rem);
-		margin: 0 auto var(--spacing-md);
-		padding: var(--spacing-sm) var(--spacing-md);
-		border-radius: var(--radius-md);
-		font-size: var(--font-medium);
+		margin-bottom: 1.6rem;
+		padding: 1.2rem 1.6rem;
+		border-radius: 8px;
+		font-size: var(--m3-font-body-medium);
 		text-align: center;
 		display: none;
-		transition:
-			opacity 0.3s ease,
-			transform 0.3s ease;
 	}
 
 	.form-status.success {
-		background-color: var(--success-bg);
-		color: var(--success-text);
-		border: 1px solid var(--success-text);
+		background-color: var(--m3-color-tertiary-container);
+		color: var(--m3-color-on-tertiary-container);
 		display: block;
 	}
 
 	.form-status.error {
-		background-color: var(--error-bg);
-		color: var(--error-text);
-		border: 1px solid var(--error-color);
+		background-color: var(--m3-color-error-container);
+		color: var(--m3-color-on-error-container);
 		display: block;
 	}
 
 	#contact-form {
-		text-align: center;
-		background: var(--background-color);
-		color: var(--text-color);
-		border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
-		border-radius: var(--radius-lg);
-		width: min(100%, 35rem);
-		margin: 0 auto;
-		padding: var(--spacing-xl);
-		box-shadow: var(--shadow-md);
+		background-color: var(--m3-color-surface);
+		padding: 2.4rem;
+		border-radius: 12px;
+		border: 1px solid var(--m3-color-outline);
 	}
 
 	.form-main-title {
-		font-size: var(--font-large);
-		font-weight: bold;
+		font-size: var(--m3-font-headline-medium);
+		font-family: var(--m3-font-family-display);
 		text-align: center;
-		margin-bottom: var(--spacing-xl);
-		color: var(--text-color);
+		margin-bottom: 2.4rem;
+		color: var(--m3-color-on-surface);
 	}
 
 	.form-group {
-		margin-bottom: var(--spacing-lg);
-		text-align: left;
+		margin-bottom: 1.6rem;
 	}
 
 	.form-group label {
 		display: block;
-		margin-bottom: var(--spacing-sm);
-		font-weight: 500;
-		font-size: var(--font-medium);
-		color: var(--text-color);
+		margin-bottom: 0.8rem;
+		font-size: var(--m3-font-label-large);
+		color: var(--m3-color-on-surface-variant);
 	}
 
 	.required::after {
 		content: "*";
-		color: var(--error-color);
-		margin-left: var(--spacing-xs);
+		color: var(--m3-color-error);
+		margin-left: 0.4rem;
 	}
 
 	.form-group input,
 	.form-group textarea {
 		width: 100%;
-		padding: var(--spacing-md);
-		border: 1px solid color-mix(in srgb, var(--text-color) 30%, transparent);
-		border-radius: var(--radius-md);
-		font-size: var(--font-medium);
-		transition: all 0.3s ease;
-		background-color: var(--background-color);
-		color: var(--text-color);
+		padding: 1.2rem 1.6rem;
+		border: 1px solid var(--m3-color-outline);
+		border-radius: 8px;
+		font-size: var(--m3-font-body-large);
+		background-color: var(--m3-color-surface-variant);
+		color: var(--m3-color-on-surface-variant);
+		transition: all 0.2s ease;
 	}
 	.form-group input::placeholder,
 	.form-group textarea::placeholder {
-		color: color-mix(in srgb, var(--text-color) 60%, transparent);
-		opacity: 1;
-	}
-
-	.form-group textarea {
-		min-height: 12rem;
-		resize: vertical;
+		color: var(--m3-color-on-surface-variant-light);
 	}
 
 	.form-group input:focus,
 	.form-group textarea:focus {
 		outline: none;
-		border-color: var(--accent-color);
-		box-shadow: 0 0 0 3px
-			color-mix(in srgb, var(--accent-color) 30%, transparent);
-	}
-
-	.form-group input:hover,
-	.form-group textarea:hover {
-		border-color: var(--accent-color);
+		border-color: var(--m3-color-primary);
+		box-shadow: 0 0 0 2px var(--m3-color-primary-container);
 	}
 
 	.error-message {
 		display: block;
-		color: var(--error-text);
-		font-size: var(--font-small);
-		margin-top: var(--spacing-xs);
-		min-height: 1.25em;
+		color: var(--m3-color-error);
+		font-size: var(--m3-font-body-small);
+		margin-top: 0.4rem;
 	}
 
 	button[type="submit"] {
-		width: min(100%, 16rem);
-		height: 3.5rem;
+		width: 100%;
+		padding: 1.2rem 2.4rem;
 		border: none;
-		border-radius: var(--radius-lg);
-		background: var(--primary-btn-color);
-		font-weight: bold;
-		font-size: var(--font-medium);
-		color: var(--inverse-text-color);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin: var(--spacing-xl) auto 0;
-		padding: 0 var(--spacing-xl);
+		border-radius: 20px;
+		background-color: var(--m3-color-primary);
+		color: var(--m3-color-on-primary);
+		font-size: var(--m3-font-label-large);
+		font-weight: 500;
 		cursor: pointer;
-		transition: all 0.3s ease;
+		transition: all 0.2s ease;
 	}
 
 	button[type="submit"]:hover {
-		background: color-mix(in srgb, var(--primary-btn-color) 90%, black);
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-md);
-	}
-
-	button[type="submit"]:focus {
-		outline: none;
-		box-shadow: 0 0 0 3px
-			color-mix(in srgb, var(--primary-btn-color) 40%, transparent);
-	}
-
-	button[type="submit"]:active {
-		transform: translateY(1px);
+		background-color: var(--m3-color-primary-dark);
 	}
 
 	button[type="submit"]:disabled {
-		background: var(--accent-color);
+		background-color: var(--m3-color-outline);
 		cursor: not-allowed;
-		transform: none;
-		box-shadow: none;
-	}
-
-	@media (max-width: 480px) {
-		.content-section {
-			padding: var(--spacing-md) var(--spacing-sm);
-		}
-
-		#contact-form {
-			border-radius: var(--radius-md);
-			box-shadow: var(--shadow-sm);
-		}
-
-		.form-group input,
-		.form-group textarea {
-			font-size: var(--font-medium);
-		}
-
-		button[type="submit"] {
-			width: 100%;
-			margin-top: var(--spacing-lg);
-		}
-	}
-
-	@media (hover: none) {
-		.form-group input:hover,
-		.form-group textarea:hover {
-			border-color: color-mix(in srgb, var(--text-color) 30%, transparent);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		button[type="submit"],
-		input,
-		textarea {
-			transition: none;
-		}
 	}
 </style>
 
