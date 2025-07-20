@@ -3,6 +3,7 @@ import ExperienceCard from "../ui/ExperienceCard.astro";
 import { getAllExperienceCards } from "../../lib/cosmic";
 
 const experiences = await getAllExperienceCards();
+const firstExperience = experiences[0];
 ---
 
 <section class="content-section">
@@ -10,17 +11,47 @@ const experiences = await getAllExperienceCards();
 	<p class="section-desc">
 		<strong>My professional journey and key achievements</strong>
 	</p>
-	<div class="card-grid">
+	<div class="card-container">
 		{
-			experiences.map((exp) => (
-				<ExperienceCard
-					title={exp.title}
-					description={exp.metadata.description}
-					thumbnail={exp.metadata.thumbnail?.url || ""}
-					slug={exp.slug}
-					date={exp.metadata.date}
-				/>
-			))
+			firstExperience && (
+				<div class="experience-card-wrapper">
+					<ExperienceCard
+						title={firstExperience.title}
+						description={firstExperience.metadata.description}
+						thumbnail={firstExperience.metadata.thumbnail?.url || ""}
+						slug={firstExperience.slug}
+						date={firstExperience.metadata.date}
+					/>
+				</div>
+			)
 		}
 	</div>
 </section>
+
+<style>
+	.page-h2 {
+		font-family: var(--m3-font-family-display);
+		font-size: var(--m3-font-headline-large);
+		color: var(--m3-color-on-background);
+		text-align: center;
+		margin-bottom: 1rem;
+	}
+
+	.section-desc {
+		font-size: var(--m3-font-body-large);
+		color: var(--m3-color-on-surface-variant);
+		text-align: center;
+		margin-bottom: 4rem;
+	}
+
+	.card-container {
+		display: flex;
+		justify-content: center;
+	}
+
+	.experience-card-wrapper {
+		width: 100%;
+		max-width: 60rem;
+		margin: 0 auto;
+	}
+</style>
