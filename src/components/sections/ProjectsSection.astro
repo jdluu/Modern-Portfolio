@@ -1,6 +1,6 @@
 ---
-import ProjectCard from "./ProjectCard.astro";
-import { getAllProjectCards } from "../lib/cosmic";
+import ProjectCard from "../ui/ProjectCard.astro";
+import { getAllProjectCards } from "../../lib/cosmic";
 
 const allProjects = (await getAllProjectCards()) || [];
 
