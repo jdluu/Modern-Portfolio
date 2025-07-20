@@ -26,10 +26,12 @@ const { title, intro, thumbnail, url } = Astro.props;
 		background-size: cover;
 		background-position: center;
 		position: relative;
-		border: 1px solid var(--text-color);
-		transition: background-image var(--transition-normal);
+		border: 1px solid var(--m3-color-outline);
+		transition: transform 0.3s ease;
 		width: 100%;
-		height: 30rem; /* Set the desired height for each section */
+		height: 30rem;
+		border-radius: 12px;
+		overflow: hidden;
 	}
 
 	.project-container {
@@ -43,42 +45,46 @@ const { title, intro, thumbnail, url } = Astro.props;
 		justify-content: center;
 		align-items: center;
 		opacity: 0;
-		transition: opacity var(--transition-normal);
+		background-color: var(--m3-color-surface-variant);
+		transition: opacity 0.3s ease-in-out;
 	}
 
-	.project-container:hover {
-		background-color: var(--text-color);
+	.project-container:hover,
+	.project-container:focus-within {
 		opacity: 1;
 	}
 
 	.more-info {
 		text-align: center;
+		padding: 1.6rem;
 	}
 
 	.project-title {
-		font-size: var(--font-xlarge);
-		font-weight: bold;
-		margin-bottom: var(--spacing-sm);
-		color: var(--inverse-text-color);
+		font-size: var(--m3-font-title-large);
+		font-family: var(--m3-font-family-display);
+		font-weight: 600;
+		margin-bottom: 0.8rem;
+		color: var(--m3-color-on-surface-variant);
 	}
 
 	.project-description {
-		font-size: var(--font-medium);
-		margin-bottom: var(--spacing-md);
-		color: var(--inverse-text-color);
+		font-size: var(--m3-font-body-large);
+		font-family: var(--m3-font-family-body);
+		margin-bottom: 1.6rem;
+		color: var(--m3-color-on-surface-variant);
 	}
 
 	.learn-more {
-		font-size: var(--font-large);
+		font-size: var(--m3-font-label-large);
+		font-family: var(--m3-font-family-body);
 		text-decoration: none;
-		color: var(--inverse-text-color);
-		background-color: var(--primary-btn-color);
-		padding: var(--spacing-sm) var(--spacing-md);
-		border-radius: var(--radius-sm);
-		transition: background-color var(--transition-normal);
+		color: var(--m3-color-primary);
+		font-weight: 500;
 	}
 
-	.learn-more:hover {
-		opacity: 0.6;
+	.learn-more:hover,
+	.learn-more:focus {
+		text-decoration: underline;
+		opacity: 0.9;
 	}
 </style>

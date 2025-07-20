@@ -3,358 +3,72 @@ import ProjectCard from "../ui/ProjectCard.astro";
 import { getAllProjectCards } from "../../lib/cosmic";
 
 const allProjects = (await getAllProjectCards()) || [];
-
-const allLanguages = new Set<string>();
-const allDomains = new Set<string>();
-
-allProjects.forEach((project) => {
-	if (
-		project.metadata.programming_languages &&
-		Array.isArray(project.metadata.programming_languages)
-	) {
-		project.metadata.programming_languages.forEach((lang) =>
-			allLanguages.add(lang)
-		);
-	}
-	if (project.metadata.domains && Array.isArray(project.metadata.domains)) {
-		project.metadata.domains.forEach((domain) => allDomains.add(domain));
-	}
-});
-
-const uniqueLanguages = Array.from(allLanguages).sort();
-const uniqueDomains = Array.from(allDomains).sort();
 ---
 
 <section class="content-section">
 	<h2 id="projects" class="page-h2">Projects</h2>
 	<p class="section-desc">
-		<strong
-			>Explore my projects. Use the filters below to narrow your search.</strong
-		>
+		Explore a curated selection of my work, demonstrating my skills in creating
+		user-friendly and effective applications.
 	</p>
 
-	{
-		uniqueLanguages.length > 0 && (
-			<div class="filter-group">
-				<h3 class="filter-group-title" id="language-filter-label">
-					Filter by Language:
-				</h3>
-				<div
-					id="language-filters"
-					class="filter-container"
-					role="radiogroup"
-					aria-labelledby="language-filter-label"
-				>
-					<button
-						class="filter-button active"
-						data-filter-type="language"
-						data-tag="all"
-						role="radio"
-						aria-checked="true"
-						tabindex="0"
-					>
-						All Languages
-					</button>
-					{uniqueLanguages.map((lang) => (
-						<button
-							class="filter-button"
-							data-filter-type="language"
-							data-tag={lang}
-							role="radio"
-							aria-checked="false"
-							tabindex="-1"
-						>
-							{lang}
-						</button>
-					))}
-				</div>
-			</div>
-		)
-	}
-
-	{
-		uniqueDomains.length > 0 && (
-			<div class="filter-group">
-				<h3 class="filter-group-title" id="domain-filter-label">
-					Filter by Domain:
-				</h3>
-				<div
-					id="domain-filters"
-					class="filter-container"
-					role="radiogroup"
-					aria-labelledby="domain-filter-label"
-				>
-					<button
-						class="filter-button active"
-						data-filter-type="domain"
-						data-tag="all"
-						role="radio"
-						aria-checked="true"
-						tabindex="0"
-					>
-						All Domains
-					</button>
-					{uniqueDomains.map((domain) => (
-						<button
-							class="filter-button"
-							data-filter-type="domain"
-							data-tag={domain}
-							role="radio"
-							aria-checked="false"
-							tabindex="-1"
-						>
-							{domain}
-						</button>
-					))}
-				</div>
-			</div>
-		)
-	}
-
-	<div id="project-card-grid" class="card-grid">
+	<div class="card-grid">
 		{
 			allProjects.map((card) => (
-				<div
-					class="project-card-wrapper"
-					data-languages={(card.metadata.programming_languages || [])
-						.join(" ")
-						.toLowerCase()}
-					data-domains={(card.metadata.domains || []).join(" ").toLowerCase()}
-				>
-					<ProjectCard
-						title={card.title}
-						intro={card.metadata.description}
-						thumbnail={card.metadata.thumbnail?.url || ""}
-						url={card.slug}
-					/>
-				</div>
+				<ProjectCard
+					title={card.title}
+					intro={card.metadata.description}
+					thumbnail={card.metadata.thumbnail?.url || ""}
+					url={card.slug}
+				/>
 			))
 		}
-		<p
-			id="no-results-message"
-			class="no-results-message"
-			style="display: none;"
-		>
-			No projects match your current filter selection.
-		</p>
 	</div>
 </section>
-
-<script>
-	document.addEventListener("DOMContentLoaded", () => {
-		const languageFilterContainer = document.getElementById("language-filters");
-		const domainFilterContainer = document.getElementById("domain-filters");
-		const projectCardGrid = document.getElementById("project-card-grid");
-		const noResultsMessage = document.getElementById("no-results-message");
-
-		if (!projectCardGrid || !noResultsMessage) return;
-
-		const projectCardWrappers = Array.from(
-			projectCardGrid.querySelectorAll(".project-card-wrapper")
-		);
-
-		let activeLanguageFilter = "all";
-		let activeDomainFilter = "all";
-
-		function applyFilters() {
-			let resultsFound = false;
-			projectCardWrappers.forEach((wrapper) => {
-				if (!(wrapper instanceof HTMLElement)) return;
-
-				const projectLanguagesAttr = wrapper.dataset.languages || "";
-				const projectDomainsAttr = wrapper.dataset.domains || "";
-
-				const projectLangs = projectLanguagesAttr.split(" ");
-				const projectDoms = projectDomainsAttr.split(" ");
-
-				const languageMatch =
-					activeLanguageFilter === "all" ||
-					projectLangs.includes(activeLanguageFilter.toLowerCase());
-				const domainMatch =
-					activeDomainFilter === "all" ||
-					projectDoms.includes(activeDomainFilter.toLowerCase());
-
-				if (languageMatch && domainMatch) {
-					wrapper.style.display = "";
-					resultsFound = true;
-				} else {
-					wrapper.style.display = "none";
-				}
-			});
-			if (noResultsMessage) {
-				noResultsMessage.style.display = resultsFound ? "none" : "block";
-			}
-		}
-
-		function setupFilterGroup(
-			filterContainer: HTMLElement | null,
-			filterType: "language" | "domain"
-		) {
-			if (!filterContainer) return;
-
-			const filterButtons = Array.from(
-				filterContainer.querySelectorAll(".filter-button")
-			);
-
-			filterButtons.forEach((button) => {
-				if (!(button instanceof HTMLButtonElement)) return;
-
-				button.addEventListener("click", (e) => {
-					const clickedButton = e.currentTarget;
-					if (!(clickedButton instanceof HTMLButtonElement)) return;
-
-					const newFilter = clickedButton.dataset.tag;
-					if (newFilter === undefined) return;
-
-					// Update ARIA states and classes for all buttons in this group
-					filterButtons.forEach((btn) => {
-						if (!(btn instanceof HTMLButtonElement)) return;
-						const isClicked = btn === clickedButton;
-						btn.setAttribute("aria-checked", String(isClicked));
-						btn.setAttribute("tabindex", isClicked ? "0" : "-1");
-						if (isClicked) {
-							btn.classList.add("active");
-						} else {
-							btn.classList.remove("active");
-						}
-					});
-
-					if (filterType === "language") {
-						activeLanguageFilter = newFilter;
-					} else if (filterType === "domain") {
-						activeDomainFilter = newFilter;
-					}
-					applyFilters();
-				});
-
-				// Keyboard navigation for radiogroup
-				button.addEventListener("keydown", (e) => {
-					if (!(e.currentTarget instanceof HTMLButtonElement)) return;
-
-					let currentButtonIndex = filterButtons.indexOf(e.currentTarget);
-					let targetButton: HTMLButtonElement | null = null;
-
-					if (e.key === "Enter" || e.key === " ") {
-						e.preventDefault();
-						e.currentTarget.click(); // This will trigger the click handler to update state
-					} else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-						e.preventDefault();
-						currentButtonIndex =
-							(currentButtonIndex + 1) % filterButtons.length;
-						targetButton = filterButtons[
-							currentButtonIndex
-						] as HTMLButtonElement;
-					} else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-						e.preventDefault();
-						currentButtonIndex =
-							(currentButtonIndex - 1 + filterButtons.length) %
-							filterButtons.length;
-						targetButton = filterButtons[
-							currentButtonIndex
-						] as HTMLButtonElement;
-					}
-
-					if (targetButton) {
-						targetButton.focus();
-					}
-				});
-			});
-		}
-
-		setupFilterGroup(languageFilterContainer, "language");
-		setupFilterGroup(domainFilterContainer, "domain");
-
-		applyFilters();
-	});
-</script>
 <style>
-	.filter-group {
-		margin-bottom: var(--spacing-lg);
-		padding: 0 var(--spacing-md);
-	}
-	.filter-group-title {
-		font-size: var(--font-large);
-		font-family: var(--font-heading);
-		color: var(--text-color);
-		text-align: center;
-		margin-bottom: var(--spacing-sm);
-	}
-	.filter-container {
+	.content-section {
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: var(--spacing-sm);
-		margin-bottom: var(--spacing-md);
+		flex-direction: column;
+		align-items: center;
+		padding: 4rem 2rem;
 	}
-	.filter-button {
-		padding: var(--spacing-sm) var(--spacing-md);
-		font-size: var(--font-medium);
-		font-family: var(--font-secondary);
-		border: 0.15rem solid var(--accent-color);
-		background-color: transparent;
-		color: var(--text-color);
-		border-radius: var(--radius-lg);
-		cursor: pointer;
-		transition: all var(--transition-fast) ease-in-out;
-		font-weight: 500;
-	}
-	.filter-button:hover,
-	.filter-button:focus {
-		background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
-		color: var(--text-color);
-		transform: translateY(-0.2rem);
-		box-shadow: var(--shadow-sm);
-		outline: none;
-	}
-	.filter-button.active,
-	.filter-button[aria-checked="true"] {
-		background-color: var(--accent-color);
-		color: var(--inverse-text-color);
-		font-weight: 700;
-		border-color: var(--accent-color);
-		box-shadow: var(--shadow-sm);
-	}
-	.filter-button:focus-visible {
-		outline: 3px solid var(--primary-btn-color);
-		outline-offset: 3px;
-	}
-	.project-card-wrapper {
-		display: block;
-	}
-	.no-results-message {
-		grid-column: 1 / -1;
+
+	.page-h2 {
+		font-family: var(--m3-font-family-display);
+		font-size: var(--m3-font-headline-large);
+		color: var(--m3-color-on-background);
+		margin-bottom: 1.5rem;
 		text-align: center;
-		font-size: var(--font-large);
-		color: var(--text-color);
-		padding: var(--spacing-lg) 0;
 	}
-	@media screen and (max-width: 1024px) {
+
+	.section-desc {
+		font-family: var(--m3-font-family-body);
+		font-size: var(--m3-font-body-large);
+		color: var(--m3-color-on-surface-variant);
+		margin-bottom: 3rem;
+		max-width: 70ch;
+		text-align: center;
+		line-height: 1.6;
+	}
+
+	.card-grid {
+		display: grid;
+		gap: 2rem;
+		width: 100%;
+		max-width: 1200px;
+	}
+
+	/* Responsive two-column layout */
+	@media (min-width: 768px) {
 		.card-grid {
-			padding: 0 var(--spacing-md) var(--spacing-lg);
-			max-width: 90%;
-		}
-		.filter-button {
-			padding: 0.5rem 1rem;
-			font-size: 0.9rem;
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
-	@media screen and (max-width: 768px) {
+
+	/* Single column on smaller screens */
+	@media (max-width: 767px) {
 		.card-grid {
-			padding: 0 var(--spacing-sm) var(--spacing-lg);
-			max-width: 95%;
-		}
-		.section-desc {
-			font-size: var(--font-large);
-		}
-		.filter-group {
-			padding: 0 0.5rem;
-		}
-		.filter-container {
-			gap: 0.5rem;
-		}
-		.filter-button {
-			padding: 0.4rem 0.8rem;
-			font-size: 0.85rem;
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
