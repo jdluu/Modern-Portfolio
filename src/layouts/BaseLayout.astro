@@ -69,30 +69,30 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<!-- Preload Critical Assets -->
 		<link
 			rel="preload"
-			href="/fonts/Montserrat/Montserrat-Regular.ttf"
+			href="/fonts/Montserrat/Montserrat-Regular.woff2"
 			as="font"
-			type="font/ttf"
+			type="font/woff2"
 			crossorigin
 		/>
 		<link
 			rel="preload"
-			href="/fonts/Open_Sans/OpenSans-Regular.ttf"
+			href="/fonts/Open_Sans/OpenSans-Regular.woff2"
 			as="font"
-			type="font/ttf"
+			type="font/woff2"
 			crossorigin
 		/>
 		<link
 			rel="preload"
-			href="/fonts/Lato/Lato-Regular.ttf"
+			href="/fonts/Lato/Lato-Regular.woff2"
 			as="font"
-			type="font/ttf"
+			type="font/woff2"
 			crossorigin
 		/>
 		<link
 			rel="preload"
-			href="/fonts/Pacifico/Pacifico-Regular.ttf"
+			href="/fonts/Pacifico/Pacifico-Regular.woff2"
 			as="font"
-			type="font/ttf"
+			type="font/woff2"
 			crossorigin
 		/>
 		<link rel="preload" href="/styles/reset.css" as="style" />
@@ -117,134 +117,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			).matches;
 			const theme = savedTheme || (prefersDark ? "dark" : "light");
 			document.documentElement.setAttribute("data-theme", theme);
-			document.body.classList.remove("no-transitions");
-		</script>
-		<script>
-			import "../scripts/theme.ts";
 		</script>
 	</body>
 </html>
 
-<style is:global>
-	:root {
-		/* Add transition properties for theme switching */
-		--theme-transition-duration: 200ms;
-		--theme-transition-easing: ease;
-
-		/* Light Theme Gradient Colors (more distinct) */
-		--light-gradient-start: #90f1f0 /*(Brighter Mint/Aqua)*/
-			--light-gradient-mid: #b0e6ff; /*(Soft Sky Blue)*/
-		--light-gradient-end: #d4f2f7; /*(Existing Very Light Cyan)*/
-
-		/* Dark Theme Gradient Colors (already good, but can be tuned) */
-		--dark-gradient-start: #0d324d; /* Deep blue */
-		--dark-gradient-mid: #125e80; /* Medium dark blue/teal */
-		--dark-gradient-end: var(
-			--dark-background-color,
-			#051510
-		); /* Your dark theme bg */
-	}
-
-	body.homepage-gradient-bg {
-		/* Default to light theme gradient */
-		background: linear-gradient(
-			-45deg,
-			var(--light-gradient-start),
-			var(--light-gradient-mid),
-			var(--light-gradient-end),
-			var(--light-gradient-start) /* Loop back for smoother animation end */
-		);
-		background-size: 400% 400%;
-		animation: gradientFlowGlobal 25s ease infinite;
-		transition: background 0.5s ease; /* Smooth transition if theme changes */
-	}
-
-	[data-theme="dark"] body.homepage-gradient-bg {
-		background: linear-gradient(
-			-45deg,
-			var(--dark-gradient-start),
-			var(--dark-gradient-mid),
-			var(--dark-gradient-end),
-			var(--dark-gradient-start) /* Loop back */
-		);
-		background-size: 400% 400%;
-		animation: gradientFlowGlobal 25s ease infinite;
-	}
-
-	@keyframes gradientFlowGlobal {
-		0% {
-			background-position: 0% 50%;
-		}
-		50% {
-			background-position: 100% 50%;
-		}
-		100% {
-			background-position: 0% 50%;
-		}
-	}
-
-	/* Ensure other pages use the standard theme background */
-	body:not(.homepage-gradient-bg) {
-		background-color: var(--background-color);
-		color: var(--text-color);
-	}
-
-	/* Add transition for theme-related properties */
-	body,
-	body *:not(script):not(style) {
-		transition:
-			background-color var(--theme-transition-duration)
-				var(--theme-transition-easing),
-			color var(--theme-transition-duration) var(--theme-transition-easing),
-			border-color var(--theme-transition-duration)
-				var(--theme-transition-easing),
-			box-shadow var(--theme-transition-duration) var(--theme-transition-easing);
-	}
-
-	/* Disable transitions when user prefers reduced motion */
-	@media (prefers-reduced-motion: reduce) {
-		body.homepage-gradient-bg {
-			animation: none;
-			/* Static gradient for reduced motion */
-			background: linear-gradient(
-				-45deg,
-				var(--light-gradient-start),
-				var(--light-gradient-mid)
-			);
-		}
-		[data-theme="dark"] body.homepage-gradient-bg {
-			background: linear-gradient(
-				-45deg,
-				var(--dark-gradient-start),
-				var(--dark-gradient-mid)
-			);
-		}
-
-		body,
-		body *:not(script):not(style) {
-			transition: none !important;
-		}
-	}
-
-	/* Prevent transition on page load */
-	.no-transitions * {
-		transition: none !important;
-	}
-</style>
-
 <style>
-	/* Scoped styles for BaseLayout itself */
 	.skip-link {
 		position: absolute;
 		top: -40px;
 		left: 0;
-		background: #000;
-		color: white;
+		background-color: var(--m3-color-primary);
+		color: var(--m3-color-on-primary);
 		padding: 8px;
-		z-index: 10000;
+		z-index: 100;
+		transition: top 0.3s ease;
 	}
 
 	.skip-link:focus {
 		top: 0;
+		outline: 2px solid var(--m3-color-primary);
+		outline-offset: 2px;
 	}
 </style>
