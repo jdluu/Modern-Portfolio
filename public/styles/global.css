@@ -1,80 +1,55 @@
-:root {
-	--container-max-width: 120rem; /* 1200px */
-	--card-grid-max-width: 75%;
-	/* Font Sizes */
-	--font-small: 1.2rem;
-	--font-medium: 1.6rem;
-	--font-large: 2rem;
-	--font-xlarge: 2.4rem;
+/* Material 3 Design System */
 
-	/* Font Families */
-	--font-primary: "Lato", sans-serif;
-	--font-secondary: "Open Sans", sans-serif;
-	--font-heading: "Montserrat", sans-serif;
-	--font-cursive: "Pacifico", cursive;
-
-	/* Spacing */
-	--spacing-xs: 0.25rem;
-	--spacing-sm: 0.5rem;
-	--spacing-md: 1rem;
-	--spacing-lg: 2rem;
-	--spacing-xl: 4rem;
-	--nav-height: 4rem;
-
-	/* Border Radius */
-	--radius-sm: 0.4rem; /* 4px */
-	--radius-md: 0.8rem; /* 8px */
-	--radius-lg: 1.6rem; /* 16px */
-
-	/* Shadows */
-	--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-
-	/* Transitions */
-	--transition-fast: 150ms ease;
-	--transition-normal: 300ms ease;
-	/* Z-indexes */
-	--z-sticky: 50;
-	--z-dropdown: 40;
-
-	/* Form & Status Colors */
-	--success-bg: #e6f9f3;
-	--success-text: #0d3d2b;
-	--error-bg: #fff0f0;
-	--error-text: #c02929;
-	--error-color: #e53e3e;
-
-	/* Shape Backgrounds */
-	--shape-bg: color-mix(in srgb, var(--primary-btn-color) 10%, transparent);
-}
-
-/* Default Light Theme */
+/* 1. Color System */
 [data-theme="light"] {
-	--text-color: #020b0d;
-	--inverse-text-color: #fdf4f2;
-	--background-color: #d4f2f7;
-	--primary-btn-color: #007bff;
-	--secondary-btn-color: #e5f7fa;
-	--accent-color: #87dbe8;
-	--icon-color: #020b0d;
+	--m3-color-primary: #8c9eff;
+	--m3-color-on-primary: #00005a;
+	--m3-color-primary-container: #e0e0ff;
+	--m3-color-on-primary-container: #00005a;
+	--m3-color-secondary: #90f0c0;
+	--m3-color-on-secondary: #003823;
+	--m3-color-tertiary: #ffcc80;
+	--m3-color-on-tertiary: #402400;
+	--m3-color-background: #fcfaff;
+	--m3-color-on-background: #1c1b1f;
+	--m3-color-surface: #fcfaff;
+	--m3-color-on-surface: #1c1b1f;
+	--m3-color-surface-variant: #e3e1ec;
+	--m3-color-on-surface-variant: #46464f;
+	--m3-color-outline: #777680;
 }
 
-/* Dark Theme */
 [data-theme="dark"] {
-	--text-color: #e6f9f3;
-	--inverse-text-color: #19060c;
-	--background-color: #051510;
-	--primary-btn-color: #4dbcd5;
-	--secondary-btn-color: #0a1429;
-	--accent-color: #244999;
-	--icon-color: #e6f9f3;
+	--m3-color-primary: #a8c7fa;
+	--m3-color-on-primary: #003062;
+	--m3-color-primary-container: #264478;
+	--m3-color-on-primary-container: #d8e2ff;
+	--m3-color-secondary: #90d393;
+	--m3-color-on-secondary: #003916;
+	--m3-color-tertiary: #fdd663;
+	--m3-color-on-tertiary: #3e2e00;
+	--m3-color-background: #1b1b1f;
+	--m3-color-on-background: #e3e2e6;
+	--m3-color-surface: #1b1b1f;
+	--m3-color-on-surface: #e3e2e6;
+	--m3-color-surface-variant: #44474f;
+	--m3-color-on-surface-variant: #c4c6d0;
+	--m3-color-outline: #8e9099;
 }
 
-/* Fonts */
+/* 2. Typography System */
+/* Font-Face Declarations */
+@font-face {
+	font-family: "Montserrat";
+	src: url("/fonts/Montserrat/Montserrat-Regular.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
 @font-face {
 	font-family: "Lato";
-	src: url("/fonts/Lato/Lato-Regular.ttf") format("truetype");
+	src: url("/fonts/Lato/Lato-Regular.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -82,15 +57,7 @@
 
 @font-face {
 	font-family: "Open Sans";
-	src: url("/fonts/Open_Sans/OpenSans-Regular.ttf") format("truetype");
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Montserrat";
-	src: url("/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
+	src: url("/fonts/Open_Sans/OpenSans-Regular.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -98,91 +65,150 @@
 
 @font-face {
 	font-family: "Pacifico";
-	src: url("/fonts/Pacifico/Pacifico-Regular.ttf") format("truetype");
+	src: url("/fonts/Pacifico/Pacifico-Regular.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
 }
+:root {
+	/* Font Families */
+	--m3-font-family-display: "Montserrat", sans-serif;
+	--m3-font-family-body: "Lato", sans-serif;
 
+	/* Type Scale */
+	--m3-font-display-large: 5.7rem;
+	--m3-font-display-medium: 4.5rem;
+	--m3-font-display-small: 3.6rem;
+	--m3-font-headline-large: 3.2rem;
+	--m3-font-headline-medium: 2.8rem;
+	--m3-font-headline-small: 2.4rem;
+	--m3-font-title-large: 2.2rem;
+	--m3-font-title-medium: 1.6rem;
+	--m3-font-title-small: 1.4rem;
+	--m3-font-label-large: 1.4rem;
+	--m3-font-label-medium: 1.2rem;
+	--m3-font-label-small: 1.1rem;
+	--m3-font-body-large: 1.6rem;
+	--m3-font-body-medium: 1.4rem;
+	--m3-font-body-small: 1.2rem;
+}
+
+/* Global Styles */
 html {
 	font-size: 62.5%; /* 1rem = 10px */
 }
 
 body {
-	background-color: var(--background-color);
-	color: var(--text-color);
-	font-family: var(--font-primary);
-	font-size: var(--font-medium);
+	background-color: var(--m3-color-background);
+	color: var(--m3-color-on-background);
+	font-family: var(--m3-font-family-body);
+	font-size: var(--m3-font-body-medium);
 }
 
-/* Common Layout Classes */
-.content-section {
-	padding: clamp(var(--spacing-lg), 5vw, var(--spacing-xl)) 0;
+.theme-switch-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	z-index: 101; /* Ensure it's above other navbar elements */
 }
 
-.page-h2 {
-	font-size: var(--font-large);
-	font-family: var(--font-heading);
-	margin: var(--spacing-sm) 0;
-	color: var(--text-color);
-	text-align: center;
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 28px;
 }
 
-.section-desc {
-	font-size: clamp(1.4rem, 1.2rem + 0.5vw, 1.8rem);
-	margin: var(--spacing-md) 0 var(--spacing-lg);
-	text-align: center;
-	color: var(--text-color);
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
-.card-grid {
-	max-width: var(--card-grid-max-width);
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-gap: var(--spacing-lg);
-	margin-left: auto;
-	margin-right: auto;
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--m3-color-surface-variant);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	border-radius: 28px;
+	display: flex;
+	align-items: center;
+	padding: 0 4px;
+	justify-content: space-between;
 }
 
-/* Project/Experience Page Layout */
-.project-page-container {
-	max-width: var(--container-max-width);
-	padding: var(--spacing-lg);
-	margin-inline: auto;
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 20px;
+	width: 20px;
+	left: 4px;
+	bottom: 4px;
+	background-color: var(--m3-color-outline);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	border-radius: 50%;
 }
 
-.project-page-div {
-	text-align: left;
+input:checked + .slider {
+	background-color: var(--m3-color-primary);
 }
 
-/* Responsive Grid */
-@media screen and (max-width: 1024px) {
-	.card-grid {
-		justify-content: center;
-		align-items: center;
-		grid-template-columns: repeat(2, 1fr);
-		grid-gap: var(--spacing-md);
-		padding: 0 0 2rem;
-	}
-
-	.page-h2 {
-		font-size: var(--font-medium);
-	}
+input:focus-visible + .slider {
+	box-shadow: 0 0 1px var(--m3-color-primary);
+	outline: 2px solid var(--m3-color-primary);
 }
 
-@media screen and (max-width: 768px) {
-	.card-grid {
-		grid-template-columns: repeat(1, 1fr);
-	}
-
-	.section-desc {
-		font-size: var(--font-medium);
-		margin: 0.75rem 0 1.5rem;
-	}
+input:checked + .slider:before {
+	-webkit-transform: translateX(22px);
+	-ms-transform: translateX(22px);
+	transform: translateX(22px);
+	background-color: var(--m3-color-on-primary);
 }
 
-a:focus-visible,
-button:focus-visible {
-	outline: 3px solid var(--accent-color);
-	outline-offset: 2px;
+.sun-icon,
+.moon-icon {
+	width: 1.8rem;
+	height: 1.8rem;
+	stroke: var(--m3-color-on-surface-variant);
+	transition: stroke 0.4s ease;
+}
+
+input:checked + .slider .sun-icon {
+	stroke: var(--m3-color-on-primary);
+	opacity: 0;
+	transform: scale(0.5);
+}
+
+input:not(:checked) + .slider .moon-icon {
+	opacity: 0;
+	transform: scale(0.5);
+}
+
+input:checked + .slider .moon-icon {
+	stroke: var(--m3-color-on-primary);
+	opacity: 1;
+	transform: scale(1);
+}
+
+input:not(:checked) + .slider .sun-icon {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
