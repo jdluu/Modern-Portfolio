@@ -76,7 +76,7 @@
 
 <style>
 	#footer {
-		height: 15vh;
+		height: 10rem;
 	}
 	#footer-ul {
 		display: flex;
@@ -86,7 +86,7 @@
 	}
 
 	.footer-link {
-		color: var(--link-color);
+		color: var(--text-color);
 		font-weight: normal;
 		text-decoration: underline;
 		transition: transform var(--transition-normal) ease;
@@ -99,15 +99,15 @@
 
 	@media (max-width: 768px) {
 		.footer-link {
-			margin: 0.5rem 0;
+			margin: var(--spacing-sm) 0;
 		}
 	}
 
 	.svg-icon {
-		width: 60px;
-		height: 60px;
+		width: 6rem;
+		height: 6rem;
 		fill: var(--icon-color);
-		margin-right: 10px;
+		margin-right: var(--spacing-md);
 		transition: transform var(--transition-normal) ease;
 		display: block;
 	}
