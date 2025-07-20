@@ -58,17 +58,18 @@ const allProjects = (await getAllProjectCards()) || [];
 		max-width: 1200px;
 	}
 
-	/* Responsive two-column layout */
+	/* Responsive layout */
+	/* Tablet: Two columns */
 	@media (min-width: 768px) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
-	/* Single column on smaller screens */
-	@media (max-width: 767px) {
+	/* Desktop: Three columns */
+	@media (min-width: 1024px) {
 		.card-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 </style>
