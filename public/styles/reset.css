@@ -1,10 +1,55 @@
-/* Reset Box Model */
+/* Modern CSS Reset */
+
+/* Box Sizing */
 *,
 *::before,
 *::after {
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box;
+}
+
+/* Core Body Defaults */
+body {
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Responsive Media */
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+/* Form Element Reset */
+input,
+button,
+textarea,
+select {
+	font: inherit;
+	border: none;
+	background: none;
+	color: inherit;
+}
+
+/* Typography and Links */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
 }
 
 /* Remove List Styles */
@@ -13,28 +58,17 @@ ol {
 	list-style: none;
 }
 
-/* Reset Heading Margins */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0;
-}
-
-/* Reset Link Styles */
-a {
-	text-decoration: none;
-}
-
-/* Reset Form Styles */
-input,
-textarea,
-button {
-	margin: 0;
-	padding: 0;
-	border: none;
-	background: none;
-	font-family: inherit;
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }
