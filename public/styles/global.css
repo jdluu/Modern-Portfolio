@@ -2,10 +2,10 @@
 	--container-max-width: 120rem; /* 1200px */
 	--card-grid-max-width: 75%;
 	/* Font Sizes */
-	--font-small: 0.8rem;
-	--font-medium: 1rem;
-	--font-large: 1.2rem;
-	--font-xlarge: 1.5rem;
+	--font-small: 1.2rem;
+	--font-medium: 1.6rem;
+	--font-large: 2rem;
+	--font-xlarge: 2.4rem;
 
 	/* Font Families */
 	--font-primary: "Lato", sans-serif;
