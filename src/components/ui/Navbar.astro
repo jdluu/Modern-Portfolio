@@ -1,456 +1,326 @@
 ---
-import {
-	Astronav,
-	MenuItems,
-	MenuIcon,
-	OpenIcon,
-	CloseIcon,
-} from "astro-navbar";
+import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 ---
 
 <header class="header">
-	<Astronav closeOnClick>
-		<nav class="nav-container" aria-label="Main navigation">
-			<div class="nav-content">
-				<a href="/" class="home-link" aria-label="Home">
+	<nav class="nav-container" aria-label="Main navigation">
+		<div class="nav-content">
+			<a href="/" class="home-link" aria-label="Home">
+				<svg
+					viewBox="0 0 32 32"
+					xmlns="http://www.w3.org/2000/svg"
+					class="home-icon"
+					aria-hidden="true"
+				>
+					<path
+						fill="currentColor"
+						d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
+					></path>
+				</svg>
+				<span class="home-text">Home</span>
+			</a>
+
+			<div class="menu-icon-wrapper">
+				<button
+					id="menu-toggle-btn"
+					class="menu-icon-button"
+					aria-label="Toggle menu"
+					aria-expanded="false"
+					aria-controls="main-menu"
+				>
 					<svg
-						viewBox="0 0 32 32"
+						class="open-icon"
 						xmlns="http://www.w3.org/2000/svg"
-						class="home-icon"
+						viewBox="0 0 50 50"
 						aria-hidden="true"
+						fill="currentColor"
 					>
+						<title>Open menu icon</title>
 						<path
-							fill="currentColor"
-							d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
+							d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
 						></path>
 					</svg>
-					<span class="home-text">Home</span>
-				</a>
-
-				<div class="menu-icon-wrapper">
-					<MenuIcon class="menu-icon-button">
-						<OpenIcon>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 50 50"
-								aria-hidden="true"
-								fill="currentColor"
-							>
-								<path
-									d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
-								></path>
-							</svg>
-						</OpenIcon>
-						<CloseIcon>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="2.5"
-								stroke="currentColor"
-								aria-hidden="true"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M6 18L18 6M6 6l12 12"></path>
-							</svg>
-						</CloseIcon>
-					</MenuIcon>
-				</div>
-
-				<MenuItems class="nav-menu-styles lg:flex">
-					<ul class="nav-list">
-						<li class="nav-item" role="menuitem">
-							<a
-								href="/about"
-								class="nav-link"
-								aria-current={Astro.url.pathname === "/about"
-									? "page"
-									: undefined}
-							>
-								About
-							</a>
-						</li>
-						<li class="nav-item" role="menuitem">
-							<a
-								href="/work"
-								class="nav-link"
-								aria-current={Astro.url.pathname === "/work"
-									? "page"
-									: undefined}
-							>
-								Work
-							</a>
-						</li>
-						<li class="nav-item" role="menuitem">
-							<a
-								href="/blog"
-								class="nav-link"
-								aria-current={Astro.url.pathname === "/blog"
-									? "page"
-									: undefined}
-							>
-								Blog
-							</a>
-						</li>
-						<li class="nav-item" role="menuitem">
-							<a
-								href="/contact"
-								class="nav-link"
-								aria-current={Astro.url.pathname === "/contact"
-									? "page"
-									: undefined}
-							>
-								Contact
-							</a>
-						</li>
-						<li class="nav-item theme-switch" role="menuitem">
-							<div class="theme-switch-wrapper">
-								<label class="switch" for="themeSwitch">
-									<span class="visually-hidden">Toggle dark theme</span>
-									<input
-										id="themeSwitch"
-										type="checkbox"
-										role="switch"
-										aria-label="Toggle dark theme"
-									/>
-									<span class="slider round">
-										<svg
-											class="sun-icon"
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke-width="2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										>
-											<circle cx="12" cy="12" r="5"></circle>
-											<line x1="12" y1="1" x2="12" y2="3"></line>
-											<line x1="12" y1="21" x2="12" y2="23"></line>
-											<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-											<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-											<line x1="1" y1="12" x2="3" y2="12"></line>
-											<line x1="21" y1="12" x2="23" y2="12"></line>
-											<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-											<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-										</svg>
-										<svg
-											class="moon-icon"
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke-width="2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										>
-											<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-											></path>
-										</svg>
-									</span>
-								</label>
-							</div>
-						</li>
-					</ul>
-				</MenuItems>
+					<svg
+						class="close-icon"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="2.5"
+						stroke="currentColor"
+						aria-hidden="true"
+					>
+						<title>Close menu icon</title>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+				</button>
 			</div>
-		</nav>
-	</Astronav>
+
+			<div id="main-menu" class="nav-menu-styles" aria-hidden="true">
+				<ul class="nav-list">
+					<li class="nav-item" role="menuitem">
+						<a
+							href="/about"
+							class="nav-link"
+							aria-current={Astro.url.pathname === "/about"
+								? "page"
+								: undefined}
+						>
+							About
+						</a>
+					</li>
+					<li class="nav-item" role="menuitem">
+						<a
+							href="/work"
+							class="nav-link"
+							aria-current={Astro.url.pathname === "/work" ? "page" : undefined}
+						>
+							Work
+						</a>
+					</li>
+					<li class="nav-item" role="menuitem">
+						<a
+							href="/blog"
+							class="nav-link"
+							aria-current={Astro.url.pathname === "/blog" ? "page" : undefined}
+						>
+							Blog
+						</a>
+					</li>
+					<li class="nav-item" role="menuitem">
+						<a
+							href="/contact"
+							class="nav-link"
+							aria-current={Astro.url.pathname === "/contact"
+								? "page"
+								: undefined}
+						>
+							Contact
+						</a>
+					</li>
+					<li class="nav-item md:hidden" role="menuitem">
+						<ThemeToggleButton client:load />
+					</li>
+				</ul>
+			</div>
+			<div class="theme-toggle-container">
+				<ThemeToggleButton client:load />
+			</div>
+		</div>
+	</nav>
 </header>
 
-<style is:global>
-	.hidden {
-		display: none !important;
-	}
-</style>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const menuToggleBtn = document.getElementById("menu-toggle-btn");
+		const mainMenu = document.getElementById("main-menu");
+
+		if (menuToggleBtn && mainMenu) {
+			menuToggleBtn.addEventListener("click", () => {
+				const isExpanded =
+					menuToggleBtn.getAttribute("aria-expanded") === "true";
+				menuToggleBtn.setAttribute("aria-expanded", String(!isExpanded));
+				mainMenu.setAttribute("aria-hidden", String(isExpanded));
+				mainMenu.classList.toggle("is-open");
+				menuToggleBtn.classList.toggle("is-open");
+			});
+
+			// Close menu on link click
+			mainMenu.addEventListener("click", (e) => {
+				if ((e.target as HTMLElement).tagName === "A") {
+					menuToggleBtn.setAttribute("aria-expanded", "false");
+					mainMenu.setAttribute("aria-hidden", "true");
+					mainMenu.classList.remove("is-open");
+					menuToggleBtn.classList.remove("is-open");
+				}
+			});
+		}
+	});
+</script>
 
 <style>
 	.header {
 		position: sticky;
 		top: 0;
-		z-index: var(--z-sticky);
-		background: var(--primary-btn-color);
-		padding: var(--spacing-sm) 0;
+		z-index: 100;
+		background-color: var(--m3-color-surface);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		padding: 0 2.4rem;
 	}
 
 	.nav-container {
-		max-width: var(--container-max-width);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		max-width: 1280px;
 		margin: 0 auto;
+		width: 100%;
+		height: 6.4rem;
 	}
 
 	.nav-content {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		padding: 0 var(--spacing-lg);
-		gap: var(--spacing-md);
+		flex-grow: 1;
+		gap: 1.6rem;
 	}
 
 	.home-link {
 		display: flex;
 		align-items: center;
 		text-decoration: none;
-		gap: var(--spacing-sm);
-		flex-shrink: 0;
+		gap: 0.8rem;
+		color: var(--m3-color-on-surface);
+		margin-right: auto;
 	}
 
 	.home-icon {
-		width: 6rem;
-		height: 6rem;
-		fill: var(--icon-color);
-		transition: transform var(--transition-normal) ease;
-		flex-shrink: 0;
+		width: 2.8rem;
+		height: 2.8rem;
+		fill: currentColor;
 	}
 
 	.home-text {
-		font-size: var(--font-xlarge);
-		font-weight: bold;
-		font-family: var(--font-cursive);
-		color: var(--text-color);
-		white-space: nowrap;
+		font-size: var(--m3-font-title-large);
+		font-family: var(--m3-font-family-display);
+		font-weight: 500;
 	}
 
 	.menu-icon-wrapper {
 		display: block;
-		flex-shrink: 0;
+		margin-left: auto; /* Push to the right */
 	}
-	@media (min-width: 1024px) {
+
+	@media (min-width: 768px) {
 		.menu-icon-wrapper {
 			display: none !important;
 		}
 	}
 
 	.menu-icon-button {
-		width: 1.75rem;
-		height: 1.75rem;
+		width: 4rem;
+		height: 4rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: var(--text-color);
+		color: var(--m3-color-on-surface);
 		background: transparent;
 		border: none;
-		padding: 0;
 		cursor: pointer;
-		border-radius: var(--radius-sm);
+		border-radius: 50%;
 	}
 	.menu-icon-button:focus-visible {
-		outline: 3px solid var(--text-color);
-		outline-offset: 3px;
+		outline: 2px solid var(--m3-color-primary);
+		background-color: var(--m3-color-primary-container);
+	}
+
+	.menu-icon-button .close-icon {
+		display: none;
+	}
+
+	.menu-icon-button.is-open .open-icon {
+		display: none;
+	}
+
+	.menu-icon-button.is-open .close-icon {
+		display: block;
 	}
 
 	.nav-menu-styles {
+		display: none;
 		position: absolute;
 		top: 100%;
 		left: 0;
 		right: 0;
-		background: var(--primary-btn-color);
-		padding: var(--spacing-md);
-		border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
-		box-shadow: var(--shadow-md);
-		z-index: var(--z-dropdown);
+		background-color: var(--m3-color-surface);
+		padding: 1.6rem;
+		border-top: 1px solid var(--m3-color-outline);
 	}
-	@media (min-width: 1024px) {
+	.nav-menu-styles.is-open {
+		display: block;
+	}
+
+	@media (min-width: 768px) {
 		.nav-menu-styles {
 			position: static;
 			background: transparent;
 			padding: 0;
 			border-top: none;
-			box-shadow: none;
+			display: flex !important;
+			width: auto;
+			/* Ensure it's always visible on desktop */
+			visibility: visible;
+			opacity: 1;
+			transform: none;
+			height: auto;
+			overflow: visible;
 		}
 	}
 
 	.nav-list {
 		display: flex;
 		flex-direction: column;
-		align-items: stretch;
-		gap: var(--spacing-md);
+		gap: 0.8rem;
+		list-style: none;
 		margin: 0;
 		padding: 0;
-		list-style: none;
 	}
-	@media (min-width: 1024px) {
+	@media (min-width: 768px) {
 		.nav-list {
 			flex-direction: row;
 			align-items: center;
-			gap: var(--spacing-lg);
+			gap: 1.6rem;
 		}
 	}
 
 	.nav-link {
 		display: block;
-		text-align: center;
-		padding: var(--spacing-sm) var(--spacing-md);
-		color: var(--text-color);
+		padding: 1rem 1.6rem;
+		color: var(--m3-color-on-surface-variant);
 		text-decoration: none;
-		font-size: var(--font-large);
-		font-weight: bold;
-		border-radius: var(--radius-lg);
-		border: 1px solid var(--text-color);
-		transition: all var(--transition-normal) ease;
-		white-space: nowrap;
-	}
-	@media (min-width: 1024px) {
-		.nav-link {
-			text-align: left;
-		}
+		font-size: var(--m3-font-label-large);
+		font-weight: 500;
+		border-radius: 20px;
+		transition: all 0.2s ease;
 	}
 
 	.nav-link:hover {
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-sm);
+		background-color: var(--m3-color-surface-variant);
+		color: var(--m3-color-on-surface-variant);
 	}
 
 	.nav-link[aria-current="page"] {
-		background-color: var(--text-color);
-		color: var(--primary-btn-color);
+		background-color: var(--m3-color-primary-container);
+		color: var(--m3-color-on-primary-container);
 	}
 
-	.theme-switch-wrapper {
-		display: flex;
+	.theme-toggle-container {
+		display: none;
 		align-items: center;
-		margin: var(--spacing-md) auto;
 	}
-	@media (min-width: 1024px) {
-		.theme-switch-wrapper {
-			margin: 0 0 0 var(--spacing-md);
+
+	@media (min-width: 768px) {
+		.theme-toggle-container {
+			display: flex;
 		}
 	}
 
-	.switch {
-		position: relative;
-		display: inline-block;
-		width: 3.75rem;
-		height: 2rem;
-		cursor: pointer;
+	.hidden,
+	.nav-item.md\:hidden {
+		display: none;
 	}
 
-	.switch input {
-		opacity: 0;
-		width: 0;
-		height: 0;
-	}
-
-	.slider {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: var(--primary-btn-color);
-		border: 1px solid transparent;
-		border-radius: 2rem;
-		transition:
-			background-color 0.4s ease,
-			border-color var(--transition-fast) ease;
-		display: flex;
-		align-items: center;
-		padding: 0 0.25rem;
-	}
-
-	.slider:before {
-		position: absolute;
-		content: "";
-		height: 1.5rem;
-		width: 1.5rem;
-		left: 0.25rem;
-		top: 50%;
-		transform: translateY(-50%);
-		background-color: white;
-		border-radius: 50%;
-		transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-		z-index: 1;
-		box-shadow: var(--shadow-sm);
-	}
-
-	input:checked + .slider {
-		background-color: var(--text-color);
-	}
-
-	input:checked + .slider:before {
-		transform: translateX(1.75rem) translateY(-50%);
-	}
-
-	input:focus-visible + .slider {
-		border-color: var(--accent-color);
-		box-shadow: 0 0 0 3px
-			color-mix(in srgb, var(--accent-color) 30%, transparent);
-	}
-
-	.sun-icon,
-	.moon-icon {
-		position: absolute;
-		width: 1.125rem;
-		height: 1.125rem;
-		top: 50%;
-		transform: translateY(-50%) scale(0.9);
-		transition:
-			opacity 0.3s ease,
-			transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-		z-index: 0;
-		stroke-width: 2;
-	}
-
-	.sun-icon {
-		left: 0.4rem;
-		stroke: #ffc400;
-		opacity: 1;
-		transform: translateY(-50%) scale(1);
-	}
-
-	.moon-icon {
-		right: 0.4rem;
-		stroke: #b0bec5;
-		opacity: 0;
-	}
-
-	input:checked + .slider .sun-icon {
-		opacity: 0;
-		transform: translateY(-50%) scale(0.5) rotate(-90deg);
-	}
-
-	input:checked + .slider .moon-icon {
-		opacity: 1;
-		transform: translateY(-50%) scale(1) rotate(0deg);
-	}
-
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
-	}
-
-	@media (max-width: 480px) {
-		.nav-content {
-			padding: 0 var(--spacing-sm);
-		}
-		.home-text {
-			display: none;
-		}
-		.home-icon {
-			width: 28px;
-			height: 28px;
-		}
-		.menu-icon-button {
-			width: 1.75rem;
-			height: 1.75rem;
+	@media (max-width: 767px) {
+		.nav-menu-styles.is-open .nav-item.md\:hidden {
+			display: block;
 		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.home-icon,
-		.nav-link,
-		.slider,
-		.slider:before,
-		.sun-icon,
-		.moon-icon,
-		.nav-menu-styles {
-			transition: none !important;
+	@media (min-width: 768px) {
+		.md\:flex {
+			display: flex;
 		}
 	}
 </style>
