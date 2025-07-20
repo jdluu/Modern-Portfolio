@@ -6,11 +6,9 @@
 		"node": ">=18.14.1"
 	},
 	"scripts": {
-		"dev": "astro dev",
-		"start": "astro dev",
+		"dev": "tinacms dev -c \"astro dev\"",
 		"build": "astro build",
-		"preview": "astro preview",
-		"astro": "astro"
+		"preview": "astro preview"
 	},
 	"dependencies": {
 		"@astrojs/sitemap": "^3.4.1",
