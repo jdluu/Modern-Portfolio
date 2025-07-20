@@ -19,18 +19,19 @@ Inside my Astro project, you'll see the following folders and files:
 │   │   ├── Montserrat/
 │   │   ├── Open_Sans/
 │   │   └── Pacifico/
+│   ├── favicons/
+│   │   ├── favicon.ico
+│   │   ├── ms-tile-150x150.png
+│   │   └── ms-tile-310x310.png
 │   ├── icons/
 │   │   ├── email.svg
 │   │   ├── github.svg
 │   │   ├── hamburger.svg
 │   │   ├── home.svg
-│   │   ├── linkedin.svg
-│   │   ├── ms-icon-150x150.png
-│   │   └── ms-icon-310x310.png
+│   │   └── linkedin.svg
 │   ├── styles/
 │   │   ├── global.css
 │   │   └── reset.css
-│   ├── favicon.ico
 │   └── Jeffrey_Luu_Resume.pdf
 ├── src/
 │   ├── components/
