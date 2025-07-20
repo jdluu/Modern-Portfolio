@@ -181,10 +181,15 @@ const uniqueDomains = Array.from(allDomains).sort();
 					wrapper.style.display = "none";
 				}
 			});
-			noResultsMessage.style.display = resultsFound ? "none" : "block";
+			if (noResultsMessage) {
+				noResultsMessage.style.display = resultsFound ? "none" : "block";
+			}
 		}
 
-		function setupFilterGroup(filterContainer, filterType) {
+		function setupFilterGroup(
+			filterContainer: HTMLElement | null,
+			filterType: "language" | "domain"
+		) {
 			if (!filterContainer) return;
 
 			const filterButtons = Array.from(
@@ -281,7 +286,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 	}
 
 	.section-desc {
-		font-size: 1.5rem;
+		font-size: var(--font-xlarge);
 		margin-bottom: 1.5rem;
 		text-align: center;
 		color: var(--text-color);
@@ -293,7 +298,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 	}
 
 	.filter-group-title {
-		font-size: 1.2rem;
+		font-size: var(--font-large);
 		font-family: var(--font-heading);
 		color: var(--text-color);
 		text-align: center;
@@ -315,9 +320,9 @@ const uniqueDomains = Array.from(allDomains).sort();
 		border: 1.5px solid var(--accent-color);
 		background-color: transparent;
 		color: var(--text-color);
-		border-radius: 25px;
+		border-radius: var(--radius-lg);
 		cursor: pointer;
-		transition: all 0.25s ease-in-out;
+		transition: all var(--transition-fast) ease-in-out;
 		font-weight: 500;
 	}
 
@@ -326,7 +331,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
 		color: var(--text-color);
 		transform: translateY(-2px);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--shadow-sm);
 		outline: none;
 	}
 
@@ -336,7 +341,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		color: var(--inverse-text-color);
 		font-weight: 700;
 		border-color: var(--accent-color);
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--shadow-sm);
 	}
 
 	.filter-button:focus-visible {
@@ -348,7 +353,7 @@ const uniqueDomains = Array.from(allDomains).sort();
 		max-width: 75%;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		grid-gap: 2rem;
+		grid-gap: var(--spacing-lg);
 		margin-left: auto;
 		margin-right: auto;
 		position: relative;
@@ -361,15 +366,15 @@ const uniqueDomains = Array.from(allDomains).sort();
 	.no-results-message {
 		grid-column: 1 / -1;
 		text-align: center;
-		font-size: 1.2rem;
+		font-size: var(--font-large);
 		color: var(--text-color);
-		padding: 2rem 0;
+		padding: var(--spacing-lg) 0;
 	}
 
 	@media screen and (max-width: 1024px) {
 		.card-grid {
 			grid-template-columns: repeat(2, 1fr);
-			grid-gap: 1.5rem;
+			grid-gap: var(--spacing-md);
 			padding: 0 1rem 2rem;
 			max-width: 90%;
 		}
@@ -382,12 +387,12 @@ const uniqueDomains = Array.from(allDomains).sort();
 	@media screen and (max-width: 768px) {
 		.card-grid {
 			grid-template-columns: 1fr;
-			grid-gap: 1.5rem;
+			grid-gap: var(--spacing-md);
 			padding: 0 0.5rem 2rem;
 			max-width: 95%;
 		}
 		.section-desc {
-			font-size: 1.2rem;
+			font-size: var(--font-large);
 		}
 		.filter-group {
 			padding: 0 0.5rem;
