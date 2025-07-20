@@ -25,9 +25,9 @@
 	--radius-lg: 16px;
 
 	/* Shadows */
-	--shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-	--shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-	--shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+	--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 
 	/* Transitions */
 	--transition-fast: 150ms ease;
@@ -67,7 +67,7 @@
 
 @font-face {
 	font-family: "Open Sans";
-	src: url("/fonts/Open_Sans/static/OpenSans-Regular.ttf") format("truetype");
+	src: url("/fonts/Open_Sans/OpenSans-Regular.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -75,7 +75,7 @@
 
 @font-face {
 	font-family: "Montserrat";
-	src: url("/fonts/Montserrat/static/Montserrat-Regular.ttf") format("truetype");
+	src: url("/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
