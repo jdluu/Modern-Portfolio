@@ -1,4 +1,6 @@
 :root {
+	--container-max-width: 1200px;
+	--card-grid-max-width: 75%;
 	/* Font Sizes */
 	--font-small: 0.8rem;
 	--font-medium: 1rem;
@@ -99,13 +101,13 @@ body {
 
 /* Common Layout Classes */
 .content-section {
-	padding: clamp(2rem, 5vw, 4rem) 0;
+	padding: clamp(var(--spacing-lg), 5vw, var(--spacing-xl)) 0;
 }
 
 .page-h2 {
 	font-size: var(--font-large);
 	font-family: var(--font-heading);
-	margin: 0.5rem 0;
+	margin: var(--spacing-sm) 0;
 	text-decoration: underline;
 	color: var(--text-color);
 	text-align: center;
@@ -113,24 +115,23 @@ body {
 
 .section-desc {
 	font-size: clamp(1.1rem, 2vw, 1.5rem);
-	margin: 1rem 0 2rem;
+	margin: var(--spacing-md) 0 var(--spacing-lg);
 	text-align: center;
 	color: var(--text-color);
 }
 
 .card-grid {
-	max-width: 75%;
+	max-width: var(--card-grid-max-width);
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-gap: 2rem;
+	grid-gap: var(--spacing-lg);
 	margin-left: auto;
 	margin-right: auto;
 }
 
 /* Project/Experience Page Layout */
 .project-page-container {
-	max-width: 1200px;
-	margin: 0 auto;
+	max-width: var(--container-max-width);
 	padding: var(--spacing-lg);
 	margin-left: clamp(5%, 20%, 25%);
 	margin-right: clamp(5%, 20%, 25%);
@@ -146,7 +147,7 @@ body {
 		justify-content: center;
 		align-items: center;
 		grid-template-columns: repeat(2, 1fr);
-		grid-gap: 1rem;
+		grid-gap: var(--spacing-md);
 		padding: 0 0 2rem;
 	}
 
@@ -161,7 +162,7 @@ body {
 	}
 
 	.section-desc {
-		font-size: 1rem;
+		font-size: var(--font-medium);
 		margin: 0.75rem 0 1.5rem;
 	}
 }
