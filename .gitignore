@@ -29,3 +29,5 @@ pnpm-debug.log*
 # Repomix config
 repomix-output.xml
 
+
+node_modules
