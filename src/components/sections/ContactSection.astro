@@ -87,8 +87,8 @@
 
 <style>
 	.content-section {
-		padding: clamp(1rem, 3vw, 2rem);
-		max-width: 1400px;
+		padding: var(--spacing-lg);
+		max-width: var(--container-max-width);
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
@@ -96,9 +96,9 @@
 	}
 
 	.page-h2 {
-		font-size: clamp(1.5rem, 3vw, var(--font-large));
+		font-size: var(--font-large);
 		font-family: var(--font-heading);
-		margin: 0.5rem 0 1.5rem;
+		margin: var(--spacing-sm) 0 var(--spacing-lg);
 		text-decoration: underline;
 		color: var(--text-color);
 		text-align: center;
@@ -120,24 +120,16 @@
 	}
 
 	.form-status.success {
-		background-color: color-mix(
-			in srgb,
-			#57b846 20%,
-			transparent
-		); /* Light green */
-		color: color-mix(in srgb, #14530d 90%, #fff); /* Dark green text */
-		border: 1px solid #57b846;
+		background-color: var(--success-bg);
+		color: var(--success-text);
+		border: 1px solid var(--success-text);
 		display: block;
 	}
 
 	.form-status.error {
-		background-color: color-mix(
-			in srgb,
-			#e32b2b 15%,
-			transparent
-		); /* Light red */
-		color: color-mix(in srgb, #901414 90%, #fff); /* Dark red text */
-		border: 1px solid #e32b2b;
+		background-color: var(--error-bg);
+		color: var(--error-text);
+		border: 1px solid var(--error-color);
 		display: block;
 	}
 
@@ -149,20 +141,20 @@
 		border-radius: var(--radius-lg);
 		width: min(100%, 35rem);
 		margin: 0 auto;
-		padding: clamp(1.5rem, 4vw, 2.5rem);
+		padding: var(--spacing-xl);
 		box-shadow: var(--shadow-md);
 	}
 
 	.form-main-title {
-		font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+		font-size: var(--font-large);
 		font-weight: bold;
 		text-align: center;
-		margin-bottom: clamp(1.5rem, 4vw, 2rem);
+		margin-bottom: var(--spacing-xl);
 		color: var(--text-color);
 	}
 
 	.form-group {
-		margin-bottom: clamp(1.25rem, 3vw, 1.5rem);
+		margin-bottom: var(--spacing-lg);
 		text-align: left;
 	}
 
@@ -170,23 +162,23 @@
 		display: block;
 		margin-bottom: var(--spacing-sm);
 		font-weight: 500;
-		font-size: clamp(0.9rem, 2vw, 1rem);
+		font-size: var(--font-medium);
 		color: var(--text-color);
 	}
 
 	.required::after {
 		content: "*";
-		color: #e32;
+		color: var(--error-color);
 		margin-left: var(--spacing-xs);
 	}
 
 	.form-group input,
 	.form-group textarea {
 		width: 100%;
-		padding: clamp(0.75rem, 2vw, 1rem);
+		padding: var(--spacing-md);
 		border: 1px solid color-mix(in srgb, var(--text-color) 30%, transparent);
 		border-radius: var(--radius-md);
-		font-size: clamp(0.9rem, 2vw, 1rem);
+		font-size: var(--font-medium);
 		transition: all 0.3s ease;
 		background-color: var(--background-color);
 		color: var(--text-color);
@@ -198,7 +190,7 @@
 	}
 
 	.form-group textarea {
-		min-height: 120px;
+		min-height: 12rem;
 		resize: vertical;
 	}
 
@@ -217,39 +209,40 @@
 
 	.error-message {
 		display: block;
-		color: #e32;
-		font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+		color: var(--error-text);
+		font-size: var(--font-small);
 		margin-top: var(--spacing-xs);
-		min-height: 1.25rem;
+		min-height: 1.25em;
 	}
 
 	button[type="submit"] {
 		width: min(100%, 16rem);
-		height: clamp(3rem, 6vw, 3.5rem);
+		height: 3.5rem;
 		border: none;
-		border-radius: 999px;
-		background: #57b846;
+		border-radius: var(--radius-lg);
+		background: var(--primary-btn-color);
 		font-weight: bold;
-		font-size: clamp(0.9rem, 2vw, 1rem);
-		color: #fff;
+		font-size: var(--font-medium);
+		color: var(--inverse-text-color);
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin: clamp(1.5rem, 4vw, 2rem) auto 0;
-		padding: 0 clamp(1.5rem, 4vw, 2rem);
+		margin: var(--spacing-xl) auto 0;
+		padding: 0 var(--spacing-xl);
 		cursor: pointer;
 		transition: all 0.3s ease;
 	}
 
 	button[type="submit"]:hover {
-		background: #4ca83d;
+		background: color-mix(in srgb, var(--primary-btn-color) 90%, black);
 		transform: translateY(-2px);
-		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--shadow-md);
 	}
 
 	button[type="submit"]:focus {
 		outline: none;
-		box-shadow: 0 0 0 3px rgba(87, 184, 70, 0.4);
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--primary-btn-color) 40%, transparent);
 	}
 
 	button[type="submit"]:active {
@@ -257,7 +250,7 @@
 	}
 
 	button[type="submit"]:disabled {
-		background: #ccc;
+		background: var(--accent-color);
 		cursor: not-allowed;
 		transform: none;
 		box-shadow: none;
@@ -265,7 +258,7 @@
 
 	@media (max-width: 480px) {
 		.content-section {
-			padding: 1rem 0.5rem;
+			padding: var(--spacing-md) var(--spacing-sm);
 		}
 
 		#contact-form {
@@ -275,12 +268,12 @@
 
 		.form-group input,
 		.form-group textarea {
-			font-size: 16px;
+			font-size: var(--font-medium);
 		}
 
 		button[type="submit"] {
 			width: 100%;
-			margin-top: 1.5rem;
+			margin-top: var(--spacing-lg);
 		}
 	}
 
