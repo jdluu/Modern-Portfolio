@@ -76,39 +76,32 @@
 
 <style>
 	#footer {
-		height: 10rem;
+		background-color: var(--m3-color-background);
+		padding: 2.4rem 0;
 	}
+
 	#footer-ul {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		list-style: none;
+		margin: 0;
+		padding: 0;
+		gap: 2.4rem;
 	}
 
 	.footer-link {
-		color: var(--text-color);
-		font-weight: normal;
-		text-decoration: underline;
-		transition: transform var(--transition-normal) ease;
-		display: inline-block;
+		color: var(--m3-color-on-surface-variant);
+		transition: color 0.3s ease;
 	}
 
 	.footer-link:hover {
-		transform: scale(1.2);
-	}
-
-	@media (max-width: 768px) {
-		.footer-link {
-			margin: var(--spacing-sm) 0;
-		}
+		color: var(--m3-color-primary);
 	}
 
 	.svg-icon {
-		width: 6rem;
-		height: 6rem;
-		fill: var(--icon-color);
-		margin-right: var(--spacing-md);
-		transition: transform var(--transition-normal) ease;
-		display: block;
+		width: 3.2rem;
+		height: 3.2rem;
+		fill: currentColor;
 	}
 </style>
