@@ -82,9 +82,11 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 					</li>
 					<li class="nav-item" role="menuitem">
 						<a
-							href="/blog"
+							href="/blog/"
 							class="nav-link"
-							aria-current={Astro.url.pathname === "/blog" ? "page" : undefined}
+							aria-current={Astro.url.pathname.startsWith("/blog")
+								? "page"
+								: undefined}
 						>
 							Blog
 						</a>
@@ -283,17 +285,31 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		font-size: var(--m3-font-label-large);
 		font-weight: 500;
 		border-radius: 20px;
-		transition: all 0.2s ease;
+		transition: all 0.3s ease;
+		position: relative;
 	}
 
 	.nav-link:hover {
-		background-color: var(--m3-color-surface-variant);
-		color: var(--m3-color-on-surface-variant);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	.nav-link[aria-current="page"] {
 		background-color: var(--m3-color-primary-container);
 		color: var(--m3-color-on-primary-container);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.nav-link[aria-current="page"]::after {
+		content: "";
+		position: absolute;
+		bottom: -2px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background-color: var(--m3-color-primary);
 	}
 
 	.theme-toggle-container {
