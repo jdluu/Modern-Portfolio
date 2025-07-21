@@ -2,11 +2,11 @@
 export interface Props {
 	title: string;
 	intro: string;
-	thumbnail: string;
 	url: string;
+	thumbnail: string;
 }
 
-const { title, intro, thumbnail, url } = Astro.props;
+const { title, intro, url, thumbnail } = Astro.props;
 ---
 
 <section class="background" style={{ backgroundImage: `url('${thumbnail}')` }}>
@@ -23,15 +23,24 @@ const { title, intro, thumbnail, url } = Astro.props;
 
 <style>
 	.background {
-		background-size: cover;
-		background-position: center;
 		position: relative;
 		border: 1px solid var(--m3-color-outline);
-		transition: transform 0.3s ease;
+		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		width: 100%;
 		height: 30rem;
-		border-radius: 12px;
+		border-radius: 24px;
 		overflow: hidden;
+		background-size: cover;
+		background-position: center;
+	}
+
+	.background:hover {
+		border-color: var(--m3-color-primary);
+		transform: scale(1.02);
+	}
+
+	.background:hover .project-container {
+		opacity: 1;
 	}
 
 	.project-container {
@@ -44,14 +53,9 @@ const { title, intro, thumbnail, url } = Astro.props;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		background: var(--m3-color-surface-variant);
 		opacity: 0;
-		background-color: var(--m3-color-surface-variant);
-		transition: opacity 0.3s ease-in-out;
-	}
-
-	.project-container:hover,
-	.project-container:focus-within {
-		opacity: 1;
+		transition: opacity 0.4s ease-in-out;
 	}
 
 	.more-info {
