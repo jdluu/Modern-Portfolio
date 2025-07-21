@@ -36,50 +36,200 @@ const displayDate = date
 ---
 
 <BaseLayout title={title}>
-	<article class="max-w-3xl mx-auto px-4 py-8">
-		<h1 class="text-4xl font-bold mb-4">{title}</h1>
-		{date && <p class="text-gray-600 mb-2">Published on {displayDate}</p>}
-		<p class="text-gray-700 mb-4">{description}</p>
+	<article>
+		<header class="post-header">
+			<h1 class="post-title">{title}</h1>
+			{date && <p class="publish-date">{displayDate}</p>}
+			{description && <p class="description">{description}</p>}
+		</header>
 
-		<div class="prose lg:prose-xl" set:html={content} />
-		<div
-			class="flex flex-col sm:flex-row justify-start items-start sm:items-center mt-8"
-		>
-			{
-				links &&
-					links
-						.filter((link) => !!link)
-						.map((link) => (
-							<a href={link!.url} class="project-link mb-4 sm:mb-0 sm:mr-6">
-								{link!.label}
-							</a>
-						))
-			}
-		</div>
+		<div class="prose" set:html={content} />
+
+		{
+			links && links.length > 0 && (
+				<div class="project-links">
+					<div class="links-container">
+						{links
+							.filter((link) => !!link?.url)
+							.map((link) => (
+								<a
+									href={link!.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="project-link"
+								>
+									{link!.label}
+								</a>
+							))}
+					</div>
+				</div>
+			)
+		}
 	</article>
 </BaseLayout>
 
 <style>
+	article {
+		max-width: 80ch;
+		margin: 0 auto;
+		padding: 4rem 2rem;
+		background-color: var(--m3-color-surface);
+		color: var(--m3-color-on-surface);
+	}
+
+	.post-header {
+		margin-bottom: 3.2rem;
+		text-align: center;
+	}
+
+	.post-title {
+		font-family: var(--m3-font-family-display);
+		font-size: var(--m3-font-headline-large);
+		color: var(--m3-color-primary);
+		margin-bottom: 1.6rem;
+		line-height: 1.2;
+	}
+
+	.publish-date {
+		font-family: var(--m3-font-family-body);
+		font-size: var(--m3-font-label-large);
+		color: var(--m3-color-on-surface-variant);
+		margin-bottom: 0.8rem;
+	}
+
+	.description {
+		font-family: var(--m3-font-family-body);
+		font-size: var(--m3-font-body-large);
+		color: var(--m3-color-on-surface-variant);
+		max-width: 65ch;
+		margin: 0 auto;
+	}
+
 	.prose {
-		@apply text-gray-800 leading-relaxed;
+		font-family: var(--m3-font-family-body);
+		font-size: var(--m3-font-body-large);
+		line-height: 1.7;
+		color: var(--m3-color-on-surface);
 	}
-	.prose h2 {
-		@apply text-2xl font-semibold mt-8 mb-4;
+
+	.prose :global(h2),
+	.prose :global(h3),
+	.prose :global(h4) {
+		font-family: var(--m3-font-family-display);
+		color: var(--m3-color-on-surface);
+		margin-top: 4rem;
+		margin-bottom: 2rem;
 	}
-	.prose p {
-		@apply mb-4;
+
+	.prose :global(h2) {
+		font-size: var(--m3-font-headline-small);
 	}
-	.prose a {
-		@apply text-blue-700 hover:underline;
+
+	.prose :global(h3) {
+		font-size: var(--m3-font-title-large);
 	}
-	.prose ul,
-	.prose ol {
-		@apply ml-6 mb-4;
+
+	.prose :global(h4) {
+		font-size: var(--m3-font-title-medium);
 	}
-	.prose li {
-		@apply mb-2;
+
+	.prose :global(p) {
+		margin-bottom: 1.6rem;
 	}
+
+	.prose :global(a) {
+		color: var(--m3-color-primary);
+		text-decoration: none;
+		border-bottom: 1px solid var(--m3-color-primary);
+		transition:
+			background-color 0.3s,
+			color 0.3s;
+	}
+
+	.prose :global(a:hover) {
+		background-color: var(--m3-color-primary);
+		color: var(--m3-color-on-primary);
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin-left: 2rem;
+		margin-bottom: 1.6rem;
+		padding-left: 2rem;
+	}
+
+	.prose :global(li) {
+		margin-bottom: 0.8rem;
+	}
+
+	.prose :global(blockquote) {
+		border-left: 4px solid var(--m3-color-outline);
+		margin-left: 0;
+		padding-left: 1.6rem;
+		font-style: italic;
+		color: var(--m3-color-on-surface-variant);
+	}
+
+	.prose :global(pre) {
+		background-color: var(--m3-color-surface-variant);
+		color: var(--m3-color-on-surface-variant);
+		padding: 1.6rem;
+		border-radius: 8px;
+		overflow-x: auto;
+	}
+
+	.prose :global(code) {
+		font-family: monospace;
+		background-color: var(--m3-color-surface-variant);
+		padding: 0.2rem 0.4rem;
+		border-radius: 4px;
+	}
+
+	.prose :global(pre) :global(code) {
+		background-color: transparent;
+		padding: 0;
+	}
+
+	.project-links {
+		margin-top: 4rem;
+		border-top: 1px solid var(--m3-color-outline);
+		padding-top: 2.4rem;
+	}
+
+	.links-container {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.6rem;
+		justify-content: center;
+	}
+
 	.project-link {
-		@apply inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition duration-300 ease-in-out;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem 2.4rem;
+		border-radius: 2rem;
+		font-family: var(--m3-font-family-body);
+		font-size: var(--m3-font-label-large);
+		font-weight: 500;
+		text-decoration: none;
+		background-color: var(--m3-color-primary-container);
+		color: var(--m3-color-on-primary-container);
+		transition: background-color 0.3s;
+	}
+
+	.project-link:hover {
+		background-color: var(--m3-color-primary);
+		color: var(--m3-color-on-primary);
+	}
+
+	@media (max-width: 768px) {
+		.post-title {
+			font-size: var(--m3-font-headline-medium);
+		}
+
+		article {
+			padding: 2.4rem 1.6rem;
+		}
 	}
 </style>
