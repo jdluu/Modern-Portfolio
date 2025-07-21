@@ -80,8 +80,9 @@
 	}
 
 	.intro-role {
-		font-size: var(--m3-font-display-medium);
+		font-size: var(--m3-font-display-large);
 		font-family: var(--m3-font-family-display);
+		font-weight: 800;
 		color: var(--m3-color-on-background);
 		margin: 0.8rem 0;
 		opacity: 0;
@@ -90,7 +91,8 @@
 	}
 
 	.intro-tagline {
-		font-size: var(--m3-font-title-large);
+		font-size: var(--m3-font-headline-small);
+		font-weight: 400;
 		color: var(--m3-color-on-surface-variant);
 		max-width: 45ch;
 		margin: 0 auto 2.4rem;
@@ -128,6 +130,57 @@
 		to {
 			opacity: 1;
 			transform: translateY(0);
+		}
+	}
+
+	.background-shapes {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		z-index: 0;
+	}
+
+	.shape {
+		position: absolute;
+		border-radius: 50%;
+		background: var(--m3-color-primary-container);
+		opacity: 0.2;
+		animation: float 20s infinite ease-in-out alternate;
+	}
+
+	.shape1 {
+		width: 200px;
+		height: 200px;
+		top: 10%;
+		left: 10%;
+		animation-duration: 25s;
+	}
+
+	.shape2 {
+		width: 150px;
+		height: 150px;
+		top: 60%;
+		left: 80%;
+		animation-duration: 20s;
+	}
+
+	.shape3 {
+		width: 100px;
+		height: 100px;
+		top: 80%;
+		left: 20%;
+		animation-duration: 30s;
+	}
+
+	@keyframes float {
+		from {
+			transform: translateY(0) rotate(0deg);
+		}
+		to {
+			transform: translateY(-20px) rotate(10deg);
 		}
 	}
 </style>
