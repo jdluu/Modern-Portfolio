@@ -2,71 +2,54 @@
 
 /* 1. Color System */
 [data-theme="light"] {
-	--m3-color-primary: #8c9eff;
-	--m3-color-on-primary: #00005a;
-	--m3-color-primary-container: #e0e0ff;
-	--m3-color-on-primary-container: #00005a;
-	--m3-color-secondary: #90f0c0;
-	--m3-color-on-secondary: #003823;
-	--m3-color-tertiary: #ffcc80;
-	--m3-color-on-tertiary: #402400;
-	--m3-color-background: #fcfaff;
-	--m3-color-on-background: #1c1b1f;
-	--m3-color-surface: #fcfaff;
-	--m3-color-on-surface: #1c1b1f;
-	--m3-color-surface-variant: #e3e1ec;
-	--m3-color-on-surface-variant: #46464f;
-	--m3-color-outline: #777680;
+	--m3-color-primary: #6750A4;
+	--m3-color-on-primary: #FFFFFF;
+	--m3-color-primary-container: #EADDFF;
+	--m3-color-on-primary-container: #21005D;
+	--m3-color-secondary: #625B71;
+	--m3-color-on-secondary: #FFFFFF;
+	--m3-color-tertiary: #7D5260;
+	--m3-color-on-tertiary: #FFFFFF;
+	--m3-color-background: #FFFBFE;
+	--m3-color-on-background: #1C1B1F;
+	--m3-color-surface: #FFFBFE;
+	--m3-color-on-surface: #1C1B1F;
+	--m3-color-surface-variant: #E7E0EC;
+	--m3-color-on-surface-variant: #49454E;
+	--m3-color-outline: #79747E;
 }
 
 [data-theme="dark"] {
-	--m3-color-primary: #a8c7fa;
-	--m3-color-on-primary: #003062;
-	--m3-color-primary-container: #264478;
-	--m3-color-on-primary-container: #d8e2ff;
-	--m3-color-secondary: #90d393;
-	--m3-color-on-secondary: #003916;
-	--m3-color-tertiary: #fdd663;
-	--m3-color-on-tertiary: #3e2e00;
-	--m3-color-background: #1b1b1f;
-	--m3-color-on-background: #e3e2e6;
-	--m3-color-surface: #1b1b1f;
-	--m3-color-on-surface: #e3e2e6;
-	--m3-color-surface-variant: #44474f;
-	--m3-color-on-surface-variant: #c4c6d0;
-	--m3-color-outline: #8e9099;
+	--m3-color-primary: #D0BCFF;
+	--m3-color-on-primary: #381E72;
+	--m3-color-primary-container: #4F378B;
+	--m3-color-on-primary-container: #EADDFF;
+	--m3-color-secondary: #CCC2DC;
+	--m3-color-on-secondary: #332D41;
+	--m3-color-tertiary: #EFB8C8;
+	--m3-color-on-tertiary: #492532;
+	--m3-color-background: #1C1B1F;
+	--m3-color-on-background: #E6E1E5;
+	--m3-color-surface: #1C1B1F;
+	--m3-color-on-surface: #E6E1E5;
+	--m3-color-surface-variant: #49454E;
+	--m3-color-on-surface-variant: #CAC4D0;
+	--m3-color-outline: #938F99;
 }
 
 /* 2. Typography System */
 /* Font-Face Declarations */
 @font-face {
-	font-family: "Montserrat";
-	src: url("/fonts/Montserrat/Montserrat-Regular.woff2") format("woff2");
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Lato";
-	src: url("/fonts/Lato/Lato-Regular.woff2") format("woff2");
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Open Sans";
-	src: url("/fonts/Open_Sans/OpenSans-Regular.woff2") format("woff2");
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
+  font-family: 'Roboto Flex';
+  src: url('/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2') format('woff2');
+  font-weight: 100 1000;
+  font-style: normal;
 }
 
 :root {
 	/* Font Families */
-	--m3-font-family-display: "Montserrat", sans-serif;
-	--m3-font-family-body: "Lato", sans-serif;
+	--m3-font-family-display: "Roboto Flex", sans-serif;
+	--m3-font-family-body: "Roboto Flex", sans-serif;
 
 	/* Type Scale */
 	--m3-font-display-large: 5.7rem;
