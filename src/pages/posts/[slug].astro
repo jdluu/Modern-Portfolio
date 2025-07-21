@@ -1,53 +1,60 @@
 ---
-import { getAllPosts } from "../../lib/cosmic";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-interface Metadata {
-	date: string;
-	description: string;
-	content: string;
-	source_code: string;
-	website: string;
-}
-
-interface PageProps {
-	title: string;
-	metadata: Metadata;
-}
+import { client } from "../../../tina/__generated__/client";
+import type { Post } from "../../../tina/__generated__/types";
 
 export async function getStaticPaths() {
-	const posts: { slug: string; title: string; metadata: Metadata }[] =
-		await getAllPosts();
+	const postsResponse = await client.queries.postConnection();
+	const posts = postsResponse.data.postConnection.edges;
 
-	return posts.map(({ slug, title, metadata }) => {
-		return {
-			params: { slug },
-			props: { title, metadata },
-		};
+	if (!posts) {
+		return [];
+	}
+
+	return posts.flatMap((edge) => {
+		if (!edge?.node) {
+			return [];
+		}
+		const slug = edge.node._sys.filename.replace(/\.md$/, "").toLowerCase();
+		return [
+			{
+				params: { slug },
+				props: edge.node,
+			},
+		];
 	});
 }
 
-const { title, metadata } = Astro.props;
+const { title, date, description, content, links } = Astro.props as Post;
+const displayDate = date
+	? new Date(date).toLocaleDateString("en-US", {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		})
+	: "";
 ---
 
 <BaseLayout title={title}>
 	<article class="max-w-3xl mx-auto px-4 py-8">
 		<h1 class="text-4xl font-bold mb-4">{title}</h1>
-		<p class="text-gray-600 mb-2">
-			Published on {metadata.date}
-		</p>
-		<p class="text-gray-700 mb-4">{metadata.description}</p>
+		{date && <p class="text-gray-600 mb-2">Published on {displayDate}</p>}
+		<p class="text-gray-700 mb-4">{description}</p>
 
-		<div class="prose lg:prose-xl">
-			<Fragment set:html={metadata.content} />
-		</div>
+		<div class="prose lg:prose-xl" set:html={content} />
 		<div
 			class="flex flex-col sm:flex-row justify-start items-start sm:items-center mt-8"
 		>
-			<a href={metadata.website} class="project-link mb-4 sm:mb-0 sm:mr-6">
-				Visit Website
-			</a>
-			<a href={metadata.source_code} class="project-link"> View Source Code </a>
+			{
+				links &&
+					links
+						.filter((link) => !!link)
+						.map((link) => (
+							<a href={link!.url} class="project-link mb-4 sm:mb-0 sm:mr-6">
+								{link!.label}
+							</a>
+						))
+			}
 		</div>
 	</article>
 </BaseLayout>
