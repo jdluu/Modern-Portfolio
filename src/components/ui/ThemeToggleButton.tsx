@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toggleTheme } from "../../lib/theme-toggle";
 
 const SunIcon = ({ className }: { className?: string }) => (
