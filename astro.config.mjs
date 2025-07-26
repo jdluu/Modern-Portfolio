@@ -12,4 +12,43 @@ export default defineConfig({
 		defaultLocale: "en",
 		locales: ["en", "fr", "pt-br", "es"],
 	},
+	output: "static",
+	vite: {
+		build: {
+			target: "es2018",
+			sourcemap: false,
+			minify: "terser",
+			terserOptions: {
+				compress: {
+					drop_console: true,
+					drop_debugger: true,
+				},
+				format: {
+					comments: false,
+				},
+			},
+			cssCodeSplit: true,
+			rollupOptions: {
+				output: {
+					manualChunks: (id) => {
+						if (id.includes("node_modules")) {
+							if (id.includes("react") || id.includes("react-dom")) {
+								return "react-vendor";
+							}
+							if (id.includes("@astrojs")) {
+								return "astro-vendor";
+							}
+							return "vendor";
+						}
+					},
+				},
+			},
+		},
+		optimizeDeps: {
+			include: ["react", "react-dom", "@astrojs/react"],
+		},
+	},
+	prerender: {
+		default: true,
+	},
 });
