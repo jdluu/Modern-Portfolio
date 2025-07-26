@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { toggleTheme } from "../../lib/theme-toggle";
 
 const SunIcon = ({ className }: { className?: string }) => (
   <svg
@@ -58,21 +59,28 @@ const ThemeToggleButton = () => {
     }
   }, []);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
     if (isDarkMode === null) return;
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.setAttribute("data-theme", "dark");
+
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (isDarkMode) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.setAttribute("data-theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.setAttribute("data-theme", "light");
+      }
     } else {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.setAttribute("data-theme", "light");
+      toggleTheme();
     }
-    localStorage.setItem("darkmode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 
   const [isAnimated, setAnimated] = useState(false);
 
-  const toggleTheme = () => {
+  const handleToggle = () => {
     setDarkMode(!isDarkMode);
     setAnimated(true);
     setTimeout(() => setAnimated(false), 500);
@@ -86,7 +94,7 @@ const ThemeToggleButton = () => {
     <div
       className="btn relative w-[6.5rem] h-[3rem] rounded-full p-[0.25rem] shadow-inner flex items-center cursor-pointer bg-white
 		    dark:shadow-[inset_0_8px_60px_rgba(0,0,0,.3),_inset_8px_0_8px_rgba(0,0,0,.3),_inset_0_-4px_4px_rgba(0,0,0,.3)]"
-      onClick={toggleTheme}
+      onClick={handleToggle}
     >
       <div
         className={`btn__indicator w-[2.5rem] h-[2.5rem] rounded-full absolute shadow-md transform transition-transform duration-500 ease-in-out
