@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 export interface Props {
 	title: string;
 	description: string;
@@ -10,7 +12,16 @@ export interface Props {
 const { title, description, slug, date, thumbnail } = Astro.props;
 ---
 
-<section class="background" style={{ backgroundImage: `url('${thumbnail}')` }}>
+<section class="background">
+	<Image
+		src={thumbnail}
+		alt={title}
+		width={600}
+		height={400}
+		loading="lazy"
+		class="experience-image"
+		format="webp"
+	/>
 	<div class="project-container">
 		<section class="more-info">
 			<span class="project-title">{title}</span>
@@ -25,8 +36,6 @@ const { title, description, slug, date, thumbnail } = Astro.props;
 
 <style>
 	.background {
-		background-size: cover;
-		background-position: center;
 		position: relative;
 		border: 1px solid var(--m3-color-outline);
 		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -34,6 +43,16 @@ const { title, description, slug, date, thumbnail } = Astro.props;
 		height: 30rem;
 		border-radius: 24px;
 		overflow: hidden;
+	}
+
+	.experience-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
 	}
 
 	.background:hover .project-container {
