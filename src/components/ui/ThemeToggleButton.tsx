@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { toggleTheme } from "../../lib/theme-toggle";
+import { createSignal, createEffect, onMount, Show } from "solid-js";
 
-const SunIcon = ({ className }: { className?: string }) => (
+const SunIcon = (props: { class?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -9,10 +8,10 @@ const SunIcon = ({ className }: { className?: string }) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={props.class}
   >
     <circle cx="12" cy="12" r="5" />
     <line x1="12" y1="1" x2="12" y2="3" />
@@ -26,7 +25,7 @@ const SunIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const MoonIcon = ({ className }: { className?: string }) => (
+const MoonIcon = (props: { class?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -34,19 +33,20 @@ const MoonIcon = ({ className }: { className?: string }) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={props.class}
   >
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </svg>
 );
 
 const ThemeToggleButton = () => {
-  const [isDarkMode, setDarkMode] = useState<boolean | null>(null);
+  const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
+  const [isAnimated, setAnimated] = createSignal(false);
 
-  useEffect(() => {
+  onMount(() => {
     const darkModeSaved = localStorage.getItem("darkmode");
     if (darkModeSaved === null) {
       const prefersDark = window.matchMedia(
@@ -57,70 +57,77 @@ const ThemeToggleButton = () => {
     } else {
       setDarkMode(JSON.parse(darkModeSaved));
     }
-  }, []);
+  });
 
-  const isInitialMount = useRef(true);
+  createEffect(() => {
+    const mode = isDarkMode();
+    if (mode === null) return;
 
-  useEffect(() => {
-    if (isDarkMode === null) return;
-
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      if (isDarkMode) {
-        document.documentElement.classList.add("dark");
-        document.documentElement.setAttribute("data-theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.setAttribute("data-theme", "light");
-      }
+    if (mode) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
     } else {
-      toggleTheme();
+      document.documentElement.classList.remove("dark");
+      document.documentElement.setAttribute("data-theme", "light");
     }
-  }, [isDarkMode]);
-
-  const [isAnimated, setAnimated] = useState(false);
+  });
 
   const handleToggle = () => {
-    setDarkMode(!isDarkMode);
-    setAnimated(true);
-    setTimeout(() => setAnimated(false), 500);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(document as any).startViewTransition) {
+      const newMode = !isDarkMode();
+      setDarkMode(newMode);
+      localStorage.setItem("darkmode", JSON.stringify(newMode));
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (document as any).startViewTransition(() => {
+      const newMode = !isDarkMode();
+      setDarkMode(newMode);
+      localStorage.setItem("darkmode", JSON.stringify(newMode));
+    });
   };
 
-  if (isDarkMode === null) {
-    return <div className="w-[3.5rem] h-[2.5rem]" />;
-  }
-
   return (
-    <div
-      className="btn relative w-[6.5rem] h-[3rem] rounded-full p-[0.25rem] shadow-inner flex items-center cursor-pointer bg-white
-		    dark:shadow-[inset_0_8px_60px_rgba(0,0,0,.3),_inset_8px_0_8px_rgba(0,0,0,.3),_inset_0_-4px_4px_rgba(0,0,0,.3)]"
-      onClick={handleToggle}
+    <Show
+      when={isDarkMode() !== null}
+      fallback={<div class="w-[3.5rem] h-[2.5rem]" />}
     >
       <div
-        className={`btn__indicator w-[2.5rem] h-[2.5rem] rounded-full absolute shadow-md transform transition-transform duration-500 ease-in-out
-        ${
-          isDarkMode
-            ? "translate-x-[3.2rem] bg-gray-800"
-            : "translate-x-0 bg-white"
-        }`}
+        class="btn relative w-[6.5rem] h-[3rem] rounded-full p-[0.25rem] shadow-inner flex items-center cursor-pointer bg-white
+		    dark:shadow-[inset_0_8px_60px_rgba(0,0,0,.3),_inset_8px_0_8px_rgba(0,0,0,.3),_inset_0_-4px_4px_rgba(0,0,0,.3)]"
+        onClick={handleToggle}
       >
-        <div className="btn__icon-container w-full h-full flex justify-center items-center">
-          {isDarkMode ? (
-            <MoonIcon
-              className={`btn__icon text-white text-lg ${
-                isAnimated ? "animate-spin" : ""
-              }`}
-            />
-          ) : (
-            <SunIcon
-              className={`btn__icon text-yellow-500 text-lg ${
-                isAnimated ? "animate-spin" : ""
-              }`}
-            />
-          )}
+        <div
+          class={`btn__indicator w-[2.5rem] h-[2.5rem] rounded-full absolute shadow-md transform transition-transform duration-500 ease-in-out
+          ${
+            isDarkMode()
+              ? "translate-x-[3.2rem] bg-gray-800"
+              : "translate-x-0 bg-white"
+          }`}
+        >
+          <div class="btn__icon-container w-full h-full flex justify-center items-center">
+            <Show
+              when={isDarkMode()}
+              fallback={
+                <SunIcon
+                  class={`btn__icon text-yellow-500 text-lg ${
+                    isAnimated() ? "animate-spin" : ""
+                  }`}
+                />
+              }
+            >
+              <MoonIcon
+                class={`btn__icon text-white text-lg ${
+                  isAnimated() ? "animate-spin" : ""
+                }`}
+              />
+            </Show>
+          </div>
         </div>
       </div>
-    </div>
+    </Show>
   );
 };
 
