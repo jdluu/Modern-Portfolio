@@ -1,27 +1,47 @@
 {
-	"extends": "astro/tsconfigs/base",
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["src/components/*"],
-			"@layouts/*": ["src/layouts/*"],
-			"@pages/*": ["src/pages/*"],
-			"@images/*": ["src/assets/images/*"],
-			"@scripts/*": ["src/scripts/*"],
-			"@fonts/*": ["public/fonts/*"],
-			"@icons/*": ["public/icons/*"]
-		},
-		"target": "ES2020",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "react",
-		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": ["src/**/*", "tina/config.ts"],
-	"exclude": ["node_modules", "dist"]
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@images/*": [
+        "src/assets/images/*"
+      ],
+      "@scripts/*": [
+        "src/scripts/*"
+      ],
+      "@fonts/*": [
+        "public/fonts/*"
+      ],
+      "@icons/*": [
+        "public/icons/*"
+      ]
+    },
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*",
+    "tina/config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
