@@ -30,7 +30,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js",
+    "jsxImportSource": "react",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

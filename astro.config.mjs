@@ -1,11 +1,19 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
+import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
     site: "https://jluu.dev",
-    integrations: [sitemap(), solidJs()],
+    integrations: [
+        sitemap(),
+        solidJs({ include: ['src/components/ui/**/*.tsx'] }),
+        react({
+            exclude: ['src/components/ui/**'],
+            include: ['node_modules/@tinacms/**', 'tina/**']
+        })
+    ],
     i18n: {
         defaultLocale: "en",
         locales: ["en", "fr", "pt-br", "es"],
