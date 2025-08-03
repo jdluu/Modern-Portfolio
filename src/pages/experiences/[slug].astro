@@ -48,7 +48,7 @@ export async function getStaticPaths() {
     }
 }
 
-const { title, metadata } = Astro.props;
+const { title, metadata } = Astro.props as PageProps;
 
 // Safely access nested properties with null checks
 const companyName = metadata?.company?.name ?? 'Company Name Not Available';
@@ -68,24 +68,57 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 <BaseLayout title={title}>
     <main class="experience-page-container">
         <article class="experience-page-div">
-            <section id="overview" aria-labelledby="experience-title">
-                <div class="experience-header">
-                    <div class="company-info" role="banner">
-                        <img 
-                            src={companyLogo}
-                            alt={`${companyName} logo`}
-                            class="company-logo"
-                            onerror="this.src='/placeholder-logo.png'"
-                            width="80"
-                            height="80"
-                            loading="lazy"
-                            aria-hidden="true"
-                        />
-                        <div class="title-container">
-                            <h1 id="experience-title" class="experience-title" tabindex="-1">{title}</h1>
-                            <p class="company-name"><strong>{companyName}</strong></p>
+            <!-- Main Content Column -->
+            <div class="main-content">
+                <section id="overview" aria-labelledby="experience-title">
+                    <div class="experience-header">
+                        <div class="company-info" role="banner">
+                            <img
+                                src={companyLogo}
+                                alt={`${companyName} logo`}
+                                class="company-logo"
+                                onerror="this.src='/placeholder-logo.png'"
+                                width="80"
+                                height="80"
+                                loading="lazy"
+                                aria-hidden="true"
+                            />
+                            <div class="title-container">
+                                <h1 id="experience-title" class="experience-title" tabindex="-1">{title}</h1>
+                                <p class="company-name"><strong>{companyName}</strong></p>
+                            </div>
                         </div>
                     </div>
+                    <p class="section-content lead">{description}</p>
+                </section>
+
+                {responsibilities.length > 0 && (
+                    <section id="responsibilities" aria-labelledby="responsibilities-title">
+                        <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
+                        <ul class="responsibilities-list" role="list">
+                            {responsibilities.map((item, index) => (
+                                <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+
+                {achievements.length > 0 && (
+                    <section id="achievements" aria-labelledby="achievements-title">
+                        <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
+                        <ul class="achievements-list" role="list">
+                            {achievements.map((item, index) => (
+                                <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+            </div>
+
+            <!-- Sidebar Column -->
+            <aside class="sidebar-content">
+                <div class="sidebar-card">
+                    <h3 id="logistics-title">Logistics</h3>
                     <div class="experience-meta">
                         <div class="meta-item">
                             <span class="meta-label" id="role-label">Role</span>
@@ -97,58 +130,39 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                         </div>
                     </div>
                 </div>
-                <p class="section-content lead">{description}</p>
-                <div class="tech-section" role="complementary" aria-label="Technical details">
-                    <div class="tech-item">
-                        <h3 id="tools-title">Tools & Technologies</h3>
-                        <p aria-labelledby="tools-title"><strong>{tools}</strong></p>
-                    </div>
-                    <div class="tech-item">
-                        <h3 id="skills-title">Skills</h3>
-                        <p aria-labelledby="skills-title"><strong>{skills}</strong></p>
+                <div class="sidebar-card">
+                    <h3 id="tech-title">Technology Stack</h3>
+                    <div class="tech-section">
+                        <div class="tech-item">
+                            <h4 id="tools-title">Tools & Technologies</h4>
+                            <p aria-labelledby="tools-title"><strong>{tools}</strong></p>
+                        </div>
+                        <div class="tech-item">
+                            <h4 id="skills-title">Skills</h4>
+                            <p aria-labelledby="skills-title"><strong>{skills}</strong></p>
+                        </div>
                     </div>
                 </div>
-            </section>
-
-            {responsibilities.length > 0 && (
-                <section id="responsibilities" aria-labelledby="responsibilities-title">
-                    <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
-                    <ul class="responsibilities-list" role="list">
-                        {responsibilities.map((item, index) => (
-                            <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
-                        ))}
-                    </ul>
-                </section>
-            )}
-
-            {achievements.length > 0 && (
-                <section id="achievements" aria-labelledby="achievements-title">
-                    <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
-                    <ul class="achievements-list" role="list">
-                        {achievements.map((item, index) => (
-                            <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
-                        ))}
-                    </ul>
-                </section>
-            )}
-
-            {showcase.length > 0 && (
-                <section id="showcase" aria-labelledby="showcase-title">
-                    <h2 id="showcase-title" tabindex="-1">Project Showcase</h2>
-                    <div class="showcase-grid">
-                        {showcase.map((item) => (
-                            <a href={item.link} 
-                               class="showcase-item" 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               aria-label={`View project: ${item.description}`}>
-                                <p><strong>{item.description}</strong></p>
-                                <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
-                            </a>
-                        ))}
+                {showcase.length > 0 && (
+                    <div class="sidebar-card">
+                        <section id="showcase" aria-labelledby="showcase-title">
+                            <h3 id="showcase-title" tabindex="-1">Project Showcase</h3>
+                            <div class="showcase-grid">
+                                {showcase.map((item) => (
+                                    <a href={item.link}
+                                       class="showcase-item"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       aria-label={`View project: ${item.description}`}>
+                                        <p><strong>{item.description}</strong></p>
+                                        <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
                     </div>
-                </section>
-            )}
+                )}
+            </aside>
         </article>
     </main>
 </BaseLayout>
@@ -156,18 +170,20 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 <style>
     /* Layout & Container Styles */
     .experience-page-container {
-        max-width: min(1200px, 95%);
+        max-width: 1200px;
         margin: 0 auto;
         padding: var(--spacing-lg);
     }
 
     .experience-page-div {
-        background: var(--background-color);
-        border-radius: 12px;
-        padding: clamp(1.5rem, 4vw, var(--spacing-xl));
-        box-shadow: var(--shadow-md);
-        margin: 0 auto;
-        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); /* Main content gets 2/3, sidebar gets 1/3 */
+        gap: var(--spacing-xl);
+        align-items: start;
+    }
+
+    .main-content {
+        max-width: 80ch; /* Optimal line-length for reading */
     }
 
     /* Header Styles */
@@ -214,12 +230,19 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         word-wrap: break-word;
     }
 
+    /* Sidebar Styles */
+    .sidebar-card {
+        background: var(--m3-color-surface-variant);
+        padding: var(--spacing-lg);
+        border-radius: 12px;
+        margin-bottom: var(--spacing-lg);
+    }
+
     .experience-meta {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: 1fr;
         gap: var(--spacing-md);
         align-items: flex-start;
-        margin-top: var(--spacing-lg);
     }
 
     .meta-item {
@@ -252,17 +275,12 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 
     .tech-section {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: 1fr;
         gap: var(--spacing-lg);
-        margin: var(--spacing-xl) 0;
     }
 
-    .tech-item {
-        padding: 0;
-    }
-
-    .tech-item h3 {
-        font-size: clamp(1.25rem, 3vw, 1.5rem);
+    .tech-item h4 {
+        font-size: clamp(1.1rem, 3vw, 1.25rem);
         margin-bottom: var(--spacing-sm);
         color: var(--text-color);
         font-family: var(--font-heading);
@@ -288,8 +306,8 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         position: relative;
         padding-left: 1.5em;
         margin-bottom: var(--spacing-md);
-        line-height: 1.6;
-        font-size: 1.1rem;
+        font-size: var(--m3-font-body-large); /* 1.6rem */
+        line-height: 1.7;
         color: var(--text-color);
     }
 
@@ -308,34 +326,37 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
 
     /* Section Titles */
-    h2 {
-        font-size: clamp(1.5rem, 4vw, 2rem);
+    .main-content h2 {
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--m3-color-outline);
+        font-size: var(--m3-font-headline-small); /* 2.4rem */
         color: var(--text-color);
         margin: var(--spacing-xl) 0 var(--spacing-md);
         font-family: var(--font-heading);
     }
 
+    .sidebar-card h3 {
+        font-size: var(--m3-font-title-medium); /* 1.6rem */
+        margin-bottom: var(--spacing-md);
+    }
+
     /* Responsive Styles */
+    @media (max-width: 992px) {
+        .experience-page-div {
+            grid-template-columns: 1fr; /* Stack columns */
+        }
+
+        .sidebar-content {
+            grid-row: 1;
+        }
+    }
+
     @media (max-width: 768px) {
         .experience-page-container {
             padding: var(--spacing-md);
         }
 
-        .experience-page-div {
-            padding: var(--spacing-lg);
-        }
-
         .company-info {
-            gap: var(--spacing-md);
-        }
-
-        .tech-section {
-            grid-template-columns: 1fr;
-            gap: var(--spacing-lg);
-        }
-
-        .experience-meta {
-            grid-template-columns: 1fr;
             gap: var(--spacing-md);
         }
     }
@@ -343,10 +364,6 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     @media (max-width: 480px) {
         .experience-page-container {
             padding: var(--spacing-sm);
-        }
-
-        .experience-page-div {
-            padding: var(--spacing-md);
         }
 
         .company-info {
@@ -367,7 +384,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 
 <script>
     // Smooth scrolling for navigation links with keyboard support
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', handleSmoothScroll);
         anchor.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -377,12 +394,13 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         });
     });
 
-    function handleSmoothScroll(e) {
+    function handleSmoothScroll(e: MouseEvent | KeyboardEvent) {
         e.preventDefault();
-        const href = e.currentTarget.getAttribute('href');
+        const currentTarget = e.currentTarget as HTMLAnchorElement;
+        const href = currentTarget.getAttribute('href');
         if (!href) return;
 
-        const targetElement = document.querySelector(href);
+        const targetElement = document.querySelector(href) as HTMLElement;
         
         if (targetElement) {
             const navHeight = parseInt(getComputedStyle(document.documentElement)
@@ -396,9 +414,9 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
             });
 
             // Set focus to the target heading
-            const heading = targetElement.querySelector('h1, h2');
+            const heading = targetElement.querySelector('h1, h2, h3, h4, h5, h6') as HTMLElement;
             if (heading) {
-                heading.focus();
+                heading.focus({ preventScroll: true });
             }
 
             // Update URL without jumping
