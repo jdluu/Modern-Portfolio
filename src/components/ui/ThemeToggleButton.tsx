@@ -92,37 +92,21 @@ const ThemeToggleButton = () => {
   return (
     <Show
       when={isDarkMode() !== null}
-      fallback={<div class="w-[3.5rem] h-[2.5rem]" />}
+      fallback={<div class="btn-placeholder" />}
     >
       <div
-        class="btn relative w-[6.5rem] h-[3rem] rounded-full p-[0.25rem] shadow-inner flex items-center cursor-pointer bg-white
-		    dark:shadow-[inset_0_8px_60px_rgba(0,0,0,.3),_inset_8px_0_8px_rgba(0,0,0,.3),_inset_0_-4px_4px_rgba(0,0,0,.3)]"
+        class="btn"
         onClick={handleToggle}
       >
-        <div
-          class={`btn__indicator w-[2.5rem] h-[2.5rem] rounded-full absolute shadow-md transform transition-transform duration-500 ease-in-out
-          ${
-            isDarkMode()
-              ? "translate-x-[3.2rem] bg-gray-800"
-              : "translate-x-0 bg-white"
-          }`}
-        >
-          <div class="btn__icon-container w-full h-full flex justify-center items-center">
+        <div class="btn__indicator">
+          <div class="btn__icon-container">
             <Show
               when={isDarkMode()}
               fallback={
-                <SunIcon
-                  class={`btn__icon text-yellow-500 text-lg ${
-                    isAnimated() ? "animate-spin" : ""
-                  }`}
-                />
+                <SunIcon class={`btn__icon btn__icon--sun ${isAnimated() ? "is-animated" : ""}`} />
               }
             >
-              <MoonIcon
-                class={`btn__icon text-white text-lg ${
-                  isAnimated() ? "animate-spin" : ""
-                }`}
-              />
+              <MoonIcon class={`btn__icon btn__icon--moon ${isAnimated() ? "is-animated" : ""}`} />
             </Show>
           </div>
         </div>
