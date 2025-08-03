@@ -1,4 +1,4 @@
-import { createSignal, createEffect, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 
 const SunIcon = (props: { class?: string }) => (
   <svg
@@ -46,71 +46,54 @@ const ThemeToggleButton = () => {
   const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
   const [isAnimated, setAnimated] = createSignal(false);
 
+
   onMount(() => {
-    const darkModeSaved = localStorage.getItem("darkmode");
-    if (darkModeSaved === null) {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
+    const saved = localStorage.getItem("darkmode");
+    if (saved === null) {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       setDarkMode(prefersDark);
       localStorage.setItem("darkmode", JSON.stringify(prefersDark));
     } else {
-      setDarkMode(JSON.parse(darkModeSaved));
+      setDarkMode(JSON.parse(saved));
     }
+    // Set initial theme attribute
+    document.documentElement.setAttribute("data-theme", isDarkMode() ? "dark" : "light");
   });
 
-  createEffect(() => {
-    const mode = isDarkMode();
-    if (mode === null) return;
 
-    if (mode) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.setAttribute("data-theme", "dark");
+  const toggle = () => {
+    const next = !isDarkMode();
+    setDarkMode(next);
+    localStorage.setItem("darkmode", JSON.stringify(next));
+    if ((document as any).startViewTransition) {
+      (document as any).startViewTransition(() => {
+        setAnimated(true);
+        document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
+        setTimeout(() => {
+          setAnimated(false);
+        }, 300);
+      });
     } else {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.setAttribute("data-theme", "light");
+      document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
     }
-  });
-
-  const handleToggle = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (!(document as any).startViewTransition) {
-      const newMode = !isDarkMode();
-      setDarkMode(newMode);
-      localStorage.setItem("darkmode", JSON.stringify(newMode));
-      return;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (document as any).startViewTransition(() => {
-      const newMode = !isDarkMode();
-      setDarkMode(newMode);
-      localStorage.setItem("darkmode", JSON.stringify(newMode));
-    });
   };
 
   return (
-    <Show
-      when={isDarkMode() !== null}
-      fallback={<div class="btn-placeholder" />}
-    >
-      <div
+    <Show when={isDarkMode() !== null} fallback={<div class="btn-placeholder" />}>
+      <button
+        type="button"
         class="btn"
-        onClick={handleToggle}
+        aria-pressed={isDarkMode() ? "true" : "false"}
+        title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
+        onClick={toggle}
       >
         <div class="btn__indicator">
           <div class="btn__icon-container">
-            <Show
-              when={isDarkMode()}
-              fallback={
-                <SunIcon class={`btn__icon btn__icon--sun ${isAnimated() ? "is-animated" : ""}`} />
-              }
-            >
-              <MoonIcon class={`btn__icon btn__icon--moon ${isAnimated() ? "is-animated" : ""}`} />
-            </Show>
+            <SunIcon class="btn__icon btn__icon--sun" />
+            <MoonIcon class="btn__icon btn__icon--moon" />
           </div>
         </div>
-      </div>
+      </button>
     </Show>
   );
 };
