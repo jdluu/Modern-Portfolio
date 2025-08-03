@@ -208,7 +208,15 @@ body {
     transform 260ms cubic-bezier(.2,.8,.2,1),
     background-color 180ms ease,
     box-shadow 180ms ease;
+  view-transition-name: theme-thumb;
   will-change: transform;
+}
+
+html:not([data-theme-vt="driving"]) .btn__indicator {
+  transform: translateX(0);
+}
+html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
+  transform: translateX(3.8rem);
 }
 
 /* Dark-mode thumb position and color */
