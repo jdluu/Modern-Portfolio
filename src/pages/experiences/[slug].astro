@@ -152,18 +152,14 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                     <div class="tech-section">
                         <div class="tech-item">
                             <h4 id="tools-title">Tools & Technologies</h4>
-                            <div class="chip-row" aria-labelledby="tools-title">
-                                {(tools || 'N/A').split(',').map(t => t.trim()).filter(Boolean).map((t, i) => (
-                                    <span class="chip">{t}</span>
-                                ))}
+                            <div class="tech-text" aria-labelledby="tools-title">
+                              {(tools || 'N/A').split(',').map(t => t.trim()).filter(Boolean).join(', ')}
                             </div>
                         </div>
                         <div class="tech-item">
                             <h4 id="skills-title">Skills</h4>
-                            <div class="chip-row" aria-labelledby="skills-title">
-                                {(skills || 'N/A').split(',').map(s => s.trim()).filter(Boolean).map((s, i) => (
-                                    <span class="chip">{s}</span>
-                                ))}
+                            <div class="tech-text" aria-labelledby="skills-title">
+                              {(skills || 'N/A').split(',').map(s => s.trim()).filter(Boolean).join(', ')}
                             </div>
                         </div>
                     </div>
@@ -193,6 +189,13 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 </BaseLayout>
 
 <style>
+/* Purple accent color for both themes */
+    :root {
+        --purple-accent: var(--m3-color-secondary); /* Dark purple for light theme */
+    }
+    [data-theme="dark"] {
+        --purple-accent: var(--m3-color-primary); /* Light violet for dark theme */
+    }
     /* Layout & Container Styles */
     .experience-page-container {
         max-width: 1200px;
@@ -315,6 +318,14 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
 
     .tech-item p {
+        color: var(--text-color);
+        line-height: 1.6;
+        word-wrap: break-word;
+        font-size: 1.1rem;
+    }
+
+    /* Text-based styles for tools and skills lists */
+    .tech-text {
         color: var(--text-color);
         line-height: 1.6;
         word-wrap: break-word;
@@ -530,7 +541,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
     /* Typography enhancements */
     .highlight {
-      color: var(--accent-color);
+      color: var(--purple-accent);
       font-weight: 500;
     }
     .lead {
@@ -538,7 +549,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
       margin-bottom: var(--spacing-lg);
     }
     strong {
-      color: var(--accent-color);
+      color: var(--purple-accent);
       font-weight: 600;
     }
 </style>
