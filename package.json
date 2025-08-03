@@ -13,12 +13,10 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.4.2",
     "@astrojs/solid-js": "^5.1.0",
-    "@astrojs/tailwind": "^6.0.2",
     "@cosmicjs/sdk": "^1.5.5",
     "astro": "^5.12.8",
     "solid-devtools": "^0.34.3",
     "solid-js": "^1.9.7",
-    "tailwindcss": "^4.1.11",
     "tinacms": "^2.8.1",
     "vite": "^7.0.6"
   },
