@@ -273,3 +273,26 @@ html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
 }
 
 
+
+:root {
+  --spacing-sm: 0.8rem;
+  --spacing-md: 1.6rem;
+  --spacing-lg: 2.4rem;
+  --spacing-xl: 3.2rem;
+  --nav-height: 64px;
+  --text-color: var(--m3-color-on-surface);
+  --accent-color: var(--m3-color-primary);
+  --font-heading: var(--m3-font-family-display);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
