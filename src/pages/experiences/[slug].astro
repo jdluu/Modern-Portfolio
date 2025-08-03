@@ -92,31 +92,48 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                     <p class="section-content lead">{description}</p>
                 </section>
 
-                {responsibilities.length > 0 && (
-                    <section id="responsibilities" aria-labelledby="responsibilities-title">
-                        <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
+                <section id="responsibilities" aria-labelledby="responsibilities-title">
+                    <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
+                    {responsibilities.length > 0 ? (
                         <ul class="responsibilities-list" role="list">
                             {responsibilities.map((item, index) => (
                                 <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
                             ))}
                         </ul>
-                    </section>
-                )}
+                    ) : (
+                        <p class="empty-state">No responsibilities available.</p>
+                    )}
+                </section>
 
-                {achievements.length > 0 && (
-                    <section id="achievements" aria-labelledby="achievements-title">
-                        <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
+                <section id="achievements" aria-labelledby="achievements-title">
+                    <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
+                    {achievements.length > 0 ? (
                         <ul class="achievements-list" role="list">
                             {achievements.map((item, index) => (
                                 <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
                             ))}
                         </ul>
-                    </section>
-                )}
+                    ) : (
+                        <p class="empty-state">No achievements available.</p>
+                    )}
+                </section>
             </div>
 
             <!-- Sidebar Column -->
             <aside class="sidebar-content">
+              <nav class="sidebar-card toc" aria-label="Page sections">
+                <h3>On this page</h3>
+                <ol class="toc-list" role="list">
+                  <li><a href="#overview">Overview</a></li>
+                  {responsibilities.length > 0 && <li><a href="#responsibilities">Responsibilities</a></li>}
+                  {achievements.length > 0 && <li><a href="#achievements">Achievements</a></li>}
+                  {showcase.length > 0 && <li><a href="#showcase">Showcase</a></li>}
+                </ol>
+                <div class="progress">
+                  <div class="progress-bar" aria-hidden="true"></div>
+                  <span class="sr-only" id="read-progress">Reading progress</span>
+                </div>
+              </nav>
                 <div class="sidebar-card">
                     <h3 id="logistics-title">Logistics</h3>
                     <div class="experience-meta">
@@ -135,11 +152,19 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                     <div class="tech-section">
                         <div class="tech-item">
                             <h4 id="tools-title">Tools & Technologies</h4>
-                            <p aria-labelledby="tools-title"><strong>{tools}</strong></p>
+                            <div class="chip-row" aria-labelledby="tools-title">
+                                {(tools || 'N/A').split(',').map(t => t.trim()).filter(Boolean).map((t, i) => (
+                                    <span class="chip">{t}</span>
+                                ))}
+                            </div>
                         </div>
                         <div class="tech-item">
                             <h4 id="skills-title">Skills</h4>
-                            <p aria-labelledby="skills-title"><strong>{skills}</strong></p>
+                            <div class="chip-row" aria-labelledby="skills-title">
+                                {(skills || 'N/A').split(',').map(s => s.trim()).filter(Boolean).map((s, i) => (
+                                    <span class="chip">{s}</span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,7 +202,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
 
     .experience-page-div {
         display: grid;
-        grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); /* Main content gets 2/3, sidebar gets 1/3 */
+        grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr);
         gap: var(--spacing-xl);
         align-items: start;
     }
@@ -190,6 +215,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .experience-header {
         margin-bottom: var(--spacing-lg);
         padding-bottom: var(--spacing-md);
+        border-bottom: 1px dashed color-mix(in oklab, var(--m3-color-outline) 40%, transparent);
     }
 
     .company-info {
@@ -206,6 +232,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         border-radius: 8px;
         background: white;
         padding: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.06);
         flex-shrink: 0;
     }
 
@@ -221,6 +248,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         line-height: 1.2;
         word-wrap: break-word;
         font-family: var(--font-heading);
+        font-weight: 700;
     }
 
     .company-name {
@@ -328,11 +356,12 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     /* Section Titles */
     .main-content h2 {
         padding-top: var(--spacing-lg);
-        border-top: 1px solid var(--m3-color-outline);
+        border-top: 1px dashed color-mix(in oklab, var(--m3-color-outline) 40%, transparent);
         font-size: var(--m3-font-headline-small); /* 2.4rem */
         color: var(--text-color);
         margin: var(--spacing-xl) 0 var(--spacing-md);
         font-family: var(--font-heading);
+        font-weight: 600;
     }
 
     .sidebar-card h3 {
@@ -341,13 +370,63 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
 
     /* Responsive Styles */
+/* Sidebar sticky + TOC */
+.sidebar-content {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--spacing-md));
+  align-self: start;
+}
+.sidebar-card.toc {
+  background: color-mix(in oklab, var(--m3-color-surface-variant) 85%, transparent);
+  border: 1px solid color-mix(in oklab, var(--m3-color-outline) 35%, transparent);
+  backdrop-filter: saturate(1.1) blur(2px);
+}
+/* TOC List */
+.toc-list {
+  margin: 0 0 var(--spacing-lg);
+  padding: 0;
+  list-style: none;
+}
+.toc-list a {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--m3-color-on-surface);
+  text-decoration: none;
+}
+.toc-list a:hover,
+.toc-list a:focus-visible {
+  color: var(--m3-color-primary);
+  text-decoration: underline;
+}
+/* Reading progress */
+.progress {
+  width: 100%;
+  height: 6px;
+  background: color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+}
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--m3-color-primary);
+  transition: width 120ms linear;
+}
+/* Chip hover/focus states */
+.chip:hover,
+.chip:focus-visible {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  border-color: var(--m3-color-primary);
+}
     @media (max-width: 992px) {
         .experience-page-div {
             grid-template-columns: 1fr; /* Stack columns */
         }
-
+    
         .sidebar-content {
-            grid-row: 1;
+            grid-row: 2;
         }
     }
 
@@ -366,6 +445,75 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
             padding: var(--spacing-sm);
         }
 
+/* Sidebar sticky + TOC */
+    .sidebar-content {
+      position: sticky;
+      top: calc(var(--nav-height) + var(--spacing-md));
+      align-self: start;
+    }
+    .sidebar-card.toc {
+      background: color-mix(in oklab, var(--m3-color-surface-variant) 85%, transparent);
+      border: 1px solid color-mix(in oklab, var(--m3-color-outline) 35%, transparent);
+      backdrop-filter: saturate(1.1) blur(2px);
+    }
+    .toc h3 {
+      margin-bottom: var(--spacing-sm);
+    }
+    .toc-list {
+      margin: 0 0 var(--spacing-lg);
+      padding: 0;
+      list-style: none;
+    }
+    .toc-list a {
+      display: inline-block;
+      padding: 6px 0;
+      color: var(--m3-color-on-surface);
+      text-decoration: none;
+    }
+    .toc-list a:hover,
+    .toc-list a:focus-visible {
+      color: var(--m3-color-primary);
+      text-decoration: underline;
+    }
+    /* Reading progress */
+    .progress {
+      width: 100%;
+      height: 6px;
+      background: color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: var(--spacing-lg);
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--m3-color-primary);
+      transition: width 120ms linear;
+    }
+    /* Chips */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: var(--m3-font-label-medium);
+      background: color-mix(in oklab, var(--m3-color-primary) 10%, var(--m3-color-surface-variant));
+      color: var(--m3-color-on-surface);
+      border: 1px solid color-mix(in oklab, var(--m3-color-primary) 25%, transparent);
+    }
+    /* Print styles (resume-friendly) */
+    @media print {
+      .sidebar-content { position: static !important; }
+      .toc, nav, header, footer { display: none !important; }
+      .sidebar-card { break-inside: avoid; }
+      body { background: white; color: black; }
+      .chip { background: var(--m3-color-surface) !important; border-color: var(--m3-color-outline) !important; }
+    }
         .company-info {
             flex-direction: column;
             align-items: center;
@@ -379,6 +527,19 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
         .meta-item {
             text-align: center;
         }
+    }
+    /* Typography enhancements */
+    .highlight {
+      color: var(--accent-color);
+      font-weight: 500;
+    }
+    .lead {
+      font-size: var(--m3-font-body-large);
+      margin-bottom: var(--spacing-lg);
+    }
+    strong {
+      color: var(--accent-color);
+      font-weight: 600;
     }
 </style>
 
@@ -423,4 +584,34 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
             history.pushState(null, '', href);
         }
     }
+
+    // IntersectionObserver: update TOC active link and reading progress
+    const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc-list a'));
+    const sections = tocLinks
+      .map(a => document.querySelector<HTMLElement>(a.getAttribute('href')!))
+      .filter((e): e is HTMLElement => e !== null);
+    const progressBar = document.querySelector<HTMLDivElement>('.progress-bar')!;
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = '#' + entry.target.id;
+          tocLinks.forEach(l => l.removeAttribute('aria-current'));
+          const active = tocLinks.find(l => l.getAttribute('href') === id);
+          active?.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach(s => io.observe(s));
+
+    // Read progress
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = Math.max(0, Math.min(1, docHeight ? scrollTop / docHeight : 0));
+      if (progressBar) progressBar.style.width = (pct * 100).toFixed(1) + '%';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 </script>
