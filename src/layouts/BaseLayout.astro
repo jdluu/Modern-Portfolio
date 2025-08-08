@@ -67,13 +67,35 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			sizes="310x310"
 			href="/favicons/ms-tile-310x310.png"
 		/>
+		<!-- Critical Fallback for LCP text to avoid FOIT on mobile -->
+		<style>
+			/* Use a fast system fallback for the LCP element until webfont loads */
+			.home-text {
+				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+				font-weight: 500;
+				/* match line-height/size to prevent layout shift */
+				line-height: 1;
+			}
+		</style>
+	
 		<!-- Preload Critical Assets -->
+		<!-- For mobile: preload a tiny subset to speed the LCP text paint -->
+		<link
+			rel="preload"
+			href="/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+			media="(max-width: 767px)"
+		/>
+		<!-- For desktop / larger viewports: preload the full variable font -->
 		<link
 			rel="preload"
 			href="/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin
+			media="(min-width: 768px)"
 		/>
 		<link rel="preload" href="/styles/reset.css" as="style" />
 		<link rel="preload" href="/styles/global.css" as="style" />
