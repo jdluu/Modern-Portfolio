@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
-
+Disallow: /admin
+ 
 Sitemap: https://jluu.dev/sitemap-index.xml
