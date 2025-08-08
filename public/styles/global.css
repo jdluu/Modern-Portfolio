@@ -39,12 +39,27 @@
 
 /* 2. Typography System */
 /* Font-Face Declarations */
+/* Small subset optimized for the LCP text (preload & apply quickly on mobile).
+   Generate this file with fonttools/pyftsubset (example provided in the repo notes). */
+@font-face {
+  font-family: 'Roboto Flex';
+  src: url('/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  /* Use 'swap' to allow a quick fallback paint then swap in the small subset ASAP */
+  font-display: swap;
+  /* Limit to Basic Latin — keep this small so mobile LCP can complete fast */
+  unicode-range: U+0000-00FF;
+}
+
+/* Full variable font (kept for desktop/expanded use) */
 @font-face {
   font-family: 'Roboto Flex';
   src: url('/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2') format('woff2');
   font-weight: 100 1000;
   font-style: normal;
-  font-display: swap;
+  /* Use 'optional' for the heavy variable font to avoid FOIT on slow connections */
+  font-display: optional;
   /* Latin subset for better performance */
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
