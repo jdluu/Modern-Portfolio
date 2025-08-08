@@ -69,12 +69,31 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		/>
 		<!-- Critical Fallback for LCP text to avoid FOIT on mobile -->
 		<style>
-			/* Use a fast system fallback for the LCP element until webfont loads */
+			/* Use a fast system fallback for the LCP elements until webfont loads.
+			   Keep metric-compatible weights per element to reduce layout shift. */
 			.home-text {
 				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 				font-weight: 500;
 				/* match line-height/size to prevent layout shift */
 				line-height: 1;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+			/* Hero (LCP) - use a bold system fallback so the initial paint roughly matches weight 800 */
+			.intro-role {
+				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+				font-weight: 800;
+				line-height: 1;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+			/* Secondary hero text */
+			.intro-tagline {
+				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+				font-weight: 400;
+				line-height: 1;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 			}
 		</style>
 	
