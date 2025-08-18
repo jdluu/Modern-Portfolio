@@ -1,11 +1,35 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getAllPosts } from "../lib/cosmic";
+import { client } from "../../tina/__generated__/client";
 
 const title = "Blog";
-const posts = await getAllPosts();
----
 
+/**
+ * Query TinaCMS for posts using the generated client.
+ * The generated `postConnection` returns edges[].node with _sys.filename
+ * which we use to derive the slug (strip .md/.mdx extension).
+ */
+const postsResp = await client.queries.postConnection();
+const edges = postsResp?.data?.postConnection?.edges ?? [];
+
+// Ensure we only map over non-null nodes so TypeScript won't complain.
+const nodes = edges
+	.map((edge) => edge?.node)
+	.filter((n) => n !== null && n !== undefined);
+
+const posts = nodes.map((node) => {
+	// node is guaranteed non-null here
+	const filename = node._sys?.filename ?? "";
+	const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
+	return {
+		title: node.title ?? "Untitled",
+		slug,
+		date: node.date ?? null,
+		description: node.description ?? null,
+	};
+});
+---
+ 
 <BaseLayout title={title}>
 	<main class="container mx-auto px-4 py-8">
 		<h1 class="text-4xl font-bold mb-8">{title}</h1>
@@ -19,9 +43,9 @@ const posts = await getAllPosts();
 						>
 							{post.title}
 						</a>
-						{post.metadata && post.metadata.date && (
+						{post.date && (
 							<p class="text-sm text-gray-500">
-								{new Date(post.metadata.date).toLocaleDateString()}
+								{new Date(post.date).toLocaleDateString()}
 							</p>
 						)}
 					</li>
