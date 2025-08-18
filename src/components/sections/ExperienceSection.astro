@@ -1,11 +1,45 @@
 ---
 import ExperienceCard from "../ui/ExperienceCard.astro";
-import { getAllExperienceCards } from "../../lib/cosmic";
+import { client } from "../../../tina/__generated__/client";
 
-const experiences = await getAllExperienceCards();
-const firstExperience = experiences[0];
+/**
+ * Use TinaCMS generated client to fetch experience cards.
+ * The generated `experiencecardConnection` returns edges[].node
+ * with _sys.filename which we can use as a slug.
+ */
+let resp;
+try {
+  // Prefer server-side sorting by endDate (desc)
+  resp = await client.queries.experiencecardConnection({ sort: "metadata.endDate:desc" });
+} catch {
+  // Fallback to unsorted if the dev server hasn’t recognized new fields yet
+  resp = await client.queries.experiencecardConnection();
+}
+const edges = resp?.data?.experiencecardConnection?.edges ?? [];
+
+const nodes = edges
+  .map((e) => e?.node)
+  .filter((n) => n !== null && n !== undefined);
+
+// Client-side safeguard sort: use ISO endDate if available; otherwise stable fallback.
+const getEndTs = (n: Record<string, any> | undefined) => {
+  const end = n?.metadata?.["endDate"] || "";
+  const t = end ? Date.parse(end) : NaN;
+  return Number.isNaN(t) ? 0 : t;
+};
+const sortedNodes = [...nodes].sort((a, b) => getEndTs(b) - getEndTs(a));
+
+// Normalize nodes into the shape ExperienceCard expects (sorted by endDate desc)
+const experiences = sortedNodes.map((node) => ({
+  title: node.title ?? "Untitled",
+  slug: (node._sys?.filename ?? "").replace(/\.mdx?$/i, "").toLowerCase(),
+  description: node.metadata?.description ?? "",
+  thumbnail: node.metadata?.thumbnail ?? "",
+  // Keep the human-readable string for display
+  date: node.metadata?.date ?? "",
+}));
 ---
-
+ 
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
 	<p class="section-desc">
@@ -13,17 +47,17 @@ const firstExperience = experiences[0];
 	</p>
 	<div class="card-container">
 		{
-			firstExperience && (
+			experiences.length > 0 && experiences.map((exp) => (
 				<div class="experience-card-wrapper">
 					<ExperienceCard
-						title={firstExperience.title}
-						description={firstExperience.metadata.description}
-						thumbnail={firstExperience.metadata.thumbnail?.url || ""}
-						slug={firstExperience.slug}
-						date={firstExperience.metadata.date}
+						title={exp.title}
+						description={exp.description}
+						thumbnail={exp.thumbnail || ""}
+						slug={exp.slug}
+						date={exp.date || ""}
 					/>
 				</div>
-			)
+			))
 		}
 	</div>
 </section>
