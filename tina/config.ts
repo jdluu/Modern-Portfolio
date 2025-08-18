@@ -34,139 +34,10 @@ export default defineConfig({
 	schema: {
 		collections: [
 			{
-				name: "experience",
-				label: "Experiences",
-				path: "content/experiences",
-				fields: [
-					{
-						type: "string",
-						name: "title",
-						label: "Title",
-						isTitle: true,
-						required: true,
-					},
-					{
-						type: "object",
-						name: "metadata",
-						label: "Metadata",
-						fields: [
-							{
-								type: "string",
-								name: "description",
-								label: "Description",
-								ui: {
-									component: "textarea",
-								},
-							},
-							{
-								type: "object",
-								name: "company",
-								label: "Company",
-								fields: [
-									{
-										type: "string",
-										name: "name",
-										label: "Name",
-									},
-									{
-										type: "image",
-										name: "image",
-										label: "Image",
-									},
-								],
-							},
-							{
-								type: "object",
-								name: "logistics",
-								label: "Logistics",
-								fields: [
-									{
-										type: "string",
-										name: "duration",
-										label: "Duration",
-									},
-									{
-										type: "string",
-										name: "role",
-										label: "Role",
-									},
-								],
-							},
-							{
-								type: "object",
-								name: "technologies",
-								label: "Technologies",
-								fields: [
-									{
-										type: "string",
-										name: "tools",
-										label: "Tools",
-									},
-									{
-										type: "string",
-										name: "skills",
-										label: "Skills",
-									},
-								],
-							},
-							{
-								type: "object",
-								name: "work",
-								label: "Work",
-								fields: [
-									{
-										type: "object",
-										name: "responsibilities",
-										label: "Responsibilities",
-										list: true,
-										fields: [
-											{
-												type: "string",
-												name: "duties",
-												label: "Duties",
-											},
-										],
-									},
-									{
-										type: "object",
-										name: "achievements",
-										label: "Achievements",
-										list: true,
-										fields: [
-											{
-												type: "string",
-												name: "points",
-												label: "Points",
-											},
-										],
-									},
-								],
-							},
-							{
-								type: "object",
-								name: "showcase",
-								label: "Showcase",
-								fields: [
-									{
-										type: "string",
-										name: "link",
-										label: "Link",
-									},
-									{
-										type: "string",
-										name: "description",
-										label: "Description",
-									},
-								],
-							},
-						],
-					},
-				],
-			},
-			{
 				name: "experiencecard",
 				label: "Experience Cards",
 				path: "content/experiencecards",
+				format: "md",
 				fields: [
 					{
 						type: "string",
@@ -197,6 +68,19 @@ export default defineConfig({
 								type: "string",
 								name: "date",
 								label: "Date",
+							},
+							{
+								type: "datetime",
+								name: "startDate",
+								label: "Start Date",
+								required: false,
+							},
+							{
+								type: "datetime",
+								name: "endDate",
+								label: "End Date",
+								required: false,
+								description: "Use 9999-12-31 for ongoing roles (Present).",
 							},
 							{
 								type: "image",
