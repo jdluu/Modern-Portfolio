@@ -34,19 +34,6 @@ export interface ExperienceCard {
 	};
 }
 
-export interface BlogPost {
-	id: string;
-	title: string;
-	slug: string;
-	content: string;
-	metadata: {
-		description?: string;
-		thumbnail?: {
-			url: string;
-		};
-	};
-}
-
 // Cache for memoization
 const cache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
@@ -155,24 +142,6 @@ export async function getProjectBySlug(
 	});
 }
 
-// Return All Experience Card Objects
-export async function getAllExperienceCards(): Promise<ExperienceCard[]> {
-	return getCachedOrFetch("experiencecards", async () => {
-		try {
-			const data = await cosmic.objects
-				.find({
-					type: "experiencecards",
-				})
-				.props("slug,title,metadata")
-				.depth(1);
-
-			return data.objects;
-		} catch (error) {
-			console.error("Error fetching experience cards:", error);
-			return [];
-		}
-	});
-}
 
 // Return All Experience Objects
 export async function getAllExperiences(): Promise<ExperienceCard[]> {
@@ -234,63 +203,6 @@ export async function getExperienceBySlug(
 	});
 }
 
-// Return All Post Objects
-export async function getAllPosts(): Promise<BlogPost[]> {
-	return getCachedOrFetch("posts", async () => {
-		try {
-			const data = await cosmic.objects
-				.find({
-					type: "posts",
-				})
-				.props("slug,title,content,metadata")
-				.depth(1);
-
-			return data.objects;
-		} catch (error) {
-			console.error("Error fetching posts:", error);
-			return [];
-		}
-	});
-}
-
-// Return All Post Slugs
-export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
-	return getCachedOrFetch("post-slugs", async () => {
-		try {
-			const data = await cosmic.objects
-				.find({
-					type: "posts",
-				})
-				.props("slug")
-				.depth(1);
-
-			return data.objects;
-		} catch (error) {
-			console.error("Error fetching post slugs:", error);
-			return [];
-		}
-	});
-}
-
-// Get Post by Slug
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-	return getCachedOrFetch(`post-${slug}`, async () => {
-		try {
-			const data = await cosmic.objects
-				.findOne({
-					type: "posts",
-					slug,
-				})
-				.props("title,content,metadata")
-				.depth(1);
-
-			return data;
-		} catch (error) {
-			console.error("Error fetching post:", error);
-			return null;
-		}
-	});
-}
 
 // Clear cache function (useful for manual cache invalidation if needed)
 export function clearCache(): void {
