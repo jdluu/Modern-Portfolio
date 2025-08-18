@@ -38,6 +38,10 @@ export default defineConfig({
 				label: "Experience Cards",
 				path: "content/experiencecards",
 				format: "md",
+				match: {
+					include: "**/*.{md,mdx}",
+					exclude: "tina/**"
+				},
 				fields: [
 					{
 						type: "string",
@@ -55,14 +59,6 @@ export default defineConfig({
 								type: "string",
 								name: "company",
 								label: "Company",
-							},
-							{
-								type: "string",
-								name: "description",
-								label: "Description",
-								ui: {
-									component: "textarea",
-								},
 							},
 							{
 								type: "string",
@@ -95,6 +91,11 @@ export default defineConfig({
 				name: "post",
 				label: "Posts",
 				path: "content/posts",
+				format: "md",
+				match: {
+					include: "**/*.{md,mdx}",
+					exclude: "tina/**"
+				},
 				fields: [
 					{
 						type: "string",
@@ -107,14 +108,6 @@ export default defineConfig({
 						type: "datetime",
 						name: "date",
 						label: "Date",
-					},
-					{
-						type: "string",
-						name: "description",
-						label: "Description",
-						ui: {
-							component: "textarea",
-						},
 					},
 					{
 						type: "string",
