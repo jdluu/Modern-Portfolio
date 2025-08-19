@@ -96,6 +96,130 @@ export default defineConfig({
 				],
 			},
 			{
+				name: "experience",
+				label: "Experiences",
+				path: "content/experiences",
+				format: "md",
+				match: {
+					include: "**/*.{md,mdx}",
+					exclude: "tina/**",
+				},
+				fields: [
+					{
+						type: "string",
+						name: "title",
+						label: "Title",
+						isTitle: true,
+						required: true,
+					},
+					{
+						type: "boolean",
+						name: "draft",
+						label: "Draft",
+						description: "Hide from published lists",
+					},
+					{
+						type: "object",
+						name: "company",
+						label: "Company",
+						fields: [
+							{ type: "string", name: "name", label: "Name" },
+							{ type: "image", name: "image", label: "Logo" },
+							{ type: "string", name: "imagealt", label: "Logo Alt Text" },
+						],
+					},
+					{
+						type: "object",
+						name: "logistics",
+						label: "Logistics",
+						fields: [
+							{ type: "string", name: "role", label: "Role" },
+							{ type: "string", name: "duration", label: "Duration" },
+							{
+								type: "datetime",
+								name: "startDate",
+								label: "Start Date",
+								required: false,
+							},
+							{
+								type: "datetime",
+								name: "endDate",
+								label: "End Date",
+								required: false,
+								description: "Use 9999-12-31 for ongoing roles (Present).",
+							},
+						],
+					},
+					{
+						type: "object",
+						name: "technologies",
+						label: "Technologies",
+						fields: [
+							{
+								type: "string",
+								name: "tools",
+								label: "Tools & Technologies",
+								ui: { component: "textarea" },
+								description: "Comma-separated list",
+							},
+							{
+								type: "string",
+								name: "skills",
+								label: "Skills",
+								ui: { component: "textarea" },
+								description: "Comma-separated list",
+							},
+						],
+					},
+					{
+						type: "object",
+						name: "work",
+						label: "Work",
+						fields: [
+							{
+								type: "object",
+								name: "responsibilities",
+								label: "Responsibilities",
+								list: true,
+								fields: [{ type: "string", name: "duties", label: "Duty" }],
+							},
+							{
+								type: "object",
+								name: "achievements",
+								label: "Achievements",
+								list: true,
+								fields: [{ type: "string", name: "points", label: "Point" }],
+							},
+						],
+					},
+					{
+						type: "object",
+						name: "showcase",
+						label: "Showcase",
+						fields: [
+							{ type: "string", name: "link", label: "Link" },
+							{ type: "string", name: "description", label: "Description" },
+						],
+					},
+					{
+						type: "object",
+						name: "card",
+						label: "Card Settings (for listings)",
+						description: "Optional: helps ExperienceCard render without additional mapping",
+						fields: [
+							{ type: "string", name: "date", label: "Date Label" },
+							{ type: "image", name: "thumbnail", label: "Thumbnail" },
+							{
+								type: "string",
+								name: "summary",
+								label: "Summary",
+								ui: { component: "textarea" },
+							},
+						],
+					},
+				],
+			},
+			{
 				name: "post",
 				label: "Posts",
 				path: "content/posts",
