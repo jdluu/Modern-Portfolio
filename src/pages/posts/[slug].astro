@@ -66,7 +66,7 @@ export async function getStaticPaths() {
   // DEV fallback: read local content files and build same props shape
   if (import.meta.env.DEV) {
     const modules = import.meta.glob("../../../content/posts/*.{md,mdx}", { eager: true }) as Record<string, any>;
-    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { as: "raw", eager: true }) as Record<string, string>;
+    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
     
     const stripFrontmatterLocal = (raw: string): string => {
       if (!raw) return "";
