@@ -44,51 +44,37 @@ const posts: PostIndexItem[] = nodes
 ---
 
 <BaseLayout title={title}>
-  <main class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
-    <header class="mb-10 text-center">
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-[var(--m3-color-on-surface)]">{title}</h1>
-      <p class="mt-3 text-[var(--m3-color-on-surface-variant)]">Latest posts</p>
+  <main class="blog-main">
+    <header class="blog-header">
+      <h1 class="blog-title">{title}</h1>
     </header>
 
     {
       posts.length === 0 ? (
-        <p class="text-center text-[var(--m3-color-on-surface-variant)]">No posts published yet.</p>
+        <p class="empty-text">No posts published yet.</p>
       ) : (
-        <ul class="space-y-5">
+        <ul class="post-list">
           {posts.map((post) => (
-            <li>
-              <a
-                href={`/posts/${post.slug}`}
-                class="block w-full rounded-2xl bg-[var(--m3-color-surface)] p-6 border-2 border-solid border-[var(--m3-color-outline)] shadow-sm hover:border-[var(--m3-color-primary)] hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--m3-color-primary)] transition"
-                style="border-bottom-width: 2px;" 
-              >
-                <!-- Neutralize global anchor bottom border for this card -->
-                <style is:inline>
-                  a.block.w-full.rounded-2xl { border-bottom: 0 !important; text-decoration: none !important; }
-                </style>
-
-                <h2 class="text-2xl font-semibold text-[var(--m3-color-on-surface)] transition-colors hover:text-[var(--m3-color-primary)]">
-                  {post.title}
-                </h2>
+            <li class="post-item">
+              <a href={`/posts/${post.slug}`} class="post-card">
+                <h2 class="post-card-title">{post.title}</h2>
 
                 {post.date && (
-                  <time class="mt-1 block text-sm text-[var(--m3-color-on-surface-variant)]">
+                  <time class="post-card-date">
                     {new Date(post.date).toLocaleDateString()}
                   </time>
                 )}
 
                 {post.tags && post.tags.length > 0 && (
-                  <div class="mt-3 flex flex-wrap gap-2">
+                  <div class="post-card-tags">
                     {post.tags.slice(0, 6).map((tag) => (
-                      <span class="inline-flex items-center rounded-full bg-[var(--m3-color-secondary-container)] text-[var(--m3-color-on-secondary-container)] border border-[var(--m3-color-outline-variant)] px-3 py-1 text-xs font-medium">
-                        #{tag}
-                      </span>
+                      <span class="tag-chip">#{tag}</span>
                     ))}
                   </div>
                 )}
 
                 {post.description && (
-                  <p class="mt-3 text-[var(--m3-color-on-surface-variant)] line-clamp-3">
+                  <p class="post-card-desc line-clamp-3">
                     {post.description}
                   </p>
                 )}
@@ -102,6 +88,103 @@ const posts: PostIndexItem[] = nodes
 </BaseLayout>
 
 <style>
+/* Layout */
+.blog-main {
+  max-width: 64rem; /* similar to max-w-4xl */
+  margin: 0 auto;
+  padding: 2.5rem 1rem; /* py-10 px-4 */
+}
+@media (min-width: 640px) { /* sm */
+  .blog-main { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px) { /* lg */
+  .blog-main { padding-left: 2rem; padding-right: 2rem; }
+}
+
+.blog-header { margin-bottom: 2.5rem; text-align: center; }
+.blog-title {
+  margin: 0;
+  font-weight: 800;
+  /* text-4xl to 5xl equivalent */
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.01em;
+  color: var(--m3-color-on-surface);
+}
+
+.empty-text { text-align: center; color: var(--m3-color-on-surface-variant); }
+
+/* List */
+.post-list { list-style: none; margin: 0; padding: 0; display: grid; row-gap: 1.25rem; } /* space-y-5 */
+.post-item { margin: 0; }
+
+/* Card */
+.post-card {
+  display: block;
+  width: 100%;
+  background-color: var(--m3-color-surface);
+  color: var(--m3-color-on-surface);
+  text-decoration: none;
+  border-bottom: 0 !important; /* neutralize any global anchor underline/border */
+  border: 2px solid var(--m3-color-outline); /* visible rectangular outline */
+  border-radius: 16px; /* rounded-2xl */
+  padding: 1.5rem; /* p-6 */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06); /* shadow-sm */
+  transition: border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.post-card:hover {
+  border-color: var(--m3-color-primary);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12); /* hover:shadow-md */
+}
+.post-card:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px var(--m3-color-primary) inset,
+    0 6px 18px rgba(0,0,0,0.14);
+}
+
+/* Card content */
+.post-card-title {
+  margin: 0;
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600;
+  color: var(--m3-color-on-surface);
+  transition: color .2s ease;
+}
+.post-card:hover .post-card-title {
+  color: var(--m3-color-primary);
+}
+
+.post-card-date {
+  display: block;
+  margin-top: 0.25rem; /* mt-1 */
+  font-size: 0.875rem; /* text-sm */
+  color: var(--m3-color-on-surface-variant);
+}
+
+.post-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* gap-2 */
+  margin-top: 0.75rem; /* mt-3 */
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background-color: var(--m3-color-secondary-container);
+  color: var(--m3-color-on-secondary-container);
+  border: 1px solid var(--m3-color-outline-variant);
+  padding: 0.25rem 0.75rem; /* py-1 px-3 */
+  font-size: 0.75rem; /* text-xs */
+  font-weight: 500; /* font-medium */
+}
+
+.post-card-desc {
+  margin-top: 0.75rem; /* mt-3 */
+  color: var(--m3-color-on-surface-variant);
+}
+
 /* Basic line clamp without Tailwind plugin */
 .line-clamp-3 {
   display: -webkit-box;
