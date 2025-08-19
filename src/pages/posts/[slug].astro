@@ -27,12 +27,20 @@ const displayDate = date
     })
   : "";
 
-// Normalize hero path to ensure it loads from public
-function normalizeHero(url?: string | null) {
-  if (!url) return null;
-  return url.startsWith("/") ? url : `/${url}`;
-}
-const heroUrl = normalizeHero(typeof hero === "string" ? hero : null);
+ // Resolve hero path respecting Astro's base for production subpaths
+ function resolveHero() {
+   const raw = typeof hero === "string" ? hero : null;
+   if (!raw) return null;
+   // Keep absolute HTTP(S) URLs unchanged
+   if (/^https?:\/\//i.test(raw)) return raw;
+   // Use Astro's base; default to "/"
+   const base = import.meta.env.BASE_URL || "/";
+   // Remove any leading slashes from the raw path to avoid duplicate slashes
+   const clean = raw.replace(/^\/+/, "");
+   // Ensure exactly one slash between base and path
+   return base.endsWith("/") ? base + clean : base + "/" + clean;
+ }
+ const heroUrl = resolveHero();
 
 // Render Markdown -> HTML at build time
 const renderedContent = content ? marked.parse(content) : "";
