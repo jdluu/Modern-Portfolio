@@ -1,26 +1,116 @@
 ---
-/*
-  ExperienceCard: use a resilient image strategy for CMS-provided URLs.
-  If thumbnail is a static/local path that can be handled by astro:assets optimization,
-  you can swap back to <Image>. For dynamic CMS URLs we use a standard <img>.
-*/
 export interface Props {
-	title: string;
-	description?: string;
-	slug: string;
-	date?: string;
-	thumbnail?: string;
+  title: string;
+  slug: string;
+  description?: string;
+  date?: string;
+  thumbnail?: string;
+  company?: string;
+  startDate?: string;
+  endDate?: string;
+  summary?: string;
+
+  // Optional nested metadata object (from Tina)
+  metadata?: {
+    company?: string;
+    date?: string;
+    startDate?: string;
+    endDate?: string;
+    thumbnail?: string;
+    summary?: string;
+  };
 }
 
-const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props as Props;
----
+const {
+  title,
+  slug,
+  description = "",
+  date: flatDate = "",
+  thumbnail: flatThumbnail = "",
 
+  company: flatCompany,
+  startDate: flatStart,
+  endDate: flatEnd,
+  summary: flatSummary,
+
+  metadata = undefined,
+} = Astro.props as Props;
+
+// Helper: safe ISO -> Date
+function parseSafeDate(value?: string): Date | undefined {
+  if (!value || typeof value !== "string") return undefined;
+  try {
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return undefined;
+    return d;
+  } catch {
+    return undefined;
+  }
+}
+
+// Helper: format date as "MMM yyyy" using Intl; fallback to locale strings.
+function formatMonthYear(d: Date): string {
+  try {
+    return new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(d);
+  } catch {
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return `${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+}
+
+// COMPANY: flattened company || metadata.company || ""
+const company = (flatCompany ?? metadata?.company ?? "") as string;
+
+// start/end priority
+const startRaw = flatStart ?? metadata?.startDate;
+const endRaw = flatEnd ?? metadata?.endDate;
+
+const startDateObj = parseSafeDate(startRaw);
+const endDateObj = parseSafeDate(endRaw);
+
+// Thumbnail priority
+const thumbnail = (flatThumbnail ?? metadata?.thumbnail ?? "") as string;
+
+// Summary priority: flattened summary || metadata.summary || description || ""
+const summary = (flatSummary ?? metadata?.summary ?? description ?? "") as string;
+
+// Date display priority: explicit flattened date OR metadata.date OR computed
+const explicitDate = flatDate || metadata?.date || "";
+
+let dateDisplay = explicitDate;
+
+if (!dateDisplay) {
+  if (startDateObj && endDateObj) {
+    const isEndSentinel = endDateObj.getFullYear() >= 9999;
+    if (isEndSentinel) {
+      dateDisplay = `${formatMonthYear(startDateObj)} — Present`;
+    } else {
+      dateDisplay = `${formatMonthYear(startDateObj)} — ${formatMonthYear(endDateObj)}`;
+    }
+  } else if (startDateObj && !endDateObj) {
+    dateDisplay = `${formatMonthYear(startDateObj)} — Present`;
+  } else {
+    dateDisplay = "";
+  }
+}
+
+// Compose the single-line "Title @ Company" display.
+// Per instructions: const titleCompany = company ? `${title} @ ${company}` : title;
+const titleCompany = company ? `${title} @ ${company}` : title;
+
+// Image alt text: use titleCompany when company exists; otherwise just title.
+const imgAlt = company ? `${title} @ ${company}` : title;
+
+// Ensure no undefined values are rendered (safety)
+const safeThumbnail = thumbnail ?? "";
+const safeDateDisplay = dateDisplay ?? "";
+const safeSummary = summary ?? "";
+---
 <section class="background">
-	{thumbnail ? (
-		// Use standard <img> for CMS/remote URLs or runtime-provided paths.
+	{safeThumbnail ? (
 		<img
-			src={thumbnail}
-			alt={title}
+			src={safeThumbnail}
+			alt={imgAlt}
 			class="experience-image"
 			loading="lazy"
 			decoding="async"
@@ -31,12 +121,18 @@ const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props
 		<div class="experience-image placeholder" aria-hidden="true"></div>
 	)}
 	<div class="project-container">
-		<section class="more-info">
-			<span class="project-title">{title}</span>
-			<span class="project-date">{date}</span>
-			<p class="project-description">
-				{description}
-			</p>
+		<section class="more-info" aria-hidden={false}>
+			<span class="project-title">{titleCompany}</span>
+
+			{safeDateDisplay ? (
+				<span class="project-date">{safeDateDisplay}</span>
+			) : <span class="project-date empty" aria-hidden="true"></span>}
+
+			{safeSummary ? (
+				<p class="project-description">{safeSummary}</p>
+			) : (
+				<p class="project-description" aria-hidden="true"></p>
+			)}
 		</section>
 		<a class="learn-more" href={`/experiences/${slug}`}>Learn More</a>
 	</div>
@@ -63,6 +159,10 @@ const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props
 		object-position: center;
 	}
 
+	.experience-image.placeholder {
+		background: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+	}
+
 	.background:hover .project-container {
 		opacity: 1;
 	}
@@ -85,13 +185,14 @@ const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props
 	.more-info {
 		text-align: center;
 		padding: 1.6rem;
+		max-width: 46rem;
 	}
 
 	.project-title {
 		font-size: var(--m3-font-title-large);
 		font-family: var(--m3-font-family-display);
 		font-weight: 600;
-		margin-bottom: 0.4rem;
+		margin-bottom: 0.8rem;
 		color: var(--m3-color-on-surface-variant);
 	}
 
@@ -101,6 +202,11 @@ const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props
 		color: var(--m3-color-on-surface-variant);
 		margin-bottom: 1.2rem;
 		display: block;
+	}
+
+	.project-date.empty {
+		margin-bottom: 1.2rem;
+		height: 0;
 	}
 
 	.project-description {
