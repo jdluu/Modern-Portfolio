@@ -45,6 +45,29 @@ function parseSafeDate(value?: string): Date | undefined {
   return d;
 }
 
+/**
+ * Defensive: strip YAML frontmatter from a raw string and return the body.
+ * Kept local to the component to avoid cross-module hoisting issues when
+ * components are used with mixed data sources in DEV (Tina + filesystem).
+ */
+const stripFrontmatterLocal = (raw?: unknown): string => {
+  const s = typeof raw === "string" ? raw : "";
+  if (!s) return "";
+  const m = s.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
+  return m ? s.slice(m[0].length) : s;
+};
+
+/**
+ * Defensive: sanitize small metadata strings used for UI display.
+ * - Strips YAML frontmatter if present
+ * - Trims and collapses excessive whitespace
+ * - Returns empty string when input is falsy
+ */
+function sanitizeStringForUI(value?: unknown): string {
+  const raw = stripFrontmatterLocal(value);
+  return raw.replace(/\s+/g, " ").trim();
+}
+
 // Format a Date as "Mon yyyy" using Intl when available; light fallback otherwise.
 function formatMonthYear(d: Date): string {
   try {
@@ -100,7 +123,8 @@ const imgAlt = company ? `${title} @ ${company}` : title;
 // Safe fallbacks to avoid rendering undefined
 const safeThumbnail = thumbnail ?? "";
 const safeDateDisplay = dateDisplay ?? "";
-const safeSummary = summary ?? "";
+// Ensure the summary used in the UI is sanitized and never undefined
+const safeSummary = sanitizeStringForUI(summary);
 ---
 <section class="background">
   {safeThumbnail ? (
