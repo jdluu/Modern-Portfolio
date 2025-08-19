@@ -139,7 +139,9 @@ const safeSummary = summary ?? "";
 </section>
 
 <style>
+	/* Card container matches ProjectCard dimensions and hover behavior */
 	.background {
+		display: block;
 		position: relative;
 		border: 1px solid var(--m3-color-outline);
 		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -147,20 +149,33 @@ const safeSummary = summary ?? "";
 		height: 30rem;
 		border-radius: 24px;
 		overflow: hidden;
+		/* Ensure consistent box sizing when contained in grid items */
+		box-sizing: border-box;
 	}
 
+	/* Image changed to contain to avoid cropping logos; centered with neutral background and subtle padding */
 	.experience-image {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
+		object-fit: contain;
 		object-position: center;
+		background-color: var(--m3-color-surface-variant);
+		padding: 0.5rem;
+		box-sizing: border-box;
 	}
 
 	.experience-image.placeholder {
-		background: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+		/* Neutral placeholder matching surface variant */
+		background-color: var(--m3-color-surface-variant);
+	}
+
+	/* Hover parity with ProjectCard: border highlight + scale */
+	.background:hover {
+		border-color: var(--m3-color-primary);
+		transform: scale(1.02);
 	}
 
 	.background:hover .project-container {
