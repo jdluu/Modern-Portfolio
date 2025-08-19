@@ -30,13 +30,18 @@ const getEndTs = (n: Record<string, any> | undefined) => {
 const sortedNodes = [...nodes].sort((a, b) => getEndTs(b) - getEndTs(a));
 
 // Normalize nodes into the shape ExperienceCard expects (sorted by endDate desc)
-const experiences = sortedNodes.map((node) => ({
-  title: node.title ?? "Untitled",
-  slug: (node._sys?.filename ?? "").replace(/\.mdx?$/i, "").toLowerCase(),
-  thumbnail: node.metadata?.thumbnail ?? "",
-  // Keep the human-readable string for display
-  date: node.metadata?.date ?? "",
-}));
+const experiences = sortedNodes.map((node) => {
+  const meta: any = node.metadata ?? {};
+  return {
+    title: node.title ?? "Untitled",
+    slug: (node._sys?.filename ?? "").replace(/\.mdx?$/i, "").toLowerCase(),
+    thumbnail: meta.thumbnail ?? "",
+    // Prefer explicit summary from content; fall back to empty string to make the prop explicit
+    description: meta.summary ?? "",
+    // Keep the human-readable string for display (optional override)
+    date: meta.date ?? "",
+  };
+});
 ---
  
 <section class="content-section">
