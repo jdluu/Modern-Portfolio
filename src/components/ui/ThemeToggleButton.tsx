@@ -1,5 +1,7 @@
 import { createSignal, onMount, Show } from "solid-js";
 
+const STORAGE_KEY = "darkmode";
+
 const SunIcon = (props: { class?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
        viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -26,30 +28,33 @@ const MoonIcon = (props: { class?: string }) => (
   </svg>
 );
 
+const isStartViewTransitionAvailable = (doc: any): doc is { startViewTransition: (cb: () => void) => { finished: Promise<void> } } =>
+  typeof doc?.startViewTransition === "function";
+
 const ThemeToggleButton = () => {
   const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
   let thumbRef: HTMLDivElement | undefined;
 
   onMount(() => {
-    const saved = localStorage.getItem("darkmode");
+    const saved = localStorage.getItem(STORAGE_KEY);
     const initial = saved === null
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
       : JSON.parse(saved);
     setDarkMode(initial);
     document.documentElement.setAttribute("data-theme", initial ? "dark" : "light");
   });
 
-  const getThumbX = (dark: boolean) => (dark ? 3.8 : 0); // rems to match CSS
+  const getThumbX = (dark: boolean) => (dark ? 3.8 : 0); // rem units align with CSS
 
   const toggle = () => {
     const anyDoc = document as any;
     const next = !isDarkMode();
     const root = document.documentElement;
 
-    // No VT available: normal path
-    if (!anyDoc.startViewTransition) {
+    // If View Transition API is unavailable, apply immediately.
+    if (!isStartViewTransitionAvailable(anyDoc)) {
       setDarkMode(next);
-      localStorage.setItem("darkmode", JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       root.setAttribute("data-theme", next ? "dark" : "light");
       return;
     }
@@ -58,36 +63,30 @@ const ThemeToggleButton = () => {
     const curX = getThumbX(curDark);
     const targetX = getThumbX(next);
 
-    // 1) Tell CSS we will drive transform manually
+    // Flag that VT-driven transforms are in effect so CSS can adapt.
     root.setAttribute("data-theme-vt", "driving");
 
-    // 2) Seed the current position inline, then in the next frame, set the target
     if (thumbRef) {
-      // Ensure the browser sees current style first
+      // Seed inline transform to the current position, force reflow, then set target.
       thumbRef.style.transform = `translateX(${curX}rem)`;
-      // Force a reflow so the starting transform is committed
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      thumbRef.offsetWidth; // reflow
-      // Now set target to start the CSS transition immediately
+      // Force reflow so starting transform is committed
+      void thumbRef.offsetWidth;
       thumbRef.style.transform = `translateX(${targetX}rem)`;
     }
 
-    // 3) Start VT and flip theme inside the callback (same frame)
     const vt = anyDoc.startViewTransition(() => {
       setDarkMode(next);
-      localStorage.setItem("darkmode", JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       root.setAttribute("data-theme", next ? "dark" : "light");
     });
 
-    // 4) When VT completes, clean up and let CSS rules take over again
+    // Cleanup after VT completes: remove inline transform and driving flag.
     vt.finished.finally(() => {
-      // After the thumb finishes its own transition, remove inline transform
       const cleanup = () => {
         thumbRef?.removeEventListener("transitionend", cleanup);
         thumbRef?.style.removeProperty("transform");
         root.removeAttribute("data-theme-vt");
       };
-      // If thumbRef missing or transitions disabled, just cleanup root flag
       if (thumbRef) {
         thumbRef.addEventListener("transitionend", cleanup, { once: true });
       } else {

@@ -22,33 +22,30 @@ export interface Props {
 }
 
 const {
+  // Inputs / Props (with defaults where appropriate)
   title,
   slug,
   description = "",
   date: flatDate = "",
   thumbnail: flatThumbnail = "",
-
   company: flatCompany,
   startDate: flatStart,
   endDate: flatEnd,
   summary: flatSummary,
-
   metadata = undefined,
 } = Astro.props as Props;
 
-// Helper: safe ISO -> Date
+/* Helpers */
+
+// Safe parse ISO-ish strings to Date; returns undefined for invalid values.
 function parseSafeDate(value?: string): Date | undefined {
   if (!value || typeof value !== "string") return undefined;
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return undefined;
-    return d;
-  } catch {
-    return undefined;
-  }
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return undefined;
+  return d;
 }
 
-// Helper: format date as "MMM yyyy" using Intl; fallback to locale strings.
+// Format a Date as "Mon yyyy" using Intl when available; light fallback otherwise.
 function formatMonthYear(d: Date): string {
   try {
     return new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(d);
@@ -58,35 +55,37 @@ function formatMonthYear(d: Date): string {
   }
 }
 
-// COMPANY: flattened company || metadata.company || ""
+/* Derived fields (priority rules preserved) */
+
+// company priority: explicit prop > metadata.company > ""
 const company = (flatCompany ?? metadata?.company ?? "") as string;
 
-// start/end priority
+// start/end raw values (prop priority preserved)
 const startRaw = flatStart ?? metadata?.startDate;
 const endRaw = flatEnd ?? metadata?.endDate;
 
+// parsed date objects (safe)
 const startDateObj = parseSafeDate(startRaw);
 const endDateObj = parseSafeDate(endRaw);
 
-// Thumbnail priority
+// thumbnail priority: prop > metadata > ""
 const thumbnail = (flatThumbnail ?? metadata?.thumbnail ?? "") as string;
 
-// Summary priority: flattened summary || metadata.summary || description || ""
+// summary priority: prop > metadata > description > ""
 const summary = (flatSummary ?? metadata?.summary ?? description ?? "") as string;
 
-// Date display priority: explicit flattened date OR metadata.date OR computed
+// explicit date priority: flattened date prop > metadata.date > ""
 const explicitDate = flatDate || metadata?.date || "";
 
+// compute the dateDisplay following original sentinel behavior (9999 => Present)
 let dateDisplay = explicitDate;
 
 if (!dateDisplay) {
   if (startDateObj && endDateObj) {
     const isEndSentinel = endDateObj.getFullYear() >= 9999;
-    if (isEndSentinel) {
-      dateDisplay = `${formatMonthYear(startDateObj)} — Present`;
-    } else {
-      dateDisplay = `${formatMonthYear(startDateObj)} — ${formatMonthYear(endDateObj)}`;
-    }
+    dateDisplay = isEndSentinel
+      ? `${formatMonthYear(startDateObj)} — Present`
+      : `${formatMonthYear(startDateObj)} — ${formatMonthYear(endDateObj)}`;
   } else if (startDateObj && !endDateObj) {
     dateDisplay = `${formatMonthYear(startDateObj)} — Present`;
   } else {
@@ -94,154 +93,145 @@ if (!dateDisplay) {
   }
 }
 
-// Compose the single-line "Title @ Company" display.
-// Per instructions: const titleCompany = company ? `${title} @ ${company}` : title;
+// Compose title + company display and image alt without changing semantics
 const titleCompany = company ? `${title} @ ${company}` : title;
-
-// Image alt text: use titleCompany when company exists; otherwise just title.
 const imgAlt = company ? `${title} @ ${company}` : title;
 
-// Ensure no undefined values are rendered (safety)
+// Safe fallbacks to avoid rendering undefined
 const safeThumbnail = thumbnail ?? "";
 const safeDateDisplay = dateDisplay ?? "";
 const safeSummary = summary ?? "";
 ---
 <section class="background">
-	{safeThumbnail ? (
-		<img
-			src={safeThumbnail}
-			alt={imgAlt}
-			class="experience-image"
-			loading="lazy"
-			decoding="async"
-			width="600"
-			height="400"
-		/>
-	) : (
-		<div class="experience-image placeholder" aria-hidden="true"></div>
-	)}
-	<div class="project-container">
-		<section class="more-info" aria-hidden={false}>
-			<span class="project-title">{titleCompany}</span>
+  {safeThumbnail ? (
+    <img
+      src={safeThumbnail}
+      alt={imgAlt}
+      class="experience-image"
+      loading="lazy"
+      decoding="async"
+      width="600"
+      height="400"
+    />
+  ) : (
+    <div class="experience-image placeholder" aria-hidden="true"></div>
+  )}
+  <div class="project-container">
+    <section class="more-info" aria-hidden={false}>
+      <span class="project-title">{titleCompany}</span>
 
-			{safeDateDisplay ? (
-				<span class="project-date">{safeDateDisplay}</span>
-			) : <span class="project-date empty" aria-hidden="true"></span>}
+      {safeDateDisplay ? (
+        <span class="project-date">{safeDateDisplay}</span>
+      ) : <span class="project-date empty" aria-hidden="true"></span>}
 
-			{safeSummary ? (
-				<p class="project-description">{safeSummary}</p>
-			) : (
-				<p class="project-description" aria-hidden="true"></p>
-			)}
-		</section>
-		<a class="learn-more" href={`/experiences/${slug}`}>Learn More</a>
-	</div>
+      {safeSummary ? (
+        <p class="project-description">{safeSummary}</p>
+      ) : (
+        <p class="project-description" aria-hidden="true"></p>
+      )}
+    </section>
+    <a class="learn-more" href={`/experiences/${slug}`}>Learn More</a>
+  </div>
 </section>
 
 <style>
-	/* Card container matches ProjectCard dimensions and hover behavior */
-	.background {
-		display: block;
-		position: relative;
-		border: 1px solid var(--m3-color-outline);
-		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		width: 100%;
-		height: 30rem;
-		border-radius: 24px;
-		overflow: hidden;
-		/* Ensure consistent box sizing when contained in grid items */
-		box-sizing: border-box;
-	}
+  /* Container (card) */
+  .background {
+    display: block;
+    position: relative;
+    border: 1px solid var(--m3-color-outline);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+    height: 30rem;
+    border-radius: 24px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
 
-	/* Image changed to contain to avoid cropping logos; centered with neutral background and subtle padding */
-	.experience-image {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		object-position: center;
-		background-color: var(--m3-color-surface-variant);
-		padding: 0.5rem;
-		box-sizing: border-box;
-	}
+  /* Image area */
+  .experience-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background-color: var(--m3-color-surface-variant);
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  .experience-image.placeholder {
+    background-color: var(--m3-color-surface-variant);
+  }
 
-	.experience-image.placeholder {
-		/* Neutral placeholder matching surface variant */
-		background-color: var(--m3-color-surface-variant);
-	}
+  /* Hover / interaction */
+  .background:hover {
+    border-color: var(--m3-color-primary);
+    transform: scale(1.02);
+  }
+  .background:hover .project-container {
+    opacity: 1;
+  }
 
-	/* Hover parity with ProjectCard: border highlight + scale */
-	.background:hover {
-		border-color: var(--m3-color-primary);
-		transform: scale(1.02);
-	}
+  /* Overlay */
+  .project-container {
+    background: var(--m3-color-surface-variant);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease-in-out;
+  }
 
-	.background:hover .project-container {
-		opacity: 1;
-	}
+  /* Text */
+  .more-info {
+    text-align: center;
+    padding: 1.6rem;
+    max-width: 46rem;
+  }
+  .project-title {
+    font-size: var(--m3-font-title-large);
+    font-family: var(--m3-font-family-display);
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--m3-color-on-surface-variant);
+  }
+  .project-date {
+    font-size: var(--m3-font-label-medium);
+    font-family: var(--m3-font-family-body);
+    color: var(--m3-color-on-surface-variant);
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+  .project-date.empty {
+    margin-bottom: 1.2rem;
+    height: 0;
+  }
+  .project-description {
+    font-size: var(--m3-font-body-large);
+    font-family: var(--m3-font-family-body);
+    margin-bottom: 1.6rem;
+    color: var(--m3-color-on-surface-variant);
+  }
 
-	.project-container {
-		background: var(--m3-color-surface-variant);
-		opacity: 0;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		transition: opacity 0.4s ease-in-out;
-	}
-
-	.more-info {
-		text-align: center;
-		padding: 1.6rem;
-		max-width: 46rem;
-	}
-
-	.project-title {
-		font-size: var(--m3-font-title-large);
-		font-family: var(--m3-font-family-display);
-		font-weight: 600;
-		margin-bottom: 0.8rem;
-		color: var(--m3-color-on-surface-variant);
-	}
-
-	.project-date {
-		font-size: var(--m3-font-label-medium);
-		font-family: var(--m3-font-family-body);
-		color: var(--m3-color-on-surface-variant);
-		margin-bottom: 1.2rem;
-		display: block;
-	}
-
-	.project-date.empty {
-		margin-bottom: 1.2rem;
-		height: 0;
-	}
-
-	.project-description {
-		font-size: var(--m3-font-body-large);
-		font-family: var(--m3-font-family-body);
-		margin-bottom: 1.6rem;
-		color: var(--m3-color-on-surface-variant);
-	}
-
-	.learn-more {
-		font-size: var(--m3-font-label-large);
-		font-family: var(--m3-font-family-body);
-		text-decoration: none;
-		color: var(--m3-color-primary);
-		font-weight: 500;
-	}
-
-	.learn-more:hover,
-	.learn-more:focus {
-		text-decoration: underline;
-		opacity: 0.9;
-	}
+  /* Link */
+  .learn-more {
+    font-size: var(--m3-font-label-large);
+    font-family: var(--m3-font-family-body);
+    text-decoration: none;
+    color: var(--m3-color-primary);
+    font-weight: 500;
+  }
+  .learn-more:hover,
+  .learn-more:focus {
+    text-decoration: underline;
+    opacity: 0.9;
+  }
 </style>
