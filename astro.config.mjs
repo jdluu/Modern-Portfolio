@@ -6,6 +6,7 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
     site: "https://jluu.dev",
+    base: "/",
     integrations: [
         sitemap(),
         solidJs({ include: ['src/components/ui/**/*.tsx'] }),
