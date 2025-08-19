@@ -4,17 +4,64 @@ import { client } from "../../../tina/__generated__/client";
 import { marked } from "marked";
 
 export async function getStaticPaths() {
-  const postsResponse = await client.queries.postConnection();
-  const edges = postsResponse?.data?.postConnection?.edges ?? [];
+  // Try Tina first
+  try {
+    const postsResponse = await client.queries.postConnection();
+    const edges = postsResponse?.data?.postConnection?.edges ?? [];
 
-  // Exclude drafts from static generation, support .md and .mdx slugs
-  return edges.flatMap((edge) => {
-    if (!edge?.node) return [];
-    const node: any = edge.node;
-    if (node.draft) return [];
-    const slug = node._sys?.filename?.replace(/\.mdx?$/i, "").toLowerCase();
-    return [{ params: { slug }, props: node }];
-  });
+    const tinaPaths = edges.flatMap((edge) => {
+      if (!edge?.node) return [];
+      const node: any = edge.node;
+      if (node.draft) return [];
+      const slug = node._sys?.filename?.replace(/\.mdx?$/i, "").toLowerCase();
+      return [{ params: { slug }, props: node }];
+    });
+
+    if (tinaPaths.length > 0) return tinaPaths;
+  } catch {
+    // Ignore and fall back below
+  }
+
+  // DEV fallback: build paths and content from local markdown files when Tina is unavailable
+  if (import.meta.env.DEV) {
+    // Frontmatter-bearing modules
+    const modules = import.meta.glob("../../../content/posts/*.{md,mdx}", { eager: true }) as Record<string, any>;
+    // Raw file contents for markdown body
+    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+ 
+    // Helper to remove YAML frontmatter from raw markdown/MDX
+    const stripFrontmatter = (raw: string): string => {
+      if (!raw) return "";
+      const m = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
+      return m ? raw.slice(m[0].length) : raw;
+    };
+ 
+    const fsPaths = Object.entries(modules).flatMap(([path, mod]) => {
+      const fm = (mod && (mod.frontmatter ?? mod.meta ?? mod.metadata)) ?? {};
+      if (fm.draft) return [];
+      const filename = path.split("/").pop() || path;
+      const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
+ 
+      const raw = rawModules[path] || "";
+      const body = stripFrontmatter(raw).trim();
+ 
+      return [{
+        params: { slug },
+        props: {
+          title: fm.title ?? "Untitled",
+          date: fm.date ?? null,
+          content: body, // pass markdown body for rendering
+          links: Array.isArray(fm.links) ? fm.links : [],
+          hero: fm.hero ?? null,
+        }
+      }];
+    });
+ 
+    return fsPaths;
+  }
+
+  // No paths discovered
+  return [];
 }
 
 const { title, date, content, links, hero } = Astro.props as any;
