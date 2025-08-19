@@ -63,11 +63,6 @@ export default defineConfig({
 							},
 							{
 								type: "string",
-								name: "role",
-								label: "Role",
-							},
-							{
-								type: "string",
 								name: "date",
 								label: "Date",
 								description: "Optional human-friendly date range (e.g. Jan 2022 — Present). If omitted UI will compute from startDate/endDate.",
