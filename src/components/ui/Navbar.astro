@@ -1,7 +1,6 @@
 ---
 import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 ---
-
 <header class="header">
 	<nav class="nav-container" aria-label="Main navigation">
 		<div class="nav-content">
@@ -63,9 +62,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 						<a
 							href="/about"
 							class="nav-link"
-							aria-current={Astro.url.pathname === "/about"
-								? "page"
-								: undefined}
+							aria-current={Astro.url.pathname === "/about" ? "page" : undefined}
 						>
 							About
 						</a>
@@ -83,9 +80,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 						<a
 							href="/blog"
 							class="nav-link"
-							aria-current={Astro.url.pathname.startsWith("/blog")
-								? "page"
-								: undefined}
+							aria-current={Astro.url.pathname.startsWith("/blog") ? "page" : undefined}
 						>
 							Blog
 						</a>
@@ -94,9 +89,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 						<a
 							href="/contact"
 							class="nav-link"
-							aria-current={Astro.url.pathname === "/contact"
-								? "page"
-								: undefined}
+							aria-current={Astro.url.pathname === "/contact" ? "page" : undefined}
 						>
 							Contact
 						</a>
@@ -117,35 +110,30 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 	document.addEventListener("DOMContentLoaded", () => {
 		const menuToggleBtn = document.getElementById("menu-toggle-btn");
 		const mainMenu = document.getElementById("main-menu");
-
+		// Early exit if critical elements missing
 		if (!menuToggleBtn || !mainMenu) return;
-		
+
 		const btn = menuToggleBtn;
 		const menu = mainMenu;
-		const firstLinkSelector = 'a, button, [tabindex]:not([tabindex="-1"])';
+		const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
 
+		// Helpers: open / close / toggle menu, and key handling.
 		function openMenu() {
 			btn.setAttribute("aria-expanded", "true");
 			btn.classList.add("is-open");
 			menu.removeAttribute("hidden");
-			try {
-				// inert is supported in modern Chromium; guard in case it's not supported
-				(menu as any).inert = false;
-			} catch (err) {}
+			// Guarded inert access (some browsers support it)
+			if ("inert" in menu) (menu as any).inert = false;
 			menu.setAttribute("data-open", "true");
-			// focus the first focusable item
-			const first = menu.querySelector(firstLinkSelector);
+			const first = menu.querySelector(firstFocusable);
 			if (first && typeof (first as HTMLElement).focus === "function") (first as HTMLElement).focus();
-			// Escape handler
 			document.addEventListener("keydown", onDocumentKeydown);
 		}
 
 		function closeMenu(returnFocus = true) {
 			btn.setAttribute("aria-expanded", "false");
 			btn.classList.remove("is-open");
-			try {
-				(menu as any).inert = true;
-			} catch (err) {}
+			if ("inert" in menu) (menu as any).inert = true;
 			menu.setAttribute("hidden", "");
 			menu.setAttribute("data-open", "false");
 			if (returnFocus) btn.focus();
@@ -160,7 +148,6 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 		function onDocumentKeydown(e: KeyboardEvent) {
 			if (e.key === "Escape" || e.key === "Esc") {
-				// If menu is open, close and restore focus
 				if (btn.getAttribute("aria-expanded") === "true") {
 					e.preventDefault();
 					closeMenu();
@@ -170,43 +157,26 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 		btn.addEventListener("click", toggleMenu);
 
-		// Close menu when a link inside is activated (via click or keyboard Enter)
+		// Close menu when a link inside is activated.
 		menu.addEventListener("click", (e) => {
 			const target = e.target;
-			// Guard: ensure target is an HTMLElement before using DOM traversal APIs
 			if (target && target instanceof HTMLElement) {
 				const link = target.closest("a,button");
-				if (link) {
-					closeMenu();
-				}
+				if (link) closeMenu();
 			}
 		});
 
-		// Ensure initial state: on desktop it's visible; on mobile keep it inert/hidden.
-		// Some browsers will render server-side HTML first with the 'hidden' attribute.
-		// If the viewport is desktop-sized, remove the hidden attribute so desktop CSS can show the menu.
-		try {
-			btn.setAttribute("aria-expanded", btn.getAttribute("aria-expanded") || "false");
-			// If desktop viewport, remove 'hidden' so CSS media query rules control visibility.
-			if (typeof window !== "undefined" && window.innerWidth >= 768) {
-				try {
-					menu.removeAttribute("hidden");
-					// make sure inert is toggled appropriately for desktop
-					try {
-						(menu as any).inert = false;
-					} catch (err) {}
-					menu.setAttribute("data-open", "false");
-				} catch (err) {
-					// ignore
-				}
-			}
-		} catch (err) {
-			// ignore
+		// Initial desktop visibility: if viewport is wide, let CSS control visibility
+		if (typeof window !== "undefined" && window.innerWidth >= 768) {
+			menu.removeAttribute("hidden");
+			if ("inert" in menu) (menu as any).inert = false;
+			menu.setAttribute("data-open", "false");
 		}
 	});
 </script>
 
 <style>
+	/* Header / layout */
 	.header {
 		position: sticky;
 		top: 0;
@@ -215,7 +185,6 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 		padding: 0 2.4rem;
 	}
-
 	.nav-container {
 		display: flex;
 		justify-content: space-between;
@@ -225,7 +194,6 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		width: 100%;
 		height: 6.4rem;
 	}
-
 	.nav-content {
 		display: flex;
 		align-items: center;
@@ -233,6 +201,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		gap: 1.6rem;
 	}
 
+	/* Home link */
 	.home-link {
 		display: flex;
 		align-items: center;
@@ -241,30 +210,20 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		color: var(--m3-color-on-surface);
 		margin-right: auto;
 	}
-
 	.home-icon {
 		width: 2.8rem;
 		height: 2.8rem;
 		fill: currentColor;
 	}
 
-	.home-text {
-		font-size: var(--m3-font-title-large);
-		font-family: var(--m3-font-family-display);
-		font-weight: 500;
-	}
-
+	/* Menu button and icon switch */
 	.menu-icon-wrapper {
 		display: block;
-		margin-left: auto; /* Push to the right */
+		margin-left: auto;
 	}
-
 	@media (min-width: 768px) {
-		.menu-icon-wrapper {
-			display: none !important;
-		}
+		.menu-icon-wrapper { display: none !important; }
 	}
-
 	.menu-icon-button {
 		width: 4rem;
 		height: 4rem;
@@ -281,22 +240,12 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		outline: 2px solid var(--m3-color-primary);
 		background-color: var(--m3-color-primary-container);
 	}
+	.menu-icon-button .close-icon { display: none; }
+	.menu-icon-button.is-open .open-icon { display: none; }
+	.menu-icon-button.is-open .close-icon { display: block; }
 
-	.menu-icon-button .close-icon {
-		display: none;
-	}
-
-	.menu-icon-button.is-open .open-icon {
-		display: none;
-	}
-
-	.menu-icon-button.is-open .close-icon {
-		display: block;
-	}
-
-	/* Mobile: hidden by default. Use [hidden] and [data-open] for stateful styling. */
+	/* Mobile menu states and desktop overrides */
 	.nav-menu-styles {
-		/* visible on desktop via media query below */
 		display: none;
 		position: absolute;
 		top: 100%;
@@ -306,14 +255,8 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		padding: 1.6rem;
 		border-top: 1px solid var(--m3-color-outline);
 	}
-	/* When explicitly opened via data-open */
-	.nav-menu-styles[data-open="true"] {
-		display: block;
-	}
-	/* Respect the HTML hidden attribute as higher-priority override */
-	.nav-menu-styles[hidden] {
-		display: none !important;
-	}
+	.nav-menu-styles[data-open="true"] { display: block; }
+	.nav-menu-styles[hidden] { display: none !important; }
 
 	@media (min-width: 768px) {
 		.nav-menu-styles {
@@ -323,7 +266,6 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 			border-top: none;
 			display: flex !important;
 			width: auto;
-			/* Ensure it's always visible on desktop */
 			visibility: visible;
 			opacity: 1;
 			transform: none;
@@ -332,6 +274,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		}
 	}
 
+	/* Nav list & links */
 	.nav-list {
 		display: flex;
 		flex-direction: column;
@@ -341,13 +284,8 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		padding: 0;
 	}
 	@media (min-width: 768px) {
-		.nav-list {
-			flex-direction: row;
-			align-items: center;
-			gap: 1.6rem;
-		}
+		.nav-list { flex-direction: row; align-items: center; gap: 1.6rem; }
 	}
-
 	.nav-link {
 		display: block;
 		padding: 1rem 1.6rem;
@@ -359,24 +297,20 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		transition: all 0.3s ease;
 		position: relative;
 	}
-
 	.nav-link:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
-	/* keyboard-visible focus style for nav links */
 	.nav-link:focus-visible {
 		outline: 2px solid var(--m3-color-primary);
 		outline-offset: 2px;
 		box-shadow: 0 0 0 2px color-mix(in oklab, var(--m3-color-primary) 35%, transparent);
 	}
-
 	.nav-link[aria-current="page"] {
 		background-color: var(--m3-color-primary-container);
 		color: var(--m3-color-on-primary-container);
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
-
 	.nav-link[aria-current="page"]::after {
 		content: "";
 		position: absolute;
@@ -389,31 +323,22 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		background-color: var(--m3-color-primary);
 	}
 
+	/* Theme toggle visibility */
 	.theme-toggle-container {
 		display: none;
 		align-items: center;
 	}
-
 	@media (min-width: 768px) {
-		.theme-toggle-container {
-			display: flex;
-		}
+		.theme-toggle-container { display: flex; }
 	}
 
+	/* small utility / responsive helpers (kept for parity) */
 	.hidden,
-	.nav-item.md\:hidden {
-		display: none;
-	}
-
+	.nav-item.md\:hidden { display: none; }
 	@media (max-width: 767px) {
-		.nav-menu-styles.is-open .nav-item.md\:hidden {
-			display: block;
-		}
+		.nav-menu-styles.is-open .nav-item.md\:hidden { display: block; }
 	}
-
 	@media (min-width: 768px) {
-		.md\:flex {
-			display: flex;
-		}
+		.md\:flex { display: flex; }
 	}
 </style>
