@@ -26,6 +26,7 @@
     "@astrojs/react": "^4.3.0",
     "@tinacms/cli": "^1.10.2",
     "@types/node": "^24.3.0",
+    "marked": "^16.2.0",
     "terser": "^5.43.1",
     "typescript": "^5.9.2"
   }

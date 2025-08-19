@@ -19,6 +19,11 @@ export default defineConfig({
         locales: ["en", "fr", "pt-br", "es"],
     },
     output: "static",
+    // Allow remote image optimization for CMS-hosted images.
+    // This is permissive (all HTTPS). Tighten with specific hostnames if desired.
+    image: {
+        remotePatterns: [{ protocol: "https" }],
+    },
     vite: {
         build: {
             target: "es2018",
