@@ -191,7 +191,9 @@ const renderedContent = content ? marked.parse(content) : "";
         // Close when clicking outside the image/content or on elements with data-close
         lightbox.addEventListener('click', (e) => {
           if (!(e.target instanceof Element)) return;
-          if (e.target === lightbox || e.target.hasAttribute('data-close')) {
+          const isBackdrop = e.target === lightbox;
+          const isCloseClick = !!e.target.closest('[data-close]');
+          if (isBackdrop || isCloseClick) {
             close();
           }
         });
