@@ -44,7 +44,7 @@
    by the hero H1 ("Developer and Designer") to keep it tiny and fast. */
 @font-face {
   font-family: 'Roboto Flex';
-  src: url('/fonts/Roboto_Flex/RobotoFlex-subset-hero-800.woff2') format('woff2');
+  src: url('/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
