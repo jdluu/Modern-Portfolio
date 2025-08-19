@@ -2,9 +2,28 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeSection from "../components/sections/HomeSection.astro";
 
-const title = "Home Page";
+const title = "Jeffrey Luu — Developer and Designer | Portfolio";
 ---
 
 <BaseLayout title={title} isHomepage={true}>
 	<HomeSection />
+	<script type="application/ld+json" is:inline>
+		{JSON.stringify([
+			{
+				"@context": "https://schema.org",
+				"@type": "Person",
+				"name": "Jeffrey Luu",
+				"jobTitle": "Developer and Designer",
+				"url": "https://jluu.dev",
+				"description": "Portfolio of Jeffrey Luu, a web and mobile developer focused on creating innovative and user-friendly experiences."
+			},
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "Jeffrey Luu Portfolio",
+				"url": "https://jluu.dev",
+				"inLanguage": "en"
+			}
+		])}
+	</script>
 </BaseLayout>

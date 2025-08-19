@@ -59,7 +59,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 			<div id="main-menu" class="nav-menu-styles" hidden inert data-open="false">
 				<ul class="nav-list">
-					<li class="nav-item" role="menuitem">
+					<li class="nav-item">
 						<a
 							href="/about"
 							class="nav-link"
@@ -70,7 +70,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 							About
 						</a>
 					</li>
-					<li class="nav-item" role="menuitem">
+					<li class="nav-item">
 						<a
 							href="/work"
 							class="nav-link"
@@ -79,7 +79,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 							Work
 						</a>
 					</li>
-					<li class="nav-item" role="menuitem">
+					<li class="nav-item">
 						<a
 							href="/blog"
 							class="nav-link"
@@ -90,7 +90,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 							Blog
 						</a>
 					</li>
-					<li class="nav-item" role="menuitem">
+					<li class="nav-item">
 						<a
 							href="/contact"
 							class="nav-link"
@@ -101,7 +101,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 							Contact
 						</a>
 					</li>
-					<li class="nav-item md:hidden" role="menuitem">
+					<li class="nav-item md:hidden">
 						<ThemeToggleButton client:idle transition:persist />
 					</li>
 				</ul>
@@ -119,9 +119,9 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 		const mainMenu = document.getElementById("main-menu");
 
 		if (!menuToggleBtn || !mainMenu) return;
-
-		const btn = menuToggleBtn as HTMLElement;
-		const menu = mainMenu as HTMLElement;
+		
+		const btn = menuToggleBtn;
+		const menu = mainMenu;
 		const firstLinkSelector = 'a, button, [tabindex]:not([tabindex="-1"])';
 
 		function openMenu() {
@@ -134,8 +134,8 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 			} catch (err) {}
 			menu.setAttribute("data-open", "true");
 			// focus the first focusable item
-			const first = menu.querySelector(firstLinkSelector) as HTMLElement | null;
-			if (first) first.focus();
+			const first = menu.querySelector(firstLinkSelector);
+			if (first && typeof (first as HTMLElement).focus === "function") (first as HTMLElement).focus();
 			// Escape handler
 			document.addEventListener("keydown", onDocumentKeydown);
 		}
@@ -172,8 +172,9 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 		// Close menu when a link inside is activated (via click or keyboard Enter)
 		menu.addEventListener("click", (e) => {
-			const target = e.target as HTMLElement | null;
-			if (target && target.closest) {
+			const target = e.target;
+			// Guard: ensure target is an HTMLElement before using DOM traversal APIs
+			if (target && target instanceof HTMLElement) {
 				const link = target.closest("a,button");
 				if (link) {
 					closeMenu();
@@ -181,9 +182,24 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 			}
 		});
 
-		// Ensure initial state: on desktop it's visible via CSS; on mobile keep it inert/hidden
+		// Ensure initial state: on desktop it's visible; on mobile keep it inert/hidden.
+		// Some browsers will render server-side HTML first with the 'hidden' attribute.
+		// If the viewport is desktop-sized, remove the hidden attribute so desktop CSS can show the menu.
 		try {
 			btn.setAttribute("aria-expanded", btn.getAttribute("aria-expanded") || "false");
+			// If desktop viewport, remove 'hidden' so CSS media query rules control visibility.
+			if (typeof window !== "undefined" && window.innerWidth >= 768) {
+				try {
+					menu.removeAttribute("hidden");
+					// make sure inert is toggled appropriately for desktop
+					try {
+						(menu as any).inert = false;
+					} catch (err) {}
+					menu.setAttribute("data-open", "false");
+				} catch (err) {
+					// ignore
+				}
+			}
 		} catch (err) {
 			// ignore
 		}
@@ -347,6 +363,12 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 	.nav-link:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+	/* keyboard-visible focus style for nav links */
+	.nav-link:focus-visible {
+		outline: 2px solid var(--m3-color-primary);
+		outline-offset: 2px;
+		box-shadow: 0 0 0 2px color-mix(in oklab, var(--m3-color-primary) 35%, transparent);
 	}
 
 	.nav-link[aria-current="page"] {

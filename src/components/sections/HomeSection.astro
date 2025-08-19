@@ -17,36 +17,61 @@
 				href="https://drive.google.com/file/d/1NvgQjI2QdMaA8ZI_vNpvlE9Gw7032Ddk/view?usp=sharing"
 				target="_blank"
 				rel="noopener noreferrer"
-				aria-label="Download Resume"
+				aria-label="Download Jeffrey Luu’s Resume (PDF)"
 			>
-				Download Resume
+				Download Resume (PDF)
 			</a>
 		</div>
 	</div>
 </section>
 
 <script>
-	document.addEventListener("DOMContentLoaded", () => {
-		const introElements = document.getElementById("intro-elements");
-		const contentSection = document.querySelector(".content-section");
+	// Defer non-critical interactive behavior and trigger decorative animations
+	// after the first paint so LCP can be recorded.
+	(function () {
+		const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-		if (
-			introElements &&
-			contentSection &&
-			!window.matchMedia("(prefers-reduced-motion: reduce)").matches
-		) {
-			(contentSection as HTMLElement).addEventListener(
-				"mousemove",
-				(e: MouseEvent) => {
+		function initAfterPaint() {
+			const introElements = document.getElementById("intro-elements");
+			const contentSection = document.querySelector(".content-section");
+
+			// Trigger decorative animation class so elements are visible at TTFP (no opacity:0)
+			if (introElements) {
+				introElements.classList.add("animate-hero");
+			}
+
+			// Attach mousemove parallax only after paint and only if user doesn't prefer reduced motion
+			if (introElements && contentSection && !prefersReduced) {
+				// Throttle mousemove to avoid layout/paint churn
+				let rafPending = false;
+				// Use the captured contentSection dimensions (safer than relying on event.currentTarget)
+				const container = contentSection as HTMLElement;
+				container.addEventListener("mousemove", (e: MouseEvent) => {
+					if (rafPending) return;
+					rafPending = true;
 					const { clientX, clientY } = e;
-					const { offsetWidth, offsetHeight } = e.currentTarget as HTMLElement;
-					const moveX = (clientX - offsetWidth / 2) / 50;
-					const moveY = (clientY - offsetHeight / 2) / 50;
-					introElements.style.transform = `translate(${moveX}px, ${moveY}px)`;
-				}
-			);
+					const rect = container.getBoundingClientRect();
+					requestAnimationFrame(() => {
+						// Use container rect to compute center-based movement; guards against null currentTarget
+						const moveX = (clientX - (rect.left + rect.width / 2)) / 50;
+						const moveY = (clientY - (rect.top + rect.height / 2)) / 50;
+						// Apply transform on the container to avoid changing individual computed styles
+						introElements.style.transform = `translate(${moveX}px, ${moveY}px)`;
+						rafPending = false;
+					});
+				});
+			}
 		}
-	});
+
+		// Use requestAnimationFrame after DOM ready to ensure first paint occurred
+		if (document.readyState === "complete" || document.readyState === "interactive") {
+			requestAnimationFrame(initAfterPaint);
+		} else {
+			document.addEventListener("DOMContentLoaded", () => {
+				requestAnimationFrame(initAfterPaint);
+			});
+		}
+	})();
 </script>
 
 <style>
@@ -71,9 +96,17 @@
 		z-index: 1;
 	}
 
+	/* Make hero content visible at initial paint to allow LCP to be recorded.
+	   Decorative entrance animations are applied via the .animate-hero class so
+	   the computed style at TTFP is visible (opacity: 1, transform: none). */
 	.intro-greeting {
 		font-size: var(--m3-font-headline-small);
 		color: var(--m3-color-secondary);
+		opacity: 1;
+		transform: none;
+	}
+	/* Decorative animation triggered post-paint */
+	.animate-hero .intro-greeting {
 		opacity: 0;
 		transform: translateY(2rem);
 		animation: fadeInUp 0.6s ease-out 0.2s forwards;
@@ -85,6 +118,10 @@
 		font-weight: 800;
 		color: var(--m3-color-on-background);
 		margin: 0.8rem 0;
+		opacity: 1; /* visible at initial paint for LCP */
+		transform: none;
+	}
+	.animate-hero .intro-role {
 		opacity: 0;
 		transform: translateY(2rem);
 		animation: fadeInUp 0.7s ease-out 0.4s forwards;
@@ -96,12 +133,20 @@
 		color: var(--m3-color-on-surface-variant);
 		max-width: 45ch;
 		margin: 0 auto 2.4rem;
+		opacity: 1;
+		transform: none;
+	}
+	.animate-hero .intro-tagline {
 		opacity: 0;
 		transform: translateY(2rem);
 		animation: fadeInUp 0.8s ease-out 0.6s forwards;
 	}
 
 	.resume-button-wrapper {
+		opacity: 1;
+		transform: none;
+	}
+	.animate-hero .resume-button-wrapper {
 		opacity: 0;
 		transform: translateY(2rem);
 		animation: fadeInUp 0.8s ease-out 0.8s forwards;
@@ -115,15 +160,34 @@
 		font-size: var(--m3-font-label-large);
 		color: var(--m3-color-on-primary);
 		background-color: var(--m3-color-primary);
+		/* stable border to reserve space for focus ring and avoid layout shift */
+		border: 2px solid transparent;
 		text-decoration: none;
 		border-radius: 20px;
 		transition: all 0.2s ease;
 	}
 
-	.resume-link:hover {
-		background-color: var(--m3-color-primary-dark);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	.resume-link:hover,
+	.resume-link:focus-visible {
+		/* Fallback first: if color-mix unsupported, keep base color */
+		background-color: var(--m3-color-primary);
+		/* Preferred: slightly darken primary to create contrast */
+		background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
+		color: var(--m3-color-on-primary);
+		box-shadow: 0 4px 12px rgba(0,0,0,0.18);
 		transform: translateY(-2px);
+		/* focus-visible outline and subtle border tint for accessibility */
+		outline: 2px solid color-mix(in oklab, var(--m3-color-primary) 65%, white 35%);
+		outline-offset: 2px;
+		border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
+	}
+
+	/* Keep text legible for visited and active states */
+	.resume-link:visited { color: var(--m3-color-on-primary); }
+	.resume-link:active {
+		background-color: var(--m3-color-primary);
+		background-color: color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
+		color: var(--m3-color-on-primary);
 	}
 
 	@keyframes fadeInUp {

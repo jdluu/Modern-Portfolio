@@ -98,16 +98,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		</style>
 	
 		<!-- Preload Critical Assets -->
-		<!-- For mobile: preload a tiny subset to speed the LCP text paint -->
+		<!-- Preload the LCP subset font unconditionally so it's available during audits and on all devices -->
 		<link
 			rel="preload"
 			href="/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin
-			media="(max-width: 767px)"
 		/>
-		<!-- For desktop / larger viewports: preload the full variable font -->
+		<!-- For desktop / larger viewports: preload the full variable font (kept conditional) -->
 		<link
 			rel="preload"
 			href="/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2"
