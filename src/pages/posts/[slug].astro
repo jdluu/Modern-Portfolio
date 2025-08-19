@@ -2,6 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { client } from "../../../tina/__generated__/client";
 import type { Post } from "../../../tina/__generated__/types";
+// server-side render Markdown safely using marked (installed as a devDependency)
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
 	const postsResponse = await client.queries.postConnection();
@@ -15,7 +17,8 @@ export async function getStaticPaths() {
 		if (!edge?.node) {
 			return [];
 		}
-		const slug = edge.node._sys.filename.replace(/\.md$/, "").toLowerCase();
+		// support .md and .mdx filenames when deriving slugs
+		const slug = edge.node._sys.filename.replace(/\.mdx?$/i, "").toLowerCase();
 		return [
 			{
 				params: { slug },
@@ -25,7 +28,7 @@ export async function getStaticPaths() {
 	});
 }
 
-const { title, date, description, content, links } = Astro.props as Post;
+const { title, date, description = "", content, links } = Astro.props as any;
 const displayDate = date
 	? new Date(date).toLocaleDateString("en-US", {
 			year: "numeric",
@@ -33,6 +36,9 @@ const displayDate = date
 			day: "numeric",
 		})
 	: "";
+
+// Render Markdown -> HTML server-side using marked (keeps behavior deterministic at build time)
+const renderedContent = content ? marked.parse(content) : "";
 ---
 
 <BaseLayout title={title}>
@@ -43,15 +49,16 @@ const displayDate = date
 			{description && <p class="description">{description}</p>}
 		</header>
 
-		<div class="prose" set:html={content} />
+		<!-- Rendered Markdown (server-side) -->
+		<div class="prose" set:html={renderedContent} />
 
 		{
 			links && links.length > 0 && (
 				<div class="project-links">
 					<div class="links-container">
 						{links
-							.filter((link) => !!link?.url)
-							.map((link) => (
+							.filter((link: any) => !!link?.url)
+							.map((link: any) => (
 								<a
 									href={link!.url}
 									target="_blank"

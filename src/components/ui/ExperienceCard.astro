@@ -1,28 +1,35 @@
 ---
-import { Image } from 'astro:assets';
-
+/*
+  ExperienceCard: use a resilient image strategy for CMS-provided URLs.
+  If thumbnail is a static/local path that can be handled by astro:assets optimization,
+  you can swap back to <Image>. For dynamic CMS URLs we use a standard <img>.
+*/
 export interface Props {
 	title: string;
-	description: string;
+	description?: string;
 	slug: string;
-	date: string;
-	thumbnail: string;
+	date?: string;
+	thumbnail?: string;
 }
 
-const { title, description, slug, date, thumbnail } = Astro.props;
+const { title, description = "", slug, date = "", thumbnail = "" } = Astro.props as Props;
 ---
 
 <section class="background">
-	<Image
-		src={thumbnail}
-		alt={title}
-		width={600}
-		height={400}
-		loading="lazy"
-		decoding="async"
-		class="experience-image"
-		format="webp"
-	/>
+	{thumbnail ? (
+		// Use standard <img> for CMS/remote URLs or runtime-provided paths.
+		<img
+			src={thumbnail}
+			alt={title}
+			class="experience-image"
+			loading="lazy"
+			decoding="async"
+			width="600"
+			height="400"
+		/>
+	) : (
+		<div class="experience-image placeholder" aria-hidden="true"></div>
+	)}
 	<div class="project-container">
 		<section class="more-info">
 			<span class="project-title">{title}</span>

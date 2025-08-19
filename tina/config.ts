@@ -2,6 +2,7 @@ import { defineConfig } from "tinacms";
 
 // Your hosting provider likely exposes this as an environment variable
 const branch =
+	process.env.NEXT_PUBLIC_TINA_BRANCH ||
 	process.env.GITHUB_BRANCH ||
 	process.env.VERCEL_GIT_COMMIT_REF ||
 	process.env.HEAD ||
@@ -42,6 +43,10 @@ export default defineConfig({
 					include: "**/*.{md,mdx}",
 					exclude: "tina/**"
 				},
+				ui: {
+					// Build routes for the site from filename
+					router: ({ document }) => `/experiences/${document._sys.filename.replace(/\\.mdx?$/i, "").toLowerCase()}`,
+				},
 				fields: [
 					{
 						type: "string",
@@ -62,8 +67,14 @@ export default defineConfig({
 							},
 							{
 								type: "string",
+								name: "role",
+								label: "Role",
+							},
+							{
+								type: "string",
 								name: "date",
 								label: "Date",
+								description: "Optional human-friendly date range (e.g. Jan 2022 — Present). If omitted UI will compute from startDate/endDate.",
 							},
 							{
 								type: "datetime",
@@ -83,6 +94,12 @@ export default defineConfig({
 								name: "thumbnail",
 								label: "Thumbnail",
 							},
+							{
+								type: "string",
+								name: "summary",
+								label: "Summary",
+								description: "Short summary shown on cards. If empty, the UI will fall back to a generated excerpt.",
+							},
 						],
 					},
 				],
@@ -96,6 +113,9 @@ export default defineConfig({
 					include: "**/*.{md,mdx}",
 					exclude: "tina/**"
 				},
+				ui: {
+					router: ({ document }) => `/posts/${document._sys.filename.replace(/\\.mdx?$/i, "").toLowerCase()}`,
+				},
 				fields: [
 					{
 						type: "string",
@@ -105,9 +125,32 @@ export default defineConfig({
 						required: true,
 					},
 					{
+						type: "string",
+						name: "description",
+						label: "Description",
+						description: "Short summary for listings and SEO",
+					},
+					{
 						type: "datetime",
 						name: "date",
 						label: "Date",
+					},
+					{
+						type: "boolean",
+						name: "draft",
+						label: "Draft",
+						description: "Mark as draft to hide from published lists",
+					},
+					{
+						type: "string",
+						name: "tags",
+						label: "Tags",
+						list: true,
+					},
+					{
+						type: "image",
+						name: "hero",
+						label: "Hero Image",
 					},
 					{
 						type: "string",
