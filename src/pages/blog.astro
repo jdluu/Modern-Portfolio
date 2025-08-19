@@ -4,11 +4,7 @@ import { client } from "../../tina/__generated__/client";
 
 const title = "Blog";
 
-// Fetch posts
-const postsResp = await client.queries.postConnection();
-const edges = postsResp?.data?.postConnection?.edges ?? [];
-const nodes = edges.map((e) => e?.node).filter((n) => n);
-
+// Fetch posts via Tina; fallback to filesystem in DEV if Tina is unavailable
 type PostIndexItem = {
   title: string;
   slug: string;
@@ -18,29 +14,65 @@ type PostIndexItem = {
   tags: string[];
 };
 
-const posts: PostIndexItem[] = nodes
-  .map((node: any) => {
-    const filename = node._sys?.filename ?? "";
-    const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
-    const tags = Array.isArray(node.tags)
-      ? (node.tags as string[]).filter((t) => !!t && typeof t === "string")
-      : [];
+let posts: PostIndexItem[] = [];
 
+try {
+  const postsResp = await client.queries.postConnection();
+  const edges = postsResp?.data?.postConnection?.edges ?? [];
+  const nodes = edges.map((e) => e?.node).filter((n) => n);
+
+  posts = nodes
+    .map((node: any) => {
+      const filename = node._sys?.filename ?? "";
+      const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
+      const tags = Array.isArray(node.tags)
+        ? (node.tags as string[]).filter((t) => !!t && typeof t === "string")
+        : [];
+
+      return {
+        title: node.title ?? "Untitled",
+        slug,
+        date: node.date ?? null,
+        description: node.description ?? "",
+        draft: Boolean(node.draft),
+        tags,
+      };
+    })
+    .filter((p) => !p.draft)
+    .sort((a, b) => {
+      const da = a.date ? new Date(a.date).getTime() : 0;
+      const db = b.date ? new Date(b.date).getTime() : 0;
+      return db - da;
+    });
+} catch {
+  posts = [];
+}
+
+// Filesystem fallback for dev: read posts directly if Tina returned none
+if ((posts?.length ?? 0) === 0 && import.meta.env.DEV) {
+  const modules = import.meta.glob("../../content/posts/*.{md,mdx}", { eager: true }) as Record<string, any>;
+
+  const fsPosts = Object.entries(modules).map(([path, mod]) => {
+    const fm = (mod && (mod.frontmatter ?? mod.meta ?? mod.metadata)) ?? {};
+    const filename = path.split("/").pop() ?? path;
+    const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
+    const tags = Array.isArray(fm.tags) ? fm.tags.filter((t: any) => typeof t === "string") : [];
     return {
-      title: node.title ?? "Untitled",
+      title: fm.title ?? "Untitled",
       slug,
-      date: node.date ?? null,
-      description: node.description ?? "",
-      draft: Boolean(node.draft),
+      date: fm.date ?? null,
+      description: fm.description ?? "",
+      draft: Boolean(fm.draft),
       tags,
-    };
-  })
-  .filter((p) => !p.draft)
-  .sort((a, b) => {
+    } as PostIndexItem;
+  });
+
+  posts = fsPosts.filter((p) => !p.draft).sort((a, b) => {
     const da = a.date ? new Date(a.date).getTime() : 0;
     const db = b.date ? new Date(b.date).getTime() : 0;
     return db - da;
   });
+}
 ---
 
 <BaseLayout title={title}>
