@@ -13,8 +13,11 @@
 				raytracing techniques with reinforcement learning.
 			</p>
 		</div>
+
 		<div id="skills-wrapper">
 			<h3 class="skills-title">Technical Domains</h3>
+
+			<!-- Skill domains grouped for clarity: Web Dev, Software & Mobile, Data Science & AI -->
 			<div class="skills-grid">
 				<div class="domain-section">
 					<h4>Web Dev</h4>
@@ -39,6 +42,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="domain-section">
 					<h4>Software & Mobile</h4>
 					<div class="tech-grid">
@@ -62,6 +66,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="domain-section">
 					<h4>Data Science & AI</h4>
 					<div class="tech-grid">
@@ -86,6 +91,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="projects-link-wrapper">
 				<p class="projects-text">Want to see these skills in action?</p>
 				<a href="/work" class="projects-link" aria-label="View my projects">
@@ -97,12 +103,12 @@
 </section>
 
 <style>
+	/* Container and headings */
 	.content-section {
 		padding: 4.8rem 2.4rem;
 		max-width: 1280px;
 		margin: 0 auto;
 	}
-
 	.page-h2 {
 		font-size: var(--m3-font-display-small);
 		font-family: var(--m3-font-family-display);
@@ -111,26 +117,24 @@
 		margin-bottom: 3.2rem;
 	}
 
+	/* Layout */
 	#flex-container {
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: 3.2rem;
 		align-items: start;
 	}
-
 	#about-wrapper {
 		padding: 2.4rem;
 		background-color: var(--m3-color-surface);
 		border-radius: 12px;
 	}
-
 	#about-desc {
 		font-size: var(--m3-font-body-large);
 		color: var(--m3-color-on-surface);
 		line-height: 1.6;
 		max-width: 70ch;
 	}
-
 	.intro-text {
 		display: block;
 		font-size: var(--m3-font-headline-medium);
@@ -139,12 +143,12 @@
 		margin-bottom: 1.6rem;
 	}
 
+	/* Skills area */
 	#skills-wrapper {
 		background-color: var(--m3-color-surface-variant);
 		border-radius: 12px;
 		padding: 2.4rem;
 	}
-
 	.skills-title {
 		font-size: var(--m3-font-headline-medium);
 		font-family: var(--m3-font-family-display);
@@ -152,30 +156,25 @@
 		text-align: center;
 		margin-bottom: 2.4rem;
 	}
-
 	.skills-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 		gap: 1.6rem;
 	}
-
 	.domain-section {
 		background-color: var(--m3-color-surface);
 		border-radius: 8px;
 		padding: 1.6rem;
 	}
-
 	.domain-section:not(:last-child) {
 		border-right: 1px solid var(--m3-color-outline);
 	}
-
 	.domain-section h4 {
 		font-size: var(--m3-font-title-large);
 		color: var(--m3-color-primary);
 		text-align: center;
 		margin-bottom: 1.6rem;
 	}
-
 	.tech-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -183,6 +182,7 @@
 		justify-items: center;
 	}
 
+	/* Tech item + tooltip (tooltip uses title attribute) */
 	.tech-item {
 		position: relative;
 		width: 6rem;
@@ -194,21 +194,20 @@
 		border-radius: 50%;
 		transition: all 0.2s ease;
 	}
-
 	.tech-item:hover {
 		transform: scale(1.1);
 		background-color: var(--m3-color-primary-container);
 	}
-
 	.tech-item img {
 		width: 3.2rem;
 		height: 3.2rem;
 		object-fit: contain;
 	}
+	/* Tooltip pseudo-element displays the element's title attribute */
 	.tech-item::after {
 		content: attr(title);
 		position: absolute;
-		bottom: calc(100% + 8px); /* Position above the icon with 8px margin */
+		bottom: calc(100% + 8px);
 		left: 50%;
 		transform: translateX(-50%);
 		background-color: var(--m3-color-inverse-surface);
@@ -216,32 +215,29 @@
 		padding: 4px 8px;
 		border-radius: 4px;
 		font-size: var(--m3-font-body-small);
-		white-space: nowrap; /* Prevent tooltip text from wrapping */
+		white-space: nowrap;
 		opacity: 0;
 		visibility: hidden;
 		pointer-events: none;
-		transition:
-			opacity 0.2s ease,
-			visibility 0.2s ease;
+		transition: opacity 0.2s ease, visibility 0.2s ease;
 	}
 	.tech-item:hover::after {
 		opacity: 1;
 		visibility: visible;
 	}
 
+	/* Projects link block */
 	.projects-link-wrapper {
 		text-align: center;
 		margin-top: 3.2rem;
 		padding-top: 1.6rem;
 		border-top: 1px solid var(--m3-color-outline);
 	}
-
 	.projects-text {
 		font-size: var(--m3-font-body-medium);
 		color: var(--m3-color-on-surface-variant);
 		margin-bottom: 0.8rem;
 	}
-
 	.projects-link {
 		font-size: var(--m3-font-label-large);
 		color: var(--m3-color-primary);
