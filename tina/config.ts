@@ -43,10 +43,6 @@ export default defineConfig({
 					include: "**/*.{md,mdx}",
 					exclude: "tina/**"
 				},
-				ui: {
-					// Build routes for the site from filename
-					router: ({ document }) => `/experiences/${document._sys.filename.replace(/\\.mdx?$/i, "").toLowerCase()}`,
-				},
 				fields: [
 					{
 						type: "string",
@@ -112,9 +108,6 @@ export default defineConfig({
 				match: {
 					include: "**/*.{md,mdx}",
 					exclude: "tina/**"
-				},
-				ui: {
-					router: ({ document }) => `/posts/${document._sys.filename.replace(/\\.mdx?$/i, "").toLowerCase()}`,
 				},
 				fields: [
 					{
