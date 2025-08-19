@@ -24,12 +24,6 @@ interface PostProps {
   Utilities
 */
 
-/** Strip YAML frontmatter from raw markdown/MDX text; returns body */
-const stripFrontmatter = (raw: string): string => {
-  if (!raw) return "";
-  const m = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
-  return m ? raw.slice(m[0].length) : raw;
-};
 
 /** Resolve hero value:
   - return absolute http(s) as-is
@@ -72,7 +66,13 @@ export async function getStaticPaths() {
   // DEV fallback: read local content files and build same props shape
   if (import.meta.env.DEV) {
     const modules = import.meta.glob("../../../content/posts/*.{md,mdx}", { eager: true }) as Record<string, any>;
-    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { as: "raw", eager: true }) as Record<string, string>;
+    
+    const stripFrontmatterLocal = (raw: string): string => {
+      if (!raw) return "";
+      const m = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
+      return m ? raw.slice(m[0].length) : raw;
+    };
 
     const fsPaths = Object.entries(modules).flatMap(([filePath, mod]) => {
       const frontmatter = (mod && (mod.frontmatter ?? mod.meta ?? mod.metadata)) ?? {};
@@ -81,7 +81,7 @@ export async function getStaticPaths() {
       const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
 
       const raw = rawModules[filePath] || "";
-      const body = stripFrontmatter(raw).trim();
+      const body = stripFrontmatterLocal(raw).trim();
 
       return [{
         params: { slug },
