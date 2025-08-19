@@ -136,11 +136,12 @@ const experiences = sortedNodes.map((node: any) => {
 	<p class="section-desc">
 		<strong>My professional journey and key achievements</strong>
 	</p>
-	<div class="card-container">
+	<div class="experience-grid">
 		{
 			// Render even when experiences is empty to avoid crashes
+			// Wrap each ExperienceCard in an explicit .experience-item to prevent external CSS from forcing full-row spans
 			experiences.length > 0 ? experiences.map((exp) => (
-				<div class="experience-card-wrapper">
+				<div class="experience-item">
 					<ExperienceCard
 						title={exp.title}
 						thumbnail={exp.thumbnail || ""}
@@ -174,14 +175,41 @@ const experiences = sortedNodes.map((node: any) => {
 		margin-bottom: 4rem;
 	}
 
-	.card-container {
+	/* Ensure the section centers content the same way as Projects */
+	.content-section {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		padding: 4rem 2rem;
 	}
-
-	.experience-card-wrapper {
+	
+	/* Experience-specific grid (mobile-first) with explicit guards to prevent global overrides */
+	.experience-grid {
+		display: grid !important;
 		width: 100%;
-		max-width: 60rem;
+		max-width: 1200px;
 		margin: 0 auto;
+		gap: 2rem;
+		grid-template-columns: 1fr; /* base */
+		justify-items: stretch;
+		align-items: stretch;
+		grid-auto-flow: row dense;
+	}
+	
+	/* Prevent external/global styles from making children span all columns */
+	.experience-grid > .experience-item {
+		grid-column: auto !important;
+		min-width: 0; /* avoid content overflow forcing new lines */
+	}
+	
+	@media (min-width: 768px) {
+		.experience-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		}
+	}
+	@media (min-width: 1024px) {
+		.experience-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+		}
 	}
 </style>
