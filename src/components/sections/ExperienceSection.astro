@@ -3,47 +3,134 @@ import ExperienceCard from "../ui/ExperienceCard.astro";
 import { client } from "../../../tina/__generated__/client";
 
 /**
- * Use TinaCMS generated client to fetch experience cards.
- * The generated `experiencecardConnection` returns edges[].node
- * with _sys.filename which we can use as a slug.
+ * Robust loading for ExperienceSection:
+ * - Try TinaCMS first (with server-side sort by metadata.endDate desc).
+ * - If that fails, retry Tina without sort.
+ * - If still unavailable OR returns no nodes in DEV, fall back to filesystem using import.meta.glob
+ *
+ * The experiencecardConnection returns edges[].node with _sys.filename; we normalize nodes
+ * to always be an array to avoid runtime issues.
  */
-let resp;
+
+/** Helpers (defensive / TS-friendly) */
+const parseDateToTs = (str: string | undefined | null): number => {
+  if (!str || typeof str !== "string") return NaN;
+  const t = Date.parse(str);
+  return Number.isNaN(t) ? NaN : t;
+};
+
+const isSentinelEnd = (str: string | undefined | null): boolean => {
+  if (!str || typeof str !== "string") return false;
+  // Try to parse a year >= 9999 from the string (e.g., "9999-12-31" or "9999")
+  const yearMatch = str.match(/(\d{4,})/);
+  if (!yearMatch) return false;
+  const year = Number(yearMatch[1]);
+  return !Number.isNaN(year) && year >= 9999;
+};
+
+const getComparableTs = (node: any): number => {
+  const meta = node?.metadata ?? {};
+  const endStr = meta?.endDate ?? meta?.date ?? "";
+  if (isSentinelEnd(endStr)) {
+    return Infinity;
+  }
+  const endTs = parseDateToTs(endStr);
+  if (!Number.isNaN(endTs)) return endTs;
+  const startTs = parseDateToTs(meta?.startDate ?? "");
+  if (!Number.isNaN(startTs)) return startTs;
+  return 0;
+};
+
+let resp: any = undefined;
+let edges: any[] = [];
+let nodes: any[] = [];
+
 try {
   // Prefer server-side sorting by endDate (desc)
   resp = await client.queries.experiencecardConnection({ sort: "metadata.endDate:desc" });
-} catch {
-  // Fallback to unsorted if the dev server hasn’t recognized new fields yet
-  resp = await client.queries.experiencecardConnection();
+} catch (err) {
+  try {
+    // Retry without sort (Tina may not recognize new field in some dev setups)
+    resp = await client.queries.experiencecardConnection();
+  } catch (err2) {
+    // Keep resp undefined - we'll fallback to filesystem if needed
+    resp = undefined;
+  }
 }
-const edges = resp?.data?.experiencecardConnection?.edges ?? [];
 
-const nodes = edges
-  .map((e) => e?.node)
-  .filter((n) => n !== null && n !== undefined);
+// Safely extract edges/nodes from Tina response
+edges = resp?.data?.experiencecardConnection?.edges ?? [];
+nodes = Array.isArray(edges) ? edges.map((e: any) => e?.node).filter((n: any) => n != null) : [];
 
-// Client-side safeguard sort: use ISO endDate if available; otherwise stable fallback.
-const getEndTs = (n: Record<string, any> | undefined) => {
-  const end = n?.metadata?.["endDate"] || "";
-  const t = end ? Date.parse(end) : NaN;
-  return Number.isNaN(t) ? 0 : t;
-};
-const sortedNodes = [...nodes].sort((a, b) => getEndTs(b) - getEndTs(a));
+// DEV filesystem fallback when Tina unavailable OR returned no nodes during dev
+if ((import.meta.env?.DEV) && (!Array.isArray(nodes) || nodes.length === 0)) {
+  try {
+    // Eagerly import frontmatter from content/experiencecards/*.md{,x}
+    const modules = import.meta.glob("../../../content/experiencecards/*.{md,mdx}", { eager: true }) as Record<string, any>;
+    const fallbacks: any[] = [];
 
-// Normalize nodes into the shape ExperienceCard expects (sorted by endDate desc)
-const experiences = sortedNodes.map((node) => {
-  const meta: any = node.metadata ?? {};
+    for (const path in modules) {
+      const mod = modules[path];
+      // Astro's markdown frontmatter is usually at mod.frontmatter
+      const fm = mod?.frontmatter ?? mod?.metadata ?? {};
+      // Derive filename from path
+      const filenameMatch = path.replace(/\\/g, "/").match(/([^/]+)$/);
+      const filename = filenameMatch ? filenameMatch[1] : path;
+      const nodeLike = {
+        title: fm?.title ?? fm?.metadata?.title ?? "Untitled",
+        _sys: { filename },
+        metadata: fm?.metadata ?? (() => {
+          // Some files might put fields at top-level frontmatter; normalize to metadata
+          const copy: any = {};
+          const possibleFields = ["company","role","date","startDate","endDate","thumbnail","summary"];
+          for (const f of possibleFields) {
+            if (fm?.[f] !== undefined) copy[f] = fm[f];
+          }
+          // If fm has title already, don't include as metadata.title
+          return copy;
+        })(),
+      };
+      fallbacks.push(nodeLike);
+    }
+
+    nodes = fallbacks;
+  } catch (fsErr) {
+    // If import.meta.glob fails for any reason, ensure nodes is at least an array
+    nodes = nodes ?? [];
+  }
+}
+
+// Defensive ensure nodes is an array
+nodes = Array.isArray(nodes) ? nodes : [];
+
+// Client-side sort: newest -> oldest using getComparableTs (Infinity for sentinel "Present")
+const sortedNodes = [...nodes].sort((a, b) => {
+  const ta = getComparableTs(a);
+  const tb = getComparableTs(b);
+  // When both are infinite, keep original order (stable sort)
+  if (ta === tb) return 0;
+  // descending
+  if (tb === Infinity && ta !== Infinity) return 1;
+  if (ta === Infinity && tb !== Infinity) return -1;
+  return tb - ta;
+});
+
+// Map to ExperienceCard props, passing full metadata
+const experiences = sortedNodes.map((node: any) => {
+  const meta = node?.metadata ?? {};
+  const filename = node?._sys?.filename ?? "";
+  const slug = String(filename).replace(/\.mdx?$/i, "").toLowerCase();
   return {
-    title: node.title ?? "Untitled",
-    slug: (node._sys?.filename ?? "").replace(/\.mdx?$/i, "").toLowerCase(),
-    thumbnail: meta.thumbnail ?? "",
-    // Prefer explicit summary from content; fall back to empty string to make the prop explicit
-    description: meta.summary ?? "",
-    // Keep the human-readable string for display (optional override)
-    date: meta.date ?? "",
+    title: node?.title ?? "Untitled",
+    slug,
+    meta,
+    metadata: meta,
+    thumbnail: meta?.thumbnail ?? "",
+    description: meta?.summary ?? "",
+    date: meta?.date ?? "",
   };
 });
 ---
- 
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
 	<p class="section-desc">
@@ -51,16 +138,22 @@ const experiences = sortedNodes.map((node) => {
 	</p>
 	<div class="card-container">
 		{
-			experiences.length > 0 && experiences.map((exp) => (
+			// Render even when experiences is empty to avoid crashes
+			experiences.length > 0 ? experiences.map((exp) => (
 				<div class="experience-card-wrapper">
 					<ExperienceCard
 						title={exp.title}
 						thumbnail={exp.thumbnail || ""}
 						slug={exp.slug}
 						date={exp.date || ""}
+						description={exp.description || ""}
+						metadata={exp.metadata}
 					/>
 				</div>
-			))
+			)) : (
+				// Keep the container but render nothing if no items
+				null
+			)
 		}
 	</div>
 </section>
