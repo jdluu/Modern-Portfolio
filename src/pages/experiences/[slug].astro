@@ -1,68 +1,220 @@
 ---
-import {getAllExperiences} from '../../lib/cosmic';
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { client } from "../../../tina/__generated__/client";
 
 interface Metadata {
-    description?: string;
-    company?: {
-        name?: string;
-        image?: {
-            url?: string;
-            imgix_url?: string;
-        } | null;
-        imagealt?: string | null;
-    };
-    logistics?: {
-        duration?: string;
-        role?: string;
-    };
-    technologies?: {
-        tools?: string;
-        skills?: string;
-    };
-    work?: {
-        responsibilities?: { duties: string }[];
-        achievements?: { points: string }[];
-    };
-    showcase?: {
-        link?: string | null;
-        description?: string | null;
-    };
+  company?: {
+    name?: string;
+    // Accept either the previous object shape or a simple string URL
+    image?: string | { url?: string; imgix_url?: string } | null;
+    imagealt?: string | null;
+  };
+  logistics?: {
+    duration?: string;
+    role?: string;
+  };
+  technologies?: {
+    tools?: string;
+    skills?: string;
+  };
+  work?: {
+    responsibilities?: { duties: string }[];
+    achievements?: { points: string }[];
+  };
+  showcase?: {
+    link?: string | null;
+    description?: string | null;
+  };
 }
 
 interface PageProps {
-    title: string;
-    metadata: Metadata;
+  title: string;
+  metadata: Metadata;
 }
 
+/**
+ * Local asset resolver (similar to posts.resolveHero)
+ * - Accepts unknown inputs (string or object with url/imgix_url)
+ * - Returns absolute http(s) urls unchanged
+ * - Joins relative paths to import.meta.env.BASE_URL
+ * - Returns null for falsy/invalid
+ */
+function resolveAssetUrl(raw: unknown): string | null {
+  if (!raw) return null;
+  // If it's an object with url/imgix_url prefer those
+  if (typeof raw === "object" && raw !== null) {
+    const asAny = raw as any;
+    const candidate = asAny.imgix_url ?? asAny.url ?? null;
+    if (!candidate) return null;
+    if (typeof candidate !== "string") return null;
+    if (/^https?:\/\//i.test(candidate)) return candidate;
+    const base = import.meta.env.BASE_URL || "/";
+    const clean = candidate.replace(/^\/+/, "");
+    return base.endsWith("/") ? base + clean : base + "/" + clean;
+  }
+
+  if (typeof raw === "string") {
+    const value = raw;
+    if (!value) return null;
+    if (/^https?:\/\//i.test(value)) return value;
+    const base = import.meta.env.BASE_URL || "/";
+    const clean = value.replace(/^\/+/, "");
+    return base.endsWith("/") ? base + clean : base + "/" + clean;
+  }
+
+  return null;
+}
+
+/*
+  Data loading: getStaticPaths
+  - Tina-first approach; on failure or no results, DEV filesystem fallback with identical globs
+  - Preserves draft filtering, slug generation, and props shape expected by the page
+*/
 export async function getStaticPaths() {
-    try {
-        const experiences = await getAllExperiences();
-        return experiences.map(({slug, title, metadata}) => ({
-            params: { slug },
-            props: { title, metadata }
-        }));
-    } catch (error) {
-        console.error('Error in getStaticPaths:', error);
-        return [];
-    }
+  // Try Tina first
+  try {
+    const resp = await client.queries.experienceConnection();
+    const edges = resp?.data?.experienceConnection?.edges ?? [];
+
+    const tinaPaths = edges.flatMap((edge: any) => {
+      if (!edge?.node) return [];
+      const node: any = edge.node;
+      if (node.draft) return [];
+      const slug = node._sys?.filename?.replace(/\.mdx?$/i, "").toLowerCase();
+      return [
+        {
+          params: { slug },
+          props: {
+            title: node.title ?? "Untitled",
+            metadata: {
+              company: {
+                name: node.company?.name ?? "",
+                image: node.company?.image ?? null,
+                imagealt: node.company?.imagealt ?? null,
+              },
+              logistics: {
+                role: node.logistics?.role ?? "",
+                duration: node.logistics?.duration ?? "",
+              },
+              technologies: {
+                tools: node.technologies?.tools ?? "",
+                skills: node.technologies?.skills ?? "",
+              },
+              work: {
+                responsibilities: Array.isArray(node.work?.responsibilities)
+                  ? node.work.responsibilities
+                      .map((r: any) => ({ duties: r?.duties ?? "" }))
+                      .filter((r: any) => !!r.duties)
+                  : [],
+                achievements: Array.isArray(node.work?.achievements)
+                  ? node.work.achievements
+                      .map((a: any) => ({ points: a?.points ?? "" }))
+                      .filter((a: any) => !!a.points)
+                  : [],
+              },
+              showcase: node.showcase
+                ? {
+                    link: node.showcase.link ?? null,
+                    description: node.showcase.description ?? null,
+                  }
+                : undefined,
+            },
+          },
+        },
+      ];
+    });
+
+    if (tinaPaths.length > 0) return tinaPaths;
+  } catch {
+    // Silent fallback to DEV below
+  }
+
+  // DEV fallback: read local content files and build same props shape
+  if (import.meta.env.DEV) {
+    const modules = import.meta.glob("../../../content/experiences/*.{md,mdx}", { eager: true }) as Record<string, any>;
+    const rawModules = import.meta.glob("../../../content/experiences/*.{md,mdx}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
+
+    const stripFrontmatterLocal = (raw: string): string => {
+      if (!raw) return "";
+      const m = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
+      return m ? raw.slice(m[0].length) : raw;
+    };
+
+    const fsPaths = Object.entries(modules).flatMap(([filePath, mod]) => {
+      const frontmatter = (mod && (mod.frontmatter ?? mod.meta ?? mod.metadata)) ?? {};
+      if (frontmatter.draft) return [];
+      const filename = filePath.split("/").pop() || filePath;
+      const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
+
+      // Build the same metadata shape as Tina mapping above
+      return [
+        {
+          params: { slug },
+          props: {
+            title: frontmatter.title ?? "Untitled",
+            metadata: {
+              company: {
+                name: frontmatter.company?.name ?? "",
+                image: frontmatter.company?.image ?? null,
+                imagealt: frontmatter.company?.imagealt ?? null,
+              },
+              logistics: {
+                role: frontmatter.logistics?.role ?? "",
+                duration: frontmatter.logistics?.duration ?? "",
+              },
+              technologies: {
+                tools: frontmatter.technologies?.tools ?? "",
+                skills: frontmatter.technologies?.skills ?? "",
+              },
+              work: {
+                responsibilities: Array.isArray(frontmatter.work?.responsibilities)
+                  ? frontmatter.work.responsibilities
+                      .map((r: any) => ({ duties: r?.duties ?? "" }))
+                      .filter((r: any) => !!r.duties)
+                  : [],
+                achievements: Array.isArray(frontmatter.work?.achievements)
+                  ? frontmatter.work.achievements
+                      .map((a: any) => ({ points: a?.points ?? "" }))
+                      .filter((a: any) => !!a.points)
+                  : [],
+              },
+              showcase: frontmatter.showcase
+                ? {
+                    link: frontmatter.showcase.link ?? null,
+                    description: frontmatter.showcase.description ?? null,
+                  }
+                : undefined,
+            },
+          },
+        },
+      ];
+    });
+
+    return fsPaths;
+  }
+
+  // No results and not in DEV
+  return [];
 }
 
+// Props / derived values
 const { title, metadata } = Astro.props as PageProps;
 
-// Safely access nested properties with null checks
-const companyName = metadata?.company?.name ?? 'Company Name Not Available';
-const companyLogo = metadata?.company?.image?.imgix_url ?? '/placeholder-logo.png';
-const role = metadata?.logistics?.role ?? 'Role Not Specified';
-const duration = metadata?.logistics?.duration ?? 'Duration Not Specified';
-const description = metadata?.description ?? 'No description available';
-const tools = metadata?.technologies?.tools ?? 'Not specified';
-const skills = metadata?.technologies?.skills ?? 'Not specified';
-const responsibilities = metadata?.work?.responsibilities?.filter(r => r?.duties) ?? [];
-const achievements = metadata?.work?.achievements?.filter(a => a?.points) ?? [];
-const showcase = metadata?.showcase && metadata.showcase.link && metadata.showcase.description 
-    ? [metadata.showcase] 
-    : [];
+// Derived and resilient values
+const companyName = metadata?.company?.name ?? "Company Name Not Available";
+// Use resolver to accept string or object shapes; fallback to placeholder
+const companyLogo = resolveAssetUrl(metadata?.company?.image) ?? "/placeholder-logo.png";
+const role = metadata?.logistics?.role ?? "Role Not Specified";
+const duration = metadata?.logistics?.duration ?? "Duration Not Specified";
+const tools = metadata?.technologies?.tools ?? "Not specified";
+const skills = metadata?.technologies?.skills ?? "Not specified";
+const responsibilities = Array.isArray(metadata?.work?.responsibilities)
+  ? metadata!.work!.responsibilities!.filter((r) => r?.duties)
+  : [];
+const achievements = Array.isArray(metadata?.work?.achievements)
+  ? metadata!.work!.achievements!.filter((a) => a?.points)
+  : [];
+const showcase = metadata?.showcase && metadata.showcase.link && metadata.showcase.description ? [metadata.showcase] : [];
 ---
 
 <BaseLayout title={title}>
@@ -90,7 +242,6 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
                             </div>
                         </div>
                     </div>
-                    <p class="section-content lead">{description}</p>
                 </section>
 
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
@@ -121,20 +272,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
             </div>
 
             <!-- Sidebar Column -->
-            <aside class="sidebar-content">
-              <nav class="sidebar-card toc" aria-label="Page sections">
-                <h3>On this page</h3>
-                <ol class="toc-list" role="list">
-                  <li><a href="#overview">Overview</a></li>
-                  {responsibilities.length > 0 && <li><a href="#responsibilities">Responsibilities</a></li>}
-                  {achievements.length > 0 && <li><a href="#achievements">Achievements</a></li>}
-                  {showcase.length > 0 && <li><a href="#showcase">Showcase</a></li>}
-                </ol>
-                <div class="progress">
-                  <div class="progress-bar" aria-hidden="true"></div>
-                  <span class="sr-only" id="read-progress">Reading progress</span>
-                </div>
-              </nav>
+            <aside class="sidebar-content" aria-label="Experience details">
                 <div class="sidebar-card">
                     <h3 id="logistics-title">Logistics</h3>
                     <div class="experience-meta">
@@ -219,7 +357,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     .experience-header {
         margin-bottom: var(--spacing-lg);
         padding-bottom: var(--spacing-md);
-        border-bottom: 1px dashed color-mix(in oklab, var(--m3-color-outline) 40%, transparent);
+        border-bottom: none;
     }
 
     .company-info {
@@ -388,43 +526,6 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
   top: calc(var(--nav-height) + var(--spacing-md));
   align-self: start;
 }
-.sidebar-card.toc {
-  background: color-mix(in oklab, var(--m3-color-surface-variant) 85%, transparent);
-  border: 1px solid color-mix(in oklab, var(--m3-color-outline) 35%, transparent);
-  backdrop-filter: saturate(1.1) blur(2px);
-}
-/* TOC List */
-.toc-list {
-  margin: 0 0 var(--spacing-lg);
-  padding: 0;
-  list-style: none;
-}
-.toc-list a {
-  display: inline-block;
-  padding: 6px 0;
-  color: var(--m3-color-on-surface);
-  text-decoration: none;
-}
-.toc-list a:hover,
-.toc-list a:focus-visible {
-  color: var(--m3-color-primary);
-  text-decoration: underline;
-}
-/* Reading progress */
-.progress {
-  width: 100%;
-  height: 6px;
-  background: color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: var(--spacing-lg);
-}
-.progress-bar {
-  width: 0%;
-  height: 100%;
-  background: var(--m3-color-primary);
-  transition: width 120ms linear;
-}
 /* Chip hover/focus states */
 .chip:hover,
 .chip:focus-visible {
@@ -457,50 +558,11 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
             padding: var(--spacing-sm);
         }
 
-/* Sidebar sticky + TOC */
+/* Sidebar sticky */
     .sidebar-content {
       position: sticky;
       top: calc(var(--nav-height) + var(--spacing-md));
       align-self: start;
-    }
-    .sidebar-card.toc {
-      background: color-mix(in oklab, var(--m3-color-surface-variant) 85%, transparent);
-      border: 1px solid color-mix(in oklab, var(--m3-color-outline) 35%, transparent);
-      backdrop-filter: saturate(1.1) blur(2px);
-    }
-    .toc h3 {
-      margin-bottom: var(--spacing-sm);
-    }
-    .toc-list {
-      margin: 0 0 var(--spacing-lg);
-      padding: 0;
-      list-style: none;
-    }
-    .toc-list a {
-      display: inline-block;
-      padding: 6px 0;
-      color: var(--m3-color-on-surface);
-      text-decoration: none;
-    }
-    .toc-list a:hover,
-    .toc-list a:focus-visible {
-      color: var(--m3-color-primary);
-      text-decoration: underline;
-    }
-    /* Reading progress */
-    .progress {
-      width: 100%;
-      height: 6px;
-      background: color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: var(--spacing-lg);
-    }
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: var(--m3-color-primary);
-      transition: width 120ms linear;
     }
     /* Chips */
     .chip-row {
@@ -542,7 +604,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
     }
     /* Typography enhancements */
     .highlight {
-      color: var(--purple-accent);
+      color: var(--m3-color-on-surface);
       font-weight: 500;
     }
     .lead {
@@ -550,80 +612,7 @@ const showcase = metadata?.showcase && metadata.showcase.link && metadata.showca
       margin-bottom: var(--spacing-lg);
     }
     strong {
-      color: var(--purple-accent);
+      color: var(--m3-color-on-surface);
       font-weight: 600;
     }
 </style>
-
-<script>
-    // Smooth scrolling for navigation links with keyboard support
-    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', handleSmoothScroll);
-        anchor.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSmoothScroll(e);
-            }
-        });
-    });
-
-    function handleSmoothScroll(e: MouseEvent | KeyboardEvent) {
-        e.preventDefault();
-        const currentTarget = e.currentTarget as HTMLAnchorElement;
-        const href = currentTarget.getAttribute('href');
-        if (!href) return;
-
-        const targetElement = document.querySelector(href) as HTMLElement;
-        
-        if (targetElement) {
-            const navHeight = parseInt(getComputedStyle(document.documentElement)
-                .getPropertyValue('--nav-height')) || 64;
-            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = targetPosition - navHeight - 32;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-
-            // Set focus to the target heading
-            const heading = targetElement.querySelector('h1, h2, h3, h4, h5, h6') as HTMLElement;
-            if (heading) {
-                heading.focus({ preventScroll: true });
-            }
-
-            // Update URL without jumping
-            history.pushState(null, '', href);
-        }
-    }
-
-    // IntersectionObserver: update TOC active link and reading progress
-    const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc-list a'));
-    const sections = tocLinks
-      .map(a => document.querySelector<HTMLElement>(a.getAttribute('href')!))
-      .filter((e): e is HTMLElement => e !== null);
-    const progressBar = document.querySelector<HTMLDivElement>('.progress-bar')!;
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = '#' + entry.target.id;
-          tocLinks.forEach(l => l.removeAttribute('aria-current'));
-          const active = tocLinks.find(l => l.getAttribute('href') === id);
-          active?.setAttribute('aria-current', 'true');
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
-
-    sections.forEach(s => io.observe(s));
-
-    // Read progress
-    const onScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = Math.max(0, Math.min(1, docHeight ? scrollTop / docHeight : 0));
-      if (progressBar) progressBar.style.width = (pct * 100).toFixed(1) + '%';
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-</script>

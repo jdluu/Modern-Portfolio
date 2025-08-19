@@ -12,12 +12,21 @@ export interface Props {
 
   // Optional nested metadata object (from Tina)
   metadata?: {
-    company?: string;
+    company?: string | { name?: string | undefined } | null;
     date?: string;
     startDate?: string;
     endDate?: string;
     thumbnail?: string;
     summary?: string;
+    logistics?: {
+      startDate?: string;
+      endDate?: string;
+    } | null;
+    card?: {
+      date?: string;
+      thumbnail?: string;
+      summary?: string;
+    } | null;
   };
 }
 
@@ -43,6 +52,18 @@ function parseSafeDate(value?: string): Date | undefined {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return undefined;
   return d;
+}
+
+// Resolve an asset URL:
+// - Return absolute URLs untouched
+// - Resolve relative paths against import.meta.env.BASE_URL (or "/")
+function resolveAssetUrl(raw?: unknown): string | null {
+  const v = typeof raw === "string" ? raw.trim() : "";
+  if (!v) return null;
+  if (/^https?:\/\//i.test(v)) return v;
+  const base = import.meta.env.BASE_URL || "/";
+  const clean = v.replace(/^\/+/, "");
+  return base.endsWith("/") ? base + clean : base + "/" + clean;
 }
 
 /**
@@ -80,25 +101,35 @@ function formatMonthYear(d: Date): string {
 
 /* Derived fields (priority rules preserved) */
 
-// company priority: explicit prop > metadata.company > ""
-const company = (flatCompany ?? metadata?.company ?? "") as string;
+// company priority:
+// - explicit flat prop
+// - metadata.company (string or object with .name)
+// - fallback empty
+const company =
+  (flatCompany as string | undefined) ??
+  (typeof metadata?.company === "string"
+    ? metadata.company
+    : metadata?.company?.name) ??
+  "";
 
-// start/end raw values (prop priority preserved)
-const startRaw = flatStart ?? metadata?.startDate;
-const endRaw = flatEnd ?? metadata?.endDate;
+// start/end raw values (prop priority preserved), with Tina "logistics" fallback
+const startRaw = flatStart ?? metadata?.startDate ?? metadata?.logistics?.startDate;
+const endRaw = flatEnd ?? metadata?.endDate ?? metadata?.logistics?.endDate;
 
 // parsed date objects (safe)
 const startDateObj = parseSafeDate(startRaw);
 const endDateObj = parseSafeDate(endRaw);
 
-// thumbnail priority: prop > metadata > ""
-const thumbnail = (flatThumbnail ?? metadata?.thumbnail ?? "") as string;
+// thumbnail priority: flat prop > metadata.thumbnail > metadata.card.thumbnail
+const rawThumb = flatThumbnail ?? metadata?.thumbnail ?? metadata?.card?.thumbnail;
+const resolvedThumb = resolveAssetUrl(rawThumb);
+const safeThumbnail = resolvedThumb ?? "";
 
-// summary priority: prop > metadata > description > ""
-const summary = (flatSummary ?? metadata?.summary ?? description ?? "") as string;
+// summary priority: flat prop > metadata.summary > metadata.card.summary > description
+const summary = (flatSummary ?? metadata?.summary ?? metadata?.card?.summary ?? description ?? "") as string;
 
-// explicit date priority: flattened date prop > metadata.date > ""
-const explicitDate = flatDate || metadata?.date || "";
+// explicit date priority: flattened date prop > metadata.date > metadata.card.date > ""
+const explicitDate = flatDate || metadata?.date || metadata?.card?.date || "";
 
 // compute the dateDisplay following original sentinel behavior (9999 => Present)
 let dateDisplay = explicitDate;
@@ -121,7 +152,6 @@ const titleCompany = company ? `${title} @ ${company}` : title;
 const imgAlt = company ? `${title} @ ${company}` : title;
 
 // Safe fallbacks to avoid rendering undefined
-const safeThumbnail = thumbnail ?? "";
 const safeDateDisplay = dateDisplay ?? "";
 // Ensure the summary used in the UI is sanitized and never undefined
 const safeSummary = sanitizeStringForUI(summary);
@@ -259,3 +289,4 @@ const safeSummary = sanitizeStringForUI(summary);
     opacity: 0.9;
   }
 </style>
+
