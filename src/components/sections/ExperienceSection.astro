@@ -33,7 +33,6 @@ const sortedNodes = [...nodes].sort((a, b) => getEndTs(b) - getEndTs(a));
 const experiences = sortedNodes.map((node) => ({
   title: node.title ?? "Untitled",
   slug: (node._sys?.filename ?? "").replace(/\.mdx?$/i, "").toLowerCase(),
-  description: node.metadata?.description ?? "",
   thumbnail: node.metadata?.thumbnail ?? "",
   // Keep the human-readable string for display
   date: node.metadata?.date ?? "",
@@ -51,7 +50,6 @@ const experiences = sortedNodes.map((node) => ({
 				<div class="experience-card-wrapper">
 					<ExperienceCard
 						title={exp.title}
-						description={exp.description}
 						thumbnail={exp.thumbnail || ""}
 						slug={exp.slug}
 						date={exp.date || ""}
