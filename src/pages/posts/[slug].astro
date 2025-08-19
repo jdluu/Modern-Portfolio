@@ -137,7 +137,7 @@ const renderedContent = content ? marked.parse(content) : "";
     )}
 
     {heroUrl && (
-      <div id="image-lightbox" class="lightbox is-hidden" aria-hidden="true">
+      <div id="image-lightbox" class="lightbox is-hidden" hidden inert data-open="false">
         <div class="lightbox-content" role="dialog" aria-modal="true" aria-label={`${title} hero image full size`} tabindex="-1">
           <img src={heroUrl} alt={`${title} hero image full size`} />
           <button class="lightbox-close" type="button" aria-label="Close image" data-close>
@@ -153,54 +153,63 @@ const renderedContent = content ? marked.parse(content) : "";
   {heroUrl && (
     <script>
       (() => {
-        // Grab elements and narrow types after guarding for null
         const lightboxEl = document.getElementById('image-lightbox');
         const trigger = document.querySelector('.hero .hero-trigger') as HTMLElement | null;
         if (!lightboxEl || !trigger) return;
-
-        const lightbox = lightboxEl as HTMLElement;
-        const content = lightbox.querySelector('.lightbox-content') as HTMLElement | null;
+  
+        const lb = lightboxEl as HTMLElement;
+        const content = lb.querySelector('.lightbox-content') as HTMLElement | null;
         let lastFocusedEl: HTMLElement | null = null;
-
+  
         function open() {
           lastFocusedEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-          lightbox.classList.remove('is-hidden');
-          lightbox.setAttribute('aria-hidden', 'false');
+          lb.classList.remove('is-hidden');
+          try {
+            (lb as any).inert = false;
+          } catch (err) {}
+          lb.removeAttribute('hidden');
+          lb.setAttribute('data-open', 'true');
           document.body.style.overflow = 'hidden';
-          if (content) {
-            content.focus();
-          }
+          if (content) content.focus();
+          document.addEventListener('keydown', onDocumentKeydown);
         }
-
+  
         function close() {
-          lightbox.classList.add('is-hidden');
-          lightbox.setAttribute('aria-hidden', 'true');
+          lb.classList.add('is-hidden');
+          try {
+            (lb as any).inert = true;
+          } catch (err) {}
+          lb.setAttribute('hidden', '');
+          lb.setAttribute('data-open', 'false');
           document.body.style.overflow = '';
-          if (lastFocusedEl) {
-            lastFocusedEl.focus();
+          if (lastFocusedEl) lastFocusedEl.focus();
+          document.removeEventListener('keydown', onDocumentKeydown);
+        }
+  
+        function onDocumentKeydown(e: KeyboardEvent) {
+          if (e.key === 'Escape' || e.key === 'Esc') {
+            if (lb.getAttribute('data-open') === 'true') {
+              e.preventDefault();
+              close();
+            }
           }
         }
-
+  
         trigger.addEventListener('click', open);
-
-        // Close on Escape (when lightbox is open)
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && !lightbox.classList.contains('is-hidden')) close();
-        });
-
+  
         // Close when clicking outside the image/content or on elements with data-close
-        lightbox.addEventListener('click', (e) => {
+        lb.addEventListener('click', (e) => {
           if (!(e.target instanceof Element)) return;
-          const isBackdrop = e.target === lightbox;
+          const isBackdrop = e.target === lb;
           const isCloseClick = !!e.target.closest('[data-close]');
           if (isBackdrop || isCloseClick) {
             close();
           }
         });
-
+  
         // Simple focus trap: keep focus on content while open
-        lightbox.addEventListener('keydown', (e) => {
-          if (e.key === 'Tab' && content && !lightbox.classList.contains('is-hidden')) {
+        lb.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Tab' && content && lb.getAttribute('data-open') === 'true') {
             e.preventDefault();
             content.focus();
           }
