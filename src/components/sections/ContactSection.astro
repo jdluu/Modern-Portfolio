@@ -1,6 +1,7 @@
 <section class="content-section" aria-labelledby="contact-heading">
 	<h2 id="contact-heading" class="page-h2">Contact</h2>
 
+	<!-- Status toast for submission results (assertive for screen readers) -->
 	<div
 		id="form-status-message"
 		role="status"
@@ -8,8 +9,7 @@
 		aria-atomic="true"
 		class="toast"
 		tabindex="-1"
-	>
-	</div>
+	></div>
 
 	<form
 		name="contact-form"
@@ -77,23 +77,22 @@
 				aria-required="true"
 				placeholder="Write your message here"
 				aria-describedby="message-error"
-				rows="5"></textarea>
+				rows="5"
+			></textarea>
 			<span id="message-error" class="error-message" aria-live="polite"></span>
 		</div>
 
-		<button type="submit" aria-label="Send message" id="submit-button"
-			>Send Email!</button
-		>
+		<button type="submit" aria-label="Send message" id="submit-button">Send Email!</button>
 	</form>
 </section>
 
 <style>
+	/* Container & heading */
 	.content-section {
 		padding: 4.8rem 2.4rem;
 		max-width: 720px;
 		margin: 0 auto;
 	}
-
 	.page-h2 {
 		font-size: var(--m3-font-display-small);
 		font-family: var(--m3-font-family-display);
@@ -102,7 +101,7 @@
 		margin-bottom: 3.2rem;
 	}
 
-	/* Toast (replaces previous .form-status banner) */
+	/* Toast: off-flow, visible via .visible; variants via .success/.error */
 	.toast {
 		position: fixed;
 		top: 1.6rem;
@@ -122,55 +121,41 @@
 		pointer-events: none;
 		transition: opacity 220ms ease, transform 220ms ease;
 		z-index: 9999;
-		/* hidden from flow so no banner above form */
 	}
-
 	.toast.visible {
 		opacity: 1;
 		transform: translateY(0) scale(1);
 		pointer-events: auto;
 	}
-
-	.toast.success {
-		border-color: var(--m3-color-success, #2e7d32);
-	}
-
-	.toast.error {
-		border-color: var(--m3-color-error, #b00020);
-	}
-
+	.toast.success { border-color: var(--m3-color-success, #2e7d32); }
+	.toast.error { border-color: var(--m3-color-error, #b00020); }
 	.toast:focus {
 		outline: none;
 		box-shadow: 0 0 0 4px rgba(0,0,0,0.04);
 		cursor: pointer;
 	}
 
-	/* Field-level error styling when aria-invalid is true */
+	/* Field-level error styling (driven by aria-invalid set by script) */
 	.form-group input[aria-invalid="true"],
 	.form-group textarea[aria-invalid="true"] {
 		border-color: var(--m3-color-error, #b00020);
 		box-shadow: 0 4px 12px rgba(184, 14, 14, 0.12);
 	}
-
-	/* Optionally tint the label when field invalid */
-	.form-group input[aria-invalid="true"] + .error-message,
-	.form-group textarea[aria-invalid="true"] + .error-message {
-		/* Keep error-message visible via script textContent; this rule keeps layout consistent */
-	}
-
 	.form-group label[aria-invalid="true"] {
 		color: var(--m3-color-error, #b00020);
 	}
+	.form-group input[aria-invalid="true"] + .error-message,
+	.form-group textarea[aria-invalid="true"] + .error-message {
+		/* layout guard - content set by script */
+	}
 
-	/* keep existing form layout rules (unchanged below) */
-
+	/* Form layout & controls */
 	#contact-form {
 		background-color: var(--m3-color-surface);
 		padding: 2.4rem;
 		border-radius: 12px;
 		border: 1px solid var(--m3-color-outline);
 	}
-
 	.form-main-title {
 		font-size: var(--m3-font-headline-medium);
 		font-family: var(--m3-font-family-display);
@@ -178,24 +163,18 @@
 		margin-bottom: 2.4rem;
 		color: var(--m3-color-on-surface);
 	}
-
-	.form-group {
-		margin-bottom: 1.6rem;
-	}
-
+	.form-group { margin-bottom: 1.6rem; }
 	.form-group label {
 		display: block;
 		margin-bottom: 0.8rem;
 		font-size: var(--m3-font-label-large);
 		color: var(--m3-color-on-surface-variant);
 	}
-
 	.required::after {
 		content: "*";
 		color: var(--m3-color-error);
 		margin-left: 0.4rem;
 	}
-
 	.form-group input,
 	.form-group textarea {
 		width: 100%;
@@ -208,17 +187,13 @@
 		transition: all 0.2s ease;
 	}
 	.form-group input::placeholder,
-	.form-group textarea::placeholder {
-		color: var(--m3-color-on-surface-variant-light);
-	}
-
+	.form-group textarea::placeholder { color: var(--m3-color-on-surface-variant-light); }
 	.form-group input:focus,
 	.form-group textarea:focus {
 		outline: none;
 		border-color: var(--m3-color-primary);
 		box-shadow: 0 0 0 2px var(--m3-color-primary-container);
 	}
-
 	.error-message {
 		display: block;
 		color: var(--m3-color-error);
@@ -238,11 +213,7 @@
 		cursor: pointer;
 		transition: all 0.2s ease;
 	}
-
-	button[type="submit"]:hover {
-		background-color: var(--m3-color-primary-dark);
-	}
-
+	button[type="submit"]:hover { background-color: var(--m3-color-primary-dark); }
 	button[type="submit"]:disabled {
 		background-color: var(--m3-color-outline);
 		cursor: not-allowed;
@@ -250,47 +221,32 @@
 </style>
 
 <script is:inline>
+	// Grouped script: constants & DOM selection, helpers, event listeners
 	document.addEventListener("DOMContentLoaded", () => {
+		// Constants & DOM selection
 		const form = document.getElementById("contact-form");
 		if (!form || !(form instanceof HTMLFormElement)) return;
-
 		const inputs = Array.from(form.querySelectorAll("input[required], textarea[required]"));
 		const submitButton = document.getElementById("submit-button");
 		const toast = document.getElementById("form-status-message");
 
-		// Toast control
+		// Helpers: toast control
 		let toastTimeout = null;
 		function showToast(message, variant = "error", duration = 4500) {
 			if (!toast) return;
-			// Reset classes
 			toast.className = "toast";
 			toast.textContent = message;
 			toast.classList.add(variant);
-			// Force reflow then show
-			void toast.offsetWidth;
+			void toast.offsetWidth; // force reflow
 			toast.classList.add("visible");
-			// Focus for screen readers (optional)
-			try {
-				toast.focus();
-			} catch (e) {
-				/* no-op */
-			}
-			// Clear previous timeout
-			if (toastTimeout) {
-				clearTimeout(toastTimeout);
-				toastTimeout = null;
-			}
+			try { toast.focus(); } catch (e) { /* no-op */ }
+			if (toastTimeout) { clearTimeout(toastTimeout); toastTimeout = null; }
 			toastTimeout = setTimeout(hideToast, duration);
 		}
-
 		function hideToast() {
 			if (!toast) return;
 			toast.classList.remove("visible");
-			// clear content after transition
-			if (toastTimeout) {
-				clearTimeout(toastTimeout);
-				toastTimeout = null;
-			}
+			if (toastTimeout) { clearTimeout(toastTimeout); toastTimeout = null; }
 			setTimeout(() => {
 				if (toast && !toast.classList.contains("visible")) {
 					toast.textContent = "";
@@ -298,22 +254,16 @@
 				}
 			}, 260);
 		}
+		if (toast) toast.addEventListener("click", hideToast);
 
-		// Dismiss on click
-		if (toast) {
-			toast.addEventListener("click", hideToast);
-		}
-
-		// Per-field validation helpers
+		// Helpers: per-field error handling
 		function setFieldError(input, message) {
 			const errorSpan = document.getElementById(`${input.id}-error`);
 			if (errorSpan) errorSpan.textContent = message;
 			input.setAttribute("aria-invalid", "true");
-			// Also mark label if present
 			const label = form.querySelector(`label[for="${input.id}"]`);
 			if (label) label.setAttribute("aria-invalid", "true");
 		}
-
 		function clearFieldError(input) {
 			const errorSpan = document.getElementById(`${input.id}-error`);
 			if (errorSpan) errorSpan.textContent = "";
@@ -322,14 +272,13 @@
 			if (label) label.removeAttribute("aria-invalid");
 		}
 
-		// Handle invalid events but do not trigger a toast per field
+		// Event listeners: per-field invalid/input
 		inputs.forEach((input) => {
 			const errorSpan = document.getElementById(`${input.id}-error`);
 			if (!errorSpan) return;
 
 			input.addEventListener("invalid", (event) => {
 				event.preventDefault(); // suppress native bubble
-				// Determine message
 				if (!input.value.trim()) {
 					setFieldError(input, "This field is required");
 				} else if (
@@ -347,31 +296,23 @@
 				} else {
 					setFieldError(input, "Invalid value");
 				}
-				// Do not show per-field toast; submit will show a single toast if needed
 			});
 
 			input.addEventListener("input", () => {
 				if (input.validity.valid) {
 					clearFieldError(input);
-				} else {
-					// Optionally show contextual message inline while typing (kept minimal)
-					// We do not show a toast here.
 				}
 			});
 		});
 
+		// Event listeners: form submit (validation + Netlify submission via fetch)
 		form.addEventListener("submit", async (event) => {
 			event.preventDefault();
-
-			// Validate all fields and populate per-field errors as needed
 			let isFormValid = true;
 			inputs.forEach((input) => {
-				// Clear previous
 				clearFieldError(input);
-				// Use built-in validity checks
 				if (!input.validity.valid) {
 					isFormValid = false;
-					// Trigger the same logic as invalid handler so spans get messages
 					if (!input.value.trim()) {
 						setFieldError(input, "This field is required");
 					} else if (
@@ -398,7 +339,6 @@
 			}
 
 			if (!submitButton || !(submitButton instanceof HTMLButtonElement)) return;
-
 			submitButton.disabled = true;
 			submitButton.textContent = "Sending...";
 
@@ -410,20 +350,16 @@
 
 				if (response.ok) {
 					form.reset();
-					// clear per-field errors and aria-invalid
 					inputs.forEach((input) => clearFieldError(input));
 					showToast("Message sent successfully!", "success");
 				} else {
-					// Attempt to get error message from response JSON
 					let errorMessage = "Failed to send message. Please try again.";
 					try {
 						const errorData = await response.json();
 						if (errorData && typeof errorData.message === "string" && errorData.message.trim()) {
 							errorMessage = errorData.message;
 						}
-					} catch (e) {
-						// ignore parse errors and keep default message
-					}
+					} catch (e) { /* ignore */ }
 					showToast(errorMessage, "error");
 				}
 			} catch (e) {
