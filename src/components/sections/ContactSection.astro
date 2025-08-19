@@ -5,7 +5,9 @@
 		id="form-status-message"
 		role="status"
 		aria-live="assertive"
-		class="form-status"
+		aria-atomic="true"
+		class="toast"
+		tabindex="-1"
 	>
 	</div>
 
@@ -100,26 +102,67 @@
 		margin-bottom: 3.2rem;
 	}
 
-	.form-status {
-		margin-bottom: 1.6rem;
-		padding: 1.2rem 1.6rem;
-		border-radius: 8px;
+	/* Toast (replaces previous .form-status banner) */
+	.toast {
+		position: fixed;
+		top: 1.6rem;
+		right: 1.6rem;
+		min-width: 260px;
+		max-width: calc(100% - 3.2rem);
+		padding: 1rem 1.2rem;
+		border-radius: 10px;
+		background-color: var(--m3-color-surface);
+		color: var(--m3-color-on-surface);
 		font-size: var(--m3-font-body-medium);
-		text-align: center;
-		display: none;
+		text-align: left;
+		box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+		border: 2px solid transparent;
+		opacity: 0;
+		transform: translateY(-8px) scale(0.99);
+		pointer-events: none;
+		transition: opacity 220ms ease, transform 220ms ease;
+		z-index: 9999;
+		/* hidden from flow so no banner above form */
 	}
 
-	.form-status.success {
-		background-color: var(--m3-color-tertiary-container);
-		color: var(--m3-color-on-tertiary-container);
-		display: block;
+	.toast.visible {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
 	}
 
-	.form-status.error {
-		background-color: var(--m3-color-error-container);
-		color: var(--m3-color-on-error-container);
-		display: block;
+	.toast.success {
+		border-color: var(--m3-color-success, #2e7d32);
 	}
+
+	.toast.error {
+		border-color: var(--m3-color-error, #b00020);
+	}
+
+	.toast:focus {
+		outline: none;
+		box-shadow: 0 0 0 4px rgba(0,0,0,0.04);
+		cursor: pointer;
+	}
+
+	/* Field-level error styling when aria-invalid is true */
+	.form-group input[aria-invalid="true"],
+	.form-group textarea[aria-invalid="true"] {
+		border-color: var(--m3-color-error, #b00020);
+		box-shadow: 0 4px 12px rgba(184, 14, 14, 0.12);
+	}
+
+	/* Optionally tint the label when field invalid */
+	.form-group input[aria-invalid="true"] + .error-message,
+	.form-group textarea[aria-invalid="true"] + .error-message {
+		/* Keep error-message visible via script textContent; this rule keeps layout consistent */
+	}
+
+	.form-group label[aria-invalid="true"] {
+		color: var(--m3-color-error, #b00020);
+	}
+
+	/* keep existing form layout rules (unchanged below) */
 
 	#contact-form {
 		background-color: var(--m3-color-surface);
@@ -211,44 +254,108 @@
 		const form = document.getElementById("contact-form");
 		if (!form || !(form instanceof HTMLFormElement)) return;
 
-		const inputs = form.querySelectorAll("input[required], textarea[required]");
+		const inputs = Array.from(form.querySelectorAll("input[required], textarea[required]"));
 		const submitButton = document.getElementById("submit-button");
-		const formStatusMessage = document.getElementById("form-status-message");
+		const toast = document.getElementById("form-status-message");
 
+		// Toast control
+		let toastTimeout = null;
+		function showToast(message, variant = "error", duration = 4500) {
+			if (!toast) return;
+			// Reset classes
+			toast.className = "toast";
+			toast.textContent = message;
+			toast.classList.add(variant);
+			// Force reflow then show
+			void toast.offsetWidth;
+			toast.classList.add("visible");
+			// Focus for screen readers (optional)
+			try {
+				toast.focus();
+			} catch (e) {
+				/* no-op */
+			}
+			// Clear previous timeout
+			if (toastTimeout) {
+				clearTimeout(toastTimeout);
+				toastTimeout = null;
+			}
+			toastTimeout = setTimeout(hideToast, duration);
+		}
+
+		function hideToast() {
+			if (!toast) return;
+			toast.classList.remove("visible");
+			// clear content after transition
+			if (toastTimeout) {
+				clearTimeout(toastTimeout);
+				toastTimeout = null;
+			}
+			setTimeout(() => {
+				if (toast && !toast.classList.contains("visible")) {
+					toast.textContent = "";
+					toast.className = "toast";
+				}
+			}, 260);
+		}
+
+		// Dismiss on click
+		if (toast) {
+			toast.addEventListener("click", hideToast);
+		}
+
+		// Per-field validation helpers
+		function setFieldError(input, message) {
+			const errorSpan = document.getElementById(`${input.id}-error`);
+			if (errorSpan) errorSpan.textContent = message;
+			input.setAttribute("aria-invalid", "true");
+			// Also mark label if present
+			const label = form.querySelector(`label[for="${input.id}"]`);
+			if (label) label.setAttribute("aria-invalid", "true");
+		}
+
+		function clearFieldError(input) {
+			const errorSpan = document.getElementById(`${input.id}-error`);
+			if (errorSpan) errorSpan.textContent = "";
+			input.removeAttribute("aria-invalid");
+			const label = form.querySelector(`label[for="${input.id}"]`);
+			if (label) label.removeAttribute("aria-invalid");
+		}
+
+		// Handle invalid events but do not trigger a toast per field
 		inputs.forEach((input) => {
 			const errorSpan = document.getElementById(`${input.id}-error`);
 			if (!errorSpan) return;
 
 			input.addEventListener("invalid", (event) => {
-				event.preventDefault();
+				event.preventDefault(); // suppress native bubble
+				// Determine message
 				if (!input.value.trim()) {
-					errorSpan.textContent = "This field is required";
+					setFieldError(input, "This field is required");
 				} else if (
 					input instanceof HTMLInputElement &&
 					input.type === "email" &&
 					!input.validity.valid
 				) {
-					errorSpan.textContent = "Please enter a valid email address";
+					setFieldError(input, "Please enter a valid email address");
 				} else if (
 					input instanceof HTMLInputElement &&
 					input.minLength > 0 &&
 					input.value.length < input.minLength
 				) {
-					errorSpan.textContent = `Must be at least ${input.minLength} characters`;
+					setFieldError(input, `Must be at least ${input.minLength} characters`);
+				} else {
+					setFieldError(input, "Invalid value");
 				}
-				if (formStatusMessage) {
-					formStatusMessage.textContent = "";
-					formStatusMessage.className = "form-status";
-				}
+				// Do not show per-field toast; submit will show a single toast if needed
 			});
 
 			input.addEventListener("input", () => {
 				if (input.validity.valid) {
-					errorSpan.textContent = "";
-				}
-				if (formStatusMessage) {
-					formStatusMessage.textContent = "";
-					formStatusMessage.className = "form-status";
+					clearFieldError(input);
+				} else {
+					// Optionally show contextual message inline while typing (kept minimal)
+					// We do not show a toast here.
 				}
 			});
 		});
@@ -256,24 +363,37 @@
 		form.addEventListener("submit", async (event) => {
 			event.preventDefault();
 
-			if (formStatusMessage) {
-				formStatusMessage.textContent = "";
-				formStatusMessage.className = "form-status";
-			}
-
+			// Validate all fields and populate per-field errors as needed
 			let isFormValid = true;
 			inputs.forEach((input) => {
+				// Clear previous
+				clearFieldError(input);
+				// Use built-in validity checks
 				if (!input.validity.valid) {
 					isFormValid = false;
+					// Trigger the same logic as invalid handler so spans get messages
+					if (!input.value.trim()) {
+						setFieldError(input, "This field is required");
+					} else if (
+						input instanceof HTMLInputElement &&
+						input.type === "email" &&
+						!input.validity.valid
+					) {
+						setFieldError(input, "Please enter a valid email address");
+					} else if (
+						input instanceof HTMLInputElement &&
+						input.minLength > 0 &&
+						input.value.length < input.minLength
+					) {
+						setFieldError(input, `Must be at least ${input.minLength} characters`);
+					} else {
+						setFieldError(input, "Invalid value");
+					}
 				}
 			});
 
 			if (!isFormValid) {
-				if (formStatusMessage) {
-					formStatusMessage.textContent = "Please correct the errors above.";
-					formStatusMessage.className = "form-status error";
-					formStatusMessage.style.display = "block";
-				}
+				showToast("Please correct the highlighted fields.", "error");
 				return;
 			}
 
@@ -290,49 +410,24 @@
 
 				if (response.ok) {
 					form.reset();
-					inputs.forEach((input) => {
-						const errorSpan = document.getElementById(`${input.id}-error`);
-						if (errorSpan) errorSpan.textContent = "";
-					});
-					if (formStatusMessage) {
-						formStatusMessage.textContent = "Message sent successfully!";
-						formStatusMessage.className = "form-status success";
-						formStatusMessage.style.display = "block";
-					}
-					formStatusMessage.focus(); // Focus for screen readers
-					setTimeout(() => {
-						if (
-							formStatusMessage &&
-							formStatusMessage.classList.contains("success")
-						) {
-							formStatusMessage.textContent = "";
-							formStatusMessage.className = "form-status";
-						}
-					}, 5000); // Hide success message after 5 seconds
+					// clear per-field errors and aria-invalid
+					inputs.forEach((input) => clearFieldError(input));
+					showToast("Message sent successfully!", "success");
 				} else {
-					// Attempt to get error message from Netlify if available
+					// Attempt to get error message from response JSON
 					let errorMessage = "Failed to send message. Please try again.";
 					try {
 						const errorData = await response.json();
-						if (errorData && errorData.message) {
+						if (errorData && typeof errorData.message === "string" && errorData.message.trim()) {
 							errorMessage = errorData.message;
 						}
 					} catch (e) {
-						// Could not parse JSON, stick to default error
+						// ignore parse errors and keep default message
 					}
-					if (formStatusMessage) {
-						formStatusMessage.textContent = errorMessage;
-						formStatusMessage.className = "form-status error";
-						formStatusMessage.style.display = "block";
-					}
+					showToast(errorMessage, "error");
 				}
-			} catch (error) {
-				if (formStatusMessage) {
-					formStatusMessage.textContent =
-						"An unexpected error occurred. Please try again.";
-					formStatusMessage.className = "form-status error";
-					formStatusMessage.style.display = "block";
-				}
+			} catch (e) {
+				showToast("Network error. Please try again.", "error");
 			} finally {
 				submitButton.disabled = false;
 				submitButton.textContent = "Send Email!";
