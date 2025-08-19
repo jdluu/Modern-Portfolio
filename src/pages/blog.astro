@@ -145,7 +145,7 @@ const posts: PostIndexItem[] = nodes
 /* Card content */
 .post-card-title {
   margin: 0;
-  font-size: 1.5rem; /* text-2xl */
+  font-size: 1.75rem; /* text-2xl (increased for readability) */
   font-weight: 600;
   color: var(--m3-color-on-surface);
   transition: color .2s ease;
@@ -157,7 +157,7 @@ const posts: PostIndexItem[] = nodes
 .post-card-date {
   display: block;
   margin-top: 0.25rem; /* mt-1 */
-  font-size: 0.875rem; /* text-sm */
+  font-size: 1rem; /* increased for readability */
   color: var(--m3-color-on-surface-variant);
 }
 
@@ -176,13 +176,15 @@ const posts: PostIndexItem[] = nodes
   color: var(--m3-color-on-secondary-container);
   border: 1px solid var(--m3-color-outline-variant);
   padding: 0.25rem 0.75rem; /* py-1 px-3 */
-  font-size: 0.75rem; /* text-xs */
+  font-size: 0.875rem; /* increased for readability */
   font-weight: 500; /* font-medium */
 }
 
 .post-card-desc {
   margin-top: 0.75rem; /* mt-3 */
   color: var(--m3-color-on-surface-variant);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.65;
 }
 
 /* Basic line clamp without Tailwind plugin */
