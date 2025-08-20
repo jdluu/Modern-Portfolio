@@ -176,22 +176,22 @@ if ((posts?.length ?? 0) === 0 && import.meta.env.DEV) {
 
 /* Card content */
 .post-card-title {
-  margin: 0;
-  font-size: 1.75rem; /* text-2xl (increased for readability) */
-  font-weight: 600;
-  color: var(--m3-color-on-surface);
-  transition: color .2s ease;
-}
+   margin: 0;
+   font-size: clamp(1.6rem, 2vw, 2.25rem);
+   font-weight: 600;
+   color: var(--m3-color-on-surface);
+   transition: color .2s ease;
+ }
 .post-card:hover .post-card-title {
   color: var(--m3-color-primary);
 }
 
 .post-card-date {
-  display: block;
-  margin-top: 0.25rem; /* mt-1 */
-  font-size: 1rem; /* increased for readability */
-  color: var(--m3-color-on-surface-variant);
-}
+   display: block;
+   margin-top: 0.25rem;
+   font-size: clamp(1rem, 0.9vw, 1.125rem);
+   color: var(--m3-color-on-surface-variant);
+ }
 
 .post-card-tags {
   display: flex;
@@ -201,23 +201,23 @@ if ((posts?.length ?? 0) === 0 && import.meta.env.DEV) {
 }
 
 .tag-chip {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  background-color: var(--m3-color-secondary-container);
-  color: var(--m3-color-on-secondary-container);
-  border: 1px solid var(--m3-color-outline-variant);
-  padding: 0.25rem 0.75rem; /* py-1 px-3 */
-  font-size: 0.875rem; /* increased for readability */
-  font-weight: 500; /* font-medium */
-}
+   display: inline-flex;
+   align-items: center;
+   border-radius: 999px;
+   background-color: var(--m3-color-secondary-container);
+   color: var(--m3-color-on-secondary-container);
+   border: 1px solid var(--m3-color-outline-variant);
+   padding: 0.25rem 0.75rem;
+   font-size: clamp(0.9rem, 0.8vw, 1rem);
+   font-weight: 500;
+ }
 
 .post-card-desc {
-  margin-top: 0.75rem; /* mt-3 */
-  color: var(--m3-color-on-surface-variant);
-  font-size: 1.0625rem; /* 17px */
-  line-height: 1.65;
-}
+   margin-top: 0.75rem;
+   color: var(--m3-color-on-surface-variant);
+   font-size: clamp(1.1rem, 1vw, 1.25rem);
+   line-height: 1.7;
+ }
 
 /* Basic line clamp without Tailwind plugin */
 .line-clamp-3 {
