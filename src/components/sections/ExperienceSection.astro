@@ -125,8 +125,6 @@ const experiences = sortedNodes.map((node: any) => {
 	</p>
 	<div class="experience-grid">
 		{
-			/* Render even when experiences is empty to avoid crashes.
-			   Wrap each ExperienceCard in .experience-item to avoid external CSS forcing full-row spans. */
 			experiences.length > 0 ? experiences.map((exp) => (
 				<div class="experience-item">
 					<ExperienceCard
