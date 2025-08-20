@@ -20,11 +20,6 @@ interface PostProps {
   hero: string | null;
 }
 
-/*
-  Utilities
-*/
-
-
 /** Resolve hero value:
   - return absolute http(s) as-is
   - join relative paths to import.meta.env.BASE_URL ensuring single slash
@@ -61,6 +56,7 @@ export async function getStaticPaths() {
     if (tinaPaths.length > 0) return tinaPaths;
   } catch {
     // silent fallback to DEV below
+    console.warn("Tina CMS query failed, falling back to local filesystem in DEV mode.");
   }
 
   // DEV fallback: read local content files and build same props shape
