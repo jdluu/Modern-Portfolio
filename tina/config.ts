@@ -41,7 +41,7 @@ export default defineConfig({
 				format: "md",
 				match: {
 					include: "**/*.{md,mdx}",
-					exclude: "tina/**"
+					exclude: "**/tina/**"
 				},
 				fields: [
 					{
@@ -102,7 +102,7 @@ export default defineConfig({
 				format: "md",
 				match: {
 					include: "**/*.{md,mdx}",
-					exclude: "tina/**",
+					exclude: "**/tina/**",
 				},
 				fields: [
 					{
@@ -226,7 +226,7 @@ export default defineConfig({
 				format: "md",
 				match: {
 					include: "**/*.{md,mdx}",
-					exclude: "tina/**"
+					exclude: "**/tina/**"
 				},
 				fields: [
 					{
