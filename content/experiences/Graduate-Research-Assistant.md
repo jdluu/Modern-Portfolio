@@ -11,5 +11,10 @@ logistics:
   duration: September 2024 - Present
   startDate: 2024-09-02T07:00:00.000Z
   endDate: 9999-12-31T08:00:00.000Z
+technologies:
+  tools: 'Unity, C#, Python'
+  skills: >-
+    Multi-agent reinforcement learning, Reward Shaping, Data Analysis, Research
+    Collaboration
 ---
 
