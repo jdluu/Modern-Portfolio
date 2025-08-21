@@ -12,5 +12,8 @@ logistics:
   duration: November 2023 - February 2024
   startDate: 2023-11-28T08:00:00.000Z
   endDate: 2024-02-13T08:00:00.000Z
+technologies:
+  tools: 'Python, C, C++, Java'
+  skills: 'Code Quality Assurance, Debugging, Problem Solving, Model Evaluation'
 ---
 
