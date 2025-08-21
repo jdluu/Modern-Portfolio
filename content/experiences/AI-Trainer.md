@@ -23,5 +23,8 @@ work:
     - duties: >-
         Improved the reliability of AI-written code by debugging it with
         comprehensive test cases
+    - duties: >-
+        Increased the accuracy and completeness of model-generated content
+        through assessment and refinement
 ---
 
