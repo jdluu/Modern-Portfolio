@@ -20,20 +20,6 @@ export interface ProjectCard {
 	};
 }
 
-export interface ExperienceCard {
-	id: string;
-	title: string;
-	slug: string;
-	metadata: {
-		description: string;
-		thumbnail: {
-			url: string;
-		};
-		content?: string;
-		date: string;
-	};
-}
-
 // Cache for memoization
 const cache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
@@ -141,68 +127,6 @@ export async function getProjectBySlug(
 		}
 	});
 }
-
-
-// Return All Experience Objects
-export async function getAllExperiences(): Promise<ExperienceCard[]> {
-	return getCachedOrFetch("experiences", async () => {
-		try {
-			const data = await cosmic.objects
-				.find({
-					type: "experiences",
-				})
-				.props("slug,title,metadata")
-				.depth(1);
-
-			return data.objects;
-		} catch (error) {
-			console.error("Error fetching experience:", error);
-			return [];
-		}
-	});
-}
-
-// Return All Experience Slugs
-export async function getAllExperienceSlugs(): Promise<{ slug: string }[]> {
-	return getCachedOrFetch("experience-slugs", async () => {
-		try {
-			const data = await cosmic.objects
-				.find({
-					type: "experiences",
-				})
-				.props("slug")
-				.depth(1);
-
-			return data.objects;
-		} catch (error) {
-			console.error("Error fetching all experience slugs:", error);
-			return [];
-		}
-	});
-}
-
-// Get Experience by Slug
-export async function getExperienceBySlug(
-	slug: string
-): Promise<ExperienceCard | null> {
-	return getCachedOrFetch(`experience-${slug}`, async () => {
-		try {
-			const data = await cosmic.objects
-				.findOne({
-					type: "experiences",
-					slug,
-				})
-				.props("title,metadata")
-				.depth(1);
-
-			return data;
-		} catch (error) {
-			console.error("Error fetching experience by slug:", error);
-			return null;
-		}
-	});
-}
-
 
 // Clear cache function (useful for manual cache invalidation if needed)
 export function clearCache(): void {
