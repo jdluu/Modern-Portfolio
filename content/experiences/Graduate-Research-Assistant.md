@@ -34,6 +34,9 @@ work:
     - points: >-
         Improved multi-agent reinforcement learning performance through reward
         shaping techniques inspired by video game design principles
-    - {}
+    - points: >-
+        Demonstrated coordinated behavior among multiple agents in Unity
+        simulations, validating reinforcement learning strategies for complex
+        tasks
 ---
 
