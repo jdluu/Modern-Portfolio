@@ -21,7 +21,7 @@ work:
         submissions, and collaborating with managers
     - duties: >-
         Worked closely with Regional Program Manager and CodePath.org team to
-        address student feedback.
+        address student feedback
     - duties: >-
         Developed a Kotlin app development curriculum and provided student
         support improving educational outcomes.
