@@ -24,5 +24,8 @@ work:
     - duties: >-
         Designed and tested Unity simulations in C# to enhance AI
         decision-making and coordination
+    - duties: >-
+        Applied machine learning to train agents for complex tasks and optimize
+        their behavior
 ---
 
