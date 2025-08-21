@@ -14,7 +14,7 @@ logistics:
 technologies:
   tools: 'Unity, C#, Python'
   skills: >-
-    Multi-agent reinforcement learning, Reward Shaping, Data Analysis, Research
+    Multi-agent Reinforcement Learning, Reward Shaping, Data Analysis, Research
     Collaboration
 ---
 
