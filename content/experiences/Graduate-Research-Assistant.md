@@ -27,5 +27,8 @@ work:
     - duties: >-
         Applied machine learning to train agents for complex tasks and optimize
         their behavior
+    - duties: >-
+        Collaborated on reports and contributed to academic discussions,
+        enhancing the quality of research outputs
 ---
 
