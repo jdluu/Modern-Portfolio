@@ -32,7 +32,7 @@ work:
         enhancing the quality of research outputs
   achievements:
     - points: >-
-        Utilized reward shaping techniques inspired by video game design
+        Applied reward shaping techniques inspired by video game design
         principles, leading to more effective agent coordination
     - {}
 ---
