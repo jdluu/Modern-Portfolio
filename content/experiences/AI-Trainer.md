@@ -15,5 +15,10 @@ logistics:
 technologies:
   tools: 'Python, C, C++, Java'
   skills: 'Code Quality Assurance, Debugging, Problem Solving, Model Evaluation'
+work:
+  responsibilities:
+    - duties: >-
+        Ensured code quality by evaluating AI-produced code (Python, C, C++,
+        Java) for adherence to best practices
 ---
 
