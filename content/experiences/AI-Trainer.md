@@ -20,5 +20,8 @@ work:
     - duties: >-
         Ensured code quality by evaluating AI-produced code (Python, C, C++,
         Java) for adherence to best practices
+    - duties: >-
+        Improved the reliability of AI-written code by debugging it with
+        comprehensive test cases
 ---
 
