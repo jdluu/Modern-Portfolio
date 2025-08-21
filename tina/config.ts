@@ -87,6 +87,64 @@ export default defineConfig({
 				],
 			},
 			{
+				name: "projectcard",
+				label: "Project Cards",
+				path: "content/projectcards",
+				format: "md",
+				match: {
+					include: "**/*.{md,mdx}",
+					exclude: "**/tina/**"
+				},
+				fields: [
+					{
+						type: "string",
+						name: "title",
+						label: "Title",
+						isTitle: true,
+						required: true,
+					},
+					{
+						type: "object",
+						name: "metadata",
+						label: "Metadata",
+						fields: [
+							{
+								type: "number",
+								name: "year",
+								label: "Year",
+								description: "Primary year used for list filtering/sorting (e.g., 2024).",
+							},
+							{
+								type: "image",
+								name: "thumbnail",
+								label: "Thumbnail",
+							},
+							{
+								type: "string",
+								name: "summary",
+								label: "Summary",
+								description: "Short summary shown on cards. If empty, the UI will fall back to a generated excerpt.",
+								ui: { component: "textarea" },
+							},
+							{
+								type: "string",
+								name: "programming_languages",
+								label: "Programming Languages",
+								list: true,
+								description: "Used for filtering — enter values like JavaScript, Python, TypeScript, etc.",
+							},
+							{
+								type: "string",
+								name: "domains",
+								label: "Domains",
+								list: true,
+								description: "Used for filtering — enter values like Web, Mobile, AI, Data, etc.",
+							},
+						],
+					},
+				],
+			},
+			{
 				name: "experience",
 				label: "Experiences",
 				path: "content/experiences",
