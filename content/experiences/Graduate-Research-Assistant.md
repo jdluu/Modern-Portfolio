@@ -32,9 +32,8 @@ work:
         enhancing the quality of research outputs
   achievements:
     - points: >-
-        Explored novel reward shaping strategies rooted in video game design
-        ideology to enhance the performance of multi-agent reinforcement
-        learning models
+        Improved multi-agent reinforcement learning performance through reward
+        shaping techniques inspired by video game design principles
     - {}
 ---
 
