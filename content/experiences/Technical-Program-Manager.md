@@ -30,6 +30,6 @@ work:
     - points: Generated 80+ student applications through enrollment promotion efforts
     - points: >-
         Mentored a student group that became a top 10 finalist in android apps
-        for Codepath nationally.
+        for Codepath nationally
 ---
 
