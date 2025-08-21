@@ -24,7 +24,7 @@ work:
         address student feedback
     - duties: >-
         Developed a Kotlin app development curriculum and provided student
-        support improving educational outcomes.
+        support improving educational outcomes
     - duties: Promoted enrollment through presentations and information distribution.
   achievements:
     - points: Generated 80+ student applications through enrollment promotion efforts.
