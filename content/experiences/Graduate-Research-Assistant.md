@@ -21,5 +21,8 @@ work:
     - duties: >-
         Applied multi-agent reinforcement learning to develop an improved
         path-finding system for simulations
+    - duties: >-
+        Designed and tested Unity simulations in C# to enhance AI
+        decision-making and coordination
 ---
 
