@@ -35,6 +35,6 @@ work:
         meticulous code reviews
     - points: >-
         Improved code output quality by 20% through systematic evaluation and
-        refinement.
+        refinement
 ---
 
