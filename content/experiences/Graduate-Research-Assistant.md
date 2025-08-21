@@ -16,5 +16,10 @@ technologies:
   skills: >-
     Multi-agent Reinforcement Learning, Reward Shaping, Data Analysis, Research
     Collaboration
+work:
+  responsibilities:
+    - duties: >-
+        Applied multi-agent reinforcement learning to develop an improved
+        path-finding system for simulations
 ---
 
