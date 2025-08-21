@@ -32,9 +32,8 @@ work:
         enhancing the quality of research outputs
   achievements:
     - points: >-
-        Improved multi-agent reinforcement learning performance through reward
-        shaping techniques inspired by video game design principles, leading to
-        more effective agent coordination
+        Utilized reward shaping techniques inspired by video game design
+        principles, leading to more effective agent coordination
     - {}
 ---
 
