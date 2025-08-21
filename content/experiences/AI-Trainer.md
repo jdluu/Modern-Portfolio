@@ -31,8 +31,8 @@ work:
         and adapting it for specific tasks
   achievements:
     - points: >-
-        Achieved over 95% acceptance rate on AI-generated code through rigorous
-        reviews and debugging.
+        Achieved over 95% acceptance rate on AI-generated code through
+        meticulous code reviews
     - points: >-
         Improved code output quality by 20% through systematic evaluation and
         refinement.
