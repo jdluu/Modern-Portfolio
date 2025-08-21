@@ -26,5 +26,8 @@ work:
     - duties: >-
         Increased the accuracy and completeness of model-generated content
         through assessment and refinement
+    - duties: >-
+        Enhanced model-generated content by improving its contextual relevance
+        and adapting it for specific tasks
 ---
 
