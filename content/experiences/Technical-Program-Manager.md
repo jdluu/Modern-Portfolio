@@ -18,7 +18,7 @@ work:
   responsibilities:
     - duties: >-
         Managed course logistics, including scheduling sessions, reviewing
-        submissions, and collaborating with managers.
+        submissions, and collaborating with managers
     - duties: >-
         Worked closely with Regional Program Manager and CodePath.org team to
         address student feedback.
@@ -32,3 +32,4 @@ work:
         Mentored a student group that became a top 10 finalist in android apps
         for Codepath nationally.
 ---
+
