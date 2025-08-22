@@ -1,137 +1,35 @@
 ---
+import type { ExperienceCardItem } from "../../types/experience-card";
+import {
+  parseSafeDate,
+  resolveAssetUrl,
+  sanitizeStringForUI,
+  formatMonthYear,
+} from "../../lib/utils";
+
 export interface Props {
-  title: string;
-  slug: string;
-  description?: string;
-  date?: string;
-  thumbnail?: string;
-  company?: string;
-  startDate?: string;
-  endDate?: string;
-  summary?: string;
-
-  // Optional nested metadata object (from Tina)
-  metadata?: {
-    company?: string | { name?: string | undefined } | null;
-    date?: string;
-    startDate?: string;
-    endDate?: string;
-    thumbnail?: string;
-    summary?: string;
-    logistics?: {
-      startDate?: string;
-      endDate?: string;
-    } | null;
-    card?: {
-      date?: string;
-      thumbnail?: string;
-      summary?: string;
-    } | null;
-  };
+  item: ExperienceCardItem;
 }
 
-const {
-  // Inputs / Props (with defaults where appropriate)
-  title,
-  slug,
-  description = "",
-  date: flatDate = "",
-  thumbnail: flatThumbnail = "",
-  company: flatCompany,
-  startDate: flatStart,
-  endDate: flatEnd,
-  summary: flatSummary,
-  metadata = undefined,
-} = Astro.props as Props;
+const { item } = Astro.props as Props;
 
-/* Helpers */
+// Minimal, type-driven extraction — metadata matches Tina schema for experiencecard.metadata
+const { title, slug, metadata = {} } = item;
+const company = metadata.company ?? "";
+const startDateStr = metadata.startDate ?? undefined;
+const endDateStr = metadata.endDate ?? undefined;
+const thumbnailSrc = metadata.thumbnail ?? undefined;
+const summaryRaw = metadata.summary ?? "";
 
-// Safe parse ISO-ish strings to Date; returns undefined for invalid values.
-function parseSafeDate(value?: string): Date | undefined {
-  if (!value || typeof value !== "string") return undefined;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return undefined;
-  return d;
-}
+// Parse dates (helpers handle invalid values)
+const startDateObj = parseSafeDate(startDateStr);
+const endDateObj = parseSafeDate(endDateStr);
 
-// Resolve an asset URL:
-// - Return absolute URLs untouched
-// - Resolve relative paths against import.meta.env.BASE_URL (or "/")
-function resolveAssetUrl(raw?: unknown): string | null {
-  const v = typeof raw === "string" ? raw.trim() : "";
-  if (!v) return null;
-  if (/^https?:\/\//i.test(v)) return v;
-  const base = import.meta.env.BASE_URL || "/";
-  const clean = v.replace(/^\/+/, "");
-  return base.endsWith("/") ? base + clean : base + "/" + clean;
-}
+// Resolve thumbnail once
+const safeThumbnail = resolveAssetUrl(thumbnailSrc) ?? "";
 
-/**
- * Defensive: strip YAML frontmatter from a raw string and return the body.
- * Kept local to the component to avoid cross-module hoisting issues when
- * components are used with mixed data sources in DEV (Tina + filesystem).
- */
-const stripFrontmatterLocal = (raw?: unknown): string => {
-  const s = typeof raw === "string" ? raw : "";
-  if (!s) return "";
-  const m = s.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
-  return m ? s.slice(m[0].length) : s;
-};
-
-/**
- * Defensive: sanitize small metadata strings used for UI display.
- * - Strips YAML frontmatter if present
- * - Trims and collapses excessive whitespace
- * - Returns empty string when input is falsy
- */
-function sanitizeStringForUI(value?: unknown): string {
-  const raw = stripFrontmatterLocal(value);
-  return raw.replace(/\s+/g, " ").trim();
-}
-
-// Format a Date as "Mon yyyy" using Intl when available; light fallback otherwise.
-function formatMonthYear(d: Date): string {
-  try {
-    return new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(d);
-  } catch {
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return `${months[d.getMonth()]} ${d.getFullYear()}`;
-  }
-}
-
-/* Derived fields (priority rules preserved) */
-
-// company priority:
-// - explicit flat prop
-// - metadata.company (string or object with .name)
-// - fallback empty
-const company =
-  (flatCompany as string | undefined) ??
-  (typeof metadata?.company === "string"
-    ? metadata.company
-    : metadata?.company?.name) ??
-  "";
-
-// start/end raw values (prop priority preserved), with Tina "logistics" fallback
-const startRaw = flatStart ?? metadata?.startDate ?? metadata?.logistics?.startDate;
-const endRaw = flatEnd ?? metadata?.endDate ?? metadata?.logistics?.endDate;
-
-// parsed date objects (safe)
-const startDateObj = parseSafeDate(startRaw);
-const endDateObj = parseSafeDate(endRaw);
-
-// thumbnail priority: flat prop > metadata.thumbnail > metadata.card.thumbnail
-const rawThumb = flatThumbnail ?? metadata?.thumbnail ?? metadata?.card?.thumbnail;
-const resolvedThumb = resolveAssetUrl(rawThumb);
-const safeThumbnail = resolvedThumb ?? "";
-
-// summary priority: flat prop > metadata.summary > metadata.card.summary > description
-const summary = (flatSummary ?? metadata?.summary ?? metadata?.card?.summary ?? description ?? "") as string;
-
-// explicit date priority: flattened date prop > metadata.date > metadata.card.date > ""
-const explicitDate = flatDate || metadata?.date || metadata?.card?.date || "";
-
-// compute the dateDisplay following original sentinel behavior (9999 => Present)
+// Compute display date with sentinel handling
+const explicitDate = metadata.date ?? "";
 let dateDisplay = explicitDate;
 
 if (!dateDisplay) {
@@ -147,14 +45,13 @@ if (!dateDisplay) {
   }
 }
 
-// Compose title + company display and image alt without changing semantics
+// Compose title + company display and image alt
 const titleCompany = company ? `${title} @ ${company}` : title;
 const imgAlt = company ? `${title} @ ${company}` : title;
 
-// Safe fallbacks to avoid rendering undefined
+// Sanitized summary for UI
+const safeSummary = sanitizeStringForUI(summaryRaw);
 const safeDateDisplay = dateDisplay ?? "";
-// Ensure the summary used in the UI is sanitized and never undefined
-const safeSummary = sanitizeStringForUI(summary);
 ---
 <section class="background">
   {safeThumbnail ? (
