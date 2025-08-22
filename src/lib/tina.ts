@@ -116,6 +116,19 @@ export async function fetchExperiences(options?: { first?: number; sort?: string
   });
 }
 
+export async function fetchExperienceBySlug(slug: string): Promise<Experience | null> {
+  if (!slug) return null;
+  const normalized = String(slug).toLowerCase();
+  // Leverage the cached fetchExperiences for robustness and to reuse cache
+  const all = await fetchExperiences({ first: 500 });
+  const found = all.find((exp: any) => {
+    const filename = exp?._sys?.filename ?? '';
+    const s = String(filename).replace(/\.mdx?$/i, '').toLowerCase();
+    return s === normalized;
+  });
+  return found ?? null;
+}
+
 export function clearTinaCache() {
   cache.clear();
 }
