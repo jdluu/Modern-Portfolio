@@ -1,14 +1,16 @@
 ---
-import ExperienceCard from "../ui/ExperienceCard.astro";
-import { fetchExperienceCards } from "../../lib/tina";
-
+import ExperienceCardList from "../ui/ExperienceCardList";
+import { listExperienceCardItems } from "../../lib/tina";
+ 
 /**
  * Loading strategy (centralized):
- * - Use fetchExperienceCards() from src/lib/tina.ts which queries the generated Tina client,
- *   applies sorting (endDate/date, sentinel 9999 => Present), and returns normalized items.
+ * - Use listExperienceCardItems() from src/lib/tina.ts which queries the generated Tina client
+ *   and returns normalized items WITHOUT performing any server-side sorting or filtering.
+ * - Astro renders the full unsorted list at build time for SEO visibility.
+ * - Client-side (Solid) will handle sorting and filtering with zero additional API calls.
  * - Tina-only (no DEV filesystem fallback) as requested.
  */
-const experiences = await fetchExperienceCards({ first: 200 }) ?? [];
+const experiences = await listExperienceCardItems({ first: 200 }) ?? [];
 ---
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
@@ -16,13 +18,9 @@ const experiences = await fetchExperienceCards({ first: 200 }) ?? [];
 		<strong>My professional journey and key achievements</strong>
 	</p>
 	<div class="experience-grid">
-		{
-			experiences.length > 0 ? experiences.map((exp) => (
-				<div class="experience-item">
-					<ExperienceCard item={exp} />
-				</div>
-			)) : null
-		}
+		<!-- Hydrated Solid component: client-side handles sorting & filtering.
+		     Astro still provides the full `experiences` array at build time for SEO. -->
+		<ExperienceCardList client:load initialItems={experiences} />
 	</div>
 </section>
 
