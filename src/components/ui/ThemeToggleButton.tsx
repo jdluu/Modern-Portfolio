@@ -104,7 +104,7 @@ const ThemeToggleButton = () => {
         title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggle}
       >
-        <div class="btn__indicator" ref={el => (thumbRef = el!)}>
+        <div class="btn__indicator" ref={(el) => { thumbRef = el!; }}>
           <div class="btn__icon-container">
             <SunIcon class="btn__icon btn__icon--sun" />
             <MoonIcon class="btn__icon btn__icon--moon" />

@@ -2,23 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { client } from "../../../tina/__generated__/client";
 import { marked } from "marked";
+import type { PostProps } from "../../types/post";
 
-/*
-  Types
-  - Minimal, non-invasive types for clarity. Keep Tina node as `any`.
-*/
-interface Link {
-  label: string;
-  url: string;
-}
-
-interface PostProps {
-  title: string;
-  date: string | null;
-  content: string;
-  links: Link[];
-  hero: string | null;
-}
 
 /** Resolve hero value:
   - return absolute http(s) as-is
@@ -102,7 +87,7 @@ export async function getStaticPaths() {
   Props extraction & derived values
   - Keep same behavior and formatting (en-US)
 */
-const { title, date, content, links, hero } = Astro.props as any;
+const { title, date, content, links, hero } = Astro.props as PostProps;
 
 const displayDate = date
   ? new Date(date).toLocaleDateString("en-US", {
