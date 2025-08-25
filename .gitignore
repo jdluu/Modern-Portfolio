@@ -25,6 +25,3 @@ pnpm-debug.log*
 
 # JetBrains IDE
 .idea/
-
-# Repomix config
-repomix-output.xml
