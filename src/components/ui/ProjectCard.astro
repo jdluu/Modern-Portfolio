@@ -1,13 +1,9 @@
 ---
 /* Frontmatter: imports, Props, prop destructuring */
 import { Image } from 'astro:assets';
+import type { ProjectCardProps } from '@/src/types/project-card';
 
-export interface Props {
-	title: string;
-	intro: string;
-	url: string;
-	thumbnail: string;
-}
+export interface Props extends ProjectCardProps {}
 
 const { title, intro, url, thumbnail } = Astro.props;
 ---
