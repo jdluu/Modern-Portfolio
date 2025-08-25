@@ -1,16 +1,22 @@
-// Type definitions for blog posts.
-// Mirrors the interfaces defined in src/pages/posts/[slug].astro
-// Exported for reuse across the codebase.
-
 export interface Link {
-  label: string;
-  url: string;
+ label: string;
+ url: string;
 }
 
 export interface PostProps {
-  title: string;
-  date: string | null;
-  content: string;
-  links: Link[];
-  hero: string | null;
+ title: string;
+ date: string | null;
+ content: string;
+ links: Link[];
+ hero: string | null;
+}
+
+// Post index/listing shape used by the blog list UI
+export interface PostIndexItem {
+ title: string;
+ slug: string;
+ date: string | null;
+ description: string;
+ tags: string[];
+ draft: boolean;
 }
