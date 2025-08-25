@@ -1,94 +1,38 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { client } from "../../../tina/__generated__/client";
-import { marked } from "marked";
+import { fetchPosts } from "../../lib/tina";
+import { resolveAssetUrl } from "../../lib/utils";
 import type { PostProps } from "../../types/post";
-
-
-/** Resolve hero value:
-  - return absolute http(s) as-is
-  - join relative paths to import.meta.env.BASE_URL ensuring single slash
-  - return null for missing/empty values
-*/
-function resolveHero(rawHero: unknown): string | null {
-  const value = typeof rawHero === "string" ? rawHero : null;
-  if (!value) return null;
-  if (/^https?:\/\//i.test(value)) return value;
-  const base = import.meta.env.BASE_URL || "/";
-  const clean = value.replace(/^\/+/, "");
-  return base.endsWith("/") ? base + clean : base + "/" + clean;
-}
 
 /*
   Data loading: getStaticPaths
-  - Tina-first approach; on failure or no results, DEV filesystem fallback with identical globs
-  - Preserves draft filtering, slug generation, and props shape
+  - Uses shared fetchPosts helper
+  - No DEV filesystem fallback (Tina-only)
 */
 export async function getStaticPaths() {
-  // Tina-first
-  try {
-    const postsResponse = await client.queries.postConnection();
-    const tinaEdges = postsResponse?.data?.postConnection?.edges ?? [];
-
-    const tinaPaths = tinaEdges.flatMap((edge) => {
-      if (!edge?.node) return [];
-      const node: any = edge.node;
-      if (node.draft) return [];
-      const slug = node._sys?.filename?.replace(/\.mdx?$/i, "").toLowerCase();
-      return [{ params: { slug }, props: node }];
-    });
-
-    if (tinaPaths.length > 0) return tinaPaths;
-  } catch {
-    // silent fallback to DEV below
-    console.warn("Tina CMS query failed, falling back to local filesystem in DEV mode.");
-  }
-
-  // DEV fallback: read local content files and build same props shape
-  if (import.meta.env.DEV) {
-    const modules = import.meta.glob("../../../content/posts/*.{md,mdx}", { eager: true }) as Record<string, any>;
-    const rawModules = import.meta.glob("../../../content/posts/*.{md,mdx}", { query: "?raw", import: "default", eager: true }) as Record<string, string>;
-    
-    const stripFrontmatterLocal = (raw: string): string => {
-      if (!raw) return "";
-      const m = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
-      return m ? raw.slice(m[0].length) : raw;
-    };
-
-    const fsPaths = Object.entries(modules).flatMap(([filePath, mod]) => {
-      const frontmatter = (mod && (mod.frontmatter ?? mod.meta ?? mod.metadata)) ?? {};
-      if (frontmatter.draft) return [];
-      const filename = filePath.split("/").pop() || filePath;
-      const slug = filename.replace(/\.mdx?$/i, "").toLowerCase();
-
-      const raw = rawModules[filePath] || "";
-      const body = stripFrontmatterLocal(raw).trim();
-
-      return [{
+  const posts = await fetchPosts({ first: 500 });
+  const paths = posts
+    .filter((p: any) => !p?.draft)
+    .map((p: any) => {
+      const filename = p._sys?.filename ?? "";
+      const slug = String(filename).replace(/\.mdx?$/i, "").toLowerCase();
+      return {
         params: { slug },
-        props: {
-          title: frontmatter.title ?? "Untitled",
-          date: frontmatter.date ?? null,
-          content: body,
-          links: Array.isArray(frontmatter.links) ? frontmatter.links : [],
-          hero: frontmatter.hero ?? null,
-        } as PostProps
-      }];
-    });
-
-    return fsPaths;
-  }
-
-  // No results and not in DEV
-  return [];
+        props: { post: p },
+      };
+    })
+    .filter((p: any) => !!p.params?.slug);
+  return paths;
 }
 
-/*
-  Props extraction & derived values
-  - Keep same behavior and formatting (en-US)
-*/
-const { title, date, content, links, hero } = Astro.props as PostProps;
+// Props / derived values (receive a full Post object)
+const { post } = Astro.props as { post: PostProps & { draft?: boolean; _sys?: any; raw?: any; slug?: string } };
 
+// Derived and resilient values
+const title = post?.title ?? "Untitled";
+const date = post?.date ?? null;
+const content = post?.content ?? "";
+const links = Array.isArray(post?.links) ? post.links : [];
 const displayDate = date
   ? new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -97,10 +41,7 @@ const displayDate = date
     })
   : "";
 
-const heroUrl = resolveHero(hero);
-
-/* Render markdown to HTML server-side using marked.parse */
-const renderedContent = content ? marked.parse(content) : "";
+const heroUrl = resolveAssetUrl(post?.hero) ?? null;
 ---
  
 <BaseLayout title={title}>
@@ -110,8 +51,8 @@ const renderedContent = content ? marked.parse(content) : "";
       {date && <p class="publish-date">{displayDate}</p>}
     </header>
 
-    <!-- Rendered Markdown (server-side) -->
-    <div class="prose" set:html={renderedContent} />
+    <!-- Post content (plain text — markdown escaped) -->
+    <div class="prose"><pre>{content}</pre></div>
 
     {
       links && links.length > 0 && (
