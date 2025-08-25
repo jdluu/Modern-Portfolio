@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "tinacms dev -c \"astro dev\"",
     "build": "tinacms build && astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "fetch:schema": "pnpm dlx dotenv-cli -e .env -- node --loader ts-node/esm src/tests/fetch-schema.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.5.1",
@@ -29,6 +30,7 @@
     "marked": "^16.2.0",
     "sharp": "^0.34.3",
     "terser": "^5.43.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
