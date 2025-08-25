@@ -1,7 +1,7 @@
 const CLIENT_ID: string | undefined = process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
 const CONTENT_TOKEN: string | undefined = process.env.TINA_TOKEN;
 const BASE_API_URL = 'https://content.tinajs.io';
-const BRANCH = 'main'; // replace with the correct branch name if needed
+const BRANCH = 'main';
 
 if (!CLIENT_ID || !CONTENT_TOKEN) {
   throw new Error('Missing required environment variables: NEXT_PUBLIC_TINA_CLIENT_ID or TINA_TOKEN');
