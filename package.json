@@ -12,6 +12,7 @@
     "fetch:schema": "pnpm dlx dotenv-cli -e .env -- node --loader ts-node/esm src/tests/fetch-schema.ts"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/sitemap": "^3.5.1",
     "@astrojs/solid-js": "^5.1.0",
     "@cosmicjs/sdk": "^1.5.5",
