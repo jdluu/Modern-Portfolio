@@ -133,6 +133,8 @@ export async function fetchPosts(options?: { first?: number; sort?: string; filt
           title: node?.title ?? 'Untitled',
           date: node?.date ?? null,
           content: node?.content ?? '',
+          description: node?.description ?? '',
+          tags: Array.isArray(node?.tags) ? node.tags.filter((t: any) => typeof t === 'string') : [],
           links: Array.isArray(node?.links) ? node.links : [],
           hero: pickImageString(node?.hero) ?? null,
           draft: Boolean(node?.draft),
