@@ -17,7 +17,7 @@ export default defineConfig({
     ],
     i18n: {
         defaultLocale: "en",
-        locales: ["en", "fr", "pt-br", "es"],
+        locales: ["en"],
     },
     output: "static",
     // Allow remote image optimization for CMS-hosted images.
