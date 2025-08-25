@@ -1,3 +1,4 @@
+/** @jsxImportSource solid-js */
 import { createSignal, onMount, Show } from "solid-js";
 
 const STORAGE_KEY = "darkmode";
