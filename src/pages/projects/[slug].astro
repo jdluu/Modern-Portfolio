@@ -1,71 +1,11 @@
 ---
 import {getAllProjects} from "../../lib/cosmic";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { Metadata, PageProps } from "../../types/project";
 
-interface Metadata {
-  description: string;
-  home: {
-    image: {
-      url: string;
-      imgix_url: string;
-    };
-    imagealt: string;
-  };
-  logistics: {
-    date: string;
-    techtitle: string;
-    technologies: string;
-    tools: string;
-  };
-  work: {
-    role: string;
-    responsibilities: { duties: string }[];
-  };
-  background: {
-    description: string;
-  };
-  problem: {
-    description: string;
-  };
-  solution: {
-    title: string;
-    description: string;
-  };
-  process: {
-    title: string;
-    plan: { steps: string }[];
-  };
-  prototype: {
-    image: {
-      url: string;
-      imgix_url: string;
-    };
-    imagealt: string;
-  };
-  final: {
-    description: string;
-    image: {
-      url: string;
-      imgix_url: string;
-    };
-    imagealt: string;
-  };
-  reflection: {
-    points: { point: string }[];
-  };
-  source: {
-    title: string;
-    link: string;
-  };
-}
-
-interface PageProps {
-  title: string;
-  metadata: Metadata;
-}
 
 export async function getStaticPaths() {
-    const projects: { slug: string; title: string; metadata: Metadata }[] = await getAllProjects();
+    const projects = await getAllProjects() as unknown as { slug: string; title: string; metadata: Metadata }[];
 
     return projects.map(({slug, title, metadata}) => {
         return {
@@ -75,7 +15,7 @@ export async function getStaticPaths() {
     });
 }
 
-const {title, metadata} = Astro.props;
+const {title, metadata} = Astro.props as PageProps;
 ---
 
 <BaseLayout title={title}>
@@ -145,7 +85,7 @@ const {title, metadata} = Astro.props;
                     <h2>My Responsibilities as {metadata.work.role}</h2>
                     <ul>
                         {metadata.work.responsibilities.map((responsibility, index) => (
-                            <li class="role-bullet-item" key={index}>
+                            <li class="role-bullet-item">
                                 {responsibility.duties}
                             </li>
                         ))}
@@ -167,7 +107,7 @@ const {title, metadata} = Astro.props;
             <section id="process" class="content-section">
                 <h2>{metadata.process.title}</h2>
                 {metadata.process.plan.map((plan, index) => (
-                    <p class="section-content" key={index}>{plan.steps}</p>
+                    <p class="section-content">{plan.steps}</p>
                 ))}
                 <figure class="project-figure">
                     <img
@@ -205,7 +145,7 @@ const {title, metadata} = Astro.props;
             <section id="reflection" class="content-section">
                 <h2>Reflection</h2>
                 {metadata.reflection.points.map((reflection, index) => (
-                    <p class="section-content" key={index}>{reflection.point}</p>
+                    <p class="section-content">{reflection.point}</p>
                 ))}
                 <a
                     href={metadata.source.link}
@@ -260,7 +200,7 @@ const {title, metadata} = Astro.props;
         });
 
         // Table of Contents Toggle
-        function toggleTableOfContents(show) {
+        function toggleTableOfContents(show: boolean) {
             if (tableOfContents && showButton) {
                 tableOfContents.style.display = show ? 'block' : 'none';
                 showButton.style.visibility = show ? 'hidden' : 'visible';
@@ -276,13 +216,13 @@ const {title, metadata} = Astro.props;
         showButton?.addEventListener("click", () => toggleTableOfContents(true));
 
         // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener('click', (e) => {
                 e.preventDefault();
-                const href = this.getAttribute('href');
+                const href = anchor.getAttribute('href');
                 if (!href) return;
 
-                const targetElement = document.querySelector(href);
+                const targetElement = document.querySelector<HTMLElement>(href);
                 
                 if (targetElement) {
                     const navHeight = parseInt(getComputedStyle(document.documentElement)
