@@ -320,3 +320,144 @@ html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
   white-space: nowrap;
   border: 0;
 }
+
+/* Experience section pagination placement and spacing
+   Pagination controls are portaled from the client island into the
+   server-rendered grid's portal (#experience-pagination-portal).
+   Center the controls beneath the cards with ~16px vertical spacing. */
+.experience-pagination-portal {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem; /* ~16px (root font-size: 62.5% -> 1rem = 10px) */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--spacing-md);
+}
+
+.experience-pagination-portal .pagination-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  /* Ensure pagination doesn't stretch the grid */
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Control pair layout for Experience controls — styled to match blog controls */
+.experience-controls {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+}
+
+/* Individual label+control grouping */
+.experience-controls .control-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Visual label styling (associated via for/id in markup) — match blog weight */
+.experience-controls .control-label {
+  color: var(--m3-color-on-surface-variant);
+  font-size: var(--m3-font-label-medium);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Shared select styling used across the site (blog-like) */
+.experience-controls .control-select {
+  padding: 0.5rem 0.75rem;
+  font-size: var(--m3-font-body-medium);
+  border: 1px solid var(--m3-color-outline);
+  border-radius: 8px;
+  background: var(--m3-color-surface);
+  color: var(--m3-color-on-surface);
+  min-width: 8rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: border-color .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+.experience-controls .control-select:focus {
+  outline: none;
+  border-color: var(--m3-color-primary);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* Smaller variant for compact selects (e.g., per-page) */
+.experience-controls .control-select.compact {
+  padding: 0.35rem 0.6rem;
+  min-width: 6.4rem;
+}
+
+/* Reset button matches blog-like pagination buttons */
+.experience-controls .btn-reset {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--m3-color-outline);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--m3-color-on-surface);
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, transform .08s ease;
+}
+.experience-controls .btn-reset:hover,
+.experience-controls .btn-reset:focus {
+  background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* Pagination controls (portaled) — match blog pagination styling */
+.experience-pagination-portal {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem; /* ~16px */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--spacing-md);
+}
+.experience-pagination-portal .pagination-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Pagination buttons and info pill */
+.experience-pagination-portal .pagination-controls button {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--m3-color-outline);
+  background: transparent;
+  color: var(--m3-color-on-surface);
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, transform .08s ease;
+}
+.experience-pagination-portal .pagination-controls button:hover:not(:disabled) {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: translateY(-1px);
+}
+.experience-pagination-portal .pagination-controls button:disabled,
+.experience-pagination-portal .pagination-controls button[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: transparent;
+  color: var(--m3-color-on-surface-variant);
+}
+
+/* Info pill */
+.experience-pagination-portal .pagination-controls > div {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--m3-color-surface-variant);
+  color: var(--m3-color-on-surface-variant);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}

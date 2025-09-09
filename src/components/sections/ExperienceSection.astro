@@ -36,6 +36,10 @@ const experiences = (raw ?? []).map((e: any) => {
 			</div>
 		))}
 	</div>
+
+	<!-- Pagination portal: client island will move the pagination controls here so they render
+	     visually underneath the server-rendered card grid while controls remain in the client island. -->
+	<div id="experience-pagination-portal" class="experience-pagination-portal" aria-hidden="false"></div>
 </section>
 
 <style>

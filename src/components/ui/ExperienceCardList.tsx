@@ -32,31 +32,6 @@ function sortExperienceCardsByDateDesc(
   });
 }
 
-function filterByCompany(
-  items: ExperienceCardItem[],
-  company?: string
-): ExperienceCardItem[] {
-  if (!company) return items;
-  const needle = company.toLowerCase();
-  return items.filter((it) => {
-    const c = String((it as any)?.metadata?.company ?? "").toLowerCase();
-    return c.includes(needle);
-  });
-}
-
-function filterBySearch(
-  items: ExperienceCardItem[],
-  query?: string
-): ExperienceCardItem[] {
-  if (!query) return items;
-  const q = query.toLowerCase().trim();
-  return items.filter((it) => {
-    const title = String(it?.title ?? "").toLowerCase();
-    const company = String((it as any)?.metadata?.company ?? "").toLowerCase();
-    const summary = String((it as any)?.metadata?.summary ?? "").toLowerCase();
-    return title.includes(q) || company.includes(q) || summary.includes(q);
-  });
-}
 
 /**
  * ExperienceCardList (Solid.js)
@@ -74,33 +49,14 @@ type Props = {
 };
 
 export default function ExperienceCardList(props: Props) {
-  const [query, setQuery] = createSignal("");
-  const [debouncedQuery, setDebouncedQuery] = createSignal("");
-  const [companyFilter, setCompanyFilter] = createSignal("");
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
-  const [sortOption, setSortOption] = createSignal<
-    "date-desc" | "date-asc" | "company-asc"
-  >("date-desc");
+  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">(
+    "date-desc"
+  );
   const [page, setPage] = createSignal(1);
   const [pageSize, setPageSize] = createSignal(6);
-  let searchRef: HTMLInputElement | undefined;
+  let paginationRef: HTMLDivElement | undefined;
 
-  // Debounce search input (300ms)
-  createEffect(() => {
-    const q = query();
-    const id = setTimeout(() => setDebouncedQuery(q), 300);
-    onCleanup(() => clearTimeout(id));
-  });
-
-  // Distinct companies for filter dropdown
-  const companies = createMemo(() => {
-    const out = new Set<string>();
-    (props.initialItems ?? []).forEach((it) => {
-      const c = String(it?.metadata?.company ?? "").trim();
-      if (c) out.add(c);
-    });
-    return Array.from(out).sort();
-  });
 
   // Derive available years (and "Present") from metadata dates
   const years = createMemo(() => {
@@ -138,8 +94,6 @@ export default function ExperienceCardList(props: Props) {
   // Reset pagination when filters change
   createEffect(() => {
     // When any of these signals change, reset to page 1
-    debouncedQuery();
-    companyFilter();
     yearFilter();
     sortOption();
     setPage(1);
@@ -148,10 +102,6 @@ export default function ExperienceCardList(props: Props) {
   // Core processing pipeline: filter -> sort -> paginate
   const processedAll = createMemo(() => {
     let items = props.initialItems ?? [];
-    // Company filter
-    items = filterByCompany(items, companyFilter());
-    // Search filter
-    items = filterBySearch(items, debouncedQuery());
     // Year filter
     const yf = yearFilter();
     if (yf) {
@@ -181,12 +131,6 @@ export default function ExperienceCardList(props: Props) {
       items = sortExperienceCardsByDateDesc(items);
     } else if (sortOption() === "date-asc") {
       items = sortExperienceCardsByDateDesc(items).reverse();
-    } else if (sortOption() === "company-asc") {
-      items = [...items].sort((a, b) => {
-        const aa = String(a?.metadata?.company ?? "").toLowerCase();
-        const bb = String(b?.metadata?.company ?? "").toLowerCase();
-        return aa.localeCompare(bb);
-      });
     }
 
     return items;
@@ -207,116 +151,128 @@ export default function ExperienceCardList(props: Props) {
   // Toggle visibility of the server-rendered cards.
   // The server renders a sibling .experience-grid with children:
   // <div class="experience-item" data-slug="..."><ExperienceCard .../></div>
-  // This effect hides/shows those nodes based on the currently paginated items.
+  // This effect hides/shows those nodes based on the currently paginated items
+  // and reorders visible nodes to match the client-side pagination order so
+  // the grid displays cards left-to-right/top-to-bottom in the expected sequence.
   createEffect(() => {
     if (typeof document === "undefined") return;
-    const visible = new Set<string>(
-      (paginated() ?? []).map((it) =>
-        String((it as any)?.slug ?? "").replace(/\.(md|mdx)$/, "")
-      )
+
+    // Build ordered list of visible slugs from the paginated items
+    const visibleSlugs = (paginated() ?? []).map((it) =>
+      String((it as any)?.slug ?? "").replace(/\.(md|mdx)$/, "")
     );
 
     const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(".experience-grid > .experience-item")
+      document.querySelectorAll<HTMLElement>(
+        ".experience-grid > .experience-item"
+      )
     );
+
+    // First, toggle visibility for accessibility and layout
     nodes.forEach((node) => {
       const slug = String(node.dataset.slug ?? "").replace(/\.(md|mdx)$/, "");
-      const shouldShow = visible.has(slug);
-      // Use inline styles to avoid coupling with CSS modules; also set aria-hidden.
+      const shouldShow = visibleSlugs.includes(slug);
       node.style.display = shouldShow ? "" : "none";
       node.setAttribute("aria-hidden", shouldShow ? "false" : "true");
     });
+
+    // Then, reorder the DOM so visible nodes appear in the same order as paginated()
+    const grid = document.querySelector<HTMLElement>(".experience-grid");
+    if (grid) {
+      visibleSlugs.forEach((slug) => {
+        // Use a attribute selector that matches the data-slug value exactly
+        const selector = `.experience-item[data-slug="${slug}"]`;
+        const node = grid.querySelector<HTMLElement>(selector);
+        if (node) {
+          // appendChild moves the node to the end in sequence — doing this in order
+          // results in the desired left-to-right/top-to-bottom visual order.
+          grid.appendChild(node);
+        }
+      });
+    }
   });
 
   // Helpers for pagination controls
   const canPrev = createMemo(() => page() > 1);
   const canNext = createMemo(() => page() < totalPages());
 
+  // Move pagination controls into the portal rendered in the parent server template
+  createEffect(() => {
+    if (typeof document === "undefined") return;
+    // Wait until the paginationRef is available
+    const node = paginationRef;
+    const portal = document.getElementById("experience-pagination-portal");
+    if (!node || !portal) return;
+    // Append the pagination controls to the portal so they appear under the server-rendered grid
+    if (portal !== node.parentElement) {
+      portal.appendChild(node);
+    }
+    onCleanup(() => {
+      // Remove node from DOM when component unmounts (keep portal clean)
+      try {
+        node.remove();
+      } catch (e) {
+        /* ignore */
+      }
+    });
+  });
+
   return (
     <section>
-      <div
-        class="experience-controls"
-        style={{
-          "margin-bottom": "1rem",
-          display: "flex",
-          gap: "0.5rem",
-          "flex-wrap": "wrap",
-          "align-items": "center",
-        }}
-      >
-        <input
-          ref={(el) => (searchRef = el!)}
-          aria-label="Search experiences"
-          placeholder="Search title, company, summary..."
-          value={query()}
-          onInput={(e: any) => setQuery(e.target.value)}
-          style="padding:0.6rem;min-width:220px"
-        />
-
-        <select
-          aria-label="Filter by company"
-          value={companyFilter()}
-          onChange={(e: any) => setCompanyFilter(e.target.value)}
-          style={{ padding: "0.6rem" }}
-        >
-          <option value="">All companies</option>
-          <For each={companies()}>
-            {(c: string) => <option value={c}>{c}</option>}
-          </For>
-        </select>
-
-        <select
-          aria-label="Filter by year"
-          value={yearFilter()}
-          onChange={(e: any) => setYearFilter(e.target.value)}
-          style={{ padding: "0.6rem" }}
-        >
-          <option value="">All years</option>
-          <For each={years()}>
-            {(y: string) => <option value={y}>{y}</option>}
-          </For>
-        </select>
-
-        <select
-          aria-label="Sort experiences"
-          value={sortOption()}
-          onChange={(e: any) => setSortOption(e.target.value)}
-          style={{ padding: "0.6rem" }}
-        >
-          <option value="date-desc">Newest first</option>
-          <option value="date-asc">Oldest first</option>
-          <option value="company-asc">Company A–Z</option>
-        </select>
-
-        <label style="display:inline-flex;align-items:center;gap:0.5rem">
-          <span class="sr-only">Items per page</span>
+      <div class="experience-controls">
+        <div class="control-pair">
+          <label for="year-select" class="control-label">Year</label>
           <select
+            id="year-select"
+            class="control-select"
+            aria-label="Filter by year"
+            value={yearFilter()}
+            onChange={(e: any) => setYearFilter(e.target.value)}
+          >
+            <option value="">All years</option>
+            <For each={years()}>
+              {(y: string) => <option value={y}>{y}</option>}
+            </For>
+          </select>
+        </div>
+
+        <div class="control-pair">
+          <label for="sort-select" class="control-label">Sort by</label>
+          <select
+            id="sort-select"
+            class="control-select"
+            aria-label="Sort experiences"
+            value={sortOption()}
+            onChange={(e: any) => setSortOption(e.target.value)}
+          >
+            <option value="date-desc">Newest first</option>
+            <option value="date-asc">Oldest first</option>
+          </select>
+        </div>
+
+        <div class="control-pair">
+          <label for="perpage-select" class="control-label">Per page</label>
+          <select
+            id="perpage-select"
+            class="control-select compact"
             aria-label="Items per page"
             value={pageSize()}
             onChange={(e: any) => {
               setPageSize(Number(e.target.value) || 6);
               setPage(1);
             }}
-            style={{ padding: "0.4rem" }}
           >
             <option value="6">6 / page</option>
             <option value="12">12 / page</option>
             <option value="24">24 / page</option>
           </select>
-        </label>
+        </div>
 
-        <button
-          onClick={() => {
-            setQuery("");
-            setDebouncedQuery("");
-            setCompanyFilter("");
-            setYearFilter("");
-            setSortOption("date-desc");
-            setPage(1);
-            searchRef?.focus();
-          }}
-          style={{ padding: "0.6rem" }}
-        >
+        <button class="btn-reset" onClick={() => {
+          setYearFilter("");
+          setSortOption("date-desc");
+          setPage(1);
+        }}>
           Reset
         </button>
       </div>
@@ -333,21 +289,8 @@ export default function ExperienceCardList(props: Props) {
           This client island controls visibility only (via data-slug on each .experience-item). */}
 
       {/* Pagination Controls */}
-      <div
-        class="pagination-controls"
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          "align-items": "center",
-          "margin-top": "1rem",
-        }}
-      >
-        <button
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={!canPrev()}
-          aria-disabled={!canPrev()}
-          style={{ padding: "0.5rem" }}
-        >
+      <div ref={(el) => (paginationRef = el!)} class="pagination-controls">
+        <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!canPrev()} aria-disabled={!canPrev()}>
           Prev
         </button>
         <div>
@@ -355,12 +298,7 @@ export default function ExperienceCardList(props: Props) {
           {Math.min((page() - 1) * pageSize() + 1, totalCount())}-
           {Math.min(page() * pageSize(), totalCount())} of {totalCount()}
         </div>
-        <button
-          onClick={() => setPage((p) => Math.min(totalPages(), p + 1))}
-          disabled={!canNext()}
-          aria-disabled={!canNext()}
-          style={{ padding: "0.5rem" }}
-        >
+        <button onClick={() => setPage((p) => Math.min(totalPages(), p + 1))} disabled={!canNext()} aria-disabled={!canNext()}>
           Next
         </button>
       </div>
