@@ -32,7 +32,6 @@ function sortExperienceCardsByDateDesc(
   });
 }
 
-
 /**
  * ExperienceCardList (Solid.js)
  *
@@ -56,7 +55,6 @@ export default function ExperienceCardList(props: Props) {
   const [page, setPage] = createSignal(1);
   const [pageSize, setPageSize] = createSignal(6);
   let paginationRef: HTMLDivElement | undefined;
-
 
   // Derive available years (and "Present") from metadata dates
   const years = createMemo(() => {
@@ -221,7 +219,9 @@ export default function ExperienceCardList(props: Props) {
     <section>
       <div class="experience-controls">
         <div class="control-pair">
-          <label for="year-select" class="control-label">Year</label>
+          <label for="year-select" class="control-label">
+            Year
+          </label>
           <select
             id="year-select"
             class="control-select"
@@ -237,7 +237,9 @@ export default function ExperienceCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="sort-select" class="control-label">Sort by</label>
+          <label for="sort-select" class="control-label">
+            Sort by
+          </label>
           <select
             id="sort-select"
             class="control-select"
@@ -251,7 +253,9 @@ export default function ExperienceCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="perpage-select" class="control-label">Per page</label>
+          <label for="perpage-select" class="control-label">
+            Per page
+          </label>
           <select
             id="perpage-select"
             class="control-select compact"
@@ -268,11 +272,14 @@ export default function ExperienceCardList(props: Props) {
           </select>
         </div>
 
-        <button class="btn-reset" onClick={() => {
-          setYearFilter("");
-          setSortOption("date-desc");
-          setPage(1);
-        }}>
+        <button
+          class="btn-reset"
+          onClick={() => {
+            setYearFilter("");
+            setSortOption("date-desc");
+            setPage(1);
+          }}
+        >
           Reset
         </button>
       </div>
@@ -290,15 +297,23 @@ export default function ExperienceCardList(props: Props) {
 
       {/* Pagination Controls */}
       <div ref={(el) => (paginationRef = el!)} class="pagination-controls">
-        <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!canPrev()} aria-disabled={!canPrev()}>
-          Prev
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={!canPrev()}
+          aria-disabled={!canPrev()}
+        >
+          Previous
         </button>
         <div>
           Page {page()} of {totalPages()} — Showing{" "}
           {Math.min((page() - 1) * pageSize() + 1, totalCount())}-
           {Math.min(page() * pageSize(), totalCount())} of {totalCount()}
         </div>
-        <button onClick={() => setPage((p) => Math.min(totalPages(), p + 1))} disabled={!canNext()} aria-disabled={!canNext()}>
+        <button
+          onClick={() => setPage((p) => Math.min(totalPages(), p + 1))}
+          disabled={!canNext()}
+          aria-disabled={!canNext()}
+        >
           Next
         </button>
       </div>
