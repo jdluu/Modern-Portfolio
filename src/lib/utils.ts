@@ -1,94 +1,85 @@
-/**
- * General-purpose utilities for content & UI handling.
- * Replaces content-utils.ts and exposes small helpers used across components and libs.
- */
-
-export type MaybeString = string | undefined | null;
-
-// Safe parse ISO-ish strings to Date; returns undefined for invalid values.
-// Accepts null explicitly to align with metadata shapes that can include null.
-export function parseSafeDate(value?: string | null): Date | undefined {
-  if (!value || typeof value !== "string") return undefined;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return undefined;
-  return d;
+// Misc helpers used across the site for safe frontmatter handling and asset resolution.
+//
+// These are intentionally simple, defensive helpers that tolerate values coming
+// from different loaders (Tina-generated objects, raw frontmatter strings, Date
+// objects, etc.). They are written to be safe for build-time usage.
+export function resolveAssetUrl(v: any): string | null {
+  if (!v && v !== 0) return null;
+  if (typeof v === "string") return v;
+  // Tina-compatible image object: { src: "/path", filename: "...", ... }
+  if (typeof v === "object" && v !== null) {
+    return String(v.src ?? v.url ?? v.path ?? v.filename ?? null);
+  }
+  return null;
 }
 
-// Parse a date string to a numeric timestamp (ms) or NaN.
-// This complements parseSafeDate when numeric comparison is needed.
-export function parseDateToTs(str?: string | null): number {
-  if (!str || typeof str !== "string") return NaN;
-  const t = Date.parse(str);
-  return Number.isNaN(t) ? NaN : t;
+export function pickImageString(field: any): string | null {
+  // Accept string or Tina-like image object
+  if (!field && field !== 0) return null;
+  if (typeof field === "string") return field;
+  if (typeof field === "object" && field !== null) {
+    return String(field.src ?? field.url ?? field.path ?? field.filename ?? null);
+  }
+  return null;
 }
 
-// Detect the sentinel "Present" year (9999 or greater) inside a string.
-// Returns true when the provided string contains a year >= 9999.
-export function isSentinelEnd(str?: string | null): boolean {
-  if (!str || typeof str !== "string") return false;
-  const yearMatch = str.match(/(\d{4,})/);
-  if (!yearMatch) return false;
-  const year = Number(yearMatch[1]);
-  return !Number.isNaN(year) && year >= 9999;
-}
-
-// Resolve an asset URL:
-// - Return absolute URLs untouched
-// - Resolve relative paths against import.meta.env.BASE_URL (or "/")
-// Use a safe cast for import.meta to avoid TS errors in environments where `env` is not declared.
-export function resolveAssetUrl(raw?: unknown): string | null {
-  const v = typeof raw === "string" ? raw.trim() : "";
-  if (!v) return null;
-  if (/^https?:\/\//i.test(v)) return v;
-  const base = ((import.meta as any).env?.BASE_URL as string) || "/";
-  const clean = v.replace(/^\/+/, "");
-  return base.endsWith("/") ? base + clean : base + "/" + clean;
+export function sanitizeStringForUI(v: any): string {
+  if (v == null) return "";
+  if (typeof v === "string") return v.trim();
+  if (Array.isArray(v)) return v.map((x) => String(x).trim()).join(", ");
+  try {
+    return String(v).trim();
+  } catch {
+    return "";
+  }
 }
 
 /**
- * Pick a usable string candidate from Tina's image field which may be:
- * - a simple string (path or absolute URL)
- * - an object with `imgix_url` or `url`
- * Returns null when no usable value is found.
+ * parseSafeDate
+ * - Accepts string, number, or Date and returns a Date object or null on failure.
  */
-export function pickImageString(img?: unknown): string | null {
-  if (!img) return null;
-  if (typeof img === "string") return img;
-  if (typeof img === "object" && img !== null) {
-    const a: any = img;
-    return a.imgix_url ?? a.url ?? null;
+export function parseSafeDate(input: any): Date | null {
+  if (!input && input !== 0) return null;
+  if (input instanceof Date && !isNaN(input.getTime())) return input;
+  if (typeof input === "number") {
+    const d = new Date(input);
+    return Number.isFinite(d.getTime()) ? d : null;
+  }
+  if (typeof input === "string") {
+    const parsed = Date.parse(input);
+    if (Number.isFinite(parsed)) return new Date(parsed);
+    // Fallback: try replacing common date separators
+    const alt = new Date(input.replace(/-/g, "/"));
+    return Number.isFinite(alt.getTime()) ? alt : null;
   }
   return null;
 }
 
 /**
- * Strip YAML frontmatter from a raw string and return the body.
- * Returns empty string for falsy input.
+ * parseDateToTs
+ * - Returns numeric timestamp (ms) or NaN
  */
-export function stripFrontmatter(raw?: unknown): string {
-  const s = typeof raw === "string" ? raw : "";
-  if (!s) return "";
-  const m = s.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
-  return m ? s.slice(m[0].length) : s;
+export function parseDateToTs(input: any): number {
+  const d = parseSafeDate(input);
+  return d ? d.getTime() : NaN;
 }
 
 /**
- * Sanitize small metadata strings used for UI display.
- * - Strips YAML frontmatter if present
- * - Trims and collapses excessive whitespace
- * - Returns empty string when input is falsy
+ * isSentinelEnd
+ * - Some frontmatter uses 9999-12-31 to indicate "Present". This helper
+ *   returns true when the year is >= 9999.
  */
-export function sanitizeStringForUI(value?: unknown): string {
-  const raw = stripFrontmatter(value);
-  return raw.replace(/\s+/g, " ").trim();
+export function isSentinelEnd(input: any): boolean {
+  const d = parseSafeDate(input);
+  if (!d) return false;
+  return d.getFullYear() >= 9999;
 }
 
-// Format a Date as "Mon yyyy" using Intl when available; light fallback otherwise.
+/**
+ * formatMonthYear
+ * - Human-friendly "Month YYYY" display (en-US)
+ */
 export function formatMonthYear(d: Date): string {
-  try {
-    return new Intl.DateTimeFormat(undefined, { month: "short", year: "numeric" }).format(d);
-  } catch {
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return `${months[d.getMonth()]} ${d.getFullYear()}`;
-  }
+  if (!d || !(d instanceof Date) || isNaN(d.getTime())) return "";
+  return d.toLocaleString("en-US", { month: "long", year: "numeric" });
 }
