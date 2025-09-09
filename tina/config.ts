@@ -1,12 +1,15 @@
 import { defineConfig } from "tinacms";
 
 export default defineConfig({
-  branch: "main",
-
-  // Get this from tina.io
+  // Allow branch to be driven by environment (works on local dev and on platforms like Vercel/GitHub Actions).
+  // Order: explicit TINA_BRANCH -> common envs (HEAD, VERCEL_GIT_COMMIT_REF, GITHUB_REF_NAME) -> fallback to main.
+  branch: process.env.TINA_BRANCH || process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || process.env.GITHUB_REF_NAME || "main",
+ 
+  // Public client ID for Tina client (kept as public env var)
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
-  // Get this from tina.io
-  token: process.env.TINA_TOKEN,
+  // Token used for read/write operations on protected branches — prefer TINA_TOKEN in CI/cloud.
+  // Fallback to NEXT_PUBLIC_TINA_TOKEN only if intentionally exposed (not recommended for sensitive tokens).
+  token: process.env.TINA_TOKEN ?? process.env.NEXT_PUBLIC_TINA_TOKEN,
 
   build: {
     outputFolder: "admin",
