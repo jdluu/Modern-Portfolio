@@ -31,6 +31,18 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
 </section>
  
 <style>
+  /* Make list and card selectors global so they affect nested/server-rendered Post.astro markup */
+  :global(.post-list) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    row-gap: 1.25rem; /* space between posts */
+  }
+  :global(.post-item) {
+    margin: 0;
+  }
+
   .page-h2 {
     font-family: var(--m3-font-family-display);
     font-size: var(--m3-font-headline-large);
@@ -38,14 +50,14 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
     text-align: center;
     margin-bottom: 1rem;
   }
- 
+
   .section-desc {
     font-size: var(--m3-font-body-large);
     color: var(--m3-color-on-surface-variant);
     text-align: center;
     margin-bottom: 2.5rem;
   }
- 
+
   .content-section.blog-section {
     display: flex;
     flex-direction: column;
@@ -54,50 +66,55 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
     max-width: 64rem;
     margin: 0 auto;
   }
- 
+
   .posts-container {
     width: 100%;
   }
- 
-  /* List */
-  .post-list { list-style: none; margin: 0; padding: 0; display: grid; row-gap: 1.25rem; } /* space-y-5 */
-  .post-item { margin: 0; }
- 
-  /* Card */
-   .post-card {
-     display: block;
-     width: 100%;
-     background-color: var(--m3-color-surface);
-     color: var(--m3-color-on-surface);
-     text-decoration: none;
-     border-bottom: 0 !important;
-     border: 2px solid var(--m3-color-outline);
-     border-radius: 16px;
-     padding: 1.5rem;
-     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-     transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease;
-     cursor: pointer;
-   }
-   .post-card:hover {
-     border-color: var(--m3-color-primary);
-     box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-     transform: translateY(-2px);
-   }
-   .post-card:focus-visible {
-     outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 20%, transparent);
-     box-shadow:
-       0 0 0 4px var(--m3-color-primary) inset,
-       0 6px 18px rgba(0,0,0,0.14);
-   }
 
-   /* Pagination placeholder styling */
-   .posts-pagination-placeholder {
-     margin-top: 1.5rem;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-   }
- 
+  /* Card (global) */
+  :global(.post-card) {
+    display: block;
+    width: 100%;
+    background-color: var(--m3-color-surface);
+    color: var(--m3-color-on-surface);
+    text-decoration: none;
+    border-bottom: 0 !important;
+    border: 2px solid var(--m3-color-outline);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease, outline-color .12s ease;
+    cursor: pointer;
+
+    /* Always-visible outline (keeps visual separation even if border blends with background). */
+    outline: 2px solid var(--m3-color-outline-variant);
+    outline-offset: 2px;
+  }
+
+  :global(.post-card):hover {
+    border-color: var(--m3-color-primary);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    outline-color: var(--m3-color-primary);
+  }
+
+  /* Keep strong, accessible focus styles while harmonizing with the new outline */
+  :global(.post-card):focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 20%, transparent);
+    outline-offset: 4px;
+    box-shadow:
+      0 0 0 4px var(--m3-color-primary) inset,
+      0 6px 18px rgba(0,0,0,0.14);
+  }
+
+  /* Pagination placeholder styling */
+  .posts-pagination-placeholder {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   /* Card content */
   .post-card-title {
      margin: 0;
@@ -109,22 +126,23 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
   .post-card:hover .post-card-title {
     color: var(--m3-color-primary);
   }
- 
+
   .post-card-date {
      display: block;
      margin-top: 0.25rem;
      font-size: clamp(1rem, 0.9vw, 1.125rem);
      color: var(--m3-color-on-surface-variant);
    }
- 
-  .post-card-tags {
+
+  /* Tag row (global) - ensures spacing between tags for server-rendered tags */
+  :global(.post-card-tags) {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.5rem; /* user's chosen spacing */
     margin-top: 0.75rem;
   }
- 
-  .tag-chip {
+
+  :global(.tag-chip) {
      display: inline-flex;
      align-items: center;
      border-radius: 999px;
@@ -134,15 +152,17 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
      padding: 0.25rem 0.75rem;
      font-size: clamp(0.9rem, 0.8vw, 1rem);
      font-weight: 500;
-   }
- 
+     /* ensure chips are visually separated even if gap is not applied by older UA */
+     margin-right: 0.5rem;
+  }
+
   .post-card-desc {
      margin-top: 0.75rem;
      color: var(--m3-color-on-surface-variant);
      font-size: clamp(1.1rem, 1vw, 1.25rem);
      line-height: 1.7;
    }
- 
+
   /* Basic line clamp without Tailwind plugin */
   .line-clamp-3 {
     display: -webkit-box;
@@ -150,7 +170,7 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
- 
+
   @media (min-width: 640px) {
     .content-section.blog-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   }
