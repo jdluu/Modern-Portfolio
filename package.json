@@ -6,10 +6,9 @@
     "node": ">=18.14.1"
   },
   "scripts": {
-    "dev": "tinacms dev -c \"astro dev\"",
-    "build": "tinacms build && astro build",
-    "preview": "astro preview",
-    "fetch:schema": "pnpm dlx dotenv-cli -e .env -- node --loader ts-node/esm src/tests/fetch-schema.ts"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -17,16 +16,11 @@
     "@astrojs/solid-js": "^5.1.1",
     "@cosmicjs/sdk": "^1.5.5",
     "astro": "^5.13.6",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
     "solid-devtools": "^0.34.3",
     "solid-js": "^1.9.9",
-    "tinacms": "^2.8.2",
     "vite": "^7.1.5"
   },
   "devDependencies": {
-    "@astrojs/react": "^4.3.1",
-    "@tinacms/cli": "^1.10.2",
     "@types/node": "^24.3.1",
     "marked": "^16.2.1",
     "sharp": "^0.34.3",
