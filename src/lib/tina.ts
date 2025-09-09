@@ -59,6 +59,9 @@ export async function listExperienceCardItems(options?: { first?: number }): Pro
  * Experience collection helper (unchanged behavior)
  */
 export async function fetchExperiences(options?: { first?: number; sort?: string; filter?: any; }): Promise<Experience[]> {
+  // NOTE: This function performs a list query and is available for debugging,
+  // but production pages should prefer single-document queries or the slug-only
+  // list helper below to avoid fetching large document graphs during builds.
   const first = options?.first ?? 200;
   return getCachedOrFetch(`experiences:${first}:${options?.sort ?? ''}`, async () => {
     try {
@@ -77,7 +80,6 @@ export async function fetchExperiences(options?: { first?: number; sort?: string
           showcase: node?.showcase ?? undefined,
           card: node?.card ?? undefined,
           _sys: node?._sys,
-          _values: node?._values,
           raw: node,
         } as Experience;
       });
@@ -90,19 +92,65 @@ export async function fetchExperiences(options?: { first?: number; sort?: string
   });
 }
 
+export async function listExperienceSlugs(options?: { first?: number }): Promise<string[]> {
+  const first = options?.first ?? 500;
+  try {
+    const resp = await client.queries.experienceConnection({ first });
+    const edges = resp?.data?.experienceConnection?.edges ?? [];
+    const nodes = Array.isArray(edges) ? edges.map((e: any) => e?.node).filter((n: any) => n != null) : [];
+
+    const out: string[] = [];
+    for (const node of nodes) {
+      // Exclude drafts from the public slug list
+      if (node?.draft === true) continue;
+      const rel = node?._sys?.relativePath ?? node?._sys?.filename ?? '';
+      const filename = String(rel);
+      const basename = filename.split(/[\\/]/).pop() ?? filename;
+      const slug = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
+      if (slug) out.push(slug);
+    }
+    return out;
+  } catch (err) {
+    console.error('Error listing experience slugs from Tina:', err);
+    return [];
+  }
+}
+
+/**
+ * Fetch a single experience document by slug using Tina's single-document query.
+ * Tries common filename extensions (.md, .mdx) and maps the returned node to the
+ * Experience shape expected by the app. Does NOT scan all experiences as a fallback.
+ */
 export async function fetchExperienceBySlug(slug: string): Promise<Experience | null> {
   if (!slug) return null;
   const normalized = String(slug).toLowerCase();
-  // Reuse the cached fetchExperiences for robustness
-  const all = await fetchExperiences({ first: 500 });
-  const found = all.find((exp: any) => {
-    const rel = exp?._sys?.relativePath ?? exp?._sys?.filename ?? '';
-    const filename = String(rel);
-    const basename = filename.split(/[\\/]/).pop() ?? filename;
-    const s = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
-    return s === normalized;
-  });
-  return found ?? null;
+
+  const tryPaths = [`${normalized}.md`, `${normalized}.mdx`];
+  for (const p of tryPaths) {
+    try {
+      const res = await client.queries.experience({ relativePath: p }).catch(() => null);
+      const node = res?.data?.experience ?? null;
+      if (node) {
+        return {
+          title: node?.title ?? 'Untitled',
+          draft: node?.draft ?? false,
+          company: node?.company ?? undefined,
+          logistics: node?.logistics ?? undefined,
+          technologies: node?.technologies ?? undefined,
+          work: node?.work ?? undefined,
+          showcase: node?.showcase ?? undefined,
+          card: node?.card ?? undefined,
+          _sys: node?._sys,
+          raw: node,
+        } as Experience;
+      }
+    } catch (err) {
+      // continue to next extension
+    }
+  }
+
+  // Not found via single-document query
+  return null;
 }
 
 /**
