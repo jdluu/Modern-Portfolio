@@ -188,5 +188,35 @@ const safeDateDisplay = dateDisplay ?? "";
     text-decoration: underline;
     opacity: 0.9;
   }
+
+  /* Accessibility: reveal overlay for keyboard users (focus-within) */
+  .background:focus-within .project-container {
+    opacity: 1;
+  }
+  /* Keep outline behavior consistent; allow focus outlines if needed */
+  .background:focus {
+    outline: none;
+  }
+
+  /* Touch / no-hover devices: show overlay by default so users don't need to hover */
+  @media (hover: none), (pointer: coarse) {
+    .project-container {
+      opacity: 1;
+    }
+    /* Avoid unexpected scale/transform on tap on touch devices */
+    .background:hover {
+      transform: none;
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .background {
+      transition: none;
+    }
+    .project-container {
+      transition: none;
+    }
+  }
 </style>
 
