@@ -1,50 +1,23 @@
 ---
 import PostsList from "../ui/PostsList";
-import { fetchPosts } from "../../lib/tina";
 import type { PostIndexItem } from "../../types/post";
-
-/**
- * BlogSection
- *
- * - Loads posts via fetchPosts() (centralized Tina helper)
- * - Filters out drafts and sorts by date (newest first)
- * - Passes initialItems to the hydrated PostsList Solid component
- *
- * Pattern follows other sections: thin Astro file + hydrated UI component
- */
-const rawPosts = await fetchPosts({ first: 500 }) ?? [];
-
-const posts: PostIndexItem[] = (rawPosts ?? [])
-  .map((p: any) => {
-    const filename = p._sys?.filename ?? "";
-    const slug = p.slug ?? String(filename).replace(/\.mdx?$/i, "").toLowerCase();
-    return {
-      title: p.title ?? "Untitled",
-      slug,
-      date: p.date ?? null,
-      description: p.description ?? "",
-      tags: Array.isArray(p.tags) ? p.tags.filter((t: any) => typeof t === "string") : [],
-      draft: Boolean(p.draft),
-    } as PostIndexItem;
-  })
-  .filter((p) => !p.draft)
-  .sort((a, b) => {
-    const da = a.date ? new Date(a.date).getTime() : 0;
-    const db = b.date ? new Date(b.date).getTime() : 0;
-    return db - da;
-  });
+ 
+// Accept posts from the parent page (server-side fetched in /pages/blog.astro)
+const { posts } = Astro.props as { posts: PostIndexItem[] };
+ 
 ---
 <section class="content-section blog-section">
   <h2 id="blog" class="page-h2">Blog</h2>
   <p class="section-desc">
     <strong>Quick Projects and Ideas.</strong>
   </p>
-
+ 
   <div class="posts-container">
+    <!-- Pass the server-fetched posts into the Solid island. -->
     <PostsList client:load initialItems={posts} />
   </div>
 </section>
-
+ 
 <style>
   .page-h2 {
     font-family: var(--m3-font-family-display);
@@ -53,14 +26,14 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
     text-align: center;
     margin-bottom: 1rem;
   }
-
+ 
   .section-desc {
     font-size: var(--m3-font-body-large);
     color: var(--m3-color-on-surface-variant);
     text-align: center;
     margin-bottom: 2.5rem;
   }
-
+ 
   .content-section.blog-section {
     display: flex;
     flex-direction: column;
@@ -69,15 +42,15 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
     max-width: 64rem;
     margin: 0 auto;
   }
-
+ 
   .posts-container {
     width: 100%;
   }
-
+ 
   /* List */
   .post-list { list-style: none; margin: 0; padding: 0; display: grid; row-gap: 1.25rem; } /* space-y-5 */
   .post-item { margin: 0; }
-
+ 
   /* Card */
   .post-card {
     display: block;
@@ -102,7 +75,7 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
       0 0 0 4px var(--m3-color-primary) inset,
       0 6px 18px rgba(0,0,0,0.14);
   }
-
+ 
   /* Card content */
   .post-card-title {
      margin: 0;
@@ -114,21 +87,21 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
   .post-card:hover .post-card-title {
     color: var(--m3-color-primary);
   }
-
+ 
   .post-card-date {
      display: block;
      margin-top: 0.25rem;
      font-size: clamp(1rem, 0.9vw, 1.125rem);
      color: var(--m3-color-on-surface-variant);
    }
-
+ 
   .post-card-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 0.75rem;
   }
-
+ 
   .tag-chip {
      display: inline-flex;
      align-items: center;
@@ -140,14 +113,14 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
      font-size: clamp(0.9rem, 0.8vw, 1rem);
      font-weight: 500;
    }
-
+ 
   .post-card-desc {
      margin-top: 0.75rem;
      color: var(--m3-color-on-surface-variant);
      font-size: clamp(1.1rem, 1vw, 1.25rem);
      line-height: 1.7;
    }
-
+ 
   /* Basic line clamp without Tailwind plugin */
   .line-clamp-3 {
     display: -webkit-box;
@@ -155,7 +128,7 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
+ 
   @media (min-width: 640px) {
     .content-section.blog-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   }
