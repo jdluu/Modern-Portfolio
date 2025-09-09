@@ -1,13 +1,20 @@
-/** @jsxImportSource solid-js */
 import { createSignal, onMount, Show } from "solid-js";
 
 const STORAGE_KEY = "darkmode";
 
 const SunIcon = (props: { class?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor"
-       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-       class={props.class}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={props.class}
+  >
     <circle cx="12" cy="12" r="5" />
     <line x1="12" y1="1" x2="12" y2="3" />
     <line x1="12" y1="21" x2="12" y2="23" />
@@ -21,16 +28,27 @@ const SunIcon = (props: { class?: string }) => (
 );
 
 const MoonIcon = (props: { class?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor"
-       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-       class={props.class}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={props.class}
+  >
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </svg>
 );
 
-const isStartViewTransitionAvailable = (doc: any): doc is { startViewTransition: (cb: () => void) => { finished: Promise<void> } } =>
-  typeof doc?.startViewTransition === "function";
+const isStartViewTransitionAvailable = (
+  doc: any
+): doc is {
+  startViewTransition: (cb: () => void) => { finished: Promise<void> };
+} => typeof doc?.startViewTransition === "function";
 
 const ThemeToggleButton = () => {
   const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
@@ -38,11 +56,16 @@ const ThemeToggleButton = () => {
 
   onMount(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    const initial = saved === null
-      ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-      : JSON.parse(saved);
+    const initial =
+      saved === null
+        ? window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        : JSON.parse(saved);
     setDarkMode(initial);
-    document.documentElement.setAttribute("data-theme", initial ? "dark" : "light");
+    document.documentElement.setAttribute(
+      "data-theme",
+      initial ? "dark" : "light"
+    );
   });
 
   const getThumbX = (dark: boolean) => (dark ? 3.8 : 0); // rem units align with CSS
@@ -97,7 +120,10 @@ const ThemeToggleButton = () => {
   };
 
   return (
-    <Show when={isDarkMode() !== null} fallback={<div class="btn-placeholder" />}>
+    <Show
+      when={isDarkMode() !== null}
+      fallback={<div class="btn-placeholder" />}
+    >
       <button
         type="button"
         class="btn"
@@ -105,7 +131,12 @@ const ThemeToggleButton = () => {
         title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggle}
       >
-        <div class="btn__indicator" ref={(el) => { thumbRef = el!; }}>
+        <div
+          class="btn__indicator"
+          ref={(el) => {
+            thumbRef = el!;
+          }}
+        >
           <div class="btn__icon-container">
             <SunIcon class="btn__icon btn__icon--sun" />
             <MoonIcon class="btn__icon btn__icon--moon" />
