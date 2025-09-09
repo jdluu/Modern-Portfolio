@@ -3,21 +3,15 @@ import ExperienceCardList from "../ui/ExperienceCardList";
 import ExperienceCard from "../ui/ExperienceCard.astro";
 import { getCollection } from "astro:content";
   
-/**
- * Loading strategy (centralized):
- * - Use the Astro content collection `experiencecards` at build-time.
- * - Map collection entries into the lightweight ExperienceCardItem shape expected
- *   by the client-side ExperienceCardList island.
- * - Client-side (Solid) will handle sorting and filtering with zero additional API calls.
- */
-const raw = (await getCollection("experiencecards")) ?? [];
-const experiences = (raw ?? []).map((e: any) => {
+const rawCollection = (await getCollection("experiencecards")) ?? [];
+function mapEntryToExperience(item: any) {
   return {
-    title: e.data?.title ?? "Untitled",
-    slug: String(e.id ?? "").toLowerCase(),
-    metadata: e.data?.metadata ?? {},
+    title: item?.data?.title ?? "Untitled",
+    slug: String(item?.id ?? "").toLowerCase(),
+    metadata: item?.data?.metadata ?? {},
   };
-});
+}
+const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 ---
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
