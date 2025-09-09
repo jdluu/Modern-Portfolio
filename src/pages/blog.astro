@@ -1,9 +1,39 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogSection from "../components/sections/BlogSection.astro";
-
+import { fetchPosts } from "../lib/tina";
+import type { PostIndexItem } from "../types/post";
+ 
 const title = "Blog";
+ 
+// Build-time fetch: retrieve up to 50 posts, normalize into PostIndexItem,
+// exclude drafts by default and sort newest-first so the server-rendered HTML
+// shows the most recent posts for SEO.
+const rawPosts = (await fetchPosts({ first: 50 })) ?? [];
+console.info("[Blog] fetchPosts returned:", Array.isArray(rawPosts) ? rawPosts.length : 0, "posts");
+if (Array.isArray(rawPosts) && rawPosts.length > 0) {
+  console.info("[Blog] first slugs:", rawPosts.slice(0, 3).map((p: any) => p?.slug ?? p?._sys?.filename));
+}
+const posts: PostIndexItem[] = (rawPosts ?? [])
+  .map((p: any) => {
+    const filename = p._sys?.filename ?? "";
+    const slug = p.slug ?? String(filename).replace(/\.mdx?$/i, "").toLowerCase();
+    return {
+      title: p.title ?? "Untitled",
+      slug,
+      date: p.date ?? null,
+      description: p.description ?? "",
+      tags: Array.isArray(p.tags) ? p.tags.filter((t: any) => typeof t === "string") : [],
+      draft: Boolean(p.draft),
+    } as PostIndexItem;
+  })
+  .filter((p) => !p.draft)
+  .sort((a, b) => {
+    const da = a.date ? new Date(a.date).getTime() : 0;
+    const db = b.date ? new Date(b.date).getTime() : 0;
+    return db - da;
+  });
 ---
 <BaseLayout title={title}>
-  <BlogSection />
+  <BlogSection posts={posts} />
 </BaseLayout>
