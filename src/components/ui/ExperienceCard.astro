@@ -21,6 +21,9 @@ const endDateStr = metadata.endDate ?? undefined;
 const thumbnailSrc = metadata.thumbnail ?? undefined;
 const summaryRaw = metadata.summary ?? "";
 
+// Ensure client links use extensionless, lowercase slugs to match getStaticPaths()
+const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "").toLowerCase();
+
 // Parse dates (helpers handle invalid values)
 const startDateObj = parseSafeDate(startDateStr);
 const endDateObj = parseSafeDate(endDateStr);
@@ -81,7 +84,7 @@ const safeDateDisplay = dateDisplay ?? "";
         <p class="project-description" aria-hidden="true"></p>
       )}
     </section>
-    <a class="learn-more" href={`/experiences/${slug}`}>Learn More</a>
+    <a class="learn-more" href={`/experiences/${safeSlug}`}>Learn More</a>
   </div>
 </section>
 
