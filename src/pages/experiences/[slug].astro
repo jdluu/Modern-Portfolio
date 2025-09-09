@@ -1,40 +1,35 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import type { Experience } from "../../types/experience";
-import { fetchExperiences } from "../../lib/tina";
+import { getCollection, getEntry } from "astro:content";
 import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "../../lib/utils";
-
-/*
-  Data loading: getStaticPaths
-  - Uses shared fetchExperiences helper
-  - No DEV filesystem fallback here (per refactor requirements)
-*/
+  
+// Generate static paths from collection entries
 export async function getStaticPaths() {
-  const exps = await fetchExperiences({ first: 500 });
-  const paths = exps
-    .filter((exp: any) => !exp?.draft)
-    .map((exp: any) => {
-      // Prefer _sys.relativePath for stable slugs; fall back to filename.
-      const rel = exp._sys?.relativePath ?? exp._sys?.filename ?? "";
-      const filename = String(rel);
-      const basename = filename.split(/[\\/]/).pop() ?? filename;
-      const slug = String(basename).replace(/\.[^/.]+$/i, "").toLowerCase();
-      return {
-        params: { slug },
-        props: { experience: exp },
-      };
-    })
-    .filter((p: any) => !!p.params?.slug);
+  const entries = await getCollection("experiences");
+  const paths = (entries ?? [])
+    .filter((e: any) => e.data?.draft !== true)
+    .map((e: any) => {
+      const rawId = String(e.id ?? "");
+      const clean = rawId.replace(/\.(md|mdx)$/, "").toLowerCase();
+      return { params: { slug: clean } };
+    });
   return paths;
 }
-
-// Props / derived values (receive a full Experience object)
-const { experience } = Astro.props as { experience: Experience };
-
+ 
+// Props / derived values (load the single experience document by slug)
+const slug = (Astro.params as any)?.slug as string;
+const cleanSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "").toLowerCase();
+const entry = await getEntry("experiences", cleanSlug);
+if (!entry) {
+  throw new Error(`Experience not found for slug: ${slug}`);
+}
+const experience = entry.data as any as Experience;
+ 
 // Derived and resilient values
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
-// Extract a string candidate from Tina image field and resolve with shared helper
+// Extract a string candidate from image field and resolve with shared helper
 const companyLogo = resolveAssetUrl(pickImageString(experience?.company?.image)) ?? "/placeholder-logo.png";
 const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
@@ -49,7 +44,7 @@ const achievements = Array.isArray(experience?.work?.achievements)
   : [];
 const showcase = experience?.showcase && experience.showcase.link && experience.showcase.description ? [experience.showcase] : [];
 ---
-
+ 
 <BaseLayout title={title}>
     <main class="experience-page-container">
         <article class="experience-page-div">
@@ -75,7 +70,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                         </div>
                     </div>
                 </section>
-
+ 
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
                     <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
                     {responsibilities.length > 0 ? (
@@ -88,7 +83,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                         <p class="empty-state">No responsibilities available.</p>
                     )}
                 </section>
-
+ 
                 <section id="achievements" aria-labelledby="achievements-title">
                     <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
                     {achievements.length > 0 ? (
@@ -102,7 +97,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                     )}
                 </section>
             </div>
-
+ 
             <!-- Sidebar Column -->
             <aside class="sidebar-content" aria-label="Experience details">
                 <div class="sidebar-card">
@@ -124,13 +119,13 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                         <div class="tech-item">
                             <h4 id="tools-title">Tools & Technologies</h4>
                             <div class="tech-text" aria-labelledby="tools-title">
-                              {(tools || 'N/A').split(',').map(t => t.trim()).filter(Boolean).join(', ')}
+                              {(tools || 'N/A').split(',').map((t: string) => t.trim()).filter(Boolean).join(', ')}
                             </div>
                         </div>
                         <div class="tech-item">
                             <h4 id="skills-title">Skills</h4>
                             <div class="tech-text" aria-labelledby="skills-title">
-                              {(skills || 'N/A').split(',').map(s => s.trim()).filter(Boolean).join(', ')}
+                              {(skills || 'N/A').split(',').map((s: string) => s.trim()).filter(Boolean).join(', ')}
                             </div>
                         </div>
                     </div>
@@ -158,7 +153,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         </article>
     </main>
 </BaseLayout>
-
+ 
 <style>
 /* Purple accent color for both themes */
     :root {
@@ -173,32 +168,32 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         margin: 0 auto;
         padding: var(--spacing-lg);
     }
-
+ 
     .experience-page-div {
         display: grid;
         grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr);
         gap: var(--spacing-xl);
         align-items: start;
     }
-
+ 
     .main-content {
         max-width: 80ch; /* Optimal line-length for reading */
     }
-
+ 
     /* Header Styles */
     .experience-header {
         margin-bottom: var(--spacing-lg);
         padding-bottom: var(--spacing-md);
         border-bottom: none;
     }
-
+ 
     .company-info {
         display: flex;
         align-items: flex-start;
         gap: clamp(1.5rem, 3vw, var(--spacing-lg));
         margin-bottom: var(--spacing-lg);
     }
-
+ 
     .company-logo {
         width: 80px;
         height: 80px;
@@ -209,12 +204,12 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         box-shadow: 0 1px 2px rgba(0,0,0,.06);
         flex-shrink: 0;
     }
-
+ 
     .title-container {
         flex: 1;
         min-width: 0;
     }
-
+ 
     .experience-title {
         font-size: clamp(1.75rem, 5vw, 2.5rem);
         margin: 0;
@@ -224,14 +219,14 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         font-family: var(--font-heading);
         font-weight: 700;
     }
-
+ 
     .company-name {
         font-size: clamp(1.25rem, 3vw, 1.5rem);
         color: var(--text-color);
         margin: 0.5rem 0;
         word-wrap: break-word;
     }
-
+ 
     /* Sidebar Styles */
     .sidebar-card {
         background: var(--m3-color-surface-variant);
@@ -239,20 +234,20 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         border-radius: 12px;
         margin-bottom: var(--spacing-lg);
     }
-
+ 
     .experience-meta {
         display: grid;
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
         align-items: flex-start;
     }
-
+ 
     .meta-item {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
     }
-
+ 
     .meta-label {
         font-size: clamp(1.05rem, 0.8vw, 1.2rem);
         color: var(--text-color);
@@ -260,13 +255,13 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         letter-spacing: 0.05em;
         font-weight: 700;
     }
-
+ 
     .meta-value {
         color: var(--text-color);
         line-height: 1.5;
         font-size: clamp(1.15rem, 0.9vw, 1.4rem);
     }
-
+ 
     /* Section Content */
     .section-content {
         font-size: clamp(1rem, 2.5vw, 1.2rem);
@@ -274,27 +269,27 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         color: var(--text-color);
         margin: var(--spacing-lg) 0;
     }
-
+ 
     .tech-section {
         display: grid;
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
     }
-
+ 
     .tech-item h4 {
         font-size: clamp(1.25rem, 1.1vw, 1.6rem);
         margin-bottom: var(--spacing-sm);
         color: var(--text-color);
         font-family: var(--font-heading);
     }
-
+ 
     .tech-item p {
         color: var(--text-color);
         line-height: 1.6;
         word-wrap: break-word;
         font-size: clamp(1.15rem, 0.9vw, 1.35rem);
     }
-
+ 
     /* Text-based styles for tools and skills lists */
     .tech-text {
         color: var(--text-color);
@@ -302,7 +297,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         word-wrap: break-word;
         font-size: clamp(1.15rem, 0.9vw, 1.35rem);
     }
-
+ 
     /* Lists Styles */
     .responsibilities-list,
     .achievements-list {
@@ -310,7 +305,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         padding: 0;
         margin: var(--spacing-md) 0;
     }
-
+ 
     .responsibilities-list li,
     .achievements-list li {
         position: relative;
@@ -320,21 +315,21 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         line-height: 1.7;
         color: var(--text-color);
     }
-
+ 
     .responsibilities-list li::before {
         content: "•";
         position: absolute;
         left: 0;
         color: var(--accent-color);
     }
-
+ 
     .achievements-list li::before {
         content: "★";
         position: absolute;
         left: 0;
         color: var(--accent-color);
     }
-
+ 
     /* Section Titles */
     .main-content h2 {
         padding-top: var(--spacing-lg);
@@ -345,12 +340,12 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
         font-family: var(--font-heading);
         font-weight: 600;
     }
-
+ 
     .sidebar-card h3 {
         font-size: clamp(1.6rem, 1.4vw, 2.1rem);
         margin-bottom: var(--spacing-md);
     }
-
+ 
     /* Responsive Styles */
 /* Sidebar sticky + TOC */
 .sidebar-content {
@@ -374,22 +369,22 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
             grid-row: 2;
         }
     }
-
+ 
     @media (max-width: 768px) {
         .experience-page-container {
             padding: var(--spacing-md);
         }
-
+ 
         .company-info {
             gap: var(--spacing-md);
         }
     }
-
+ 
     @media (max-width: 480px) {
         .experience-page-container {
             padding: var(--spacing-sm);
         }
-
+ 
 /* Sidebar sticky */
     .sidebar-content {
       position: sticky;
@@ -425,11 +420,11 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
             align-items: center;
             text-align: center;
         }
-
+ 
         .title-container {
             text-align: center;
         }
-
+ 
         .meta-item {
             text-align: center;
         }
