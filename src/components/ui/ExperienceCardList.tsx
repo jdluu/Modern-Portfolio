@@ -262,13 +262,14 @@ export default function ExperienceCardList(props: Props) {
             aria-label="Items per page"
             value={pageSize()}
             onChange={(e: any) => {
-              setPageSize(Number(e.target.value) || 6);
+              setPageSize(Number(e.target.value) || 3);
               setPage(1);
             }}
           >
-            <option value="6">6 / page</option>
-            <option value="12">12 / page</option>
-            <option value="24">24 / page</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="24">24</option>
           </select>
         </div>
 
