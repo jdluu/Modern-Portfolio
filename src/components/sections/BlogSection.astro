@@ -170,7 +170,55 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
+  
+  /* Responsive controls: ensure the two control groups align/stack cleanly on small screens.
+     Default: keep desktop layout where .controls-right is pushed to the end.
+     At <=640px: center and stack both groups (each takes full width). */
+  :global(.posts-controls) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  :global(.posts-controls .controls-left),
+  :global(.posts-controls .controls-right) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  :global(.posts-controls .controls-right) {
+    margin-left: auto;
+  }
+  :global(.posts-controls .btn-reset) {
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--m3-color-outline);
+    background: transparent;
+  }
+  
+  @media (max-width: 640px) {
+    :global(.posts-controls) { justify-content: center; }
+    :global(.posts-controls .controls-right) { margin-left: 0; }
+    :global(.posts-controls .controls-left),
+    :global(.posts-controls .controls-right) {
+      flex: 1 1 100%;
+      justify-content: center;
+    }
+    :global(.posts-controls .controls-left) { margin-bottom: 0.5rem; }
+    :global(.posts-controls .controls-right) { gap: 0.5rem; }
+    :global(.posts-controls .controls-right .btn-reset) { margin-left: 0.25rem; }
+    /* Ensure tag panel (dialog) remains usable on narrow viewports */
+    :global(.posts-controls .controls-right [role="dialog"]) {
+      left: 0 !important;
+      right: auto !important;
+      min-width: 200px !important;
+      max-width: calc(100% - 32px) !important;
+    }
+  }
+  
   @media (min-width: 640px) {
     .content-section.blog-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   }

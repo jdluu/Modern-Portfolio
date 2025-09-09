@@ -197,12 +197,12 @@ export default function PostsList(props: Props) {
     placeholder.appendChild(container);
   });
 
-  return (
-    <section>
+return (
+  <section>
+    <div class="posts-controls experience-controls">
       <div
-        class="posts-controls experience-controls"
+        class="controls-left"
         style={{
-          "margin-bottom": "1rem",
           display: "flex",
           gap: "0.75rem",
           "flex-wrap": "wrap",
@@ -248,200 +248,199 @@ export default function PostsList(props: Props) {
             <option value="20">20</option>
           </select>
         </div>
-
-        <div
-          style={{
-            "margin-left": "auto",
-            display: "flex",
-            gap: "0.5rem",
-            "align-items": "center",
-          }}
-        >
-          <Show when={tags().length > 0}>
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                "align-items": "center",
-              }}
-            >
-              <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>
-                Filter by Tag
-              </label>
-
-              <div style={{ position: "relative" }}>
-                <button
-                  type="button"
-                  onClick={() => setShowTagPanel((s) => !s)}
-                  aria-expanded={showTagPanel()}
-                  style={{
-                    padding: "0.25rem 0.6rem",
-                    "border-radius": "6px",
-                    border: "1px solid var(--m3-color-outline)",
-                    background: "transparent",
-                    display: "inline-flex",
-                    gap: "0.5rem",
-                    "align-items": "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      background: "var(--m3-color-surface-variant)",
-                      "border-radius": "999px",
-                      padding: "0 0.4rem",
-                      "font-weight": "600",
-                    }}
-                  >
-                    {selectedTags().length === 0
-                      ? "All"
-                      : selectedTags().length}
-                  </span>
-                </button>
-
-                <Show when={showTagPanel()}>
-                  <div
-                    ref={(el) => (tagPanelRef = el!)}
-                    role="dialog"
-                    aria-label="Tag selector"
-                    style={{
-                      position: "absolute",
-                      right: "0px",
-                      "z-index": "1000",
-                      "min-width": "220px",
-                      "max-width": "360px",
-                      padding: "0.5rem",
-                      "margin-top": "0.5rem",
-                      "border-radius": "8px",
-                      border: "1px solid var(--m3-color-outline)",
-                      background: "var(--m3-color-surface)",
-                      "box-shadow": "0 6px 18px rgba(0,0,0,0.08)",
-                      "max-height": "260px",
-                      overflow: "auto",
-                    }}
-                  >
-                    <input
-                      placeholder="Search tags"
-                      value={tagFilterTerm()}
-                      onInput={(e) =>
-                        setTagFilterTerm((e.target as HTMLInputElement).value)
-                      }
-                      style={{
-                        width: "100%",
-                        padding: "0.45rem 0.5rem",
-                        "border-radius": "6px",
-                        border: "1px solid var(--m3-color-outline)",
-                        "margin-bottom": "0.5rem",
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        display: "flex",
-                        "flex-direction": "column",
-                        gap: "0.25rem",
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedTags([]);
-                          setPage(1);
-                        }}
-                        style={{
-                          padding: "0.35rem 0.5rem",
-                          "border-radius": "6px",
-                          border: "1px solid var(--m3-color-outline)",
-                          background:
-                            selectedTags().length === 0
-                              ? "var(--m3-color-primary)"
-                              : "transparent",
-                          color:
-                            selectedTags().length === 0
-                              ? "var(--m3-color-on-primary)"
-                              : "inherit",
-                          "text-align": "left",
-                        }}
-                      >
-                        <span style={{ "margin-right": "0.5rem" }}>
-                          {selectedTags().length === 0 ? "✓" : "○"}
-                        </span>
-                        All
-                      </button>
-
-                      <For each={visibleTags()}>
-                        {(t) => {
-                          const isSel = () => selectedTags().includes(t);
-                          return (
-                            <label
-                              style={{
-                                display: "flex",
-                                "align-items": "center",
-                                gap: "0.5rem",
-                                padding: "0.25rem 0.25rem",
-                                "border-radius": "6px",
-                                cursor: "pointer",
-                                background: isSel()
-                                  ? "var(--m3-color-surface-variant)"
-                                  : "transparent",
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSel()}
-                                onChange={() => toggleTag(t)}
-                                aria-checked={isSel()}
-                              />
-                              <span style={{ flex: "1 1 auto" }}>{t}</span>
-                              <span style={{ opacity: isSel() ? 1 : 0.45 }}>
-                                {isSel() ? "✓" : "○"}
-                              </span>
-                            </label>
-                          );
-                        }}
-                      </For>
-                    </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        "justify-content": "flex-end",
-                        "margin-top": "0.5rem",
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setShowTagPanel(false)}
-                        style={{
-                          padding: "0.35rem 0.5rem",
-                          "border-radius": "6px",
-                          border: "1px solid var(--m3-color-outline)",
-                          background: "transparent",
-                        }}
-                      >
-                        Done
-                      </button>
-                    </div>
-                  </div>
-                </Show>
-              </div>
-            </div>
-          </Show>
-
-          <button
-            class="btn-reset"
-            onClick={() => {
-              setSortOrder("newest");
-              setSelectedTags([]);
-              setPageSize(5);
-              setPage(1);
-            }}
-          >
-            Reset
-          </button>
-        </div>
       </div>
 
-      {/* Note: The actual list elements are server-rendered in BlogSection. This island only controls visibility. */}
-    </section>
-  );
+      <div
+        class="controls-right"
+        style={{
+          display: "flex",
+          gap: "0.5rem",
+          "align-items": "center",
+        }}
+      >
+        <Show when={tags().length > 0}>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              "align-items": "center",
+            }}
+          >
+            <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>
+              Filter by Tag
+            </label>
+
+            <div style={{ position: "relative" }}>
+              <button
+                type="button"
+                onClick={() => setShowTagPanel((s) => !s)}
+                aria-expanded={showTagPanel()}
+                style={{
+                  padding: "0.25rem 0.6rem",
+                  "border-radius": "6px",
+                  border: "1px solid var(--m3-color-outline)",
+                  background: "transparent",
+                  display: "inline-flex",
+                  gap: "0.5rem",
+                  "align-items": "center",
+                }}
+              >
+                <span
+                  style={{
+                    background: "var(--m3-color-surface-variant)",
+                    "border-radius": "999px",
+                    padding: "0 0.4rem",
+                    "font-weight": "600",
+                  }}
+                >
+                  {selectedTags().length === 0 ? "All" : selectedTags().length}
+                </span>
+              </button>
+
+              <Show when={showTagPanel()}>
+                <div
+                  ref={(el) => (tagPanelRef = el!)}
+                  role="dialog"
+                  aria-label="Tag selector"
+                  style={{
+                    position: "absolute",
+                    right: "0px",
+                    "z-index": "1000",
+                    "min-width": "220px",
+                    "max-width": "360px",
+                    padding: "0.5rem",
+                    "margin-top": "0.5rem",
+                    "border-radius": "8px",
+                    border: "1px solid var(--m3-color-outline)",
+                    background: "var(--m3-color-surface)",
+                    "box-shadow": "0 6px 18px rgba(0,0,0,0.08)",
+                    "max-height": "260px",
+                    overflow: "auto",
+                  }}
+                >
+                  <input
+                    placeholder="Search tags"
+                    value={tagFilterTerm()}
+                    onInput={(e) =>
+                      setTagFilterTerm((e.target as HTMLInputElement).value)
+                    }
+                    style={{
+                      width: "100%",
+                      padding: "0.45rem 0.5rem",
+                      "border-radius": "6px",
+                      border: "1px solid var(--m3-color-outline)",
+                      "margin-bottom": "0.5rem",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      display: "flex",
+                      "flex-direction": "column",
+                      gap: "0.25rem",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTags([]);
+                        setPage(1);
+                      }}
+                      style={{
+                        padding: "0.35rem 0.5rem",
+                        "border-radius": "6px",
+                        border: "1px solid var(--m3-color-outline)",
+                        background:
+                          selectedTags().length === 0
+                            ? "var(--m3-color-primary)"
+                            : "transparent",
+                        color:
+                          selectedTags().length === 0
+                            ? "var(--m3-color-on-primary)"
+                            : "inherit",
+                        "text-align": "left",
+                      }}
+                    >
+                      <span style={{ "margin-right": "0.5rem" }}>
+                        {selectedTags().length === 0 ? "✓" : "○"}
+                      </span>
+                      All
+                    </button>
+
+                    <For each={visibleTags()}>
+                      {(t) => {
+                        const isSel = () => selectedTags().includes(t);
+                        return (
+                          <label
+                            style={{
+                              display: "flex",
+                              "align-items": "center",
+                              gap: "0.5rem",
+                              padding: "0.25rem 0.25rem",
+                              "border-radius": "6px",
+                              cursor: "pointer",
+                              background: isSel()
+                                ? "var(--m3-color-surface-variant)"
+                                : "transparent",
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSel()}
+                              onChange={() => toggleTag(t)}
+                              aria-checked={isSel()}
+                            />
+                            <span style={{ flex: "1 1 auto" }}>{t}</span>
+                            <span style={{ opacity: isSel() ? 1 : 0.45 }}>
+                              {isSel() ? "✓" : "○"}
+                            </span>
+                          </label>
+                        );
+                      }}
+                    </For>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      "justify-content": "flex-end",
+                      "margin-top": "0.5rem",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setShowTagPanel(false)}
+                      style={{
+                        padding: "0.35rem 0.5rem",
+                        "border-radius": "6px",
+                        border: "1px solid var(--m3-color-outline)",
+                        background: "transparent",
+                      }}
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              </Show>
+            </div>
+          </div>
+        </Show>
+
+        <button
+          class="btn-reset"
+          onClick={() => {
+            setSortOrder("newest");
+            setSelectedTags([]);
+            setPageSize(5);
+            setPage(1);
+          }}
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+
+    {/* Note: The actual list elements are server-rendered in BlogSection. This island only controls visibility. */}
+  </section>
+);
 }
