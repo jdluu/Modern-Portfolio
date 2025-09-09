@@ -1,4 +1,11 @@
-import { createSignal, createMemo, createEffect, For, Show } from "solid-js";
+import {
+  createSignal,
+  createMemo,
+  createEffect,
+  For,
+  Show,
+  onCleanup,
+} from "solid-js";
 import type { PostIndexItem } from "../../types/post";
 
 /**
@@ -23,9 +30,15 @@ export default function PostsList(props: Props) {
 
   // UI state
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
-  const [selectedTag, setSelectedTag] = createSignal<string | null>(null);
+  // support multiple selected tags
+  const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
   const [pageSize, setPageSize] = createSignal<number>(5); // default view shows 5 posts
   const [page, setPage] = createSignal<number>(1);
+
+  // Tag panel UI helpers (searchable, toggleable panel for many tags)
+  const [showTagPanel, setShowTagPanel] = createSignal<boolean>(false);
+  const [tagFilterTerm, setTagFilterTerm] = createSignal<string>("");
+  let tagPanelRef: HTMLElement | undefined;
 
   // Derived unique tags from all posts (for filter UI)
   const tags = createMemo(() => {
@@ -40,16 +53,37 @@ export default function PostsList(props: Props) {
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   });
 
+  const visibleTags = createMemo(() => {
+    const term = tagFilterTerm().trim().toLowerCase();
+    if (!term) return tags();
+    return tags().filter((t) => t.toLowerCase().includes(term));
+  });
+
+  // Close tag panel when clicking outside
+  createEffect(() => {
+    if (typeof document === "undefined") return;
+    if (!showTagPanel()) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (!tagPanelRef) return;
+      if (target && tagPanelRef.contains(target)) return;
+      setShowTagPanel(false);
+    };
+    document.addEventListener("click", handler);
+    onCleanup(() => document.removeEventListener("click", handler));
+  });
+
   // Filter + Sort (pure, in-memory)
   const filteredAndSorted = createMemo(() => {
     let items = all.slice();
     // always exclude drafts (server and UI)
     items = items.filter((i) => !i.draft);
-    // tag filter
-    const tag = selectedTag();
-    if (tag) {
+    // tag filter (support multiple tags — include item if it matches any selected tag)
+    const sel = selectedTags();
+    if (sel.length > 0) {
+      const s = new Set(sel);
       items = items.filter(
-        (i) => Array.isArray(i.tags) && i.tags.includes(tag)
+        (i) => Array.isArray(i.tags) && i.tags.some((t) => s.has(t))
       );
     }
     // sort by date (newest/oldest)
@@ -75,8 +109,13 @@ export default function PostsList(props: Props) {
   });
 
   // Helpers
-  function selectTag(tag: string | null) {
-    setSelectedTag(tag);
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) => {
+      const set = new Set(prev);
+      if (set.has(tag)) set.delete(tag);
+      else set.add(tag);
+      return Array.from(set);
+    });
     setPage(1);
   }
   function changePageSize(n: number) {
@@ -94,11 +133,19 @@ export default function PostsList(props: Props) {
   createEffect(() => {
     if (typeof document === "undefined") return;
     const visibleSlugs = new Set(
-      (pageItems() ?? []).map((p) => String(p.slug ?? "").replace(/\.(md|mdx)$/, ""))
+      (pageItems() ?? []).map((p) =>
+        String(p.slug ?? "").replace(/\.(md|mdx)$/, "")
+      )
     );
-    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".post-list > .post-item"));
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".post-list > .post-item")
+    );
     nodes.forEach((n) => {
-      const slug = String(n.dataset.slug ?? n.querySelector("a")?.getAttribute("href")?.split("/posts/")[1] ?? "").replace(/\.(md|mdx)$/, "");
+      const slug = String(
+        n.dataset.slug ??
+          n.querySelector("a")?.getAttribute("href")?.split("/posts/")[1] ??
+          ""
+      ).replace(/\.(md|mdx)$/, "");
       const show = visibleSlugs.has(slug);
       n.style.display = show ? "" : "none";
       n.setAttribute("aria-hidden", show ? "false" : "true");
@@ -110,51 +157,40 @@ export default function PostsList(props: Props) {
   // pagination/filters via toggling and by mounting controls into the placeholder.
   createEffect(() => {
     if (typeof document === "undefined") return;
-    const placeholder = document.querySelector<HTMLElement>(".posts-pagination-placeholder");
+    const placeholder = document.querySelector<HTMLElement>(
+      ".posts-pagination-placeholder"
+    );
     if (!placeholder) return;
-    // Build controls HTML
+    // Build controls HTML (use theme-aware CSS classes instead of inline colours)
     const prevDisabled = page() <= 1;
     const nextDisabled = page() >= totalPages();
     placeholder.innerHTML = "";
     const container = document.createElement("div");
-    container.className = "posts-pagination-controls";
+    // assign both a generic pagination-controls class and a posts-specific wrapper
+    container.className = "pagination-controls posts-pagination-controls";
     container.style.display = "flex";
     container.style.gap = "1rem";
     container.style.alignItems = "center";
     container.style.justifyContent = "center";
-
+ 
     const prevBtn = document.createElement("button");
     prevBtn.type = "button";
+    prevBtn.className = "pagination-button";
     prevBtn.textContent = "Previous";
     prevBtn.disabled = prevDisabled;
-    prevBtn.style.padding = "0.6rem 0.9rem";
-    prevBtn.style.borderRadius = "8px";
-    prevBtn.style.border = "1px solid var(--m3-color-outline)";
-    prevBtn.style.background = prevDisabled ? "transparent" : "var(--m3-color-primary)";
-    prevBtn.style.color = prevDisabled ? "var(--m3-color-on-surface-variant)" : "var(--m3-color-on-primary)";
-    prevBtn.style.cursor = prevDisabled ? "not-allowed" : "pointer";
     prevBtn.addEventListener("click", () => goPrev());
-
+ 
     const info = document.createElement("div");
-    info.textContent = `Page ${page()} of ${totalPages()} — ${totalItems()} posts`;
-    info.style.padding = "0.45rem 0.9rem";
-    info.style.borderRadius = "999px";
-    info.style.background = "var(--m3-color-surface-variant)";
-    info.style.color = "var(--m3-color-on-surface-variant)";
-    info.style.fontWeight = "600";
-
+    info.className = "pagination-info";
+    info.textContent = `Page ${page()} of ${totalPages()}`;
+ 
     const nextBtn = document.createElement("button");
     nextBtn.type = "button";
+    nextBtn.className = "pagination-button";
     nextBtn.textContent = "Next";
     nextBtn.disabled = nextDisabled;
-    nextBtn.style.padding = "0.6rem 0.9rem";
-    nextBtn.style.borderRadius = "8px";
-    nextBtn.style.border = "1px solid var(--m3-color-outline)";
-    nextBtn.style.background = nextDisabled ? "transparent" : "var(--m3-color-primary)";
-    nextBtn.style.color = nextDisabled ? "var(--m3-color-on-surface-variant)" : "var(--m3-color-on-primary)";
-    nextBtn.style.cursor = nextDisabled ? "not-allowed" : "pointer";
     nextBtn.addEventListener("click", () => goNext());
-
+ 
     container.appendChild(prevBtn);
     container.appendChild(info);
     container.appendChild(nextBtn);
@@ -164,7 +200,7 @@ export default function PostsList(props: Props) {
   return (
     <section>
       <div
-        class="posts-controls"
+        class="posts-controls experience-controls"
         style={{
           "margin-bottom": "1rem",
           display: "flex",
@@ -230,25 +266,182 @@ export default function PostsList(props: Props) {
               }}
             >
               <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>
-                Tag
+                Filter by Tag
               </label>
-              <select
-                value={selectedTag() ?? ""}
-                onChange={(e) =>
-                  selectTag((e.target as HTMLSelectElement).value || null)
-                }
-              >
-                <option value="">All</option>
-                <For each={tags()}>{(t) => <option value={t}>{t}</option>}</For>
-              </select>
+
+              <div style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => setShowTagPanel((s) => !s)}
+                  aria-expanded={showTagPanel()}
+                  style={{
+                    padding: "0.25rem 0.6rem",
+                    "border-radius": "6px",
+                    border: "1px solid var(--m3-color-outline)",
+                    background: "transparent",
+                    display: "inline-flex",
+                    gap: "0.5rem",
+                    "align-items": "center",
+                  }}
+                >
+                  <span
+                    style={{
+                      background: "var(--m3-color-surface-variant)",
+                      "border-radius": "999px",
+                      padding: "0 0.4rem",
+                      "font-weight": "600",
+                    }}
+                  >
+                    {selectedTags().length === 0
+                      ? "All"
+                      : selectedTags().length}
+                  </span>
+                </button>
+
+                <Show when={showTagPanel()}>
+                  <div
+                    ref={(el) => (tagPanelRef = el!)}
+                    role="dialog"
+                    aria-label="Tag selector"
+                    style={{
+                      position: "absolute",
+                      right: "0px",
+                      "z-index": "1000",
+                      "min-width": "220px",
+                      "max-width": "360px",
+                      padding: "0.5rem",
+                      "margin-top": "0.5rem",
+                      "border-radius": "8px",
+                      border: "1px solid var(--m3-color-outline)",
+                      background: "var(--m3-color-surface)",
+                      "box-shadow": "0 6px 18px rgba(0,0,0,0.08)",
+                      "max-height": "260px",
+                      overflow: "auto",
+                    }}
+                  >
+                    <input
+                      placeholder="Search tags"
+                      value={tagFilterTerm()}
+                      onInput={(e) =>
+                        setTagFilterTerm((e.target as HTMLInputElement).value)
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "0.45rem 0.5rem",
+                        "border-radius": "6px",
+                        border: "1px solid var(--m3-color-outline)",
+                        "margin-bottom": "0.5rem",
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        "flex-direction": "column",
+                        gap: "0.25rem",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedTags([]);
+                          setPage(1);
+                        }}
+                        style={{
+                          padding: "0.35rem 0.5rem",
+                          "border-radius": "6px",
+                          border: "1px solid var(--m3-color-outline)",
+                          background:
+                            selectedTags().length === 0
+                              ? "var(--m3-color-primary)"
+                              : "transparent",
+                          color:
+                            selectedTags().length === 0
+                              ? "var(--m3-color-on-primary)"
+                              : "inherit",
+                          "text-align": "left",
+                        }}
+                      >
+                        <span style={{ "margin-right": "0.5rem" }}>
+                          {selectedTags().length === 0 ? "✓" : "○"}
+                        </span>
+                        All
+                      </button>
+
+                      <For each={visibleTags()}>
+                        {(t) => {
+                          const isSel = () => selectedTags().includes(t);
+                          return (
+                            <label
+                              style={{
+                                display: "flex",
+                                "align-items": "center",
+                                gap: "0.5rem",
+                                padding: "0.25rem 0.25rem",
+                                "border-radius": "6px",
+                                cursor: "pointer",
+                                background: isSel()
+                                  ? "var(--m3-color-surface-variant)"
+                                  : "transparent",
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSel()}
+                                onChange={() => toggleTag(t)}
+                                aria-checked={isSel()}
+                              />
+                              <span style={{ flex: "1 1 auto" }}>{t}</span>
+                              <span style={{ opacity: isSel() ? 1 : 0.45 }}>
+                                {isSel() ? "✓" : "○"}
+                              </span>
+                            </label>
+                          );
+                        }}
+                      </For>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        "justify-content": "flex-end",
+                        "margin-top": "0.5rem",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setShowTagPanel(false)}
+                        style={{
+                          padding: "0.35rem 0.5rem",
+                          "border-radius": "6px",
+                          border: "1px solid var(--m3-color-outline)",
+                          background: "transparent",
+                        }}
+                      >
+                        Done
+                      </button>
+                    </div>
+                  </div>
+                </Show>
+              </div>
             </div>
           </Show>
+
+          <button
+            class="btn-reset"
+            onClick={() => {
+              setSortOrder("newest");
+              setSelectedTags([]);
+              setPageSize(5);
+              setPage(1);
+            }}
+          >
+            Reset
+          </button>
         </div>
       </div>
 
-
       {/* Note: The actual list elements are server-rendered in BlogSection. This island only controls visibility. */}
-
     </section>
   );
 }
