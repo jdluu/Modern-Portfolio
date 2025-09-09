@@ -461,3 +461,44 @@ html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
   font-weight: 600;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
+
+/* Generic pagination controls (theme-aware) — shared by PostsList and ExperienceCardList */
+.pagination-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-button {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--m3-color-outline);
+  background: transparent;
+  color: var(--m3-color-on-surface);
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, transform .08s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: translateY(-1px);
+}
+
+.pagination-button:disabled,
+.pagination-button[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: transparent;
+  color: var(--m3-color-on-surface-variant);
+}
+
+.pagination-info {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--m3-color-surface-variant);
+  color: var(--m3-color-on-surface-variant);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
