@@ -2,131 +2,139 @@
 
 /* 1. Color System */
 [data-theme="light"] {
-	--m3-color-primary: #2959aa;
-	--m3-color-on-primary: #e6e7ed;
-	--m3-color-primary-container: #e6e7ed;
-	--m3-color-on-primary-container: #2959aa;
-	--m3-color-secondary: #5a3e8e;
-	--m3-color-on-secondary: #e6e7ed;
-	--m3-color-tertiary: #8c4351;
-	--m3-color-on-tertiary: #e6e7ed;
-	--m3-color-background: #e6e7ed;
-	--m3-color-on-background: #343b58;
-	--m3-color-surface: #e6e7ed;
-	--m3-color-on-surface: #343b58;
-	--m3-color-surface-variant: #e6e7ed;
-	--m3-color-on-surface-variant: #40434f;
-	--m3-color-outline: #6c6e75;
+  --m3-color-primary: #2959aa;
+  --m3-color-on-primary: #e6e7ed;
+  --m3-color-primary-container: #e6e7ed;
+  --m3-color-on-primary-container: #2959aa;
+  --m3-color-secondary: #5a3e8e;
+  --m3-color-on-secondary: #e6e7ed;
+  --m3-color-tertiary: #8c4351;
+  --m3-color-on-tertiary: #e6e7ed;
+  --m3-color-background: #e6e7ed;
+  --m3-color-on-background: #343b58;
+  --m3-color-surface: #e6e7ed;
+  --m3-color-on-surface: #343b58;
+  --m3-color-surface-variant: #e6e7ed;
+  --m3-color-on-surface-variant: #40434f;
+  --m3-color-outline: #6c6e75;
 }
 
 [data-theme="dark"] {
-	--m3-color-primary: #bb9af7;
-	--m3-color-on-primary: #1a1b26;
-	--m3-color-primary-container: #414868;
-	--m3-color-on-primary-container: #bb9af7;
-	--m3-color-secondary: #7aa2f7;
-	--m3-color-on-secondary: #1a1b26;
-	--m3-color-tertiary: #f7768e;
-	--m3-color-on-tertiary: #1a1b26;
-	--m3-color-background: #1a1b26;
-	--m3-color-on-background: #a9b1d6;
-	--m3-color-surface: #1a1b26;
-	--m3-color-on-surface: #c0caf5;
-	--m3-color-surface-variant: #24283b;
-	--m3-color-on-surface-variant: #a9b1d6;
-	--m3-color-outline: #565f89;
+  --m3-color-primary: #bb9af7;
+  --m3-color-on-primary: #1a1b26;
+  --m3-color-primary-container: #414868;
+  --m3-color-on-primary-container: #bb9af7;
+  --m3-color-secondary: #7aa2f7;
+  --m3-color-on-secondary: #1a1b26;
+  --m3-color-tertiary: #f7768e;
+  --m3-color-on-tertiary: #1a1b26;
+  --m3-color-background: #1a1b26;
+  --m3-color-on-background: #a9b1d6;
+  --m3-color-surface: #1a1b26;
+  --m3-color-on-surface: #c0caf5;
+  --m3-color-surface-variant: #24283b;
+  --m3-color-on-surface-variant: #a9b1d6;
+  --m3-color-outline: #565f89;
 }
 
 /* 2. Typography System */
-/* Font-Face Declarations */
-/* LCP/hero subset (weight 800) - preload this in the document head and use font-display: swap
-   This file should be generated with fonttools/pyftsubset to include the exact glyphs used
-   by the hero H1 ("Developer and Designer") to keep it tiny and fast. */
 @font-face {
-  font-family: 'Roboto Flex';
-  src: url('/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2') format('woff2');
+  font-family: "Roboto Flex";
+  src: url("/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
-  /* Limit to Basic Latin for smallest payload; the subset build should include the exact hero glyphs */
   unicode-range: U+0000-00FF;
 }
 
-/* UI subset (weight 500) - small subset used for short UI strings (e.g., "Home") */
 @font-face {
-  font-family: 'Roboto Flex';
-  src: url('/fonts/Roboto_Flex/RobotoFlex-subset-ui-500.woff2') format('woff2');
+  font-family: "Roboto Flex";
+  src: url("/fonts/Roboto_Flex/RobotoFlex-subset-ui-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0000-00FF;
 }
 
-/* Full variable font (kept for desktop/expanded use). We don't preload this — load it with JS after LCP. */
 @font-face {
-  font-family: 'Roboto Flex';
-  src: url('/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2') format('woff2');
+  font-family: "Roboto Flex";
+  src: url("/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2") format("woff2");
   font-weight: 100 1000;
   font-style: normal;
-  /* Use 'optional' for the heavy variable font to avoid FOIT on slow connections */
   font-display: optional;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
 }
 
 :root {
-	/* COLORS */
-	--color: #9176FF;
-	--dark-color: #2b2b2b;
-	--dark-icon-color: #fff;
-	--light-color: #f7f7f7;
-	--light-icon-color: #ffcc00;
+  /* COLORS */
+  --color: #9176ff;
+  --dark-color: #2b2b2b;
+  --dark-icon-color: #fff;
+  --light-color: #f7f7f7;
+  --light-icon-color: #ffcc00;
 
-	/* Font Families */
-	--m3-font-family-display: "Roboto Flex", sans-serif;
-	--m3-font-family-body: "Roboto Flex", sans-serif;
+  /* Font Families */
+  --m3-font-family-display: "Roboto Flex", sans-serif;
+  --m3-font-family-body: "Roboto Flex", sans-serif;
 
-	/* Type Scale */
-	--m3-font-display-large: 5.7rem;
-	--m3-font-display-medium: 4.5rem;
-	--m3-font-display-small: 3.6rem;
-	--m3-font-headline-large: 3.2rem;
-	--m3-font-headline-medium: 2.8rem;
-	--m3-font-headline-small: 2.4rem;
-	--m3-font-title-large: 2.2rem;
-	--m3-font-title-medium: 1.6rem;
-	--m3-font-title-small: 1.4rem;
-	--m3-font-label-large: 1.4rem;
-	--m3-font-label-medium: 1.2rem;
-	--m3-font-label-small: 1.1rem;
-	--m3-font-body-large: 1.6rem;
-	--m3-font-body-medium: 1.4rem;
-	--m3-font-body-small: 1.2rem;
+  /* Type Scale */
+  --m3-font-display-large: 5.7rem;
+  --m3-font-display-medium: 4.5rem;
+  --m3-font-display-small: 3.6rem;
+  --m3-font-headline-large: 3.2rem;
+  --m3-font-headline-medium: 2.8rem;
+  --m3-font-headline-small: 2.4rem;
+  --m3-font-title-large: 2.2rem;
+  --m3-font-title-medium: 1.6rem;
+  --m3-font-title-small: 1.4rem;
+  --m3-font-label-large: 1.4rem;
+  --m3-font-label-medium: 1.2rem;
+  --m3-font-label-small: 1.1rem;
+  --m3-font-body-large: 1.6rem;
+  --m3-font-body-medium: 1.4rem;
+  --m3-font-body-small: 1.2rem;
+
+  --spacing-sm: 0.8rem;
+  --spacing-md: 1.6rem;
+  --spacing-lg: 2.4rem;
+  --spacing-xl: 3.2rem;
+  --nav-height: 64px;
+  --text-color: var(--m3-color-on-surface);
+  --accent-color: var(--m3-color-primary);
+  --font-heading: var(--m3-font-family-display);
 }
 
 /* Global Styles */
 html {
-	font-size: 62.5%; /* 1rem = 10px */
+  font-size: 62.5%; /* 1rem = 10px */
 }
 
 body {
-	background-color: var(--m3-color-background);
-	color: var(--m3-color-on-background);
-	font-family: var(--m3-font-family-body);
-	font-size: var(--m3-font-body-medium);
+  background-color: var(--m3-color-background);
+  color: var(--m3-color-on-background);
+  font-family: var(--m3-font-family-body);
+  font-size: var(--m3-font-body-medium);
 }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+/* Accessibility helper: use .sr-only as the single canonical helper.
+   The previous `.visually-hidden` definition was removed and replaced by
+   `.sr-only` below. Keep .sr-only as the standard helper for screen-reader-only content. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
+/* Small utility animations used by the View Transition API */
 @keyframes clip-in {
   from {
     clip-path: circle(0% at 50% 50%);
@@ -157,348 +165,4 @@ body {
   ::view-transition-new(root) {
     animation: none;
   }
-}
-
-/* Theme Toggle Button */
-/* Toggle root as an accessible button */
-.btn {
-  position: relative;
-  inline-size: 7rem;
-  block-size: 3.6rem;
-  padding: 0.4rem;
-  border: 0;               /* remove default button borders */
-  border-radius: 9999px;
-  background: var(--m3-color-surface);
-  box-shadow:
-    0 1px 2px rgba(0,0,0,0.06),
-    0 2px 8px rgba(0,0,0,0.06) inset;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  transition:
-    background-color 180ms ease,
-    box-shadow 180ms ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Container color shifts slightly per theme for contrast */
-[data-theme="light"] .btn {
-  background: #ffffff;
-}
-[data-theme="dark"] .btn {
-  background: #262a3b;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,0.25),
-    0 0 0 1px rgba(255,255,255,0.04) inset;
-}
-
-/* Hover/active */
-.btn:hover {
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.08),
-    0 0 0 1px rgba(0,0,0,0.04) inset;
-}
-.btn:active .btn__indicator {
-  transform: translateX(0) scale(0.97);
-}
-[data-theme="dark"] .btn:active .btn__indicator {
-  transform: translateX(3.5rem) scale(0.97);
-}
-
-/* Focus-visible ring (M3 style) */
-.btn:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px color-mix(in oklab, var(--m3-color-primary) 35%, transparent),
-    0 0 0 6px color-mix(in oklab, var(--m3-color-primary) 15%, transparent);
-}
-
-/* Thumb */
-.btn__indicator {
-  position: absolute;
-  inset-block-start: 0.4rem;
-  inset-inline-start: 0.4rem;
-  inline-size: 2.8rem;
-  block-size: 2.8rem;
-  border-radius: 50%;
-  background: var(--m3-color-surface-variant);
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.18),
-    0 1px 1px rgba(0,0,0,0.06);
-  transform: translateX(0);
-  transition:
-    transform 260ms cubic-bezier(.2,.8,.2,1),
-    background-color 180ms ease,
-    box-shadow 180ms ease;
-  view-transition-name: theme-thumb;
-  will-change: transform;
-}
-
-html:not([data-theme-vt="driving"]) .btn__indicator {
-  transform: translateX(0);
-}
-html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
-  transform: translateX(3.8rem);
-}
-
-/* Dark-mode thumb position and color */
-[data-theme="dark"] .btn__indicator {
-  background: #11131c;
-  transform: translateX(3.8rem);
-  box-shadow:
-    0 6px 10px rgba(0,0,0,0.35),
-    0 1px 0 rgba(0,0,0,0.3);
-}
-
-/* Icon container cross-fade */
-.btn__icon-container {
-  inline-size: 100%;
-  block-size: 100%;
-  display: grid;
-  place-items: center;
-  position: relative;
-}
-
-.btn__icon {
-  font-size: 1.3rem;
-  position: absolute;
-  transition: opacity 180ms ease, transform 180ms ease;
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-[data-theme="light"] .btn__icon--sun {
-  opacity: 1;
-  transform: scale(1);
-  color: var(--light-icon-color);
-}
-
-[data-theme="dark"] .btn__icon--moon {
-  opacity: 1;
-  transform: scale(1);
-  color: var(--dark-icon-color);
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .btn,
-  .btn__indicator,
-  .btn__icon {
-    transition: none !important;
-  }
-}
-
-/* Placeholder can match new size */
-.btn-placeholder {
-  inline-size: 7rem;
-  block-size: 3.6rem;
-}
-
-
-
-:root {
-  --spacing-sm: 0.8rem;
-  --spacing-md: 1.6rem;
-  --spacing-lg: 2.4rem;
-  --spacing-xl: 3.2rem;
-  --nav-height: 64px;
-  --text-color: var(--m3-color-on-surface);
-  --accent-color: var(--m3-color-primary);
-  --font-heading: var(--m3-font-family-display);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Experience section pagination placement and spacing
-   Pagination controls are portaled from the client island into the
-   server-rendered grid's portal (#experience-pagination-portal).
-   Center the controls beneath the cards with ~16px vertical spacing. */
-.experience-pagination-portal {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.6rem; /* ~16px (root font-size: 62.5% -> 1rem = 10px) */
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 var(--spacing-md);
-}
-
-.experience-pagination-portal .pagination-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-  /* Ensure pagination doesn't stretch the grid */
-  max-width: 1200px;
-  width: 100%;
-}
-
-/* Control pair layout for Experience controls — styled to match blog controls */
-.experience-controls {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--spacing-md);
-  padding: 0 var(--spacing-md);
-}
-
-/* Individual label+control grouping */
-.experience-controls .control-pair {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-/* Visual label styling (associated via for/id in markup) — match blog weight */
-.experience-controls .control-label {
-  color: var(--m3-color-on-surface-variant);
-  font-size: var(--m3-font-label-medium);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-/* Shared select styling used across the site (blog-like) */
-.experience-controls .control-select {
-  padding: 0.5rem 0.75rem;
-  font-size: var(--m3-font-body-medium);
-  border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
-  background: var(--m3-color-surface);
-  color: var(--m3-color-on-surface);
-  min-width: 8rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  transition: border-color .15s ease, box-shadow .15s ease, transform .12s ease;
-}
-.experience-controls .control-select:focus {
-  outline: none;
-  border-color: var(--m3-color-primary);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-
-/* Smaller variant for compact selects (e.g., per-page) */
-.experience-controls .control-select.compact {
-  padding: 0.35rem 0.6rem;
-  min-width: 6.4rem;
-}
-
-/* Reset button matches blog-like pagination buttons */
-.experience-controls .btn-reset {
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--m3-color-on-surface);
-  cursor: pointer;
-  transition: background .12s ease, color .12s ease, transform .08s ease;
-}
-.experience-controls .btn-reset:hover,
-.experience-controls .btn-reset:focus {
-  background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
-  outline: none;
-  transform: translateY(-1px);
-}
-
-/* Pagination controls (portaled) — match blog pagination styling */
-.experience-pagination-portal {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.6rem; /* ~16px */
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 var(--spacing-md);
-}
-.experience-pagination-portal .pagination-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-  max-width: 1200px;
-  width: 100%;
-}
-
-/* Pagination buttons and info pill */
-.experience-pagination-portal .pagination-controls button {
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
-  border: 1px solid var(--m3-color-outline);
-  background: transparent;
-  color: var(--m3-color-on-surface);
-  cursor: pointer;
-  transition: background .12s ease, color .12s ease, transform .08s ease;
-}
-.experience-pagination-portal .pagination-controls button:hover:not(:disabled) {
-  background: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  transform: translateY(-1px);
-}
-.experience-pagination-portal .pagination-controls button:disabled,
-.experience-pagination-portal .pagination-controls button[aria-disabled="true"] {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: transparent;
-  color: var(--m3-color-on-surface-variant);
-}
-
-/* Info pill */
-.experience-pagination-portal .pagination-controls > div {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  background: var(--m3-color-surface-variant);
-  color: var(--m3-color-on-surface-variant);
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-}
-
-/* Generic pagination controls (theme-aware) — shared by PostsList and ExperienceCardList */
-.pagination-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.pagination-button {
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
-  border: 1px solid var(--m3-color-outline);
-  background: transparent;
-  color: var(--m3-color-on-surface);
-  cursor: pointer;
-  transition: background .12s ease, color .12s ease, transform .08s ease;
-}
-
-.pagination-button:hover:not(:disabled) {
-  background: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  transform: translateY(-1px);
-}
-
-.pagination-button:disabled,
-.pagination-button[aria-disabled="true"] {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: transparent;
-  color: var(--m3-color-on-surface-variant);
-}
-
-.pagination-info {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  background: var(--m3-color-surface-variant);
-  color: var(--m3-color-on-surface-variant);
-  font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }

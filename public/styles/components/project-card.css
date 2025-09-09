@@ -1,0 +1,111 @@
+/* ProjectCard component styles (extracted from src/components/ui/ProjectCard.astro)
+   Scoped under .project-card so we don't collide with other card styles. */
+
+/* container */
+.project-card.background {
+  position: relative;
+  border: 1px solid var(--m3-color-outline);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 100%;
+  height: 30rem;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* overlay / content */
+.project-card .project-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--m3-color-surface-variant);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+/* image */
+.project-card .project-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* hover */
+.project-card.background:hover {
+  border-color: var(--m3-color-primary);
+  transform: scale(1.02);
+}
+.project-card.background:hover .project-container {
+  opacity: 1;
+}
+
+/* overlay / content */
+.project-card .more-info {
+  text-align: center;
+  padding: 1.6rem;
+}
+
+/* text */
+.project-card .project-title {
+  font-size: var(--m3-font-title-large);
+  font-family: var(--m3-font-family-display);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: var(--m3-color-on-surface-variant);
+}
+
+.project-card .project-description {
+  font-size: var(--m3-font-body-large);
+  font-family: var(--m3-font-family-body);
+  margin-bottom: 1.6rem;
+  color: var(--m3-color-on-surface-variant);
+}
+
+/* link */
+.project-card .learn-more {
+  font-size: var(--m3-font-label-large);
+  font-family: var(--m3-font-family-body);
+  text-decoration: none;
+  color: var(--m3-color-primary);
+  font-weight: 500;
+}
+
+.project-card .learn-more:hover,
+.project-card .learn-more:focus {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* Ensure keyboard users can reveal overlay */
+.project-card.background:focus-within .project-container {
+  opacity: 1;
+}
+
+/* Avoid unexpected transforms on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .project-card .project-container {
+    opacity: 1;
+  }
+  .project-card.background:hover {
+    transform: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    transition: none;
+  }
+  .project-card .project-container {
+    transition: none;
+  }
+}

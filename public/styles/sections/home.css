@@ -1,0 +1,109 @@
+/* Home / Hero section styles (moved from HomeSection.astro) */
+
+/* Container / hero layout */
+.content-section.homepage-intro-section {
+  padding: 4.8rem 2.4rem;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-h2 { position: absolute; left: -9999px; } /* visually hidden heading for semantics */
+
+.intro-content { z-index: 1; }
+
+/* Hero text visible at initial paint; animate-hero applies decorative entrance */
+.intro-greeting {
+  font-size: var(--m3-font-headline-small);
+  color: var(--m3-color-secondary);
+  opacity: 1;
+  transform: none;
+}
+.animate-hero .intro-greeting {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+.intro-role {
+  font-size: var(--m3-font-display-large);
+  font-family: var(--m3-font-family-display);
+  font-weight: 800;
+  color: var(--m3-color-on-background);
+  margin: 0.8rem 0;
+  opacity: 1;
+  transform: none;
+}
+.animate-hero .intro-role {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fadeInUp 0.7s ease-out 0.4s forwards;
+}
+
+.intro-tagline {
+  font-size: var(--m3-font-headline-small);
+  font-weight: 400;
+  color: var(--m3-color-on-surface-variant);
+  max-width: 45ch;
+  margin: 0 auto 2.4rem;
+  opacity: 1;
+  transform: none;
+}
+.animate-hero .intro-tagline {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+.resume-button-wrapper { opacity: 1; transform: none; }
+.animate-hero .resume-button-wrapper {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: fadeInUp 0.8s ease-out 0.8s forwards;
+}
+
+/* CTA styling */
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 2.4rem;
+  font-size: var(--m3-font-label-large);
+  color: var(--m3-color-on-primary);
+  background-color: var(--m3-color-primary);
+  border: 2px solid transparent;
+  text-decoration: none;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+.resume-link:hover,
+.resume-link:focus-visible {
+  background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
+  color: var(--m3-color-on-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-2px);
+  outline: 2px solid color-mix(in oklab, var(--m3-color-primary) 65%, white 35%);
+  outline-offset: 2px;
+  border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
+}
+.resume-link:visited { color: var(--m3-color-on-primary); }
+.resume-link:active {
+  background-color: color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
+  color: var(--m3-color-on-primary);
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Decorative background shapes & animation */
+.background-shapes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; }
+.shape { position: absolute; border-radius: 50%; background: var(--m3-color-primary); opacity: 0.2; animation: float 20s infinite ease-in-out alternate; }
+.shape1 { width: 200px; height: 200px; top: 10%; left: 10%; animation-duration: 25s; }
+.shape2 { width: 150px; height: 150px; top: 60%; left: 80%; animation-duration: 20s; }
+.shape3 { width: 100px; height: 100px; top: 80%; left: 20%; animation-duration: 30s; }
+@keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-20px) rotate(10deg); } }
