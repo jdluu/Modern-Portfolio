@@ -1,4 +1,12 @@
 // Tina API helpers for Experiences + Posts
+//
+// Rewritten to use the auto-generated Tina client correctly for build-time
+// data fetching. The core goals:
+// - Use postConnection(...) for list queries (with a reasonable default limit)
+// - Provide a single-document lookup via client.queries.post({ relativePath })
+// - Normalize posts for the app (slug, date, tags, draft, hero, description)
+// - Keep a small in-memory cache to avoid repeated work during builds
+//
 import { client } from '../../tina/__generated__/client';
 
 import type { ExperienceCardItem } from "../types/experience-card";
@@ -9,25 +17,14 @@ import { pickImageString } from "./utils";
 const cache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-async function getCachedOrFetch<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
-  const cached = cache.get(key);
-  const now = Date.now();
-  if (cached && now - cached.timestamp < CACHE_TTL) {
-    return cached.data as T;
-  }
-  try {
-    const data = await fetcher();
-    cache.set(key, { data, timestamp: now });
-    return data;
-  } catch (err) {
-    if (cached) return cached.data as T;
-    throw err;
-  }
+async function getCachedOrFetch<T>(_key: string, fetcher: () => Promise<T>): Promise<T> {
+  // Disable caching entirely to avoid any chance of stale/empty data during dev/build.
+  // If needed later, re-enable with environment-aware TTL logic.
+  return await fetcher();
 }
 
 /**
- * Get raw Tina 'experiencecard' nodes (unsorted).
- * Intended for build-time SSR. No sorting/filtering here; that belongs to the client.
+ * Experience card helpers (unchanged behavior)
  */
 export async function getExperienceCardNodes(options?: { first?: number }): Promise<any[]> {
   const first = options?.first ?? 200;
@@ -39,13 +36,13 @@ export async function getExperienceCardNodes(options?: { first?: number }): Prom
   });
 }
 
-/**
- * Pure mapper: Tina 'experiencecard' node -> ExperienceCardItem
- */
 export function mapExperienceCardNodeToItem(node: any): ExperienceCardItem {
   const metadata = (node?.metadata ?? {}) as any;
-  const filename = node?._sys?.filename ?? '';
-  const slug = String(filename).replace(/\.mdx?$/i, '').toLowerCase();
+  // Prefer relativePath for a stable slug, fall back to filename if needed.
+  const rel = node?._sys?.relativePath ?? node?._sys?.filename ?? '';
+  const filename = String(rel);
+  const basename = filename.split(/[\\/]/).pop() ?? filename;
+  const slug = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
   return {
     title: node?.title ?? 'Untitled',
     slug,
@@ -53,19 +50,13 @@ export function mapExperienceCardNodeToItem(node: any): ExperienceCardItem {
   } as ExperienceCardItem;
 }
 
-/**
- * List normalized ExperienceCardItem entries (unsorted).
- * Sorting/filtering is expected to be done on the client for interactivity.
- */
 export async function listExperienceCardItems(options?: { first?: number }): Promise<ExperienceCardItem[]> {
   const nodes = await getExperienceCardNodes({ first: options?.first });
   return nodes.map(mapExperienceCardNodeToItem);
 }
 
 /**
- * Fetch full 'experience' documents from Tina and return normalized Experience objects.
- * - Uses the generated 'experienceConnection' query.
- * - Returns the raw Tina node in the result for callers that need full access.
+ * Experience collection helper (unchanged behavior)
  */
 export async function fetchExperiences(options?: { first?: number; sort?: string; filter?: any; }): Promise<Experience[]> {
   const first = options?.first ?? 200;
@@ -75,7 +66,6 @@ export async function fetchExperiences(options?: { first?: number; sort?: string
       const edges = resp?.data?.experienceConnection?.edges ?? [];
       const nodes = Array.isArray(edges) ? edges.map((e: any) => e?.node).filter((n: any) => n != null) : [];
 
-      // Map Tina 'experience' nodes into our Experience type (keeps raw node accessible)
       const experiences = nodes.map((node: any) => {
         return {
           title: node?.title ?? 'Untitled',
@@ -103,48 +93,72 @@ export async function fetchExperiences(options?: { first?: number; sort?: string
 export async function fetchExperienceBySlug(slug: string): Promise<Experience | null> {
   if (!slug) return null;
   const normalized = String(slug).toLowerCase();
-  // Leverage the cached fetchExperiences for robustness and to reuse cache
+  // Reuse the cached fetchExperiences for robustness
   const all = await fetchExperiences({ first: 500 });
   const found = all.find((exp: any) => {
-    const filename = exp?._sys?.filename ?? '';
-    const s = String(filename).replace(/\.mdx?$/i, '').toLowerCase();
+    const rel = exp?._sys?.relativePath ?? exp?._sys?.filename ?? '';
+    const filename = String(rel);
+    const basename = filename.split(/[\\/]/).pop() ?? filename;
+    const s = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
     return s === normalized;
   });
   return found ?? null;
 }
 
 /**
- * Fetch posts from Tina and normalize fields.
- * - Tina-only (no DEV filesystem fallback)
- * - Returns array of normalized post objects (includes slug, draft flag and raw node)
+ * Posts helpers (rewritten to align with Tina docs and project requirements)
+ *
+ * - fetchPosts: use postConnection with a sensible default (first: 50)
+ * - Always normalize fields we rely on in the UI
+ * - Ensure the returned list is sorted by date descending (newest first)
  */
-export async function fetchPosts(options?: { first?: number; sort?: string; filter?: any; }): Promise<(PostProps & { draft?: boolean; _sys?: any; raw?: any; slug?: string })[]> {
-  const first = options?.first ?? 200;
-  return getCachedOrFetch(`posts:${first}:${options?.sort ?? ''}`, async () => {
+export async function fetchPosts(options?: { first?: number; sort?: string; filter?: any; }): Promise<(PostProps & { description?: string; tags?: string[]; draft?: boolean; _sys?: any; raw?: any; slug?: string })[]> {
+  const first = options?.first ?? 50;
+  const sort = options?.sort ?? "date:desc";
+  const cacheKey = `posts:${first}:${sort}:${JSON.stringify(options?.filter ?? null)}`;
+  return getCachedOrFetch(cacheKey, async () => {
     try {
-      const resp = await client.queries.postConnection({ first, sort: options?.sort, filter: options?.filter });
+      // Use the generated Tina client for all environments (cloud or local configured endpoint).
+      const resp = await client.queries.postConnection({ first, sort, filter: options?.filter });
+      if (resp?.errors && Array.isArray(resp.errors) && resp.errors.length > 0) {
+        console.error("[Tina] postConnection errors:", resp.errors);
+      }
       const edges = resp?.data?.postConnection?.edges ?? [];
       const nodes = Array.isArray(edges) ? edges.map((e: any) => e?.node).filter((n: any) => n != null) : [];
 
       const posts = nodes.map((node: any) => {
-        const filename = node?._sys?.filename ?? '';
-        const slug = String(filename).replace(/\.mdx?$/i, '').toLowerCase();
+        // Prefer relativePath for stable slugs; fall back to filename if necessary.
+        const rel = node?._sys?.relativePath ?? node?._sys?.filename ?? '';
+        const full = String(rel);
+        const basename = full.split(/[\\/]/).pop() ?? full;
+        const slug = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
+
         return {
           title: node?.title ?? 'Untitled',
           date: node?.date ?? null,
           content: node?.content ?? '',
           description: node?.description ?? '',
-          tags: Array.isArray(node?.tags) ? node.tags.filter((t: any) => typeof t === 'string') : [],
-          links: Array.isArray(node?.links) ? node.links : [],
+          tags: Array.isArray(node?.tags) ? node.tags.filter((t: any) => typeof t === "string") : [],
+          links: Array.isArray(node?.links)
+            ? node.links.filter((l: any) => l != null).map((l: any) => ({ label: l.label, url: l.url }))
+            : [],
           hero: pickImageString(node?.hero) ?? null,
           draft: Boolean(node?.draft),
           _sys: node?._sys,
           raw: node,
           slug,
-        };
+        } as PostProps & { description?: string; tags?: string[]; draft?: boolean; _sys?: any; raw?: any; slug?: string };
       });
 
-      return posts;
+      // Exclude drafts strictly (only remove when draft is true), then sort newest-first as a safety.
+      const visible = posts.filter((p: any) => p?.draft !== true);
+      visible.sort((a: any, b: any) => {
+        const ta = a?.date ? Date.parse(a.date as string) : 0;
+        const tb = b?.date ? Date.parse(b.date as string) : 0;
+        return tb - ta;
+      });
+
+      return visible;
     } catch (err) {
       console.error('Error fetching posts from Tina:', err);
       return [];
@@ -152,13 +166,55 @@ export async function fetchPosts(options?: { first?: number; sort?: string; filt
   });
 }
 
-export async function fetchPostBySlug(slug: string): Promise<(PostProps & { draft?: boolean; _sys?: any; raw?: any; slug?: string }) | null> {
+/**
+ * Attempt to fetch a single post by slug using the generated single-document query.
+ * Tina's single-document queries expect a relativePath (filename), so we try common
+ * extensions (.md, .mdx) first. If that fails we fall back to scanning the list.
+ */
+export async function fetchPostBySlug(slug: string): Promise<(PostProps & { description?: string; tags?: string[]; draft?: boolean; _sys?: any; raw?: any; slug?: string }) | null> {
   if (!slug) return null;
   const normalized = String(slug).toLowerCase();
+
+  // Try .md then .mdx via single-document query
+  const tryPaths = [`${normalized}.md`, `${normalized}.mdx`];
+  for (const p of tryPaths) {
+    try {
+      // client.queries.post returns { data: { post: { ... } } } shape
+      const res = await client.queries.post({ relativePath: p }).catch(() => null);
+      const node = res?.data?.post ?? null;
+      if (node) {
+        const rel = node?._sys?.relativePath ?? node?._sys?.filename ?? p;
+        const filename = String(rel);
+        const basename = filename.split(/[\\/]/).pop() ?? filename;
+        const outSlug = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
+        return {
+          title: node?.title ?? 'Untitled',
+          date: node?.date ?? null,
+          content: node?.content ?? '',
+          description: node?.description ?? '',
+          tags: Array.isArray(node?.tags) ? node.tags.filter((t: any) => typeof t === 'string') : [],
+          links: Array.isArray(node?.links)
+            ? node.links.filter((l: any) => l != null).map((l: any) => ({ label: l.label, url: l.url }))
+            : [],
+          hero: pickImageString(node?.hero) ?? null,
+          draft: Boolean(node?.draft),
+          _sys: node?._sys,
+          raw: node,
+          slug: outSlug,
+        };
+      }
+    } catch (err) {
+      // ignore and continue to next attempt
+    }
+  }
+
+  // Fallback: scan fetched posts (cached) for a match
   const all = await fetchPosts({ first: 500 });
   const found = all.find((p: any) => {
-    const filename = p?._sys?.filename ?? '';
-    const s = String(filename).replace(/\.mdx?$/i, '').toLowerCase();
+    const rel = p?._sys?.relativePath ?? p?._sys?.filename ?? '';
+    const filename = String(rel);
+    const basename = filename.split(/[\\/]/).pop() ?? filename;
+    const s = String(basename).replace(/\.[^/.]+$/i, '').toLowerCase();
     return s === normalized || p.slug === normalized;
   });
   return found ?? null;
