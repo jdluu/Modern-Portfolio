@@ -1,9 +1,8 @@
----
+--- 
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, render } from "astro:content";
 import { resolveAssetUrl } from "../../lib/utils";
-import type { PostProps } from "../../types/post";
- 
+
 // Generate static paths from Astro content collection
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -20,13 +19,13 @@ export async function getStaticPaths() {
     .filter(Boolean);
   return paths;
 }
- 
+
 // Props / derived values (receive the content entry as `post`)
 const { post } = Astro.props as { post: any };
- 
+
 // Render the Markdown/MDX body to a Content component
 const { Content } = await render(post);
- 
+
 // Derived and resilient values from frontmatter
 const title = post?.data?.title ?? "Untitled";
 const date = post?.data?.date ?? null;
@@ -38,55 +37,69 @@ const displayDate = date
       day: "numeric",
     })
   : "";
- 
+
 const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
 ---
- 
+
 <BaseLayout title={title}>
-  <article>
+  <article class="post-grid">
     <header class="post-header">
       <h1 class="post-title">{title}</h1>
       {date && <p class="publish-date">{displayDate}</p>}
     </header>
- 
-    <!-- Rendered Markdown content -->
-    <div class="prose"><Content /></div>
 
-    {
-      links && links.length > 0 && (
-        <div class="project-links">
-          <div class="links-container">
-            {links
-              .filter((link: any) => !!link?.url)
-              .map((link: any) => (
-                <a
-                  href={link!.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project-link"
-                >
-                  {link!.label}
-                </a>
-              ))}
-          </div>
-        </div>
-      )
-    }
-
+    {/* Aside: image + links (appears to the right on desktop) */}
     {heroUrl && (
-      <figure class="hero">
-        <button
-          type="button"
-          class="hero-trigger"
-          aria-label="Open image in full size"
-        >
-          <img src={heroUrl} alt={`${title} hero image`} loading="lazy" />
-        </button>
-      </figure>
+      <aside class="aside" aria-labelledby="post-hero">
+        <figure class="hero" id="post-hero">
+          <button
+            type="button"
+            class="hero-trigger"
+            aria-label="Open image in full size"
+            aria-controls="image-lightbox"
+            aria-expanded="false"
+          >
+            <img src={heroUrl} alt={`${title} hero image`} loading="lazy" decoding="async" />
+          </button>
+        </figure>
+
+        {/* aside links moved below both columns to sit under main + hero */}
+      </aside>
     )}
 
+    {/* Main content column */}
+    <main class="main-content">
+      <div class="prose"><Content /></div>
+
+      {/* If there are links but no hero, show links under content (fallback) */}
+      {/* fallback links removed — links will be rendered once beneath both columns */}
+    </main>
+ 
+    { links && links.length > 0 && (
+      <div class="project-links" aria-label="Project links">
+        <div class="links-container">
+          {links
+            .filter((link: any) => !!link?.url)
+            .map((link: any) => (
+              <a
+                href={link!.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-link"
+              >
+                <span class="link-label">{link!.label}</span>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="14" height="14" class="external-icon">
+                  <path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"></path>
+                  <path fill="currentColor" d="M5 5h5V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-5h-2v5H5V5z"></path>
+                </svg>
+              </a>
+            ))}
+        </div>
+      </div>
+    )}
+ 
     {heroUrl && (
-      <div id="image-lightbox" class="lightbox is-hidden" hidden inert data-open="false">
+      <div id="image-lightbox" class="lightbox is-hidden" hidden data-open="false" aria-hidden="true">
         <div class="lightbox-content" role="dialog" aria-modal="true" aria-label={`${title} hero image full size`} tabindex="-1">
           <img src={heroUrl} alt={`${title} hero image full size`} />
           <button class="lightbox-close" type="button" aria-label="Close image" data-close>
@@ -106,8 +119,10 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
         const trigger = document.querySelector('.hero .hero-trigger') as HTMLElement | null;
         if (!lightboxEl || !trigger) return;
   
+        const triggerEl = trigger as HTMLElement; // non-nullable alias for handlers
         const lb = lightboxEl as HTMLElement;
         const content = lb.querySelector('.lightbox-content') as HTMLElement | null;
+        const closeBtn = lb.querySelector('[data-close]') as HTMLElement | null;
         let lastFocusedEl: HTMLElement | null = null;
   
         function open() {
@@ -118,8 +133,10 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
           } catch (err) {}
           lb.removeAttribute('hidden');
           lb.setAttribute('data-open', 'true');
+          lb.setAttribute('aria-hidden', 'false');
           document.body.style.overflow = 'hidden';
-          if (content) content.focus();
+          triggerEl.setAttribute('aria-expanded', 'true');
+          if (closeBtn && typeof (closeBtn as any).focus === 'function') (closeBtn as HTMLElement).focus();
           document.addEventListener('keydown', onDocumentKeydown);
         }
   
@@ -130,7 +147,9 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
           } catch (err) {}
           lb.setAttribute('hidden', '');
           lb.setAttribute('data-open', 'false');
+          lb.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
+          triggerEl.setAttribute('aria-expanded', 'false');
           if (lastFocusedEl) lastFocusedEl.focus();
           document.removeEventListener('keydown', onDocumentKeydown);
         }
@@ -144,13 +163,14 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
           }
         }
   
-        trigger.addEventListener('click', open);
+        triggerEl.addEventListener('click', open);
   
         // Close when clicking outside the image/content or on elements with data-close
-        lb.addEventListener('click', (e) => {
-          if (!(e.target instanceof Element)) return;
-          const isBackdrop = e.target === lb;
-          const isCloseClick = !!e.target.closest('[data-close]');
+        lb.addEventListener('click', (e: Event) => {
+          const evt = e as MouseEvent;
+          if (!(evt.target instanceof Element)) return;
+          const isBackdrop = evt.target === lb;
+          const isCloseClick = !!evt.target.closest('[data-close]');
           if (isBackdrop || isCloseClick) {
             close();
           }
@@ -160,7 +180,7 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
         lb.addEventListener('keydown', (e: KeyboardEvent) => {
           if (e.key === 'Tab' && content && lb.getAttribute('data-open') === 'true') {
             e.preventDefault();
-            content.focus();
+            if (typeof (content as any).focus === 'function') (content as HTMLElement).focus();
           }
         });
       })();
@@ -169,17 +189,35 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
 </BaseLayout>
 
 <style>
-  article {
-    max-width: 80ch;
+  /* Two-column layout where the header spans the full width above the columns.
+     This ensures the aside (hero) sits beside the main text row and aligns to the
+     top of the text area (not the title/date). Links occupy a full-width row below. */
+  article.post-grid {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 4rem 2rem;
     background-color: var(--m3-color-surface);
     color: var(--m3-color-on-surface);
+    display: grid;
+    /* two equal columns (left text, right hero) */
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "header header"
+      "main   aside"
+      "links  links";
+    gap: 2.4rem;
+    align-items: start;
+    box-sizing: border-box;
   }
 
   .post-header {
-    margin-bottom: 2.4rem;
-    text-align: center;
+    /* Place header in its own full-width row above columns so aside cannot affect its height.
+       Visually it's left-aligned to match the main content column. */
+    grid-area: header;
+    margin: 0 0 1.6rem 0;
+    text-align: left;
+    align-self: start;
+    max-width: min(80ch, 100%);
   }
 
   .post-title {
@@ -197,130 +235,38 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
     margin-bottom: 0.8rem;
   }
 
-  .prose {
-    font-family: var(--m3-font-family-body);
-    font-size: var(--m3-font-body-large);
-    line-height: 1.7;
-    color: var(--m3-color-on-surface);
+  .main-content {
+    grid-area: main;
+    min-width: 0;
+    width: 100%;
   }
 
-  .prose :global(h2),
-  .prose :global(h3),
-  .prose :global(h4) {
-    font-family: var(--m3-font-family-display);
-    color: var(--m3-color-on-surface);
-    margin-top: 4rem;
-    margin-bottom: 2rem;
-  }
-
-  .prose :global(h2) {
-    font-size: var(--m3-font-headline-small);
-  }
-
-  .prose :global(h3) {
-    font-size: var(--m3-font-title-large);
-  }
-
-  .prose :global(h4) {
-    font-size: var(--m3-font-title-medium);
-  }
-
-  .prose :global(p) {
-    margin-bottom: 1.6rem;
-  }
-
-  .prose :global(a) {
-    color: var(--m3-color-primary);
-    text-decoration: none;
-    border-bottom: 1px solid var(--m3-color-primary);
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .prose :global(a:hover) {
-    background-color: var(--m3-color-primary);
-    color: var(--m3-color-on-primary);
-  }
-
-  .prose :global(ul),
-  .prose :global(ol) {
-    margin-left: 2rem;
-    margin-bottom: 1.6rem;
-    padding-left: 2rem;
-  }
-
-  .prose :global(li) {
-    margin-bottom: 0.8rem;
-  }
-
-  .prose :global(blockquote) {
-    border-left: 4px solid var(--m3-color-outline);
-    margin-left: 0;
-    padding-left: 1.6rem;
-    font-style: italic;
-    color: var(--m3-color-on-surface-variant);
-  }
-
-  .prose :global(pre) {
-    background-color: var(--m3-color-surface-variant);
-    color: var(--m3-color-on-surface-variant);
-    padding: 1.6rem;
-    border-radius: 8px;
-    overflow-x: auto;
-  }
-
-  .prose :global(code) {
-    font-family: monospace;
-    background-color: var(--m3-color-surface-variant);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-  }
-
-  .prose :global(pre) :global(code) {
-    background-color: transparent;
-    padding: 0;
-  }
-
-  .project-links {
-    margin-top: 4rem;
-    border-top: 1px solid var(--m3-color-outline);
-    padding-top: 2.4rem;
-  }
-
-  .links-container {
+  .aside {
+    grid-area: aside;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1.6rem;
-    justify-content: center;
-  }
-
-  .project-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 2.4rem;
-    border-radius: 2rem;
-    font-family: var(--m3-font-family-body);
-    font-size: var(--m3-font-label-large);
-    font-weight: 500;
-    text-decoration: none;
-    background-color: var(--m3-color-primary-container);
-    color: var(--m3-color-on-primary-container);
-    transition: background-color 0.3s;
-  }
-
-  .project-link:hover {
-    background-color: var(--m3-color-primary);
-    color: var(--m3-color-on-primary);
+    align-self: start; /* keep aside aligned to the top of the main column */
+    width: 100%; /* fill the aside column */
   }
 
   .hero {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    max-height: min(60vh, 480px); /* allow the hero to be visually prominent while staying constrained */
     background-color: var(--m3-color-surface-variant);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    margin: 2rem 0 0 0;
-    border: 1px solid var(--m3-color-outline-variant);
+    margin: 0;
+    border: 1px solid color-mix(in oklab, var(--m3-color-outline) 55%, transparent);
+    display: block;
+  }
+
+  /* Ensure the image fills the hero box without stretching the layout */
+  .hero-trigger img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .hero-trigger {
@@ -336,10 +282,121 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
     height: 100%;
     object-fit: cover;
     transition: transform .4s ease;
+    display: block;
   }
 
   .hero-trigger:hover img {
     transform: scale(1.02);
+  }
+
+  .project-links {
+    grid-area: links;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--m3-color-outline);
+    display: flex;
+    justify-content: center;
+  }
+
+  .project-links .links-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: min(80ch, 900px);
+    width: 100%;
+    padding-inline: 0.8rem;
+    box-sizing: border-box;
+  }
+
+  .aside-links {
+    margin-top: 0;
+  }
+
+  .links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    font-family: var(--m3-font-family-body);
+    font-size: var(--m3-font-label-large);
+    font-weight: 500;
+    text-decoration: none;
+    background-color: var(--m3-color-primary-container);
+    color: var(--m3-color-on-primary-container);
+    transition: background-color 0.18s, transform 0.12s;
+    border: 1px solid transparent;
+  }
+
+  .project-link .link-label {
+    display: inline-block;
+  }
+
+  .project-link .external-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: currentColor;
+    flex: 0 0 auto;
+  }
+
+  .project-link:hover {
+    background-color: var(--m3-color-primary);
+    color: var(--m3-color-on-primary);
+    transform: translateY(-2px);
+  }
+
+  .project-link:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px color-mix(in oklab, var(--m3-color-primary) 25%, transparent),
+      0 0 0 6px color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
+    border-color: color-mix(in oklab, var(--m3-color-primary) 40%, transparent);
+  }
+
+  .prose {
+    font-family: var(--m3-font-family-body);
+    font-size: var(--m3-font-body-large);
+    line-height: 1.7;
+    color: var(--m3-color-on-surface);
+    min-width: 0;
+    max-width: none; /* allow the prose to fill the left 50% column */
+    width: 100%;
+    margin: 0; /* ensure left alignment within the left column */
+  }
+
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    font-family: var(--m3-font-family-display);
+    color: var(--m3-color-on-surface);
+    margin-top: 2.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.6rem;
+  }
+
+  .prose :global(a) {
+    color: var(--m3-color-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.18s, color 0.18s, border-color 0.18s;
+  }
+
+  .prose :global(a:hover) {
+    background-color: var(--m3-color-primary);
+    color: var(--m3-color-on-primary);
   }
 
   /* Lightbox */
@@ -380,7 +437,7 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
     width: 40px;
     height: 40px;
     border-radius: 999px;
-    border: 1px solid var(--m3-color-outline-variant);
+    border: 1px solid var(--m3-color-outline);
     background-color: var(--m3-color-surface-variant);
     color: var(--m3-color-on-surface-variant);
     display: inline-flex;
@@ -393,12 +450,64 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
     color: var(--m3-color-on-primary);
   }
 
-  @media (max-width: 768px) {
+  /* Mobile - single column, stacking order: Header → Image → Links → Text */
+  @media (max-width: 900px) {
+    article.post-grid {
+      grid-template-columns: 1fr;
+      padding: 2.4rem 1.6rem;
+      /* Mobile stacking order: Header → Image (aside) → Links → Text (main) */
+      grid-template-areas:
+        "header"
+        "aside"
+        "links"
+        "main";
+    }
+  
+    .post-header {
+      grid-area: header;
+      text-align: center;
+    }
+  
+    /* Restore normal flow for mobile */
+    .aside {
+      position: static;
+      width: auto;
+      grid-area: aside;
+      margin: 0 0 1.6rem 0;
+      align-self: stretch;
+    }
+  
+    .main-content {
+      grid-area: main;
+      margin-right: 0; /* remove desktop reserved space */
+    }
+  
+    .project-links {
+      grid-area: links;
+      margin-top: 1.6rem;
+    }
+  
+    .links-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+  
+    .project-link {
+      padding: 0.8rem 1.2rem;
+      border-radius: 999px;
+    }
+  
     .post-title {
       font-size: var(--m3-font-headline-medium);
     }
-    article {
-      padding: 2.4rem 1.6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-trigger img,
+    .project-link {
+      transition: none !important;
     }
   }
 </style>
