@@ -14,8 +14,11 @@ export async function getStaticPaths() {
   const paths = posts
     .filter((p: any) => !p?.draft)
     .map((p: any) => {
-      const filename = p._sys?.filename ?? "";
-      const slug = String(filename).replace(/\.mdx?$/i, "").toLowerCase();
+      // Prefer _sys.relativePath for stable slugs; fall back to filename.
+      const rel = p._sys?.relativePath ?? p._sys?.filename ?? "";
+      const filename = String(rel);
+      const basename = filename.split(/[\\/]/).pop() ?? filename;
+      const slug = String(basename).replace(/\.[^/.]+$/i, "").toLowerCase();
       return {
         params: { slug },
         props: { post: p },

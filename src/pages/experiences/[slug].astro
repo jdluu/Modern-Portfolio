@@ -14,8 +14,11 @@ export async function getStaticPaths() {
   const paths = exps
     .filter((exp: any) => !exp?.draft)
     .map((exp: any) => {
-      const filename = exp._sys?.filename ?? "";
-      const slug = String(filename).replace(/\.mdx?$/i, "").toLowerCase();
+      // Prefer _sys.relativePath for stable slugs; fall back to filename.
+      const rel = exp._sys?.relativePath ?? exp._sys?.filename ?? "";
+      const filename = String(rel);
+      const basename = filename.split(/[\\/]/).pop() ?? filename;
+      const slug = String(basename).replace(/\.[^/.]+$/i, "").toLowerCase();
       return {
         params: { slug },
         props: { experience: exp },
