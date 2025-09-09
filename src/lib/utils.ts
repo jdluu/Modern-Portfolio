@@ -1,28 +1,38 @@
 // Misc helpers used across the site for safe frontmatter handling and asset resolution.
-//
-// These are intentionally simple, defensive helpers that tolerate values coming
-// from different loaders (Tina-generated objects, raw frontmatter strings, Date
-// objects, etc.). They are written to be safe for build-time usage.
-export function resolveAssetUrl(v: any): string | null {
-  if (!v && v !== 0) return null;
-  if (typeof v === "string") return v;
-  // Tina-compatible image object: { src: "/path", filename: "...", ... }
-  if (typeof v === "object" && v !== null) {
+// Designed to be small, defensive, and self-documenting.
+
+type ImageLike = { src?: string; url?: string; path?: string; filename?: string } & Record<string, unknown>;
+
+function isImageLike(value: unknown): value is ImageLike {
+  return typeof value === "object" && value !== null && (
+    "src" in (value as object) ||
+    "url" in (value as object) ||
+    "path" in (value as object) ||
+    "filename" in (value as object)
+  );
+}
+
+// Extract a canonical image/path string from either a string or a Tina-like image object.
+function getImagePathOrNull(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "string") return value;
+  if (isImageLike(value)) {
+    const v = value as ImageLike;
     return String(v.src ?? v.url ?? v.path ?? v.filename ?? null);
   }
   return null;
 }
 
-export function pickImageString(field: any): string | null {
-  // Accept string or Tina-like image object
-  if (!field && field !== 0) return null;
-  if (typeof field === "string") return field;
-  if (typeof field === "object" && field !== null) {
-    return String(field.src ?? field.url ?? field.path ?? field.filename ?? null);
-  }
-  return null;
+// Backwards-compatible exports kept with original names.
+export function resolveAssetUrl(v: any): string | null {
+  return getImagePathOrNull(v);
 }
 
+export function pickImageString(field: any): string | null {
+  return getImagePathOrNull(field);
+}
+
+// Sanitize values for UI consumption: strings, arrays -> comma list, others -> trimmed string
 export function sanitizeStringForUI(v: any): string {
   if (v == null) return "";
   if (typeof v === "string") return v.trim();
@@ -39,7 +49,7 @@ export function sanitizeStringForUI(v: any): string {
  * - Accepts string, number, or Date and returns a Date object or null on failure.
  */
 export function parseSafeDate(input: any): Date | null {
-  if (!input && input !== 0) return null;
+  if (input === null || input === undefined) return null;
   if (input instanceof Date && !isNaN(input.getTime())) return input;
   if (typeof input === "number") {
     const d = new Date(input);
