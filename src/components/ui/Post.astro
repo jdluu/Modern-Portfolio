@@ -1,0 +1,40 @@
+---
+import type { PostIndexItem } from "../../types/post";
+
+export interface Props {
+  item: PostIndexItem;
+}
+
+const { item } = Astro.props as Props;
+const title = item?.title ?? "Untitled";
+const slug = String(item?.slug ?? "").replace(/\.(md|mdx)$/, "");
+const date = item?.date ? new Date(item.date as any) : null;
+const dateDisplay = date && !isNaN(date.getTime()) ? date.toLocaleDateString() : "";
+const tags = Array.isArray(item?.tags) ? (item.tags as string[]) : [];
+const description = item?.description ?? "";
+---
+<li class="post-item" data-slug={slug}>
+  <a href={`/posts/${slug}`} class="post-card" aria-labelledby={`post-${slug}-title`}>
+    <h2 id={`post-${slug}-title`} class="post-card-title">{title}</h2>
+
+    {dateDisplay ? (
+      <time class="post-card-date" datetime={date ? date.toISOString() : undefined}>
+        {dateDisplay}
+      </time>
+    ) : null}
+
+    {tags && tags.length > 0 ? (
+      <div class="post-card-tags" aria-hidden="false">
+        {tags.slice(0, 6).map((tag) => (
+          <span class="tag-chip">#{tag}</span>
+        ))}
+      </div>
+    ) : null}
+
+    {description ? (
+      <p class="post-card-desc line-clamp-3">
+        {description}
+      </p>
+    ) : null}
+  </a>
+</li>

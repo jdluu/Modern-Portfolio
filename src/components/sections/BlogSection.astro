@@ -1,5 +1,6 @@
 ---
 import PostsList from "../ui/PostsList";
+import Post from "../ui/Post.astro";
 import type { PostIndexItem } from "../../types/post";
  
 // Accept posts from the parent page (server-side fetched in /pages/blog.astro)
@@ -13,8 +14,19 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
   </p>
  
   <div class="posts-container">
-    <!-- Pass the server-fetched posts into the Solid island. -->
+    <!-- Client island: controls, filtering, and pagination only -->
     <PostsList client:load initialItems={posts} />
+    <!-- Server-rendered list for SEO & initial markup. Each Post renders an <li data-slug="...">.
+         The client island controls visibility of these server nodes to implement pagination/filters. -->
+    <ul class="post-list" role="list" aria-hidden="false">
+      {posts.map((p) => (
+        <Post item={p} />
+      ))}
+    </ul>
+
+    <!-- Pagination placeholder: the PostsList island will render interactive pagination
+         controls here so they appear visually below the posts list. -->
+    <div class="posts-pagination-placeholder" aria-hidden="false"></div>
   </div>
 </section>
  
@@ -52,29 +64,39 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
   .post-item { margin: 0; }
  
   /* Card */
-  .post-card {
-    display: block;
-    width: 100%;
-    background-color: var(--m3-color-surface);
-    color: var(--m3-color-on-surface);
-    text-decoration: none;
-    border-bottom: 0 !important;
-    border: 2px solid var(--m3-color-outline);
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-    transition: border-color .2s ease, box-shadow .2s ease, color .2s ease;
-  }
-  .post-card:hover {
-    border-color: var(--m3-color-primary);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  }
-  .post-card:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 4px var(--m3-color-primary) inset,
-      0 6px 18px rgba(0,0,0,0.14);
-  }
+   .post-card {
+     display: block;
+     width: 100%;
+     background-color: var(--m3-color-surface);
+     color: var(--m3-color-on-surface);
+     text-decoration: none;
+     border-bottom: 0 !important;
+     border: 2px solid var(--m3-color-outline);
+     border-radius: 16px;
+     padding: 1.5rem;
+     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+     transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease;
+     cursor: pointer;
+   }
+   .post-card:hover {
+     border-color: var(--m3-color-primary);
+     box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+     transform: translateY(-2px);
+   }
+   .post-card:focus-visible {
+     outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 20%, transparent);
+     box-shadow:
+       0 0 0 4px var(--m3-color-primary) inset,
+       0 6px 18px rgba(0,0,0,0.14);
+   }
+
+   /* Pagination placeholder styling */
+   .posts-pagination-placeholder {
+     margin-top: 1.5rem;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+   }
  
   /* Card content */
   .post-card-title {

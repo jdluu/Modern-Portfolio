@@ -1,7 +1,6 @@
-/** @jsxImportSource solid-js */
-import { createSignal, createMemo, For, Show } from "solid-js";
+import { createSignal, createMemo, createEffect, For, Show } from "solid-js";
 import type { PostIndexItem } from "../../types/post";
- 
+
 /**
  * PostsList (Solid.js) — interactive island
  *
@@ -18,16 +17,16 @@ import type { PostIndexItem } from "../../types/post";
 type Props = {
   initialItems: PostIndexItem[];
 };
- 
+
 export default function PostsList(props: Props) {
   const all = props.initialItems ?? [];
- 
+
   // UI state
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
   const [selectedTag, setSelectedTag] = createSignal<string | null>(null);
   const [pageSize, setPageSize] = createSignal<number>(5); // default view shows 5 posts
   const [page, setPage] = createSignal<number>(1);
- 
+
   // Derived unique tags from all posts (for filter UI)
   const tags = createMemo(() => {
     const s = new Set<string>();
@@ -40,7 +39,7 @@ export default function PostsList(props: Props) {
     }
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   });
- 
+
   // Filter + Sort (pure, in-memory)
   const filteredAndSorted = createMemo(() => {
     let items = all.slice();
@@ -49,7 +48,9 @@ export default function PostsList(props: Props) {
     // tag filter
     const tag = selectedTag();
     if (tag) {
-      items = items.filter((i) => Array.isArray(i.tags) && i.tags.includes(tag));
+      items = items.filter(
+        (i) => Array.isArray(i.tags) && i.tags.includes(tag)
+      );
     }
     // sort by date (newest/oldest)
     items.sort((a, b) => {
@@ -59,10 +60,12 @@ export default function PostsList(props: Props) {
     });
     return items;
   });
- 
+
   const totalItems = createMemo(() => filteredAndSorted().length);
-  const totalPages = createMemo(() => Math.max(1, Math.ceil(totalItems() / pageSize())));
- 
+  const totalPages = createMemo(() =>
+    Math.max(1, Math.ceil(totalItems() / pageSize()))
+  );
+
   // Current page items
   const pageItems = createMemo(() => {
     const pg = Math.max(1, Math.min(page(), totalPages()));
@@ -70,7 +73,7 @@ export default function PostsList(props: Props) {
     const start = (pg - 1) * size;
     return filteredAndSorted().slice(start, start + size);
   });
- 
+
   // Helpers
   function selectTag(tag: string | null) {
     setSelectedTag(tag);
@@ -86,87 +89,166 @@ export default function PostsList(props: Props) {
   function goNext() {
     setPage(Math.min(totalPages(), page() + 1));
   }
- 
+
+  // When pageItems (server list window) changes, toggle visibility of server-rendered .post-item nodes.
+  createEffect(() => {
+    if (typeof document === "undefined") return;
+    const visibleSlugs = new Set(
+      (pageItems() ?? []).map((p) => String(p.slug ?? "").replace(/\.(md|mdx)$/, ""))
+    );
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".post-list > .post-item"));
+    nodes.forEach((n) => {
+      const slug = String(n.dataset.slug ?? n.querySelector("a")?.getAttribute("href")?.split("/posts/")[1] ?? "").replace(/\.(md|mdx)$/, "");
+      const show = visibleSlugs.has(slug);
+      n.style.display = show ? "" : "none";
+      n.setAttribute("aria-hidden", show ? "false" : "true");
+    });
+  });
+
+  // Render pagination controls into the server-rendered placeholder below the posts.
+  // This keeps the server list as the canonical DOM for SEO while the island controls
+  // pagination/filters via toggling and by mounting controls into the placeholder.
+  createEffect(() => {
+    if (typeof document === "undefined") return;
+    const placeholder = document.querySelector<HTMLElement>(".posts-pagination-placeholder");
+    if (!placeholder) return;
+    // Build controls HTML
+    const prevDisabled = page() <= 1;
+    const nextDisabled = page() >= totalPages();
+    placeholder.innerHTML = "";
+    const container = document.createElement("div");
+    container.className = "posts-pagination-controls";
+    container.style.display = "flex";
+    container.style.gap = "1rem";
+    container.style.alignItems = "center";
+    container.style.justifyContent = "center";
+
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.textContent = "Previous";
+    prevBtn.disabled = prevDisabled;
+    prevBtn.style.padding = "0.6rem 0.9rem";
+    prevBtn.style.borderRadius = "8px";
+    prevBtn.style.border = "1px solid var(--m3-color-outline)";
+    prevBtn.style.background = prevDisabled ? "transparent" : "var(--m3-color-primary)";
+    prevBtn.style.color = prevDisabled ? "var(--m3-color-on-surface-variant)" : "var(--m3-color-on-primary)";
+    prevBtn.style.cursor = prevDisabled ? "not-allowed" : "pointer";
+    prevBtn.addEventListener("click", () => goPrev());
+
+    const info = document.createElement("div");
+    info.textContent = `Page ${page()} of ${totalPages()} — ${totalItems()} posts`;
+    info.style.padding = "0.45rem 0.9rem";
+    info.style.borderRadius = "999px";
+    info.style.background = "var(--m3-color-surface-variant)";
+    info.style.color = "var(--m3-color-on-surface-variant)";
+    info.style.fontWeight = "600";
+
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = nextDisabled;
+    nextBtn.style.padding = "0.6rem 0.9rem";
+    nextBtn.style.borderRadius = "8px";
+    nextBtn.style.border = "1px solid var(--m3-color-outline)";
+    nextBtn.style.background = nextDisabled ? "transparent" : "var(--m3-color-primary)";
+    nextBtn.style.color = nextDisabled ? "var(--m3-color-on-surface-variant)" : "var(--m3-color-on-primary)";
+    nextBtn.style.cursor = nextDisabled ? "not-allowed" : "pointer";
+    nextBtn.addEventListener("click", () => goNext());
+
+    container.appendChild(prevBtn);
+    container.appendChild(info);
+    container.appendChild(nextBtn);
+    placeholder.appendChild(container);
+  });
+
   return (
     <section>
-      <div class="posts-controls" style={{ "margin-bottom": "1rem", display: "flex", "gap": "0.75rem", "flex-wrap": "wrap", "align-items": "center" }}>
+      <div
+        class="posts-controls"
+        style={{
+          "margin-bottom": "1rem",
+          display: "flex",
+          gap: "0.75rem",
+          "flex-wrap": "wrap",
+          "align-items": "center",
+        }}
+      >
         <div>
-          <label for="sort" style={{ "margin-right": "0.5rem", "font-weight": "600" }}>Sort</label>
-          <select id="sort" value={sortOrder()} onChange={(e) => { setSortOrder((e.target as HTMLSelectElement).value as any); setPage(1); }}>
+          <label
+            for="sort"
+            style={{ "margin-right": "0.5rem", "font-weight": "600" }}
+          >
+            Sort
+          </label>
+          <select
+            id="sort"
+            value={sortOrder()}
+            onChange={(e) => {
+              setSortOrder((e.target as HTMLSelectElement).value as any);
+              setPage(1);
+            }}
+          >
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
           </select>
         </div>
- 
+
         <div>
-          <label for="pageSize" style={{ "margin-right": "0.5rem", "font-weight": "600" }}>Per page</label>
-          <select id="pageSize" value={String(pageSize())} onChange={(e) => changePageSize(Number((e.target as HTMLSelectElement).value))}>
+          <label
+            for="pageSize"
+            style={{ "margin-right": "0.5rem", "font-weight": "600" }}
+          >
+            Per page
+          </label>
+          <select
+            id="pageSize"
+            value={String(pageSize())}
+            onChange={(e) =>
+              changePageSize(Number((e.target as HTMLSelectElement).value))
+            }
+          >
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
           </select>
         </div>
- 
-        {/* drafts are permanently excluded; draft toggle removed */}
- 
-        <div style={{ "margin-left": "auto", display: "flex", gap: "0.5rem", "align-items": "center" }}>
+
+        <div
+          style={{
+            "margin-left": "auto",
+            display: "flex",
+            gap: "0.5rem",
+            "align-items": "center",
+          }}
+        >
           <Show when={tags().length > 0}>
-            <div style={{ display: "flex", gap: "0.5rem", "align-items": "center" }}>
-              <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>Tag</label>
-              <select value={selectedTag() ?? ""} onChange={(e) => selectTag((e.target as HTMLSelectElement).value || null)}>
+            <div
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                "align-items": "center",
+              }}
+            >
+              <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>
+                Tag
+              </label>
+              <select
+                value={selectedTag() ?? ""}
+                onChange={(e) =>
+                  selectTag((e.target as HTMLSelectElement).value || null)
+                }
+              >
                 <option value="">All</option>
-                <For each={tags()}>
-                  {(t) => <option value={t}>{t}</option>}
-                </For>
+                <For each={tags()}>{(t) => <option value={t}>{t}</option>}</For>
               </select>
             </div>
           </Show>
         </div>
       </div>
- 
-      <Show when={totalItems() === 0}>
-        <p class="empty-text">No posts match your filters.</p>
-      </Show>
- 
-      <Show when={totalItems() > 0}>
-        <ul class="post-list" role="list">
-          <For each={pageItems()}>
-            {(post) => (
-              <li class="post-item">
-                <a href={`/posts/${post.slug}`} class="post-card">
-                  <h2 class="post-card-title">{post.title}</h2>
- 
-                  {post.date && (
-                    <time class="post-card-date">
-                      {new Date(post.date).toLocaleDateString()}
-                    </time>
-                  )}
- 
-                  {post.tags && post.tags.length > 0 && (
-                    <div class="post-card-tags" aria-hidden="false">
-                      {post.tags.slice(0, 6).map((tag) => (
-                        <span class="tag-chip">#{tag}</span>
-                      ))}
-                    </div>
-                  )}
- 
-                  {post.description && post.description.length > 0 && (
-                    <p class="post-card-desc line-clamp-3">{post.description}</p>
-                  )}
-                </a>
-              </li>
-            )}
-          </For>
-        </ul>
- 
-        <div class="pagination" style={{ "margin-top": "1rem", display: "flex", "gap": "0.5rem", "align-items": "center", "justify-content": "center" }}>
-          <button type="button" onClick={goPrev} disabled={page() <= 1}>Previous</button>
-          <span aria-live="polite" style={{ "min-width": "8rem", "text-align": "center" }}>
-            Page {page()} of {totalPages()} — {totalItems()} posts
-          </span>
-          <button type="button" onClick={goNext} disabled={page() >= totalPages()}>Next</button>
-        </div>
-      </Show>
+
+
+      {/* Note: The actual list elements are server-rendered in BlogSection. This island only controls visibility. */}
+
     </section>
   );
 }

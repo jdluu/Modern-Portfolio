@@ -1,41 +1,36 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchPosts } from "../../lib/tina";
+import { getCollection, render } from "astro:content";
 import { resolveAssetUrl } from "../../lib/utils";
 import type { PostProps } from "../../types/post";
-
-/*
-  Data loading: getStaticPaths
-  - Uses shared fetchPosts helper
-  - No DEV filesystem fallback (Tina-only)
-*/
+ 
+// Generate static paths from Astro content collection
 export async function getStaticPaths() {
-  const posts = await fetchPosts({ first: 500 });
-  const paths = posts
-    .filter((p: any) => !p?.draft)
+  const posts = await getCollection("posts");
+  const paths = (posts ?? [])
+    .filter((p: any) => p.data?.draft !== true)
     .map((p: any) => {
-      // Prefer _sys.relativePath for stable slugs; fall back to filename.
-      const rel = p._sys?.relativePath ?? p._sys?.filename ?? "";
-      const filename = String(rel);
-      const basename = filename.split(/[\\/]/).pop() ?? filename;
-      const slug = String(basename).replace(/\.[^/.]+$/i, "").toLowerCase();
+      const rawId = String(p.id ?? "");
+      const clean = rawId.replace(/\.(md|mdx)$/, "").toLowerCase();
       return {
-        params: { slug },
+        params: { slug: clean },
         props: { post: p },
       };
     })
-    .filter((p: any) => !!p.params?.slug);
+    .filter(Boolean);
   return paths;
 }
-
-// Props / derived values (receive a full Post object)
-const { post } = Astro.props as { post: PostProps & { draft?: boolean; _sys?: any; raw?: any; slug?: string } };
-
-// Derived and resilient values
-const title = post?.title ?? "Untitled";
-const date = post?.date ?? null;
-const content = post?.content ?? "";
-const links = Array.isArray(post?.links) ? post.links : [];
+ 
+// Props / derived values (receive the content entry as `post`)
+const { post } = Astro.props as { post: any };
+ 
+// Render the Markdown/MDX body to a Content component
+const { Content } = await render(post);
+ 
+// Derived and resilient values from frontmatter
+const title = post?.data?.title ?? "Untitled";
+const date = post?.data?.date ?? null;
+const links = Array.isArray(post?.data?.links) ? post.data.links : [];
 const displayDate = date
   ? new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -43,8 +38,8 @@ const displayDate = date
       day: "numeric",
     })
   : "";
-
-const heroUrl = resolveAssetUrl(post?.hero) ?? null;
+ 
+const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
 ---
  
 <BaseLayout title={title}>
@@ -53,9 +48,9 @@ const heroUrl = resolveAssetUrl(post?.hero) ?? null;
       <h1 class="post-title">{title}</h1>
       {date && <p class="publish-date">{displayDate}</p>}
     </header>
-
-    <!-- Post content (plain text — markdown escaped) -->
-    <div class="prose"><pre>{content}</pre></div>
+ 
+    <!-- Rendered Markdown content -->
+    <div class="prose"><Content /></div>
 
     {
       links && links.length > 0 && (
