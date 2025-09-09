@@ -29,42 +29,72 @@
 </section>
 
 <script>
-	// Script groups: reduced-motion guard, constants & selection, helpers, event listeners.
-	// Preserves init timing (post-paint) and rAF-based mousemove throttling.
+	// Reduced-motion guard, DOM selection, and rAF-throttled parallax.
 	(function () {
-		const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+		const prefersReducedMotion =
+			typeof window !== "undefined" &&
+			window.matchMedia &&
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	
 		function initAfterPaint() {
-			const introElements = document.getElementById("intro-elements");
-			const contentSection = document.querySelector(".content-section");
+			const hero = document.getElementById("intro-elements");
+			const section = document.querySelector(".content-section");
+	
+			// Decorative entrance (keeps elements visible for LCP)
+			if (hero) hero.classList.add("animate-hero");
+	
+			// Attach a lightweight, rAF-throttled parallax only when allowed
+			if (!prefersReducedMotion && hero && section) {
+				let rafScheduled = false;
+				// Narrow the type to HTMLElement so DOM mouse properties are available
+				const container = section as HTMLElement;
 
-			// Trigger decorative entrance animations (keeps elements visible at initial paint for LCP)
-			if (introElements) introElements.classList.add("animate-hero");
-
-			// Parallax: attach only when user does not prefer reduced motion
-			if (introElements && contentSection && !prefersReduced) {
-				let rafPending = false;
-				const container = contentSection as HTMLElement;
-				container.addEventListener("mousemove", (e: MouseEvent) => {
-					if (rafPending) return;
-					rafPending = true;
-					const { clientX, clientY } = e;
+				// Named handler so we can remove it later (prevents leaks during client-side navigation).
+				// Use the EventListener type so add/removeEventListener accept the same value.
+				// We cast to PointerEvent to handle both pointer and mouse inputs.
+				const onMove: EventListener = (event) => {
+					if (rafScheduled) return;
+					rafScheduled = true;
+					const ev = event as PointerEvent;
+					const clientX = ev.clientX;
+					const clientY = ev.clientY;
 					const rect = container.getBoundingClientRect();
 					requestAnimationFrame(() => {
-						const moveX = (clientX - (rect.left + rect.width / 2)) / 50;
-						const moveY = (clientY - (rect.top + rect.height / 2)) / 50;
-						introElements.style.transform = `translate(${moveX}px, ${moveY}px)`;
-						rafPending = false;
+						const offsetX = (clientX - (rect.left + rect.width / 2)) / 50;
+						const offsetY = (clientY - (rect.top + rect.height / 2)) / 50;
+						// Verify hero exists before accessing style (defensive)
+						if (hero && hero.style) {
+							hero.style.transform = "translate(" + offsetX + "px, " + offsetY + "px)";
+						}
+						rafScheduled = false;
 					});
-				});
+				};
+	
+				// Attach both pointer and mouse listeners for broader device support.
+				// Use passive listeners for better scroll/paint performance since we never call preventDefault().
+				container.addEventListener("pointermove", onMove, { passive: true });
+				container.addEventListener("mousemove", onMove, { passive: true });
+	
+				// Cleanup to avoid leaking listeners if the page is unloaded or hidden.
+				const cleanup = function () {
+					container.removeEventListener("pointermove", onMove);
+					container.removeEventListener("mousemove", onMove);
+					window.removeEventListener("pagehide", cleanup);
+					window.removeEventListener("beforeunload", cleanup);
+				};
+	
+				window.addEventListener("pagehide", cleanup);
+				window.addEventListener("beforeunload", cleanup);
 			}
 		}
-
-		// Ensure init runs after first paint
+	
+		// Run init after first paint for best LCP behavior
 		if (document.readyState === "complete" || document.readyState === "interactive") {
 			requestAnimationFrame(initAfterPaint);
 		} else {
-			document.addEventListener("DOMContentLoaded", () => requestAnimationFrame(initAfterPaint));
+			document.addEventListener("DOMContentLoaded", function () {
+				requestAnimationFrame(initAfterPaint);
+			});
 		}
 	})();
 </script>

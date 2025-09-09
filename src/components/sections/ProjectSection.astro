@@ -2,7 +2,22 @@
 import ProjectCard from "../ui/ProjectCard.astro";
 import { getAllProjectCards } from "../../lib/cosmic";
 
-const allProjects = (await getAllProjectCards()) || [];
+/**
+ * Load project cards at build-time and normalize into a small, explicit shape
+ * so the template below stays simple and self-documenting.
+ */
+const rawProjects = (await getAllProjectCards()) || [];
+
+function mapRawProject(raw: any) {
+  return {
+    title: raw?.title ?? "Untitled",
+    slug: raw?.slug ?? "",
+    description: raw?.metadata?.description ?? "",
+    thumbnailUrl: raw?.metadata?.thumbnail?.url ?? "",
+  };
+}
+
+const projects = rawProjects.map(mapRawProject);
 ---
 
 <section class="content-section">
@@ -12,15 +27,13 @@ const allProjects = (await getAllProjectCards()) || [];
 	</p>
 
 	<div class="card-grid">
-		{
-			allProjects.map((card) => (
-				<ProjectCard
-					title={card.title}
-					intro={card.metadata.description}
-					thumbnail={card.metadata.thumbnail?.url || ""}
-					url={card.slug}
-				/>
-			))
-		}
+		{projects.map((p) => (
+			<ProjectCard
+				title={p.title}
+				intro={p.description}
+				thumbnail={p.thumbnailUrl}
+				url={p.slug}
+			/>
+		))}
 	</div>
 </section>

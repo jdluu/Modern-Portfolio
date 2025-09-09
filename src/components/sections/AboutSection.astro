@@ -1,3 +1,38 @@
+---
+const webIcons = [
+  { title: "HTML5", src: "/icons/tech/html5.svg", alt: "HTML5" },
+  { title: "CSS3", src: "/icons/tech/css3.svg", alt: "CSS3" },
+  { title: "JavaScript", src: "/icons/tech/javascript.svg", alt: "JavaScript" },
+  { title: "TypeScript", src: "/icons/tech/typescript.svg", alt: "TypeScript" },
+  { title: "React", src: "/icons/tech/react.svg", alt: "React" },
+  { title: "Node.js", src: "/icons/tech/nodejs.svg", alt: "Node.js" },
+];
+
+const softwareIcons = [
+  { title: "Android", src: "/icons/tech/android.svg", alt: "Android" },
+  { title: "Java", src: "/icons/tech/java.svg", alt: "Java" },
+  { title: "Unity", src: "/icons/tech/unity.svg", alt: "Unity" },
+  { title: "C#", src: "/icons/tech/csharp.svg", alt: "C#" },
+  { title: "C", src: "/icons/tech/c.svg", alt: "C" },
+  { title: "C++", src: "/icons/tech/cpp.svg", alt: "C++" },
+];
+
+const aiIcons = [
+  { title: "Python", src: "/icons/tech/python.svg", alt: "Python" },
+  { title: "Pandas", src: "/icons/tech/pandas.svg", alt: "Pandas" },
+  { title: "SQL", src: "/icons/tech/sql.svg", alt: "SQL" },
+  { title: "R", src: "/icons/tech/r.svg", alt: "R" },
+  { title: "TensorFlow", src: "/icons/tech/tensorflow.svg", alt: "TensorFlow" },
+  { title: "PyTorch", src: "/icons/tech/pytorch.svg", alt: "PyTorch" },
+];
+
+const domains = [
+  { title: "Web Dev", icons: webIcons },
+  { title: "Software & Mobile", icons: softwareIcons },
+  { title: "Data Science & AI", icons: aiIcons },
+];
+---
+
 <section class="content-section" aria-labelledby="about">
 	<h2 id="about" class="page-h2">About Me</h2>
 	<div id="flex-container" role="main">
@@ -17,79 +52,19 @@
 		<div id="skills-wrapper">
 			<h3 class="skills-title">Technical Domains</h3>
 
-			<!-- Skill domains grouped for clarity: Web Dev, Software & Mobile, Data Science & AI -->
 			<div class="skills-grid">
-				<div class="domain-section">
-					<h4>Web Dev</h4>
-					<div class="tech-grid">
-						<div class="tech-item" title="HTML5">
-							<img src="/icons/tech/html5.svg" alt="HTML5" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="CSS3">
-							<img src="/icons/tech/css3.svg" alt="CSS3" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="JavaScript">
-							<img src="/icons/tech/javascript.svg" alt="JavaScript" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="TypeScript">
-							<img src="/icons/tech/typescript.svg" alt="TypeScript" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="React">
-							<img src="/icons/tech/react.svg" alt="React" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="Node.js">
-							<img src="/icons/tech/nodejs.svg" alt="Node.js" width="32" height="32" loading="lazy" decoding="async" />
+				{domains.map((domain) => (
+					<div class="domain-section">
+						<h4>{domain.title}</h4>
+						<div class="tech-grid">
+							{domain.icons.map((icon) => (
+								<div class="tech-item" title={icon.title}>
+									<img src={icon.src} alt={icon.alt} width="32" height="32" loading="lazy" decoding="async" />
+								</div>
+							))}
 						</div>
 					</div>
-				</div>
-
-				<div class="domain-section">
-					<h4>Software & Mobile</h4>
-					<div class="tech-grid">
-						<div class="tech-item" title="Android">
-							<img src="/icons/tech/android.svg" alt="Android" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="Java">
-							<img src="/icons/tech/java.svg" alt="Java" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="Unity">
-							<img src="/icons/tech/unity.svg" alt="Unity" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="C#">
-							<img src="/icons/tech/csharp.svg" alt="C#" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="C">
-							<img src="/icons/tech/c.svg" alt="C" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="C++">
-							<img src="/icons/tech/cpp.svg" alt="C++" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-					</div>
-				</div>
-
-				<div class="domain-section">
-					<h4>Data Science & AI</h4>
-					<div class="tech-grid">
-						<div class="tech-item" title="Python">
-							<img src="/icons/tech/python.svg" alt="Python" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="Pandas">
-							<img src="/icons/tech/pandas.svg" alt="Pandas" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="SQL">
-							<img src="/icons/tech/sql.svg" alt="SQL" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="R">
-							<img src="/icons/tech/r.svg" alt="R" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="TensorFlow">
-							<img src="/icons/tech/tensorflow.svg" alt="TensorFlow" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-						<div class="tech-item" title="PyTorch">
-							<img src="/icons/tech/pytorch.svg" alt="PyTorch" width="32" height="32" loading="lazy" decoding="async" />
-						</div>
-					</div>
-				</div>
+				))}
 			</div>
 
 			<div class="projects-link-wrapper">
