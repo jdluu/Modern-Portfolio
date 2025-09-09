@@ -1,0 +1,47 @@
+/* Project Section styles (moved from ProjectSection.astro) */
+.content-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+}
+
+.page-h2 {
+  font-family: var(--m3-font-family-display);
+  font-size: var(--m3-font-headline-large);
+  color: var(--m3-color-on-background);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.section-desc {
+  font-family: var(--m3-font-family-body);
+  font-size: var(--m3-font-body-large);
+  color: var(--m3-color-on-surface-variant);
+  margin-bottom: 3rem;
+  max-width: 70ch;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.card-grid {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Responsive layout */
+/* Tablet: Two columns */
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: Three columns */
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

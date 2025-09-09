@@ -1,0 +1,184 @@
+/* Blog Section styles (loaded per-page via head slot) */
+
+/* Section header */
+.page-h2 {
+  font-family: var(--m3-font-family-display);
+  font-size: var(--m3-font-headline-large);
+  color: var(--m3-color-on-background);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: var(--m3-font-body-large);
+  color: var(--m3-color-on-surface-variant);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+/* Layout for the blog content area */
+.content-section.blog-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.posts-container {
+  width: 100%;
+}
+
+.posts-pagination-placeholder {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Post list and card styles (server-rendered markup relies on these selectors) */
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  row-gap: 1.25rem;
+}
+
+.post-item {
+  margin: 0;
+}
+
+.post-card {
+  display: block;
+  width: 100%;
+  background-color: var(--m3-color-surface);
+  color: var(--m3-color-on-surface);
+  text-decoration: none;
+  border-bottom: 0 !important;
+  border: 2px solid var(--m3-color-outline);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease, outline-color .12s ease;
+  cursor: pointer;
+  outline: 2px solid var(--m3-color-outline-variant);
+  outline-offset: 2px;
+}
+
+.post-card:hover {
+  border-color: var(--m3-color-primary);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  outline-color: var(--m3-color-primary);
+}
+
+.post-card:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 20%, transparent);
+  outline-offset: 4px;
+  box-shadow:
+    0 0 0 4px var(--m3-color-primary) inset,
+    0 6px 18px rgba(0,0,0,0.14);
+}
+
+.post-card-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 2vw, 2.25rem);
+  font-weight: 600;
+  color: var(--m3-color-on-surface);
+  transition: color .2s ease;
+}
+.post-card:hover .post-card-title {
+  color: var(--m3-color-primary);
+}
+
+.post-card-date {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: clamp(1rem, 0.9vw, 1.125rem);
+  color: var(--m3-color-on-surface-variant);
+}
+
+/* Tag row and chips */
+.post-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background-color: var(--m3-color-secondary-container);
+  color: var(--m3-color-on-secondary-container);
+  border: 1px solid var(--m3-color-outline-variant);
+  padding: 0.25rem 0.75rem;
+  font-size: clamp(0.9rem, 0.8vw, 1rem);
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+/* Post description / excerpt */
+.post-card-desc {
+  margin-top: 0.75rem;
+  color: var(--m3-color-on-surface-variant);
+  font-size: clamp(1.1rem, 1vw, 1.25rem);
+  line-height: 1.7;
+}
+
+/* Clamp utility used by server-rendered excerpts */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Controls shared by the PostsList island (kept in section CSS to avoid global loading) */
+.posts-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+.posts-controls .controls-left,
+.posts-controls .controls-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.posts-controls .controls-right {
+  margin-left: auto;
+}
+.posts-controls .btn-reset {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--m3-color-outline);
+  background: transparent;
+}
+
+/* Small-screen adjustments for controls */
+@media (max-width: 640px) {
+  .posts-controls { justify-content: center; }
+  .posts-controls .controls-right { margin-left: 0; }
+  .posts-controls .controls-left,
+  .posts-controls .controls-right {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+  .posts-controls .controls-left { margin-bottom: 0.5rem; }
+  .posts-controls .controls-right { gap: 0.5rem; }
+  .posts-controls .controls-right .btn-reset { margin-left: 0.25rem; }
+  .posts-controls .controls-right [role="dialog"] {
+    left: 0 !important;
+    right: auto !important;
+    min-width: 200px !important;
+    max-width: calc(100% - 32px) !important;
+  }
+}

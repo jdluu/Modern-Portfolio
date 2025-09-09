@@ -9,7 +9,7 @@ const { title, intro, url, thumbnail } = Astro.props;
 ---
 
 <!-- Markup: structure and class names preserved exactly -->
-<section class="background">
+<section class="project-card background">
 	<Image
 		src={thumbnail}
 		alt={title}
@@ -30,89 +30,3 @@ const { title, intro, url, thumbnail } = Astro.props;
 		<a class="learn-more" href={`/projects/${url}`}>Learn More</a>
 	</div>
 </section>
-
-<style>
-	/* container */
-	.background {
-		position: relative;
-		border: 1px solid var(--m3-color-outline);
-		transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		width: 100%;
-		height: 30rem;
-		border-radius: 24px;
-		overflow: hidden;
-	}
-
-	.project-container {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		background: var(--m3-color-surface-variant);
-		opacity: 0;
-		transition: opacity 0.4s ease-in-out;
-	}
-
-	/* image */
-	.project-image {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center;
-	}
-
-	/* hover */
-	.background:hover {
-		border-color: var(--m3-color-primary);
-		transform: scale(1.02);
-	}
-
-	.background:hover .project-container {
-		opacity: 1;
-	}
-
-	/* overlay / content */
-	.more-info {
-		text-align: center;
-		padding: 1.6rem;
-	}
-
-	/* text */
-	.project-title {
-		font-size: var(--m3-font-title-large);
-		font-family: var(--m3-font-family-display);
-		font-weight: 600;
-		margin-bottom: 0.8rem;
-		color: var(--m3-color-on-surface-variant);
-	}
-
-	.project-description {
-		font-size: var(--m3-font-body-large);
-		font-family: var(--m3-font-family-body);
-		margin-bottom: 1.6rem;
-		color: var(--m3-color-on-surface-variant);
-	}
-
-	/* link */
-	.learn-more {
-		font-size: var(--m3-font-label-large);
-		font-family: var(--m3-font-family-body);
-		text-decoration: none;
-		color: var(--m3-color-primary);
-		font-weight: 500;
-	}
-
-	.learn-more:hover,
-	.learn-more:focus {
-		text-decoration: underline;
-		opacity: 0.9;
-	}
-</style>

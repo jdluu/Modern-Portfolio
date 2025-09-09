@@ -29,5 +29,6 @@ const posts: PostIndexItem[] = (rawPosts ?? [])
   });
 ---
 <BaseLayout title={title}>
+  <link slot="head" rel="stylesheet" href="/styles/sections/blog.css" />
   <BlogSection posts={posts} />
 </BaseLayout>

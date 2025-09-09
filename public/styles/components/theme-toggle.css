@@ -1,0 +1,136 @@
+/* Theme Toggle Button (extracted) */
+/* Toggle root as an accessible button */
+.btn {
+  position: relative;
+  inline-size: 7rem;
+  block-size: 3.6rem;
+  padding: 0.4rem;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--m3-color-surface);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.06),
+    0 2px 8px rgba(0,0,0,0.06) inset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Container color shifts slightly per theme for contrast */
+[data-theme="light"] .btn {
+  background: #ffffff;
+}
+[data-theme="dark"] .btn {
+  background: #262a3b;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.25),
+    0 0 0 1px rgba(255,255,255,0.04) inset;
+}
+
+/* Hover/active */
+.btn:hover {
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.08),
+    0 0 0 1px rgba(0,0,0,0.04) inset;
+}
+.btn:active .btn__indicator {
+  transform: translateX(0) scale(0.97);
+}
+[data-theme="dark"] .btn:active .btn__indicator {
+  transform: translateX(3.5rem) scale(0.97);
+}
+
+/* Focus-visible ring (M3 style) */
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--m3-color-primary) 35%, transparent),
+    0 0 0 6px color-mix(in oklab, var(--m3-color-primary) 15%, transparent);
+}
+
+/* Thumb */
+.btn__indicator {
+  position: absolute;
+  inset-block-start: 0.4rem;
+  inset-inline-start: 0.4rem;
+  inline-size: 2.8rem;
+  block-size: 2.8rem;
+  border-radius: 50%;
+  background: var(--m3-color-surface-variant);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.18),
+    0 1px 1px rgba(0,0,0,0.06);
+  transform: translateX(0);
+  transition:
+    transform 260ms cubic-bezier(.2,.8,.2,1),
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+  view-transition-name: theme-thumb;
+  will-change: transform;
+}
+
+html:not([data-theme-vt="driving"]) .btn__indicator {
+  transform: translateX(0);
+}
+html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
+  transform: translateX(3.8rem);
+}
+
+/* Dark-mode thumb position and color */
+[data-theme="dark"] .btn__indicator {
+  background: #11131c;
+  transform: translateX(3.8rem);
+  box-shadow:
+    0 6px 10px rgba(0,0,0,0.35),
+    0 1px 0 rgba(0,0,0,0.3);
+}
+
+/* Icon container cross-fade */
+.btn__icon-container {
+  inline-size: 100%;
+  block-size: 100%;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.btn__icon {
+  font-size: 1.3rem;
+  position: absolute;
+  transition: opacity 180ms ease, transform 180ms ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+[data-theme="light"] .btn__icon--sun {
+  opacity: 1;
+  transform: scale(1);
+  color: var(--light-icon-color);
+}
+
+[data-theme="dark"] .btn__icon--moon {
+  opacity: 1;
+  transform: scale(1);
+  color: var(--dark-icon-color);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn__indicator,
+  .btn__icon {
+    transition: none !important;
+  }
+}
+
+/* Placeholder can match new size */
+.btn-placeholder {
+  inline-size: 7rem;
+  block-size: 3.6rem;
+}

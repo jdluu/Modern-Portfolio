@@ -117,10 +117,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		/>
 		<link rel="preload" href="/styles/reset.css" as="style" />
 		<link rel="preload" href="/styles/global.css" as="style" />
-
+		<link rel="preload" href="/styles/components/pagination.css" as="style" />
+		<link rel="preload" href="/styles/components/theme-toggle.css" as="style" />
+		<link rel="preload" href="/styles/components/navbar.css" as="style" />
+		<link rel="preload" href="/styles/components/footer.css" as="style" />
+		<link rel="preload" href="/styles/components/project-card.css" as="style" />
+		<link rel="preload" href="/styles/components/experience-card.css" as="style" />
+		
 		<!-- Styles -->
 		<link rel="stylesheet" href="/styles/reset.css" />
 		<link rel="stylesheet" href="/styles/global.css" />
+		<link rel="stylesheet" href="/styles/components/pagination.css" />
+		<link rel="stylesheet" href="/styles/components/theme-toggle.css" />
+		<link rel="stylesheet" href="/styles/components/navbar.css" />
+		<link rel="stylesheet" href="/styles/components/footer.css" />
+		<link rel="stylesheet" href="/styles/components/project-card.css" />
+		<link rel="stylesheet" href="/styles/components/experience-card.css" />
+		<!-- Page-specific CSS can be injected by pages via the named head slot -->
+		<slot name="head" />
 	</head>
 	<body class:list={["no-transitions", { "homepage-gradient-bg": isHomepage }]}>
 		<a href="#main-content" class="skip-link">Skip to main content</a>

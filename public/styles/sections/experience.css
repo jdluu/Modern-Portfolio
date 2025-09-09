@@ -1,0 +1,60 @@
+/* Experience Section styles (loaded per-page via head slot) */
+
+/* Section header */
+.page-h2 {
+  font-family: var(--m3-font-family-display);
+  font-size: var(--m3-font-headline-large);
+  color: var(--m3-color-on-background);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: var(--m3-font-body-large);
+  color: var(--m3-color-on-surface-variant);
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+/* Section layout */
+.content-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+}
+
+/* Experience grid (server-rendered items rely on these selectors) */
+.experience-grid {
+  display: grid;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-auto-flow: row dense;
+}
+
+/* Prevent global rules from breaking grid children */
+.experience-grid > .experience-item {
+  grid-column: auto !important;
+  min-width: 0;
+}
+
+/* Responsive columns */
+@media (min-width: 768px) {
+  .experience-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  .experience-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Note: controls/pagination visuals are in /public/styles/components/pagination.css
+   This file confines layout and section-specific spacing, while shared control styles
+   live in the component CSS to be globally available where client islands expect them. */
