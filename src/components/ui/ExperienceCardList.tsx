@@ -290,7 +290,7 @@ export default function ExperienceCardList(props: Props) {
         aria-atomic="true"
         style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"
       >
-        {totalCount()} results, page {page()} of {totalPages()}
+        Page {page()} of {totalPages()}
       </div>
 
       {/* Server-rendered grid of ExperienceCard entries lives in the parent (ExperienceSection).
@@ -299,18 +299,16 @@ export default function ExperienceCardList(props: Props) {
       {/* Pagination Controls */}
       <div ref={(el) => (paginationRef = el!)} class="pagination-controls">
         <button
+          class="pagination-button"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={!canPrev()}
           aria-disabled={!canPrev()}
         >
           Previous
         </button>
-        <div>
-          Page {page()} of {totalPages()} — Showing{" "}
-          {Math.min((page() - 1) * pageSize() + 1, totalCount())}-
-          {Math.min(page() * pageSize(), totalCount())} of {totalCount()}
-        </div>
+        <div class="pagination-info">Page {page()} of {totalPages()}</div>
         <button
+          class="pagination-button"
           onClick={() => setPage((p) => Math.min(totalPages(), p + 1))}
           disabled={!canNext()}
           aria-disabled={!canNext()}
