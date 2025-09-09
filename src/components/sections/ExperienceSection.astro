@@ -1,26 +1,40 @@
 ---
 import ExperienceCardList from "../ui/ExperienceCardList";
-import { listExperienceCardItems } from "../../lib/tina";
- 
+import ExperienceCard from "../ui/ExperienceCard.astro";
+import { getCollection } from "astro:content";
+  
 /**
  * Loading strategy (centralized):
- * - Use listExperienceCardItems() from src/lib/tina.ts which queries the generated Tina client
- *   and returns normalized items WITHOUT performing any server-side sorting or filtering.
- * - Astro renders the full unsorted list at build time for SEO visibility.
+ * - Use the Astro content collection `experiencecards` at build-time.
+ * - Map collection entries into the lightweight ExperienceCardItem shape expected
+ *   by the client-side ExperienceCardList island.
  * - Client-side (Solid) will handle sorting and filtering with zero additional API calls.
- * - Tina-only (no DEV filesystem fallback) as requested.
  */
-const experiences = await listExperienceCardItems({ first: 200 }) ?? [];
+const raw = (await getCollection("experiencecards")) ?? [];
+const experiences = (raw ?? []).map((e: any) => {
+  return {
+    title: e.data?.title ?? "Untitled",
+    slug: String(e.id ?? "").toLowerCase(),
+    metadata: e.data?.metadata ?? {},
+  };
+});
 ---
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
 	<p class="section-desc">
 		<strong>My professional journey and key achievements</strong>
 	</p>
+	<!-- Client island (controls + visibility) -->
+	<ExperienceCardList client:load initialItems={experiences} />
+
+	<!-- Server-rendered grid of ExperienceCard items for SEO and initial markup.
+	     The client island will toggle visibility of these cards via data-slug attributes. -->
 	<div class="experience-grid">
-		<!-- Hydrated Solid component: client-side handles sorting & filtering.
-		     Astro still provides the full `experiences` array at build time for SEO. -->
-		<ExperienceCardList client:load initialItems={experiences} />
+		{experiences.map((e) => (
+			<div class="experience-item" data-slug={String(e.slug ?? "").replace(/\.(md|mdx)$/, "")}>
+				<ExperienceCard item={e} />
+			</div>
+		))}
 	</div>
 </section>
 
