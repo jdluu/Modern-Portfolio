@@ -9,10 +9,6 @@ const title = "Blog";
  
 // Build-time fetch: use Astro Content Collections
 const rawPosts: any[] = (await getCollection("posts")) ?? [];
-console.info("[Blog] getCollection('posts') returned:", Array.isArray(rawPosts) ? rawPosts.length : 0, "posts");
-if (Array.isArray(rawPosts) && rawPosts.length > 0) {
-  console.info("[Blog] first ids:", rawPosts.slice(0, 3).map((p: any) => p?.id));
-}
 const posts: PostIndexItem[] = (rawPosts ?? [])
   .map((p: any) => {
     const slug = String(p.id ?? "").toLowerCase();
