@@ -2,11 +2,12 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ExperienceSection from "../components/sections/ExperienceSection.astro";
 import ProjectSection from "../components/sections/ProjectSection.astro";
-
-const title = "Experience & Projects";
+ 
+/* Page title (consistent naming across pages) */
+const pageTitle = "Experience & Projects";
 ---
-
-<BaseLayout title={title}>
+ 
+<BaseLayout title={pageTitle}>
 	<link slot="head" rel="stylesheet" href="/styles/sections/experience.css" />
 	<link slot="head" rel="stylesheet" href="/styles/sections/project.css" />
 	<ExperienceSection />

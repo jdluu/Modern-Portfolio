@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ContactSection from "../components/sections/ContactSection.astro";
-
-const title = "Contact Information";
+ 
+/* Page title (consistent naming across pages) */
+const pageTitle = "Contact Information";
 ---
-
-<BaseLayout title={title}>
+ 
+<BaseLayout title={pageTitle}>
 	<link slot="head" rel="stylesheet" href="/styles/sections/contact.css" />
 	<ContactSection />
 </BaseLayout>

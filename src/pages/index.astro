@@ -2,29 +2,37 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HomeSection from "../components/sections/HomeSection.astro";
 
-const title = "Jeffrey Luu — Developer and Designer | Portfolio";
----
+/* Page title (consistent naming across pages) */
+const pageTitle = "Jeffrey Luu — Developer and Designer | Portfolio";
 
-<BaseLayout title={title} isHomepage={true}>
-	<link slot="head" rel="stylesheet" href="/styles/sections/home.css" />
-	<HomeSection />
-	<script type="application/ld+json" is:inline>
-		{JSON.stringify([
-			{
-				"@context": "https://schema.org",
-				"@type": "Person",
-				"name": "Jeffrey Luu",
-				"jobTitle": "Developer and Designer",
-				"url": "https://jluu.dev",
-				"description": "Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences."
-			},
-			{
-				"@context": "https://schema.org",
-				"@type": "WebSite",
-				"name": "Jeffrey Luu Portfolio",
-				"url": "https://jluu.dev",
-				"inLanguage": "en"
-			}
-		])}
-	</script>
-</BaseLayout>
+/* Structured Data (JSON-LD) for the homepage.
+   Extracted into a named constant for readability while preserving
+   identical output via JSON.stringify below.
+*/
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Jeffrey Luu",
+    jobTitle: "Developer and Designer",
+    url: "https://jluu.dev",
+    description:
+      "Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Jeffrey Luu Portfolio",
+    url: "https://jluu.dev",
+    inLanguage: "en",
+  },
+];
+---
+ 
+<BaseLayout title={pageTitle} isHomepage={true}>
+ 	<link slot="head" rel="stylesheet" href="/styles/sections/home.css" />
+ 	<HomeSection />
+ 	<script type="application/ld+json" is:inline>
+ 		{JSON.stringify(structuredData)}
+ 	</script>
+ </BaseLayout>
