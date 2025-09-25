@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
-
-const title =
+ 
+/* Page title (consistent naming across pages) */
+const pageTitle =
 	"About Jeffrey Luu, a software engineer based in Orange County, California.";
 ---
-
-<BaseLayout title={title}>
+ 
+<BaseLayout title={pageTitle}>
 	<link slot="head" rel="stylesheet" href="/styles/sections/about.css" />
 	<AboutSection />
 </BaseLayout>
