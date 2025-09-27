@@ -89,16 +89,46 @@
 
 /* Link */
 .experience-card .learn-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 4.4rem;
+  padding: 0 1.8rem;
   font-size: var(--m3-font-label-large);
   font-family: var(--m3-font-family-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--m3-color-on-primary);
+  background-color: var(--m3-color-primary);
+  border: 1px solid color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
+  border-radius: 999px;
   text-decoration: none;
-  color: var(--m3-color-primary);
-  font-weight: 500;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 6px 14px color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+}
+.experience-card .learn-more:visited {
+  color: var(--m3-color-on-primary);
 }
 .experience-card .learn-more:hover,
-.experience-card .learn-more:focus {
-  text-decoration: underline;
-  opacity: 0.9;
+.experience-card .learn-more:focus-visible {
+  background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
+  border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
+  box-shadow: 0 8px 20px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+  transform: translateY(-1px);
+}
+.experience-card .learn-more:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 45%, white 55%);
+  outline-offset: 3px;
+}
+.experience-card .learn-more:active {
+  background-color: color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  transform: translateY(0);
 }
 
 /* Accessibility: reveal overlay for keyboard users (focus-within) */
