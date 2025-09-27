@@ -67,11 +67,13 @@
   outline-offset: 2px;
 }
 
-.post-card:hover {
-  border-color: var(--m3-color-primary);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-  transform: translateY(-2px);
-  outline-color: var(--m3-color-primary);
+@media (hover: hover) {
+  .post-card:hover {
+    border-color: var(--m3-color-primary);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    outline-color: var(--m3-color-primary);
+  }
 }
 
 .post-card:focus-visible {
@@ -89,8 +91,10 @@
   color: var(--m3-color-on-surface);
   transition: color .2s ease;
 }
-.post-card:hover .post-card-title {
-  color: var(--m3-color-primary);
+@media (hover: hover) {
+  .post-card:hover .post-card-title {
+    color: var(--m3-color-primary);
+  }
 }
 
 .post-card-date {
