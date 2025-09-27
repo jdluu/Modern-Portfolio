@@ -32,11 +32,13 @@
   cursor: pointer;
   transition: background .12s ease, color .12s ease, transform .08s ease;
 }
-.experience-pagination-portal .pagination-controls button:hover:not(:disabled),
-.pagination-button:hover:not(:disabled) {
-  background: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .experience-pagination-portal .pagination-controls button:hover:not(:disabled),
+  .pagination-button:hover:not(:disabled) {
+    background: var(--m3-color-primary);
+    color: var(--m3-color-on-primary);
+    transform: translateY(-1px);
+  }
 }
 .experience-pagination-portal .pagination-controls button:disabled,
 .experience-pagination-portal .pagination-controls button[aria-disabled="true"],
@@ -119,7 +121,13 @@
   cursor: pointer;
   transition: background .12s ease, color .12s ease, transform .08s ease;
 }
-.experience-controls .btn-reset:hover,
+@media (hover: hover) {
+  .experience-controls .btn-reset:hover {
+    background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
+    outline: none;
+    transform: translateY(-1px);
+  }
+}
 .experience-controls .btn-reset:focus {
   background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
   outline: none;
