@@ -22,7 +22,7 @@ export default defineConfig({
   },
   vite: {
     build: {
-      target: "es2018",
+      target: "es2024",
       sourcemap: false,
       minify: "terser",
       terserOptions: {
