@@ -141,8 +141,10 @@
   text-decoration: none;
   font-weight: 500;
 }
-.projects-link:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .projects-link:hover {
+    text-decoration: underline;
+  }
 }
 
 @media (min-width: 960px) {
