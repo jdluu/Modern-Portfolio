@@ -47,7 +47,6 @@
   unicode-range: U+0000-00FF;
 }
 
-
 @font-face {
   font-family: "Roboto Flex";
   src: url("/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2") format("woff2");
@@ -147,7 +146,7 @@ body {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.18s;
+  animation-duration: 0.75s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
