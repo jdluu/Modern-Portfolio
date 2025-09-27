@@ -47,14 +47,6 @@
   unicode-range: U+0000-00FF;
 }
 
-@font-face {
-  font-family: "Roboto Flex";
-  src: url("/fonts/Roboto_Flex/RobotoFlex-subset-ui-500.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF;
-}
 
 @font-face {
   font-family: "Roboto Flex";
@@ -109,6 +101,10 @@
 /* Global Styles */
 html {
   font-size: 62.5%; /* 1rem = 10px */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height);
 }
 
 body {
@@ -116,6 +112,11 @@ body {
   color: var(--m3-color-on-background);
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-body-medium);
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
+  color: var(--m3-color-on-primary);
 }
 
 /* Accessibility helper: use .sr-only as the single canonical helper.
@@ -146,7 +147,7 @@ body {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 1s;
+  animation-duration: 0.18s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 }
@@ -158,6 +159,11 @@ body {
 
 ::view-transition-new(root) {
   animation-name: clip-in;
+}
+
+html[data-theme-vt="driving"] ::view-transition-old(root),
+html[data-theme-vt="driving"] ::view-transition-new(root) {
+  animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
