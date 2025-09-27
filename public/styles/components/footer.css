@@ -18,11 +18,14 @@
   color: var(--m3-color-on-surface-variant);
   transition: all 0.3s ease;
   display: inline-block;
+  user-select: none;
 }
 
-.footer-link:hover {
-  color: var(--m3-color-primary);
-  transform: scale(1.1) rotate(-5deg);
+@media (hover: hover) {
+  .footer-link:hover {
+    color: var(--m3-color-primary);
+    transform: scale(1.1) rotate(-5deg);
+  }
 }
 
 .svg-icon {
