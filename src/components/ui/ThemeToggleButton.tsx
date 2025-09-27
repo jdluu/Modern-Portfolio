@@ -128,6 +128,7 @@ const ThemeToggleButton = () => {
         type="button"
         class="btn"
         aria-pressed={isDarkMode() ? "true" : "false"}
+        aria-label={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
         title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggle}
       >
