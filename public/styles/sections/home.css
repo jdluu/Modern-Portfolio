@@ -30,7 +30,7 @@
 }
 
 .intro-role {
-  font-size: var(--m3-font-display-large);
+  font-size: clamp(3.2rem, 6vw, 5.6rem);
   font-family: var(--m3-font-family-display);
   font-weight: 800;
   color: var(--m3-color-on-background);
@@ -80,7 +80,17 @@
   border-radius: 20px;
   transition: all 0.2s ease;
 }
-.resume-link:hover,
+@media (hover: hover) {
+  .resume-link:hover {
+    background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
+    color: var(--m3-color-on-primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transform: translateY(-2px);
+    outline: 2px solid color-mix(in oklab, var(--m3-color-primary) 65%, white 35%);
+    outline-offset: 2px;
+    border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
+  }
+}
 .resume-link:focus-visible {
   background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
   color: var(--m3-color-on-primary);
@@ -101,9 +111,15 @@
 }
 
 /* Decorative background shapes & animation */
-.background-shapes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; }
-.shape { position: absolute; border-radius: 50%; background: var(--m3-color-primary); opacity: 0.2; animation: float 20s infinite ease-in-out alternate; }
+.background-shapes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
+.shape { position: absolute; border-radius: 50%; background: var(--m3-color-primary); opacity: 0.2; animation: float 20s infinite ease-in-out alternate; pointer-events: none; }
 .shape1 { width: 200px; height: 200px; top: 10%; left: 10%; animation-duration: 25s; }
 .shape2 { width: 150px; height: 150px; top: 60%; left: 80%; animation-duration: 20s; }
 .shape3 { width: 100px; height: 100px; top: 80%; left: 20%; animation-duration: 30s; }
 @keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-20px) rotate(10deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .shape {
+    animation: none;
+  }
+}
