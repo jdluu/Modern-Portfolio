@@ -8,20 +8,25 @@
 
 .page-h2 {
   font-family: var(--m3-font-family-display);
-  font-size: var(--m3-font-headline-large);
+  font-size: clamp(2.8rem, 2.4rem + 1.2vw, 4rem);
+  font-weight: var(--font-weight-h2);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.014em;
   color: var(--m3-color-on-background);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
   text-align: center;
 }
 
 .section-desc {
   font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-body-large);
+  font-size: clamp(1.6rem, 1.5rem + 0.2vw, 1.85rem);
+  font-weight: 420;
+  line-height: var(--font-line-height-body);
+  letter-spacing: -0.005em;
   color: var(--m3-color-on-surface-variant);
-  margin-bottom: 3rem;
+  margin-bottom: 3.2rem;
   max-width: 70ch;
   text-align: center;
-  line-height: 1.6;
 }
 
 .card-grid {

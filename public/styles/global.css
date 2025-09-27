@@ -25,16 +25,16 @@
   --m3-color-primary-container: #414868;
   --m3-color-on-primary-container: #bb9af7;
   --m3-color-secondary: #7aa2f7;
-  --m3-color-on-secondary: #1a1b26;
+  --m3-color-on-secondary: #11121b;
   --m3-color-tertiary: #f7768e;
-  --m3-color-on-tertiary: #1a1b26;
+  --m3-color-on-tertiary: #11121b;
   --m3-color-background: #1a1b26;
-  --m3-color-on-background: #a9b1d6;
-  --m3-color-surface: #1a1b26;
-  --m3-color-on-surface: #c0caf5;
-  --m3-color-surface-variant: #24283b;
-  --m3-color-on-surface-variant: #a9b1d6;
-  --m3-color-outline: #565f89;
+  --m3-color-on-background: #dce1ff;
+  --m3-color-surface: #202436;
+  --m3-color-on-surface: #e7ebff;
+  --m3-color-surface-variant: #2c3147;
+  --m3-color-on-surface-variant: #bfc6f4;
+  --m3-color-outline: #6e78a8;
 }
 
 /* 2. Typography System */
@@ -77,15 +77,15 @@
   --m3-font-headline-large: 3.2rem;
   --m3-font-headline-medium: 2.8rem;
   --m3-font-headline-small: 2.4rem;
-  --m3-font-title-large: 2.2rem;
-  --m3-font-title-medium: 1.6rem;
-  --m3-font-title-small: 1.4rem;
+  --m3-font-title-large: 2.4rem;
+  --m3-font-title-medium: 1.8rem;
+  --m3-font-title-small: 1.6rem;
   --m3-font-label-large: 1.4rem;
-  --m3-font-label-medium: 1.2rem;
-  --m3-font-label-small: 1.1rem;
-  --m3-font-body-large: 1.6rem;
-  --m3-font-body-medium: 1.4rem;
-  --m3-font-body-small: 1.2rem;
+  --m3-font-label-medium: 1.3rem;
+  --m3-font-label-small: 1.2rem;
+  --m3-font-body-large: 1.8rem;
+  --m3-font-body-medium: 1.6rem;
+  --m3-font-body-small: 1.45rem;
 
   --spacing-sm: 0.8rem;
   --spacing-md: 1.6rem;
@@ -95,6 +95,30 @@
   --text-color: var(--m3-color-on-surface);
   --accent-color: var(--m3-color-primary);
   --font-heading: var(--m3-font-family-display);
+
+  /* Fluid typography tokens */
+  --font-size-h1-min: 3.2rem;
+  --font-size-h1-max: 5.6rem;
+  --font-size-h2-min: 2.4rem;
+  --font-size-h2-max: 4rem;
+  --font-size-h3-min: 2rem;
+  --font-size-h3-max: 3rem;
+  --font-size-h4: 1.8rem;
+  --font-size-h5: 1.6rem;
+  --font-size-h6: 1.45rem;
+  --font-size-body-min: 1.6rem;
+  --font-size-body-max: 1.8rem;
+
+  --font-weight-h1: 560;
+  --font-weight-h2: 520;
+  --font-weight-h3: 500;
+  --font-weight-h4: 480;
+  --font-weight-h5: 470;
+  --font-weight-h6: 460;
+
+  --font-line-height-heading-tight: 1.22;
+  --font-line-height-heading: 1.24;
+  --font-line-height-body: 1.6;
 }
 
 /* Global Styles */
@@ -110,7 +134,103 @@ body {
   background-color: var(--m3-color-background);
   color: var(--m3-color-on-background);
   font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-body-medium);
+  font-size: clamp(
+    var(--font-size-body-min),
+    calc(1.52rem + 0.5vw),
+    var(--font-size-body-max)
+  );
+  line-height: var(--font-line-height-body);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--m3-font-family-display);
+  color: var(--m3-color-on-surface);
+  margin: 0 0 0.65em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(
+    var(--font-size-h1-min),
+    calc(var(--font-size-h1-min) + 2.2vw),
+    var(--font-size-h1-max)
+  );
+  font-weight: var(--font-weight-h1);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(
+    var(--font-size-h2-min),
+    calc(var(--font-size-h2-min) + 1.6vw),
+    var(--font-size-h2-max)
+  );
+  font-weight: var(--font-weight-h2);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.012em;
+}
+
+h3 {
+  font-size: clamp(
+    var(--font-size-h3-min),
+    calc(var(--font-size-h3-min) + 0.9vw),
+    var(--font-size-h3-max)
+  );
+  font-weight: var(--font-weight-h3);
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.008em;
+}
+
+h4 {
+  font-size: clamp(1.8rem, 1.62rem + 0.35vw, var(--font-size-h4));
+  font-weight: var(--font-weight-h4);
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.004em;
+}
+
+h5 {
+  font-size: clamp(1.6rem, 1.5rem + 0.2vw, var(--font-size-h5));
+  font-weight: var(--font-weight-h5);
+  line-height: 1.28;
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-h6);
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 1.6em;
+  line-height: var(--font-line-height-body);
+  color: var(--m3-color-on-surface);
+}
+
+li {
+  margin: 0 0 0.4em;
+}
+
+small {
+  font-size: clamp(1.3rem, 1.22rem + 0.1vw, 1.4rem);
+  line-height: var(--font-line-height-body);
+}
+
+strong,
+b {
+  font-weight: 640;
 }
 
 ::selection {

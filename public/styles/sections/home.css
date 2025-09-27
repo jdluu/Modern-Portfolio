@@ -18,7 +18,10 @@
 
 /* Hero text visible at initial paint; animate-hero applies decorative entrance */
 .intro-greeting {
-  font-size: var(--m3-font-headline-small);
+  font-size: clamp(1.8rem, 1.6rem + 0.6vw, 2.4rem);
+  font-weight: var(--font-weight-h5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--m3-color-secondary);
   opacity: 1;
   transform: none;
@@ -32,9 +35,11 @@
 .intro-role {
   font-size: clamp(3.2rem, 6vw, 5.6rem);
   font-family: var(--m3-font-family-display);
-  font-weight: 800;
+  font-weight: var(--font-weight-h1);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.02em;
   color: var(--m3-color-on-background);
-  margin: 0.8rem 0;
+  margin: 0.6rem 0 1rem;
   opacity: 1;
   transform: none;
 }
@@ -45,8 +50,10 @@
 }
 
 .intro-tagline {
-  font-size: var(--m3-font-headline-small);
-  font-weight: 400;
+  font-size: clamp(1.9rem, 1.7rem + 0.4vw, 2.4rem);
+  font-weight: 420;
+  line-height: var(--font-line-height-body);
+  letter-spacing: -0.005em;
   color: var(--m3-color-on-surface-variant);
   max-width: 45ch;
   margin: 0 auto 2.4rem;
@@ -71,39 +78,46 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.2rem 2.4rem;
-  font-size: var(--m3-font-label-large);
+  gap: 0.8rem;
+  min-height: 4.8rem;
+  padding: 0 2.6rem;
+  font-size: clamp(1.6rem, 1.5rem + 0.2vw, 1.8rem);
+  font-family: var(--m3-font-family-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--m3-color-on-primary);
   background-color: var(--m3-color-primary);
-  border: 2px solid transparent;
+  border: 1px solid color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  border-radius: 999px;
   text-decoration: none;
-  border-radius: 20px;
-  transition: all 0.2s ease;
+  box-shadow: 0 10px 24px color-mix(in oklab, var(--m3-color-primary) 30%, black 70%);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 @media (hover: hover) {
   .resume-link:hover {
     background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
-    color: var(--m3-color-on-primary);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    border-color: color-mix(in oklab, var(--m3-color-primary) 60%, black 40%);
+    box-shadow: 0 12px 28px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
     transform: translateY(-2px);
-    outline: 2px solid color-mix(in oklab, var(--m3-color-primary) 65%, white 35%);
-    outline-offset: 2px;
-    border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
   }
 }
 .resume-link:focus-visible {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
-  color: var(--m3-color-on-primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-  transform: translateY(-2px);
-  outline: 2px solid color-mix(in oklab, var(--m3-color-primary) 65%, white 35%);
-  outline-offset: 2px;
-  border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
+  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 45%, white 55%);
+  outline-offset: 3px;
+  box-shadow: 0 12px 28px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+  transform: translateY(-1px);
 }
 .resume-link:visited { color: var(--m3-color-on-primary); }
 .resume-link:active {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
-  color: var(--m3-color-on-primary);
+  background-color: color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  border-color: color-mix(in oklab, var(--m3-color-primary) 60%, black 40%);
+  box-shadow: 0 6px 16px color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+  transform: translateY(0);
 }
 
 @keyframes fadeInUp {
