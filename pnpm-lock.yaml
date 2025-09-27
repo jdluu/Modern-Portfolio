@@ -36,9 +36,6 @@ importers:
       '@types/node':
         specifier: ^24.5.2
         version: 24.5.2
-      sharp:
-        specifier: ^0.34.4
-        version: 0.34.4
       terser:
         specifier: ^5.44.0
         version: 5.44.0
@@ -2733,7 +2730,8 @@ snapshots:
   '@esbuild/win32-x64@0.25.10':
     optional: true
 
-  '@img/colour@1.0.0': {}
+  '@img/colour@1.0.0':
+    optional: true
 
   '@img/sharp-darwin-arm64@0.34.4':
     optionalDependencies:
@@ -3493,7 +3491,8 @@ snapshots:
 
   destr@2.0.5: {}
 
-  detect-libc@2.1.1: {}
+  detect-libc@2.1.1:
+    optional: true
 
   deterministic-object-hash@2.0.2:
     dependencies:
@@ -4499,6 +4498,7 @@ snapshots:
       '@img/sharp-win32-arm64': 0.34.4
       '@img/sharp-win32-ia32': 0.34.4
       '@img/sharp-win32-x64': 0.34.4
+    optional: true
 
   shiki@3.13.0:
     dependencies:
