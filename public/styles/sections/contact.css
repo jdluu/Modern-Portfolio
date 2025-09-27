@@ -27,7 +27,7 @@
   color: var(--m3-color-on-surface);
   font-size: var(--m3-font-body-medium);
   text-align: left;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   border: 2px solid transparent;
   opacity: 0;
   transform: translateY(-8px) scale(0.99);
@@ -40,11 +40,15 @@
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
-.toast.success { border-color: var(--m3-color-success, #2e7d32); }
-.toast.error { border-color: var(--m3-color-error, #b00020); }
+.toast.success {
+  border-color: var(--m3-color-success, #2e7d32);
+}
+.toast.error {
+  border-color: var(--m3-color-error, #b00020);
+}
 .toast:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(0,0,0,0.04);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
   cursor: pointer;
 }
 
@@ -72,7 +76,9 @@
   margin-bottom: 2.4rem;
   color: var(--m3-color-on-surface);
 }
-.form-group { margin-bottom: 1.6rem; }
+.form-group {
+  margin-bottom: 1.6rem;
+}
 .form-group label {
   display: block;
   margin-bottom: 0.8rem;
@@ -96,7 +102,9 @@
   transition: all 0.2s ease;
 }
 .form-group input::placeholder,
-.form-group textarea::placeholder { color: var(--m3-color-on-surface-variant-light); }
+.form-group textarea::placeholder {
+  color: var(--m3-color-on-surface-variant-light);
+}
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
@@ -122,7 +130,11 @@ button[type="submit"] {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-button[type="submit"]:hover { background-color: var(--m3-color-primary-dark); }
+@media (hover: hover) {
+  button[type="submit"]:hover {
+    background-color: var(--m3-color-on-surface);
+  }
+}
 button[type="submit"]:disabled {
   background-color: var(--m3-color-outline);
   cursor: not-allowed;
