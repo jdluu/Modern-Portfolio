@@ -9,7 +9,7 @@
 .page-h2 {
   font-size: var(--m3-font-display-small);
   font-family: var(--m3-font-family-display);
-  color: var(--m3-color-on-background);
+  color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 3.2rem;
 }

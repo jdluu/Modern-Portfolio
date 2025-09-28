@@ -22,7 +22,7 @@
   font-weight: var(--font-weight-h5);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--m3-color-secondary);
+  color: var(--color-accent);
   opacity: 1;
   transform: none;
 }
@@ -38,7 +38,7 @@
   font-weight: var(--font-weight-h1);
   line-height: var(--font-line-height-heading-tight);
   letter-spacing: -0.02em;
-  color: var(--m3-color-on-background);
+  color: var(--color-text-primary);
   margin: 0.6rem 0 1rem;
   opacity: 1;
   transform: none;
@@ -54,7 +54,7 @@
   font-weight: 420;
   line-height: var(--font-line-height-body);
   letter-spacing: -0.005em;
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   max-width: 45ch;
   margin: 0 auto 2.4rem;
   opacity: 1;
@@ -85,12 +85,12 @@
   font-family: var(--m3-font-family-body);
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: var(--m3-color-on-primary);
-  background-color: var(--m3-color-primary);
-  border: 1px solid color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 70%, black 30%);
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 10px 24px color-mix(in oklab, var(--m3-color-primary) 30%, black 70%);
+  box-shadow: 0 10px 24px color-mix(in oklab, var(--color-accent) 30%, black 70%);
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -100,23 +100,23 @@
 }
 @media (hover: hover) {
   .resume-link:hover {
-    background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
-    border-color: color-mix(in oklab, var(--m3-color-primary) 60%, black 40%);
-    box-shadow: 0 12px 28px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+    background-color: color-mix(in oklab, var(--color-accent) 85%, black 15%);
+    border-color: color-mix(in oklab, var(--color-accent) 60%, black 40%);
+    box-shadow: 0 12px 28px color-mix(in oklab, var(--color-accent) 45%, black 55%);
     transform: translateY(-2px);
   }
 }
 .resume-link:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 45%, white 55%);
+  outline: 3px solid color-mix(in oklab, var(--color-accent) 45%, white 55%);
   outline-offset: 3px;
-  box-shadow: 0 12px 28px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+  box-shadow: 0 12px 28px color-mix(in oklab, var(--color-accent) 45%, black 55%);
   transform: translateY(-1px);
 }
-.resume-link:visited { color: var(--m3-color-on-primary); }
+.resume-link:visited { color: var(--color-on-accent); }
 .resume-link:active {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
-  border-color: color-mix(in oklab, var(--m3-color-primary) 60%, black 40%);
-  box-shadow: 0 6px 16px color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+  background-color: color-mix(in oklab, var(--color-accent) 70%, black 30%);
+  border-color: color-mix(in oklab, var(--color-accent) 60%, black 40%);
+  box-shadow: 0 6px 16px color-mix(in oklab, var(--color-accent) 35%, black 65%);
   transform: translateY(0);
 }
 
@@ -126,7 +126,7 @@
 
 /* Decorative background shapes & animation */
 .background-shapes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
-.shape { position: absolute; border-radius: 50%; background: var(--m3-color-primary); opacity: 0.2; animation: float 20s infinite ease-in-out alternate; pointer-events: none; }
+.shape { position: absolute; border-radius: 50%; background: var(--color-accent); opacity: 0.2; animation: float 20s infinite ease-in-out alternate; pointer-events: none; }
 .shape1 { width: 200px; height: 200px; top: 10%; left: 10%; animation-duration: 25s; }
 .shape2 { width: 150px; height: 150px; top: 60%; left: 80%; animation-duration: 20s; }
 .shape3 { width: 100px; height: 100px; top: 80%; left: 20%; animation-duration: 30s; }

@@ -1,6 +1,6 @@
 /* Footer component styles (extracted from src/components/ui/Footer.astro) */
 #footer {
-  background-color: var(--m3-color-background);
+  background-color: var(--color-background);
   padding: 2.4rem 0;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .footer-link {
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   transition: all 0.3s ease;
   display: inline-block;
   user-select: none;
@@ -23,7 +23,7 @@
 
 @media (hover: hover) {
   .footer-link:hover {
-    color: var(--m3-color-primary);
+    color: var(--color-accent);
     transform: scale(1.1) rotate(-5deg);
   }
 }

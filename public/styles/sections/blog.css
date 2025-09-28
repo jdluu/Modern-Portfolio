@@ -4,14 +4,14 @@
 .page-h2 {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
-  color: var(--m3-color-on-background);
+  color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 1rem;
 }
 
 .section-desc {
   font-size: var(--m3-font-body-large);
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   text-align: center;
   margin-bottom: 2.5rem;
 }
@@ -53,34 +53,34 @@
 .post-card {
   display: block;
   width: 100%;
-  background-color: var(--m3-color-surface);
-  color: var(--m3-color-on-surface);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   text-decoration: none;
   border-bottom: 0 !important;
-  border: 2px solid var(--m3-color-outline);
+  border: 2px solid var(--color-border);
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease, outline-color .12s ease;
   cursor: pointer;
-  outline: 2px solid var(--m3-color-outline-variant);
+  outline: 2px solid var(--color-border);
   outline-offset: 2px;
 }
 
 @media (hover: hover) {
   .post-card:hover {
-    border-color: var(--m3-color-primary);
+    border-color: var(--color-accent);
     box-shadow: 0 10px 24px rgba(0,0,0,0.12);
     transform: translateY(-2px);
-    outline-color: var(--m3-color-primary);
+    outline-color: var(--color-accent);
   }
 }
 
 .post-card:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 20%, transparent);
+  outline: 3px solid color-mix(in oklab, var(--color-accent) 20%, transparent);
   outline-offset: 4px;
   box-shadow:
-    0 0 0 4px var(--m3-color-primary) inset,
+    0 0 0 4px var(--color-accent) inset,
     0 6px 18px rgba(0,0,0,0.14);
 }
 
@@ -88,12 +88,12 @@
   margin: 0;
   font-size: clamp(1.6rem, 2vw, 2.25rem);
   font-weight: 600;
-  color: var(--m3-color-on-surface);
+  color: var(--color-text-primary);
   transition: color .2s ease;
 }
 @media (hover: hover) {
   .post-card:hover .post-card-title {
-    color: var(--m3-color-primary);
+    color: var(--color-accent);
   }
 }
 
@@ -101,7 +101,7 @@
   display: block;
   margin-top: 0.25rem;
   font-size: clamp(1rem, 0.9vw, 1.125rem);
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
 }
 
 /* Tag row and chips */
@@ -116,9 +116,9 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  background-color: var(--m3-color-secondary-container);
-  color: var(--m3-color-on-secondary-container);
-  border: 1px solid var(--m3-color-outline-variant);
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
   padding: 0.25rem 0.75rem;
   font-size: clamp(0.9rem, 0.8vw, 1rem);
   font-weight: 500;
@@ -128,7 +128,7 @@
 /* Post description / excerpt */
 .post-card-desc {
   margin-top: 0.75rem;
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   font-size: clamp(1.1rem, 1vw, 1.25rem);
   line-height: 1.7;
 }

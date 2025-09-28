@@ -35,7 +35,7 @@
 @media (hover: hover) {
   .experience-pagination-portal .pagination-controls button:hover:not(:disabled),
   .pagination-button:hover:not(:disabled) {
-    background: var(--m3-color-primary);
+    background: var(--color-accent);
     color: var(--m3-color-on-primary);
     transform: translateY(-1px);
   }
@@ -101,7 +101,7 @@
 }
 .experience-controls .control-select:focus {
   outline: none;
-  border-color: var(--m3-color-primary);
+  border-color: var(--color-accent);
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
 
@@ -123,13 +123,13 @@
 }
 @media (hover: hover) {
   .experience-controls .btn-reset:hover {
-    background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 6%, transparent);
     outline: none;
     transform: translateY(-1px);
   }
 }
 .experience-controls .btn-reset:focus {
-  background: color-mix(in oklab, var(--m3-color-primary) 6%, transparent);
+  background: color-mix(in oklab, var(--color-accent) 6%, transparent);
   outline: none;
   transform: translateY(-1px);
 }
