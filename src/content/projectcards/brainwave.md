@@ -1,14 +1,15 @@
 ---
-title: "SimpleTweet"
-slug: "simpletweet"
-description: "An android app that allows a user to view his Twitter timeline and post a new tweet."
-date: October 2021 - March 2022
-startDate: 2021-10-01
-endDate: 2022-03-31
+title: "BrainWave"
+slug: "brainwave"
+description: "An intelligent note-taking web application with AI integration"
+date: February 2024 - March 2024
+startDate: 2024-02-01
+endDate: 2024-03-31
 thumbnail:
-  url: "/uploads/thumbnail_simpletweet.png"
+  url: "/uploads/thumbnail_brainwave.png"
 programming_languages:
-  - "Java"
+  - "Typescript"
+  - "React"
 domains:
-  - "Mobile"
+  - "Web"
 ---
