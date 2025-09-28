@@ -7,7 +7,7 @@ date: "2024-12-13T08:00:00.000Z"
 tags:
   - AI
   - Python
-hero: /uploads/heroImageTS.png
+hero: /uploads/hero_image_truthseeker.png
 links:
   - label: Website
     url: "https://journeytotruth.streamlit.app"
