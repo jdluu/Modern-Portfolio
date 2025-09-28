@@ -45,7 +45,7 @@ const MoonIcon = (props: { class?: string }) => (
 );
 
 const isStartViewTransitionAvailable = (
-  doc: any
+  doc: any,
 ): doc is {
   startViewTransition: (cb: () => void) => { finished: Promise<void> };
 } => typeof doc?.startViewTransition === "function";
@@ -64,7 +64,7 @@ const ThemeToggleButton = () => {
     setDarkMode(initial);
     document.documentElement.setAttribute(
       "data-theme",
-      initial ? "dark" : "light"
+      initial ? "dark" : "light",
     );
   });
 
@@ -128,7 +128,9 @@ const ThemeToggleButton = () => {
         type="button"
         class="btn"
         aria-pressed={isDarkMode() ? "true" : "false"}
-        aria-label={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
+        aria-label={
+          isDarkMode() ? "Switch to light mode" : "Switch to dark mode"
+        }
         title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggle}
       >

@@ -11,7 +11,7 @@ const cache = new Map<string, CacheEntry<unknown>>();
 export async function getCachedOrFetch<T>(
   key: string,
   fetcher: () => Promise<T>,
-  ttlMs: number = DEFAULT_TTL_MS
+  ttlMs: number = DEFAULT_TTL_MS,
 ): Promise<T> {
   const now = Date.now();
   const existing = cache.get(key) as CacheEntry<T> | undefined;

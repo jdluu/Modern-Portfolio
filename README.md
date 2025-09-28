@@ -18,5 +18,5 @@ This project is built with the following technologies:
 - Fonts: Locally hosted Roboto Flex variable font (WOFF2) ([public/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2](public/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2))
 - Icons: Inline SVG assets ([public/icons/](public/icons/))
 - SEO/Meta: Robots and favicons ([public/robots.txt](public/robots.txt), [public/favicons/](public/favicons/))
-- Hosting/Deploy: Netlify (custom headers via [public/_headers](public/_headers))
+- Hosting/Deploy: Netlify (custom headers via [public/\_headers](public/_headers))
 - Package Manager: pnpm
