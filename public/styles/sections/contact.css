@@ -32,7 +32,9 @@
   opacity: 0;
   transform: translateY(-8px) scale(0.99);
   pointer-events: none;
-  transition: opacity 220ms ease, transform 220ms ease;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
   z-index: 9999;
 }
 .toast.visible {

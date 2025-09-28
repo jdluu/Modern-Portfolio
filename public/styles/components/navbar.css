@@ -46,7 +46,9 @@
   margin-left: auto;
 }
 @media (min-width: 768px) {
-  .menu-icon-wrapper { display: none !important; }
+  .menu-icon-wrapper {
+    display: none !important;
+  }
 }
 .menu-icon-button {
   width: 4rem;
@@ -64,9 +66,15 @@
   outline: 2px solid var(--color-accent);
   background-color: var(--m3-color-primary-container);
 }
-.menu-icon-button .close-icon { display: none; }
-.menu-icon-button.is-open .open-icon { display: none; }
-.menu-icon-button.is-open .close-icon { display: block; }
+.menu-icon-button .close-icon {
+  display: none;
+}
+.menu-icon-button.is-open .open-icon {
+  display: none;
+}
+.menu-icon-button.is-open .close-icon {
+  display: block;
+}
 
 /* Mobile menu states and desktop overrides */
 .nav-menu-styles {
@@ -79,8 +87,12 @@
   padding: 1.6rem;
   border-top: 1px solid var(--m3-color-outline);
 }
-.nav-menu-styles[data-open="true"] { display: block; }
-.nav-menu-styles[hidden] { display: none !important; }
+.nav-menu-styles[data-open="true"] {
+  display: block;
+}
+.nav-menu-styles[hidden] {
+  display: none !important;
+}
 
 @media (min-width: 768px) {
   .nav-menu-styles {
@@ -109,8 +121,14 @@
   align-items: flex-end;
 }
 @media (min-width: 768px) {
-  .nav-list { flex-direction: row; align-items: center; gap: 1.6rem; }
-  .nav-link { text-align: center; }
+  .nav-list {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.6rem;
+  }
+  .nav-link {
+    text-align: center;
+  }
 }
 .nav-link {
   display: block;
@@ -160,14 +178,20 @@
   align-items: center;
 }
 @media (min-width: 768px) {
-  .theme-toggle-container { display: flex; }
+  .theme-toggle-container {
+    display: flex;
+  }
 }
 
 /* small utility / responsive helpers (kept for parity) */
 .hidden,
-.nav-item.md\:hidden { display: none; }
+.nav-item.md\:hidden {
+  display: none;
+}
 @media (max-width: 767px) {
-  .nav-menu-styles[data-open="true"] .nav-item.md\:hidden { display: block; }
+  .nav-menu-styles[data-open="true"] .nav-item.md\:hidden {
+    display: block;
+  }
 }
 
 /* Mobile: ensure comfortable tap targets (>=44x44) and spacing */
@@ -194,5 +218,7 @@
 }
 
 @media (min-width: 768px) {
-  .md\:flex { display: flex; }
+  .md\:flex {
+    display: flex;
+  }
 }

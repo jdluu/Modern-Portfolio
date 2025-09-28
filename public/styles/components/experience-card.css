@@ -110,7 +110,8 @@
     border-color 0.2s ease,
     transform 0.2s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 6px 14px color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+  box-shadow: 0 6px 14px
+    color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
 }
 .experience-card .learn-more:visited {
   color: var(--m3-color-on-primary);
@@ -119,7 +120,8 @@
 .experience-card .learn-more:focus-visible {
   background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
   border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
-  box-shadow: 0 8px 20px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+  box-shadow: 0 8px 20px
+    color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
   transform: translateY(-1px);
 }
 .experience-card .learn-more:focus-visible {

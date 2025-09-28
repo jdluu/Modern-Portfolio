@@ -164,7 +164,9 @@
   }
 
   /* If any decorative background/image has a z-index, keep it below interactive layer */
-  .project-card .project-image { z-index: 0; }
+  .project-card .project-image {
+    z-index: 0;
+  }
 }
 
 /* Reduced motion */

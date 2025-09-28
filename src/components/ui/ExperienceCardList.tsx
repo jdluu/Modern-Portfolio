@@ -23,7 +23,7 @@ function getComparableTsFromItem(item: ExperienceCard): number {
 }
 
 function sortExperienceCardsByDateDesc(
-  items: ExperienceCard[]
+  items: ExperienceCard[],
 ): ExperienceCard[] {
   return [...items].sort((a, b) => {
     const ta = getComparableTsFromItem(a);
@@ -53,7 +53,7 @@ type Props = {
 export default function ExperienceCardList(props: Props) {
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
   const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">(
-    "date-desc"
+    "date-desc",
   );
   const [page, setPage] = createSignal(1);
   const [pageSize, setPageSize] = createSignal(6);
@@ -124,20 +124,20 @@ export default function ExperienceCardList(props: Props) {
         return yearsFound.has(yf);
       });
     }
-  
+
     // Sorting
     if (sortOption() === "date-desc") {
       items = sortExperienceCardsByDateDesc(items);
     } else if (sortOption() === "date-asc") {
       items = sortExperienceCardsByDateDesc(items).reverse();
     }
-  
+
     return items;
   });
 
   const totalCount = createMemo(() => processedAll().length);
   const totalPages = createMemo(() =>
-    Math.max(1, Math.ceil(totalCount() / pageSize()))
+    Math.max(1, Math.ceil(totalCount() / pageSize())),
   );
   const paginated = createMemo(() => {
     const p = Math.min(Math.max(1, page()), totalPages());
@@ -158,13 +158,13 @@ export default function ExperienceCardList(props: Props) {
 
     // Build ordered list of visible slugs from the paginated items
     const visibleSlugs = (paginated() ?? []).map((it) =>
-      normalizeSlug((it as any)?.slug)
+      normalizeSlug((it as any)?.slug),
     );
 
     const nodes = Array.from(
       document.querySelectorAll<HTMLElement>(
-        ".experience-grid > .experience-item"
-      )
+        ".experience-grid > .experience-item",
+      ),
     );
 
     // First, toggle visibility for accessibility and layout
@@ -307,7 +307,9 @@ export default function ExperienceCardList(props: Props) {
         >
           Previous
         </button>
-        <div class="pagination-info">Page {page()} of {totalPages()}</div>
+        <div class="pagination-info">
+          Page {page()} of {totalPages()}
+        </div>
         <button
           class="pagination-button"
           onClick={() => setPage((p) => Math.min(totalPages(), p + 1))}

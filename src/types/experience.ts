@@ -1,4 +1,3 @@
-
 /**
  * Full Experience document shape used on detail pages.
  * Mirrors the Tina schema for the `experience` collection but keeps fields optional

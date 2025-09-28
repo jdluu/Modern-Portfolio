@@ -10,7 +10,10 @@ const STORAGE_DEBOUNCE_MS = 100;
 const TOGGLE_THROTTLE_MS = 300;
 
 // Debounce helper: coalesces rapid calls into a single execution after `wait` ms.
-function debounce<T extends (...args: any[]) => void>(fn: T, wait: number): (...args: Parameters<T>) => void {
+function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
   return (...args: Parameters<T>) => {
     if (timeout) clearTimeout(timeout);
@@ -22,7 +25,10 @@ function debounce<T extends (...args: any[]) => void>(fn: T, wait: number): (...
 }
 
 // Throttle helper: ensures the wrapped function runs at most once per `wait` ms.
-function throttle<T extends (...args: any[]) => void>(fn: T, wait: number): (...args: Parameters<T>) => void {
+function throttle<T extends (...args: any[]) => void>(
+  fn: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
   let lastCall = 0;
   return (...args: Parameters<T>) => {
     const now = Date.now();
@@ -45,7 +51,10 @@ const debouncedSetStorage = debounce((isDark: boolean) => {
 // Runtime guard for the experimental View Transitions API.
 // This avoids unsafe casts and keeps intent explicit.
 function supportsViewTransition(): boolean {
-  return typeof (document as Document & { startViewTransition?: unknown }).startViewTransition === "function";
+  return (
+    typeof (document as Document & { startViewTransition?: unknown })
+      .startViewTransition === "function"
+  );
 }
 
 /**
@@ -57,7 +66,10 @@ function supportsViewTransition(): boolean {
 export const toggleTheme = (): void => {
   const applyToggle = () => {
     const isDark = document.documentElement.classList.toggle("dark");
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDark ? "dark" : "light",
+    );
     debouncedSetStorage(isDark);
   };
 

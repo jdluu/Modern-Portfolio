@@ -26,7 +26,7 @@ const posts = defineCollection({
         z.object({
           label: z.string(),
           url: z.string(),
-        })
+        }),
       )
       .optional(),
     slug: z.string().optional(),

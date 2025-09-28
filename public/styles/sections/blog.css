@@ -54,8 +54,12 @@
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
-    transform 0.12s ease, outline-color 0.12s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease,
+    transform 0.12s ease,
+    outline-color 0.12s ease;
   cursor: pointer;
   outline: 2px solid var(--color-border);
   outline-offset: 2px;
@@ -73,7 +77,8 @@
 .post-card:focus-visible {
   outline: 3px solid color-mix(in oklab, var(--color-accent) 20%, transparent);
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px var(--color-accent) inset,
+  box-shadow:
+    0 0 0 4px var(--color-accent) inset,
     0 6px 18px rgba(0, 0, 0, 0.14);
 }
 

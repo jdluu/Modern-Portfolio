@@ -1,14 +1,21 @@
 // Misc helpers used across the site for safe frontmatter handling and asset resolution.
 // Designed to be small, defensive, and self-documenting.
 
-type ImageLike = { src?: string; url?: string; path?: string; filename?: string } & Record<string, unknown>;
+type ImageLike = {
+  src?: string;
+  url?: string;
+  path?: string;
+  filename?: string;
+} & Record<string, unknown>;
 
 function isImageLike(value: unknown): value is ImageLike {
-  return typeof value === "object" && value !== null && (
-    "src" in (value as object) ||
-    "url" in (value as object) ||
-    "path" in (value as object) ||
-    "filename" in (value as object)
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("src" in (value as object) ||
+      "url" in (value as object) ||
+      "path" in (value as object) ||
+      "filename" in (value as object))
   );
 }
 

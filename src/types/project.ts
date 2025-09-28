@@ -40,7 +40,10 @@ export interface Project {
   // Background / problem / solution
   background?: { description?: string | null } | null;
   problem?: { description?: string | null } | string | null;
-  solution?: { title?: string | null; description?: string | null } | string | null;
+  solution?:
+    | { title?: string | null; description?: string | null }
+    | string
+    | null;
 
   // Process (may include title and a plan array)
   process?: {
@@ -62,9 +65,12 @@ export interface Project {
   } | null;
 
   // Reflection / points
-  reflection?: {
-    points?: { point?: string | null }[] | null;
-  } | string[] | null;
+  reflection?:
+    | {
+        points?: { point?: string | null }[] | null;
+      }
+    | string[]
+    | null;
 
   // Source / external links used by the page
   source?: {
