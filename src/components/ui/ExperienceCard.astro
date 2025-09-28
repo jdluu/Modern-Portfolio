@@ -1,5 +1,5 @@
 ---
-import type { ExperienceCardItem } from "../../types/experience-card";
+import type { ExperienceCard } from "../../types/experience-card";
 import {
   parseSafeDate,
   resolveAssetUrl,
@@ -8,18 +8,27 @@ import {
 } from "../../lib/utils";
 
 export interface Props {
-  item: ExperienceCardItem;
+  item: ExperienceCard;
 }
 
 const { item } = Astro.props as Props;
 
-// Minimal, type-driven extraction — metadata matches Tina schema for experiencecard.metadata
-const { title, slug, metadata = {} } = item;
-const company = metadata.company ?? "";
-const startDateStr = metadata.startDate ?? undefined;
-const endDateStr = metadata.endDate ?? undefined;
-const thumbnailSrc = metadata.thumbnail ?? undefined;
-const summaryRaw = metadata.summary ?? "";
+// Minimal, type-driven extraction — flattened ExperienceCard exposes metadata fields at top-level
+const {
+  title,
+  slug,
+  company = "",
+  startDate,
+  endDate,
+  date,
+  thumbnail,
+  summary = "",
+} = item;
+
+const startDateStr = startDate ?? undefined;
+const endDateStr = endDate ?? undefined;
+const thumbnailSrc = thumbnail ?? undefined;
+const summaryRaw = summary ?? "";
 
 // Ensure client links use extensionless, lowercase slugs to match getStaticPaths()
 const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "");
@@ -32,7 +41,7 @@ const endDateObj = parseSafeDate(endDateStr);
 const safeThumbnail = resolveAssetUrl(thumbnailSrc) ?? "";
 
 // Compute display date with sentinel handling
-const explicitDate = metadata.date ?? "";
+const explicitDate = date ?? "";
 let dateDisplay = explicitDate;
 
 if (!dateDisplay) {

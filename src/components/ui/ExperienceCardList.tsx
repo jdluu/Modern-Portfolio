@@ -5,27 +5,26 @@ import {
   createEffect,
   onCleanup,
 } from "solid-js";
-import type { ExperienceCardItem } from "../../types/experience-card";
+import type { ExperienceCard } from "../../types/experience-card";
 import { parseDateToTs, isSentinelEnd } from "../../lib/utils";
 
 function normalizeSlug(value: unknown): string {
   return String(value ?? "").replace(/\.(md|mdx)$/i, "");
 }
 
-function getComparableTsFromItem(item: ExperienceCardItem): number {
-  const meta = (item as any)?.metadata ?? {};
-  const endStr = meta?.endDate ?? meta?.date ?? "";
+function getComparableTsFromItem(item: ExperienceCard): number {
+  const endStr = (item as any)?.endDate ?? (item as any)?.date ?? "";
   if (isSentinelEnd(endStr)) return Infinity;
   const endTs = parseDateToTs(endStr);
   if (!Number.isNaN(endTs)) return endTs;
-  const startTs = parseDateToTs(meta?.startDate ?? "");
+  const startTs = parseDateToTs((item as any)?.startDate ?? "");
   if (!Number.isNaN(startTs)) return startTs;
   return 0;
 }
 
 function sortExperienceCardsByDateDesc(
-  items: ExperienceCardItem[]
-): ExperienceCardItem[] {
+  items: ExperienceCard[]
+): ExperienceCard[] {
   return [...items].sort((a, b) => {
     const ta = getComparableTsFromItem(a);
     const tb = getComparableTsFromItem(b);
@@ -45,10 +44,10 @@ function sortExperienceCardsByDateDesc(
  * - Pagination: page size selector + prev/next controls
  *
  * Props:
- * - initialItems: ExperienceCardItem[] (rendered statically by Astro and passed into the hydrated component)
+ * - initialItems: ExperienceCard[] (rendered statically by Astro and passed into the hydrated component)
  */
 type Props = {
-  initialItems: ExperienceCardItem[];
+  initialItems: ExperienceCard[];
 };
 
 export default function ExperienceCardList(props: Props) {
@@ -60,15 +59,14 @@ export default function ExperienceCardList(props: Props) {
   const [pageSize, setPageSize] = createSignal(6);
   let paginationRef: HTMLDivElement | undefined;
 
-  // Derive available years (and "Present") from metadata dates
+  // Derive available years (and "Present") from date fields
   const years = createMemo(() => {
     const out = new Set<string>();
     (props.initialItems ?? []).forEach((it) => {
-      const meta = it?.metadata ?? {};
       const candidates = [
-        meta?.startDate ?? "",
-        meta?.endDate ?? "",
-        meta?.date ?? "",
+        (it as any)?.startDate ?? "",
+        (it as any)?.endDate ?? "",
+        (it as any)?.date ?? "",
       ];
       candidates.forEach((v) => {
         if (!v) return;
@@ -108,11 +106,10 @@ export default function ExperienceCardList(props: Props) {
     const yf = yearFilter();
     if (yf) {
       items = items.filter((it) => {
-        const meta = it?.metadata ?? {};
         const cand = [
-          meta?.startDate ?? "",
-          meta?.endDate ?? "",
-          meta?.date ?? "",
+          (it as any)?.startDate ?? "",
+          (it as any)?.endDate ?? "",
+          (it as any)?.date ?? "",
         ];
         const yearsFound = new Set<string>();
         for (const v of cand) {
@@ -127,14 +124,14 @@ export default function ExperienceCardList(props: Props) {
         return yearsFound.has(yf);
       });
     }
-
+  
     // Sorting
     if (sortOption() === "date-desc") {
       items = sortExperienceCardsByDateDesc(items);
     } else if (sortOption() === "date-asc") {
       items = sortExperienceCardsByDateDesc(items).reverse();
     }
-
+  
     return items;
   });
 
