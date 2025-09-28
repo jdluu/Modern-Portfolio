@@ -120,50 +120,54 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // --- 1. Get all required elements ---
     const mainMenu = document.getElementById("main-menu");
+    const menuToggleBtn = document.getElementById("menu-toggle-btn");
+    const backdrop = document.getElementById("menu-backdrop");
+    const menuCloseBtn = document.getElementById("menu-close-btn");
 
-	if (!mainMenu) {
-		console.error("Navigation menu element #main-menu not found.");
-		return; 
-	}
+    // --- 2. Check if all elements exist before proceeding ---
+    if (mainMenu && menuToggleBtn && backdrop && menuCloseBtn) {
+      // --- 3. All logic is now safely scoped inside this block ---
+      
+      const btn = menuToggleBtn;
+      const menu = mainMenu;
+      const back = backdrop;
+      const closeBtn = menuCloseBtn;
+      const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
 
-	const menuToggleBtn = document.getElementById("menu-toggle-btn");
-	const backdrop = document.getElementById("menu-backdrop");
-	const menuCloseBtn = document.getElementById("menu-close-btn");
+      let isAnimating = false;
+      let openFallbackTimer: number | undefined;
+      let closeFallbackTimer: number | undefined;
 
-	if (!menuToggleBtn || !backdrop) {
-		return; 
-	}
-    
-    const btn = menuToggleBtn;
-    const menu = mainMenu;
-    const back = backdrop;
-    const closeBtn = menuCloseBtn;
-    const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
-    
-    let isAnimating = false;
-    
-    function onDocumentKeydown(e: KeyboardEvent) {
+      function cleanupAfterClose() {
+        menu.setAttribute("hidden", "");
+        menu.setAttribute("data-open", "false");
+        menu.inert = true;
+        menu.classList.remove("is-closing");
+        back.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+        isAnimating = false;
+        window.clearTimeout(closeFallbackTimer);
+      }
+
+      function onDocumentKeydown(e: KeyboardEvent) {
         if (e.key === "Escape" || e.key === "Esc") {
-            if (btn.getAttribute("aria-expanded") === "true") {
-                e.preventDefault();
-                closeMenu();
-            }
+          if (btn.getAttribute("aria-expanded") === "true") {
+            e.preventDefault();
+            closeMenu();
+          }
         }
-    }
-    
-    let openFallbackTimer: number | undefined;
-	let closeFallbackTimer: number | undefined;
-    
-    function onMenuTransitionEnd(e: TransitionEvent) {
+      }
+
+      function onMenuTransitionEnd(e: TransitionEvent) {
         if (e.target !== menu) return;
         isAnimating = false;
         window.clearTimeout(openFallbackTimer);
-        window.clearTimeout(closeFallbackTimer);
         menu.removeEventListener("transitionend", onMenuTransitionEnd);
-    }
-    
-    function openMenu() {
+      }
+
+      function openMenu() {
         if (isAnimating) return;
         isAnimating = true;
         btn.setAttribute("aria-expanded", "true");
@@ -173,99 +177,94 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
         back.removeAttribute("hidden");
         back.classList.add("visible");
         document.body.style.overflow = "hidden";
+        
         requestAnimationFrame(() => {
-            void menu.offsetWidth;
-            menu.classList.add("is-open");
-            menu.focus();
-            const first = menu.querySelector<HTMLElement>(firstFocusable);
-            if (first) first.focus();
-            document.addEventListener("keydown", onDocumentKeydown);
-            menu.addEventListener("transitionend", onMenuTransitionEnd);
+          void menu.offsetWidth; // Trigger reflow for transition
+          menu.classList.add("is-open");
+          const first = menu.querySelector<HTMLElement>(firstFocusable);
+          if (first) first.focus();
+          document.addEventListener("keydown", onDocumentKeydown);
+          menu.addEventListener("transitionend", onMenuTransitionEnd);
         });
+
         openFallbackTimer = window.setTimeout(() => {
-            if (isAnimating) {
-                isAnimating = false;
-                menu.removeEventListener("transitionend", onMenuTransitionEnd);
-            }
+          if (isAnimating) {
+            isAnimating = false;
+            menu.removeEventListener("transitionend", onMenuTransitionEnd);
+          }
         }, 600);
-    }
-    
-    function closeMenu(returnFocus = true) {
+      }
+
+      function closeMenu(returnFocus = true) {
         if (isAnimating) return;
         isAnimating = true;
         btn.setAttribute("aria-expanded", "false");
         menu.classList.remove("is-open");
         menu.classList.add("is-closing");
         back.classList.remove("visible");
+
         function onEnd(e: TransitionEvent) {
-            if (e.target !== menu) return;
-            menu.setAttribute("hidden", "");
-            menu.setAttribute("data-open", "false");
-            menu.inert = true;
-            menu.classList.remove("is-closing");
-            back.setAttribute("hidden", "");
-            document.body.style.overflow = "";
-            isAnimating = false;
-            window.clearTimeout(closeFallbackTimer);
-            menu.removeEventListener("transitionend", onEnd);
+          if (e.target !== menu) return;
+          cleanupAfterClose();
+          menu.removeEventListener("transitionend", onEnd);
         }
+
         menu.addEventListener("transitionend", onEnd);
+
         closeFallbackTimer = window.setTimeout(() => {
-            if (isAnimating) {
-                menu.setAttribute("hidden", "");
-                menu.setAttribute("data-open", "false");
-                menu.inert = true;
-                menu.classList.remove("is-closing");
-                back.setAttribute("hidden", "");
-                document.body.style.overflow = "";
-                isAnimating = false;
-                menu.removeEventListener("transitionend", onEnd);
-            }
+          if (isAnimating) {
+            cleanupAfterClose();
+            menu.removeEventListener("transitionend", onEnd);
+          }
         }, 600);
+
         document.removeEventListener("keydown", onDocumentKeydown);
         if (returnFocus) btn.focus();
-    }
-    
-    function toggleMenu() {
+      }
+
+      function toggleMenu() {
         const isExpanded = btn.getAttribute("aria-expanded") === "true";
         if (isExpanded) closeMenu();
         else openMenu();
-    }
-    
-    btn.addEventListener("click", toggleMenu);
-    if (closeBtn) closeBtn.addEventListener("click", () => closeMenu());
-    back.addEventListener("click", () => closeMenu());
-    menu.addEventListener("click", (e) => {
-        if (e.target && e.target instanceof HTMLElement) {
-            const link = e.target.closest("a,button");
-            if (link) closeMenu();
+      }
+
+      const desktopBreakpoint = 768;
+      function setDesktopNavState() {
+        const isDesktop = window.innerWidth >= desktopBreakpoint;
+        const isMenuOpen = menu.getAttribute("data-open") === "true";
+
+        if (isDesktop) {
+          menu.inert = false;
+          if (isMenuOpen) {
+            closeMenu(false);
+            document.body.style.overflow = "";
+            back.setAttribute("hidden", "");
+          }
+        } else {
+          menu.inert = !isMenuOpen;
         }
-    });
+      }
 
+      // --- Attach all event listeners ---
+      btn.addEventListener("click", toggleMenu);
+      closeBtn.addEventListener("click", () => closeMenu());
+      back.addEventListener("click", () => closeMenu());
+      menu.addEventListener("click", (e) => {
+        if (e.target instanceof HTMLElement) {
+          if (e.target.closest("a, button")) {
+            closeMenu();
+          }
+        }
+      });
+      
+      // --- Initial setup and resize listener ---
+      setDesktopNavState();
+      window.addEventListener("resize", setDesktopNavState);
 
-    const desktopBreakpoint = 768;
-
-    function setDesktopNavState() {
-		if (!mainMenu) return;
-
-		if (window.innerWidth >= desktopBreakpoint) {
-			// On desktop, ensure the menu is always visible and interactive.
-			mainMenu.removeAttribute('hidden');
-			mainMenu.inert = false;
-		} else {
-			// On mobile, ensure the menu is hidden and inert unless it's open.
-			const isOpen = mainMenu.getAttribute('data-open') === 'true';
-			if (!isOpen) {
-			mainMenu.setAttribute('hidden', '');
-			mainMenu.inert = true;
-			}
-		}
-	}
-
-    // Run on initial page load
-    setDesktopNavState();
-
-    // Run when the window is resized
-    window.addEventListener('resize', setDesktopNavState);
+    } else {
+      console.error(
+        "One or more required navigation elements were not found."
+      );
+    }
   });
 </script>
