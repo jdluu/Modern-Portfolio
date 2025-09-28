@@ -8,6 +8,10 @@ import {
 import type { ExperienceCardItem } from "../../types/experience-card";
 import { parseDateToTs, isSentinelEnd } from "../../lib/utils";
 
+function normalizeSlug(value: unknown): string {
+  return String(value ?? "").replace(/\.(md|mdx)$/i, "");
+}
+
 function getComparableTsFromItem(item: ExperienceCardItem): number {
   const meta = (item as any)?.metadata ?? {};
   const endStr = meta?.endDate ?? meta?.date ?? "";
@@ -157,7 +161,7 @@ export default function ExperienceCardList(props: Props) {
 
     // Build ordered list of visible slugs from the paginated items
     const visibleSlugs = (paginated() ?? []).map((it) =>
-      String((it as any)?.slug ?? "").replace(/\.(md|mdx)$/, "")
+      normalizeSlug((it as any)?.slug)
     );
 
     const nodes = Array.from(
@@ -168,7 +172,7 @@ export default function ExperienceCardList(props: Props) {
 
     // First, toggle visibility for accessibility and layout
     nodes.forEach((node) => {
-      const slug = String(node.dataset.slug ?? "").replace(/\.(md|mdx)$/, "");
+      const slug = normalizeSlug(node.dataset.slug);
       const shouldShow = visibleSlugs.includes(slug);
       node.style.display = shouldShow ? "" : "none";
       node.setAttribute("aria-hidden", shouldShow ? "false" : "true");

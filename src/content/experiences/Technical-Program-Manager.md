@@ -2,7 +2,7 @@
 title: Technical Program Manager
 company:
   name: CodePath
-  image: /uploads/tnCodePath.png
+  image: /uploads/thumbnail_codepath.png
   imagealt: >-
     CodePath.org logo with the words 'CODE PATH' in black and 'ORG' in teal,
     inside a rounded white square on a black background.
@@ -12,8 +12,8 @@ logistics:
   startDate: 2022-01-01T08:00:00.000Z
   endDate: 2022-06-10T07:00:00.000Z
 technologies:
-  tools: 'Kotlin, Java'
-  skills: 'Curriculum Development, Program Management, Student Support'
+  tools: "Kotlin, Java"
+  skills: "Curriculum Development, Program Management, Student Support"
 work:
   responsibilities:
     - duties: >-
@@ -32,4 +32,3 @@ work:
         Mentored a student group that became a top 10 finalist in android apps
         for Codepath nationally
 ---
-

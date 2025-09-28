@@ -5,9 +5,13 @@ import { getCollection } from "astro:content";
   
 const rawCollection = (await getCollection("experiencecards")) ?? [];
 function mapEntryToExperience(item: any) {
+  const entrySlug =
+    typeof item?.slug === "string"
+      ? item.slug
+      : String(item?.id ?? "").replace(/\.(md|mdx)$/i, "");
   return {
     title: item?.data?.title ?? "Untitled",
-    slug: String(item?.id ?? "").toLowerCase(),
+    slug: entrySlug,
     metadata: item?.data?.metadata ?? {},
   };
 }
@@ -22,7 +26,7 @@ const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 	     The client island will toggle visibility of these cards via data-slug attributes. -->
 	<div class="experience-grid">
 		{experiences.map((e) => (
-			<div class="experience-item" data-slug={String(e.slug ?? "").replace(/\.(md|mdx)$/, "")}>
+			<div class="experience-item" data-slug={e.slug ?? ""}>
 				<ExperienceCard item={e} />
 			</div>
 		))}
