@@ -15,9 +15,6 @@ const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 ---
 <section class="content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
-	<p class="section-desc">
-		<strong>My professional journey</strong>
-	</p>
 	<!-- Client island (controls + visibility) -->
 	<ExperienceCardList client:load initialItems={experiences} />
 

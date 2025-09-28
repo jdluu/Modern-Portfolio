@@ -9,13 +9,6 @@
   margin-bottom: 1rem;
 }
 
-.section-desc {
-  font-size: var(--m3-font-body-large);
-  color: var(--color-text-tertiary);
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-
 /* Layout for the blog content area */
 .content-section.blog-section {
   display: flex;
@@ -60,8 +53,9 @@
   border: 2px solid var(--color-border);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-  transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .12s ease, outline-color .12s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
+    transform 0.12s ease, outline-color 0.12s ease;
   cursor: pointer;
   outline: 2px solid var(--color-border);
   outline-offset: 2px;
@@ -70,7 +64,7 @@
 @media (hover: hover) {
   .post-card:hover {
     border-color: var(--color-accent);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
     outline-color: var(--color-accent);
   }
@@ -79,9 +73,8 @@
 .post-card:focus-visible {
   outline: 3px solid color-mix(in oklab, var(--color-accent) 20%, transparent);
   outline-offset: 4px;
-  box-shadow:
-    0 0 0 4px var(--color-accent) inset,
-    0 6px 18px rgba(0,0,0,0.14);
+  box-shadow: 0 0 0 4px var(--color-accent) inset,
+    0 6px 18px rgba(0, 0, 0, 0.14);
 }
 
 .post-card-title {
@@ -89,7 +82,7 @@
   font-size: clamp(1.6rem, 2vw, 2.25rem);
   font-weight: 600;
   color: var(--color-text-primary);
-  transition: color .2s ease;
+  transition: color 0.2s ease;
 }
 @media (hover: hover) {
   .post-card:hover .post-card-title {
@@ -169,16 +162,26 @@
 
 /* Small-screen adjustments for controls */
 @media (max-width: 640px) {
-  .posts-controls { justify-content: center; }
-  .posts-controls .controls-right { margin-left: 0; }
+  .posts-controls {
+    justify-content: center;
+  }
+  .posts-controls .controls-right {
+    margin-left: 0;
+  }
   .posts-controls .controls-left,
   .posts-controls .controls-right {
     flex: 1 1 100%;
     justify-content: center;
   }
-  .posts-controls .controls-left { margin-bottom: 0.5rem; }
-  .posts-controls .controls-right { gap: 0.5rem; }
-  .posts-controls .controls-right .btn-reset { margin-left: 0.25rem; }
+  .posts-controls .controls-left {
+    margin-bottom: 0.5rem;
+  }
+  .posts-controls .controls-right {
+    gap: 0.5rem;
+  }
+  .posts-controls .controls-right .btn-reset {
+    margin-left: 0.25rem;
+  }
   .posts-controls .controls-right [role="dialog"] {
     left: 0 !important;
     right: auto !important;

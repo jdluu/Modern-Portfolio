@@ -9,13 +9,6 @@
   margin-bottom: 1rem;
 }
 
-.section-desc {
-  font-size: var(--m3-font-body-large);
-  color: var(--m3-color-on-surface-variant);
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
 /* Section layout */
 .content-section {
   display: flex;
