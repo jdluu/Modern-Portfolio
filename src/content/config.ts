@@ -91,7 +91,6 @@ const experiencecards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    // Flattened metadata fields (migrated frontmatter should set these at top-level)
     company: z.string().optional(),
     date: z.union([z.string(), z.coerce.date()]).optional(),
     startDate: z.union([z.string(), z.coerce.date()]).optional(),
@@ -132,9 +131,7 @@ const projectcards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    // Flattened metadata fields for project listing frontmatter
     description: z.string().optional(),
-    // Optional date fields to mirror experiencecard schema and Cosmic payloads.
     date: z.union([z.string(), z.coerce.date()]).optional(),
     startDate: z.union([z.string(), z.coerce.date()]).optional(),
     endDate: z.union([z.string(), z.coerce.date()]).optional(),
