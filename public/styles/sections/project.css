@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 2rem;
+  padding: var(--space-12) var(--space-5);
 }
 
 .page-h2 {
@@ -13,7 +13,7 @@
   line-height: var(--font-line-height-heading-tight);
   letter-spacing: -0.014em;
   color: var(--color-text-primary);
-  margin-bottom: 1.8rem;
+  margin-bottom: var(--space-5);
   text-align: center;
 }
 
@@ -24,14 +24,14 @@
   line-height: var(--font-line-height-body);
   letter-spacing: -0.005em;
   color: var(--m3-color-on-surface-variant);
-  margin-bottom: 3.2rem;
+  margin-bottom: var(--space-8);
   max-width: 70ch;
   text-align: center;
 }
 
 .card-grid {
   display: grid;
-  gap: 2rem;
+  gap: var(--grid-gap-sm);
   width: 100%;
   max-width: 1200px;
 }
@@ -41,6 +41,7 @@
 @media (min-width: 768px) {
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap-md);
   }
 }
 
@@ -48,5 +49,6 @@
 @media (min-width: 1024px) {
   .card-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap-lg);
   }
 }
