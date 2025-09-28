@@ -39,6 +39,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  z-index: 0;
 }
 
 /* hover */
@@ -78,8 +79,11 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: var(--space-10);
-  padding: 0 var(--space-5);
+  /* Ensure minimum touch target size */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.75rem;
+  inline-size: max-content;
   font-size: var(--m3-font-label-large);
   font-family: var(--m3-font-family-body);
   font-weight: 600;
@@ -110,9 +114,13 @@
   transform: translateY(-1px);
 }
 
-.project-card .learn-more:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--color-accent) 45%, white 55%);
+.project-card .learn-more:focus-visible,
+.project-card .project-container a:focus-visible {
+  outline: 2px solid var(--color-accent, currentColor);
   outline-offset: 3px;
+  /* make sure focus indication sits above overlay backgrounds */
+  z-index: 3;
+  position: relative;
 }
 
 .project-card .learn-more:active {
@@ -127,12 +135,36 @@
 
 /* Avoid unexpected transforms on touch devices */
 @media (hover: none), (pointer: coarse) {
+  /* Keep overlay visible on touch devices but allow taps to reach interactive elements */
   .project-card .project-container {
     opacity: 1;
+    transform: none;
+    /* Allow pointer events to pass through overlay background */
+    pointer-events: none;
+    z-index: 1;
   }
+
+  /* Ensure interactive elements are tappable and above the overlay background */
+  .project-card .project-container a,
+  .project-card .project-container button,
+  .project-card .project-container .learn-more {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+    /* reinforce minimum touch target for any inline links */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+  }
+
   .project-card.background:hover {
     transform: none;
   }
+
+  /* If any decorative background/image has a z-index, keep it below interactive layer */
+  .project-card .project-image { z-index: 0; }
 }
 
 /* Reduced motion */
