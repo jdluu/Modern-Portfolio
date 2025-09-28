@@ -136,7 +136,6 @@ const projectcards = defineCollection({
     startDate: z.union([z.string(), z.coerce.date()]).optional(),
     endDate: z.union([z.string(), z.coerce.date()]).optional(),
     thumbnail: z.object({ url: z.string().optional() }).optional(),
-    content: z.string().optional(),
     programming_languages: z.array(z.string()).optional(),
     domains: z.array(z.string()).optional(),
     slug: z.string().optional(),
