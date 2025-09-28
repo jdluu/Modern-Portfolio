@@ -109,87 +109,25 @@ const projects = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    metadata: z
+    slug: z.string().optional(),
+    date: z.union([z.string(), z.coerce.date()]).optional(),
+    summary: z.string().optional(),
+    role: z.string().optional(),
+    technologies: z.array(z.string()).optional(),
+    tools: z.array(z.string()).optional(),
+    cover: z.string().optional(),
+    final: z.string().optional(),
+    problem: z.string().optional(),
+    solution: z.string().optional(),
+    process: z.array(z.string()).optional(),
+    impact: z.array(z.string()).optional(),
+    reflection: z.array(z.string()).optional(),
+    links: z
       .object({
-        description: z.string().optional(),
-        home: z
-          .object({
-            image: z
-              .object({
-                url: z.string().optional(),
-                imgix_url: z.string().optional(),
-              })
-              .optional(),
-            imagealt: z.string().optional(),
-          })
-          .optional(),
-        logistics: z
-          .object({
-            date: z.string().optional(),
-            techtitle: z.string().optional(),
-            technologies: z.string().optional(),
-            tools: z.string().optional(),
-          })
-          .optional(),
-        work: z
-          .object({
-            role: z.string().optional(),
-            responsibilities: z
-              .array(z.object({ duties: z.string().optional() }))
-              .optional(),
-          })
-          .optional(),
-        background: z.object({ description: z.string().optional() }).optional(),
-        problem: z.object({ description: z.string().optional() }).optional(),
-        solution: z
-          .object({
-            title: z.string().optional(),
-            description: z.string().optional(),
-          })
-          .optional(),
-        process: z
-          .object({
-            title: z.string().optional(),
-            plan: z.array(z.object({ steps: z.string().optional() })).optional(),
-          })
-          .optional(),
-        prototype: z
-          .object({
-            image: z
-              .object({
-                url: z.string().optional(),
-                imgix_url: z.string().optional(),
-              })
-              .optional(),
-            imagealt: z.string().optional(),
-          })
-          .optional(),
-        final: z
-          .object({
-            description: z.string().optional(),
-            image: z
-              .object({
-                url: z.string().optional(),
-                imgix_url: z.string().optional(),
-              })
-              .optional(),
-            imagealt: z.string().optional(),
-          })
-          .optional(),
-        reflection: z
-          .object({
-            points: z.array(z.object({ point: z.string().optional() })).optional(),
-          })
-          .optional(),
-        source: z
-          .object({
-            title: z.string().optional(),
-            link: z.string().optional(),
-          })
-          .optional(),
+        live: z.string().optional(),
+        source: z.string().optional(),
       })
       .optional(),
-    slug: z.string().optional(),
   }),
 });
 
@@ -201,7 +139,6 @@ const projectcards = defineCollection({
       .object({
         description: z.string().optional(),
         thumbnail: z.object({ url: z.string().optional() }).optional(),
-        content: z.string().optional(),
         programming_languages: z.array(z.string()).optional(),
         domains: z.array(z.string()).optional(),
       })
