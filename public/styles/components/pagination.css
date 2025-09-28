@@ -144,7 +144,8 @@
 /* Focus: show an accessible ring but do not change button fill color (prevents persistent flashing) */
 .experience-controls .btn-reset:focus {
   outline: none;
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 20%, transparent);
+  box-shadow: 0 0 0 4px
+    color-mix(in oklab, var(--color-accent) 20%, transparent);
   transform: translateY(-1px);
 }
 
@@ -255,7 +256,11 @@
   border-color: var(--color-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transform: translateY(0);
-  transition: background-color 0.12s ease, color 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    transform 0.08s ease,
+    box-shadow 0.12s ease;
 }
 
 /* Hover: slight darken for emphasis (use color-mix towards black for consistent contrast) */
@@ -265,7 +270,7 @@
     background-color: color-mix(in oklab, var(--color-accent) 88%, black 12%);
     color: var(--m3-color-on-primary);
     transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -280,6 +285,7 @@
 .experience-controls .btn-reset:focus,
 .project-controls .btn-reset:focus {
   outline: none;
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 20%, transparent);
+  box-shadow: 0 0 0 4px
+    color-mix(in oklab, var(--color-accent) 20%, transparent);
   border-color: color-mix(in oklab, var(--color-accent) 60%, black 10%);
 }

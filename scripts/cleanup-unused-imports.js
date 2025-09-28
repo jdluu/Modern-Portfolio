@@ -31,7 +31,9 @@ for (const sf of sourceFiles) {
     // Check default import usage
     if (defaultImport) {
       const name = defaultImport.getText();
-      const refs = sf.getDescendantsOfKind(ts.SyntaxKind.Identifier).filter(id => id.getText() === name);
+      const refs = sf
+        .getDescendantsOfKind(ts.SyntaxKind.Identifier)
+        .filter((id) => id.getText() === name);
       if (refs.length <= 1) {
         // remove default import
         defaultImport.remove();
@@ -41,7 +43,9 @@ for (const sf of sourceFiles) {
 
     for (const n of named) {
       const name = n.getName();
-      const refs = sf.getDescendantsOfKind(ts.SyntaxKind.Identifier).filter(id => id.getText() === name);
+      const refs = sf
+        .getDescendantsOfKind(ts.SyntaxKind.Identifier)
+        .filter((id) => id.getText() === name);
       if (refs.length <= 1) {
         n.remove();
         fileChanged = true;
@@ -49,7 +53,11 @@ for (const sf of sourceFiles) {
     }
 
     // If the import has no specifiers left, remove the whole import
-    if (imp.getNamedImports().length === 0 && !imp.getDefaultImport() && !imp.getNamespaceImport()) {
+    if (
+      imp.getNamedImports().length === 0 &&
+      !imp.getDefaultImport() &&
+      !imp.getNamespaceImport()
+    ) {
       imp.remove();
       fileChanged = true;
     }
