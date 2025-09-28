@@ -5,7 +5,7 @@
 .experience-card.background {
   display: block;
   position: relative;
-  border: 1px solid var(--m3-color-outline);
+  border: 1px solid var(--color-border);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   height: 30rem;
@@ -23,12 +23,12 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  background-color: var(--m3-color-surface-variant);
+  background-color: var(--color-card);
   padding: 0.5rem;
   box-sizing: border-box;
 }
 .experience-card .experience-image.placeholder {
-  background-color: var(--m3-color-surface-variant);
+  background-color: var(--color-card);
 }
 
 /* Hover / interaction */
@@ -42,7 +42,7 @@
 
 /* Overlay */
 .experience-card .project-container {
-  background: var(--m3-color-surface-variant);
+  background: var(--color-card);
   opacity: 0;
   position: absolute;
   top: 0;

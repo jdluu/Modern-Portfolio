@@ -5,7 +5,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--m3-color-surface);
+  background-color: var(--color-surface);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   padding: 0 2.4rem;
 }
@@ -31,7 +31,7 @@
   align-items: center;
   text-decoration: none;
   gap: 0.8rem;
-  color: var(--m3-color-on-surface);
+  color: var(--color-text-primary);
   margin-right: auto;
 }
 .home-icon {
@@ -54,14 +54,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--m3-color-on-surface);
+  color: var(--color-text-primary);
   background: transparent;
   border: none;
   cursor: pointer;
   border-radius: 50%;
 }
 .menu-icon-button:focus-visible {
-  outline: 2px solid var(--m3-color-primary);
+  outline: 2px solid var(--color-accent);
   background-color: var(--m3-color-primary-container);
 }
 .menu-icon-button .close-icon { display: none; }
@@ -75,7 +75,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: var(--m3-color-surface);
+  background-color: var(--color-surface);
   padding: 1.6rem;
   border-top: 1px solid var(--m3-color-outline);
 }
@@ -134,8 +134,8 @@
 .nav-link:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px color-mix(in oklab, var(--m3-color-primary) 45%, transparent),
-    0 0 0 5px color-mix(in oklab, var(--m3-color-primary) 15%, transparent);
+    0 0 0 3px color-mix(in oklab, var(--color-accent) 45%, transparent),
+    0 0 0 5px color-mix(in oklab, var(--color-accent) 15%, transparent);
 }
 .nav-link[aria-current="page"] {
   background-color: var(--m3-color-primary-container);
@@ -151,7 +151,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--m3-color-primary);
+  background-color: var(--color-accent);
 }
 
 /* Theme toggle visibility */

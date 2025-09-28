@@ -4,7 +4,7 @@
 .page-h2 {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
-  color: var(--m3-color-on-background);
+  color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 1rem;
 }

@@ -4,7 +4,7 @@
 /* container */
 .project-card.background {
   position: relative;
-  border: 1px solid var(--m3-color-outline);
+  border: 1px solid var(--color-border);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   height: 30rem;
@@ -23,7 +23,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--m3-color-surface-variant);
+  background: var(--color-card);
   opacity: 0;
   transition: opacity 0.4s ease-in-out;
 }
@@ -41,7 +41,7 @@
 
 /* hover */
 .project-card.background:hover {
-  border-color: var(--m3-color-primary);
+  border-color: var(--color-accent);
   transform: scale(1.02);
 }
 .project-card.background:hover .project-container {
@@ -60,14 +60,14 @@
   font-family: var(--m3-font-family-display);
   font-weight: 600;
   margin-bottom: 0.8rem;
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
 }
 
 .project-card .project-description {
   font-size: var(--m3-font-body-large);
   font-family: var(--m3-font-family-body);
   margin-bottom: 1.6rem;
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
 }
 
 /* link */
@@ -83,8 +83,8 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--m3-color-on-primary);
-  background-color: var(--m3-color-primary);
-  border: 1px solid color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
+  background-color: var(--color-accent);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 75%, black 25%);
   border-radius: 999px;
   text-decoration: none;
   transition:
@@ -93,28 +93,28 @@
     border-color 0.2s ease,
     transform 0.2s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 6px 14px color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+  box-shadow: 0 6px 14px color-mix(in oklab, var(--color-accent) 35%, black 65%);
 }
 
 .project-card .learn-more:visited {
-  color: var(--m3-color-on-primary);
+  color: var(--color-on-accent);
 }
 
 .project-card .learn-more:hover,
 .project-card .learn-more:focus-visible {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
-  border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
-  box-shadow: 0 8px 20px color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
+  background-color: color-mix(in oklab, var(--color-accent) 85%, black 15%);
+  border-color: color-mix(in oklab, var(--color-accent) 65%, black 35%);
+  box-shadow: 0 8px 20px color-mix(in oklab, var(--color-accent) 45%, black 55%);
   transform: translateY(-1px);
 }
 
 .project-card .learn-more:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 45%, white 55%);
+  outline: 3px solid color-mix(in oklab, var(--color-accent) 45%, white 55%);
   outline-offset: 3px;
 }
 
 .project-card .learn-more:active {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  background-color: color-mix(in oklab, var(--color-accent) 70%, black 30%);
   transform: translateY(0);
 }
 

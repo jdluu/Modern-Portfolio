@@ -9,7 +9,7 @@
 .page-h2 {
   font-size: var(--m3-font-display-small);
   font-family: var(--m3-font-family-display);
-  color: var(--m3-color-on-background);
+  color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 3.2rem;
 }
@@ -23,12 +23,12 @@
 }
 #about-wrapper {
   padding: 2.4rem;
-  background-color: var(--m3-color-surface);
+  background-color: var(--color-surface);
   border-radius: 12px;
 }
 #about-desc {
   font-size: var(--m3-font-body-large);
-  color: var(--m3-color-on-surface);
+  color: var(--color-text-primary);
   line-height: 1.6;
   max-width: 70ch;
 }
@@ -36,20 +36,20 @@
   display: block;
   font-size: var(--m3-font-headline-medium);
   font-family: var(--m3-font-family-display);
-  color: var(--m3-color-primary);
+  color: var(--color-accent);
   margin-bottom: 1.6rem;
 }
 
 /* Skills area */
 #skills-wrapper {
-  background-color: var(--m3-color-surface-variant);
+  background-color: var(--color-card);
   border-radius: 12px;
   padding: 2.4rem;
 }
 .skills-title {
   font-size: var(--m3-font-headline-medium);
   font-family: var(--m3-font-family-display);
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   text-align: center;
   margin-bottom: 2.4rem;
 }
@@ -59,16 +59,16 @@
   gap: 1.6rem;
 }
 .domain-section {
-  background-color: var(--m3-color-surface);
+  background-color: var(--color-surface);
   border-radius: 8px;
   padding: 1.6rem;
 }
 .domain-section:not(:last-child) {
-  border-right: 1px solid var(--m3-color-outline);
+  border-right: 1px solid var(--color-border);
 }
 .domain-section h4 {
   font-size: var(--m3-font-title-large);
-  color: var(--m3-color-primary);
+  color: var(--color-accent);
   text-align: center;
   margin-bottom: 1.6rem;
 }
@@ -87,13 +87,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--m3-color-surface-variant);
+  background-color: var(--color-card);
   border-radius: 50%;
   transition: all 0.2s ease;
 }
 .tech-item:hover {
   transform: scale(1.1);
-  background-color: var(--m3-color-primary-container);
+  background-color: var(--color-accent-hover);
 }
 .tech-item img {
   width: 3.2rem;
@@ -107,8 +107,8 @@
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--m3-color-inverse-surface);
-  color: var(--m3-color-inverse-on-surface);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: var(--m3-font-body-small);
@@ -128,16 +128,16 @@
   text-align: center;
   margin-top: 3.2rem;
   padding-top: 1.6rem;
-  border-top: 1px solid var(--m3-color-outline);
+  border-top: 1px solid var(--color-border);
 }
 .projects-text {
   font-size: var(--m3-font-body-medium);
-  color: var(--m3-color-on-surface-variant);
+  color: var(--color-text-tertiary);
   margin-bottom: 0.8rem;
 }
 .projects-link {
   font-size: var(--m3-font-label-large);
-  color: var(--m3-color-primary);
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
 }
