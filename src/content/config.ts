@@ -91,16 +91,13 @@ const experiencecards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    metadata: z
-      .object({
-        company: z.string().optional(),
-        date: z.union([z.string(), z.coerce.date()]).optional(),
-        startDate: z.union([z.string(), z.coerce.date()]).optional(),
-        endDate: z.union([z.string(), z.coerce.date()]).optional(),
-        thumbnail: z.string().optional(),
-        summary: z.string().optional(),
-      })
-      .optional(),
+    // Flattened metadata fields (migrated frontmatter should set these at top-level)
+    company: z.string().optional(),
+    date: z.union([z.string(), z.coerce.date()]).optional(),
+    startDate: z.union([z.string(), z.coerce.date()]).optional(),
+    endDate: z.union([z.string(), z.coerce.date()]).optional(),
+    thumbnail: z.string().optional(),
+    summary: z.string().optional(),
     slug: z.string().optional(),
   }),
 });
@@ -135,19 +132,16 @@ const projectcards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    metadata: z
-      .object({
-        description: z.string().optional(),
-        // Optional date fields to mirror experiencecard schema and Cosmic payloads.
-        date: z.union([z.string(), z.coerce.date()]).optional(),
-        startDate: z.union([z.string(), z.coerce.date()]).optional(),
-        endDate: z.union([z.string(), z.coerce.date()]).optional(),
-        thumbnail: z.object({ url: z.string().optional() }).optional(),
-        content: z.string().optional(),
-        programming_languages: z.array(z.string()).optional(),
-        domains: z.array(z.string()).optional(),
-      })
-      .optional(),
+    // Flattened metadata fields for project listing frontmatter
+    description: z.string().optional(),
+    // Optional date fields to mirror experiencecard schema and Cosmic payloads.
+    date: z.union([z.string(), z.coerce.date()]).optional(),
+    startDate: z.union([z.string(), z.coerce.date()]).optional(),
+    endDate: z.union([z.string(), z.coerce.date()]).optional(),
+    thumbnail: z.object({ url: z.string().optional() }).optional(),
+    content: z.string().optional(),
+    programming_languages: z.array(z.string()).optional(),
+    domains: z.array(z.string()).optional(),
     slug: z.string().optional(),
   }),
 });
