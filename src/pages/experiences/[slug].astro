@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import type { Experience } from "../../types/experience";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "../../lib/utils";
   
 // Generate static paths from collection entries
@@ -10,19 +10,35 @@ export async function getStaticPaths() {
   const paths = (entries ?? [])
     .filter((e: any) => e.data?.draft !== true)
     .map((e: any) => {
-      const rawId = String(e.id ?? "");
-      const clean = rawId.replace(/\.(md|mdx)$/, "").toLowerCase();
-      return { params: { slug: clean } };
+      const canonicalSlug =
+        typeof e.slug === "string" && e.slug.length > 0
+          ? e.slug
+          : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+      return { params: { slug: canonicalSlug } };
     });
   return paths;
 }
  
 // Props / derived values (load the single experience document by slug)
-const slug = (Astro.params as any)?.slug as string;
-const cleanSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "").toLowerCase();
-const entry = await getEntry("experiences", cleanSlug);
+const slugParam = (Astro.params as any)?.slug as string;
+
+const experiencesEntries = await getCollection("experiences");
+const entry =
+  (experiencesEntries ?? []).find((e: any) => {
+    const canonicalSlug =
+      typeof e.slug === "string" && e.slug.length > 0
+        ? e.slug
+        : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+    const canonicalId = String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+    return (
+      slugParam === canonicalSlug ||
+      slugParam === canonicalId ||
+      slugParam === String(e.id ?? "")
+    );
+  }) ?? null;
+
 if (!entry) {
-  throw new Error(`Experience not found for slug: ${slug}`);
+  throw new Error(`Experience not found for slug: ${slugParam}`);
 }
 const experience = entry.data as any as Experience;
  

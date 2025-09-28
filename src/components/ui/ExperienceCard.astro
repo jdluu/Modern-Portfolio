@@ -22,7 +22,7 @@ const thumbnailSrc = metadata.thumbnail ?? undefined;
 const summaryRaw = metadata.summary ?? "";
 
 // Ensure client links use extensionless, lowercase slugs to match getStaticPaths()
-const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "").toLowerCase();
+const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "");
 
 // Parse dates (helpers handle invalid values)
 const startDateObj = parseSafeDate(startDateStr);

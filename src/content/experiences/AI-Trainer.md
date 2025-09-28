@@ -2,7 +2,7 @@
 title: AI Trainer
 company:
   name: Outlier
-  image: /uploads/tnOutlier.jpg
+  image: /uploads/thumbnail_outlier.jpg
   imagealt: >-
     Outlier logo featuring an abstract overlapping circular design with a
     gradient of teal, blue, and purple, alongside the word 'Outlier' in bold
@@ -13,8 +13,8 @@ logistics:
   startDate: 2023-11-28T08:00:00.000Z
   endDate: 2024-02-13T08:00:00.000Z
 technologies:
-  tools: 'Python, C, C++, Java'
-  skills: 'Code Quality Assurance, Debugging, Problem Solving, Model Evaluation'
+  tools: "Python, C, C++, Java"
+  skills: "Code Quality Assurance, Debugging, Problem Solving, Model Evaluation"
 work:
   responsibilities:
     - duties: >-
@@ -37,4 +37,3 @@ work:
         Improved code output quality by 20% through systematic evaluation and
         refinement
 ---
-
