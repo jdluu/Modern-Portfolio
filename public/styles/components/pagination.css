@@ -119,29 +119,32 @@
   min-width: 6.4rem;
 }
 
-/* Reset button matches blog-like pagination buttons */
+/* Reset button base (kept minimal here; emphasized styles are defined later) */
 .experience-controls .btn-reset {
   padding: 0.5rem 0.85rem;
   border: 1px solid var(--m3-color-outline);
   border-radius: 8px;
-  background: transparent;
+  background: transparent; /* emphasized appearance provided by project-specific rule later */
   color: var(--m3-color-on-surface);
   cursor: pointer;
   transition:
-    background 0.12s ease,
+    background-color 0.12s ease,
     color 0.12s ease,
-    transform 0.08s ease;
+    transform 0.08s ease,
+    box-shadow 0.12s ease;
 }
+
+/* Hover: minor elevation only — do not change background here to avoid flashing */
 @media (hover: hover) {
   .experience-controls .btn-reset:hover {
-    background: color-mix(in oklab, var(--color-accent) 6%, transparent);
-    outline: none;
     transform: translateY(-1px);
   }
 }
+
+/* Focus: show an accessible ring but do not change button fill color (prevents persistent flashing) */
 .experience-controls .btn-reset:focus {
-  background: color-mix(in oklab, var(--color-accent) 6%, transparent);
   outline: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 20%, transparent);
   transform: translateY(-1px);
 }
 
@@ -241,4 +244,40 @@
     left: 0;
     right: 0;
   }
+}
+/* Emphasize Reset buttons in experience & project controls
+   - Keep a single stable background color across all states to avoid flashing.
+   - Use box-shadow / transform for hover/active affordance and a focus ring for accessibility. */
+.experience-controls .btn-reset,
+.project-controls .btn-reset {
+  background-color: var(--color-accent);
+  color: var(--m3-color-on-primary);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(0);
+  transition: box-shadow 0.12s ease, transform 0.08s ease;
+}
+
+/* Hover: elevation only (do not change background color) */
+@media (hover: hover) {
+  .experience-controls .btn-reset:hover,
+  .project-controls .btn-reset:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+  }
+}
+
+/* Active: press effect without changing fill color */
+.experience-controls .btn-reset:active,
+.project-controls .btn-reset:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) inset, 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Focus: visible ring but keep background unchanged so text remains readable */
+.experience-controls .btn-reset:focus,
+.project-controls .btn-reset:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 20%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent) 60%, black 10%);
 }
