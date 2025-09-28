@@ -9,17 +9,17 @@ function mapEntryToExperience(item: any) {
     typeof item?.slug === "string"
       ? item.slug
       : String(item?.id ?? "").replace(/\.(md|mdx)$/i, "");
-  const md = item?.data?.metadata ?? {};
+  const d = item?.data ?? {};
   return {
-    title: item?.data?.title ?? "Untitled",
+    title: d?.title ?? "Untitled",
     slug: entrySlug,
-    // Flatten metadata fields to top-level for the new ExperienceCard shape
-    company: md.company ?? null,
-    date: md.date ?? null,
-    startDate: md.startDate ?? null,
-    endDate: md.endDate ?? null,
-    thumbnail: md.thumbnail ?? null,
-    summary: md.summary ?? null,
+    // Read flattened frontmatter fields (migrated to top-level in content/config.ts)
+    company: d.company ?? null,
+    date: d.date ?? null,
+    startDate: d.startDate ?? null,
+    endDate: d.endDate ?? null,
+    thumbnail: d.thumbnail ?? null,
+    summary: d.summary ?? null,
   };
 }
 const experiences = (rawCollection ?? []).map(mapEntryToExperience);
