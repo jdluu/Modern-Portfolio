@@ -98,30 +98,134 @@ export default function ProjectCardList(props: Props) {
     return arr;
   });
 
-  const languages = createMemo(() => {
-    const out = new Set<string>();
-    (props.initialItems ?? []).forEach((it) => {
+  /**
+   * Languages with dynamic counts.
+   * - Counts are computed dynamically based on current Year and Domain filters,
+   *   but EXCLUDING the current language selections (per requirement).
+   * - Returns array of { name, count } sorted by count desc then name.
+   */
+  const languageCounts = createMemo(() => {
+    const yf = yearFilter();
+    const currentDomainFilters = domainFilters() ?? [];
+
+    // Start from all initial items and apply Year + Domain filters (but NOT languageFilters)
+    let items = props.initialItems ?? [];
+
+    // Year filtering (same logic as processedAll)
+    if (yf) {
+      items = items.filter((it) => {
+        const cand = [
+          (it as any)?.startDate ?? "",
+          (it as any)?.endDate ?? "",
+          (it as any)?.date ?? "",
+        ];
+        const yearsFound = new Set<string>();
+        for (const v of cand) {
+          if (!v) continue;
+          if (isSentinelEnd(v)) yearsFound.add("Present");
+          else {
+            const ts = parseDateToTs(v);
+            if (!Number.isNaN(ts)) yearsFound.add(String(new Date(ts).getFullYear()));
+          }
+        }
+        return yearsFound.has(yf);
+      });
+    }
+
+    // Domain filters (apply current domain filters)
+    if (currentDomainFilters && currentDomainFilters.length > 0) {
+      items = items.filter((it) => {
+        const itemDomains = Array.isArray((it as any)?.domains)
+          ? (it as any).domains.map((x: any) => String(x))
+          : [];
+        return currentDomainFilters.some((f) => itemDomains.includes(f));
+      });
+    }
+
+    // Tally languages
+    const counts = new Map<string, number>();
+    items.forEach((it) => {
       const list = (it as any)?.programming_languages ?? [];
       if (Array.isArray(list)) {
-        list.forEach((l) => {
-          if (l) out.add(String(l));
+        list.forEach((l: any) => {
+          if (!l) return;
+          const name = String(l);
+          counts.set(name, (counts.get(name) ?? 0) + 1);
         });
       }
     });
-    return Array.from(out).sort((a, b) => a.localeCompare(b));
+
+    const arr = Array.from(counts.entries()).map(([name, count]) => ({ name, count }));
+    arr.sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
+    return arr;
   });
 
-  const domains = createMemo(() => {
-    const out = new Set<string>();
-    (props.initialItems ?? []).forEach((it) => {
+  /**
+   * Domains with dynamic counts.
+   * - Counts are computed dynamically based on current Year and Language filters,
+   *   but EXCLUDING the current domain selections (per requirement).
+   * - Returns array of { name, count } sorted by count desc then name.
+   */
+  const domainCounts = createMemo(() => {
+    const yf = yearFilter();
+    const currentLanguageFilters = languageFilters() ?? [];
+
+    // Start from all initial items and apply Year + Language filters (but NOT domainFilters)
+    let items = props.initialItems ?? [];
+
+    // Year filtering
+    if (yf) {
+      items = items.filter((it) => {
+        const cand = [
+          (it as any)?.startDate ?? "",
+          (it as any)?.endDate ?? "",
+          (it as any)?.date ?? "",
+        ];
+        const yearsFound = new Set<string>();
+        for (const v of cand) {
+          if (!v) continue;
+          if (isSentinelEnd(v)) yearsFound.add("Present");
+          else {
+            const ts = parseDateToTs(v);
+            if (!Number.isNaN(ts)) yearsFound.add(String(new Date(ts).getFullYear()));
+          }
+        }
+        return yearsFound.has(yf);
+      });
+    }
+
+    // Language filters (apply current language filters)
+    if (currentLanguageFilters && currentLanguageFilters.length > 0) {
+      items = items.filter((it) => {
+        const itemLangs = Array.isArray((it as any)?.programming_languages)
+          ? (it as any).programming_languages.map((x: any) => String(x))
+          : [];
+        return currentLanguageFilters.some((f) => itemLangs.includes(f));
+      });
+    }
+
+    // Tally domains
+    const counts = new Map<string, number>();
+    items.forEach((it) => {
       const list = (it as any)?.domains ?? [];
       if (Array.isArray(list)) {
-        list.forEach((d) => {
-          if (d) out.add(String(d));
+        list.forEach((d: any) => {
+          if (!d) return;
+          const name = String(d);
+          counts.set(name, (counts.get(name) ?? 0) + 1);
         });
       }
     });
-    return Array.from(out).sort((a, b) => a.localeCompare(b));
+
+    const arr = Array.from(counts.entries()).map(([name, count]) => ({ name, count }));
+    arr.sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
+    return arr;
   });
 
   // Reset pagination when filters change
@@ -373,15 +477,15 @@ export default function ProjectCardList(props: Props) {
               role="menu"
               aria-label="Programming languages"
             >
-              <For each={languages()}>
-                {(l: string) => (
+              <For each={languageCounts()}>
+                {(l: { name: string; count: number }) => (
                   <label class="dropdown-item" role="menuitemcheckbox">
                     <input
                       type="checkbox"
-                      checked={languageFilters().includes(l)}
-                      onChange={() => setLanguageFilters(toggleFilterArray(languageFilters(), l))}
+                      checked={languageFilters().includes(l.name)}
+                      onChange={() => setLanguageFilters(toggleFilterArray(languageFilters(), l.name))}
                     />
-                    <span>{l}</span>
+                    <span>{l.name} ({l.count})</span>
                   </label>
                 )}
               </For>
@@ -410,15 +514,15 @@ export default function ProjectCardList(props: Props) {
               role="menu"
               aria-label="Domains"
             >
-              <For each={domains()}>
-                {(d: string) => (
+              <For each={domainCounts()}>
+                {(d: { name: string; count: number }) => (
                   <label class="dropdown-item" role="menuitemcheckbox">
                     <input
                       type="checkbox"
-                      checked={domainFilters().includes(d)}
-                      onChange={() => setDomainFilters(toggleFilterArray(domainFilters(), d))}
+                      checked={domainFilters().includes(d.name)}
+                      onChange={() => setDomainFilters(toggleFilterArray(domainFilters(), d.name))}
                     />
-                    <span>{d}</span>
+                    <span>{d.name} ({d.count})</span>
                   </label>
                 )}
               </For>
