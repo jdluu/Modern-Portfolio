@@ -98,7 +98,6 @@ const experiencecards = defineCollection({
     endDate: z.union([z.string(), z.coerce.date()]).optional(),
     thumbnail: z.string().optional(),
     summary: z.string().optional(),
-
   }),
 });
 

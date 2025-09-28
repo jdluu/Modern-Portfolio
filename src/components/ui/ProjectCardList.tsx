@@ -1,4 +1,10 @@
-import { For, createSignal, createMemo, createEffect, onCleanup } from "solid-js";
+import {
+  For,
+  createSignal,
+  createMemo,
+  createEffect,
+  onCleanup,
+} from "solid-js";
 import type { ProjectCard } from "../../types/project-card";
 import { parseDateToTs, isSentinelEnd } from "../../lib/utils";
 
@@ -60,8 +66,10 @@ export default function ProjectCardList(props: Props) {
     if (typeof document === "undefined") return;
     function onDocClick(e: MouseEvent) {
       const t = e.target as Node;
-      if (langDropdownRef && !langDropdownRef.contains(t)) setLangDropdownOpen(false);
-      if (domDropdownRef && !domDropdownRef.contains(t)) setDomDropdownOpen(false);
+      if (langDropdownRef && !langDropdownRef.contains(t))
+        setLangDropdownOpen(false);
+      if (domDropdownRef && !domDropdownRef.contains(t))
+        setDomDropdownOpen(false);
     }
     document.addEventListener("click", onDocClick);
     onCleanup(() => document.removeEventListener("click", onDocClick));
@@ -126,7 +134,8 @@ export default function ProjectCardList(props: Props) {
           if (isSentinelEnd(v)) yearsFound.add("Present");
           else {
             const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts)) yearsFound.add(String(new Date(ts).getFullYear()));
+            if (!Number.isNaN(ts))
+              yearsFound.add(String(new Date(ts).getFullYear()));
           }
         }
         return yearsFound.has(yf);
@@ -156,7 +165,10 @@ export default function ProjectCardList(props: Props) {
       }
     });
 
-    const arr = Array.from(counts.entries()).map(([name, count]) => ({ name, count }));
+    const arr = Array.from(counts.entries()).map(([name, count]) => ({
+      name,
+      count,
+    }));
     arr.sort((a, b) => {
       if (b.count !== a.count) return b.count - a.count;
       return a.name.localeCompare(b.name);
@@ -191,7 +203,8 @@ export default function ProjectCardList(props: Props) {
           if (isSentinelEnd(v)) yearsFound.add("Present");
           else {
             const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts)) yearsFound.add(String(new Date(ts).getFullYear()));
+            if (!Number.isNaN(ts))
+              yearsFound.add(String(new Date(ts).getFullYear()));
           }
         }
         return yearsFound.has(yf);
@@ -221,7 +234,10 @@ export default function ProjectCardList(props: Props) {
       }
     });
 
-    const arr = Array.from(counts.entries()).map(([name, count]) => ({ name, count }));
+    const arr = Array.from(counts.entries()).map(([name, count]) => ({
+      name,
+      count,
+    }));
     arr.sort((a, b) => {
       if (b.count !== a.count) return b.count - a.count;
       return a.name.localeCompare(b.name);
@@ -388,7 +404,11 @@ export default function ProjectCardList(props: Props) {
     if (langs && langs.length) parts.push(`Languages: ${langs.join(", ")}`);
     const doms = domainFilters();
     if (doms && doms.length) parts.push(`Domains: ${doms.join(", ")}`);
-    parts.push(sortOption() === "date-desc" ? "Sorted: Newest first" : "Sorted: Oldest first");
+    parts.push(
+      sortOption() === "date-desc"
+        ? "Sorted: Newest first"
+        : "Sorted: Oldest first",
+    );
     parts.push(`Per page: ${pageSize()}`);
     parts.push(`Page: ${page()} of ${totalPages()}`);
     return parts.join("; ");
@@ -396,8 +416,14 @@ export default function ProjectCardList(props: Props) {
 
   return (
     <section>
-      <div class="experience-controls" role="region" aria-labelledby="projects-controls-label">
-        <h3 id="projects-controls-label" class="sr-only">Project filters and controls</h3>
+      <div
+        class="experience-controls"
+        role="region"
+        aria-labelledby="projects-controls-label"
+      >
+        <h3 id="projects-controls-label" class="sr-only">
+          Project filters and controls
+        </h3>
 
         <div class="control-pair">
           <label for="project-year-select" class="control-label">
@@ -469,7 +495,9 @@ export default function ProjectCardList(props: Props) {
               onClick={() => setLangDropdownOpen((v) => !v)}
               type="button"
             >
-              {languageFilters().length ? `${languageFilters().length} selected` : "All languages"}
+              {languageFilters().length
+                ? `${languageFilters().length} selected`
+                : "All languages"}
             </button>
 
             <div
@@ -483,9 +511,15 @@ export default function ProjectCardList(props: Props) {
                     <input
                       type="checkbox"
                       checked={languageFilters().includes(l.name)}
-                      onChange={() => setLanguageFilters(toggleFilterArray(languageFilters(), l.name))}
+                      onChange={() =>
+                        setLanguageFilters(
+                          toggleFilterArray(languageFilters(), l.name),
+                        )
+                      }
                     />
-                    <span>{l.name} ({l.count})</span>
+                    <span>
+                      {l.name} ({l.count})
+                    </span>
                   </label>
                 )}
               </For>
@@ -506,7 +540,9 @@ export default function ProjectCardList(props: Props) {
               onClick={() => setDomDropdownOpen((v) => !v)}
               type="button"
             >
-              {domainFilters().length ? `${domainFilters().length} selected` : "All domains"}
+              {domainFilters().length
+                ? `${domainFilters().length} selected`
+                : "All domains"}
             </button>
 
             <div
@@ -520,9 +556,15 @@ export default function ProjectCardList(props: Props) {
                     <input
                       type="checkbox"
                       checked={domainFilters().includes(d.name)}
-                      onChange={() => setDomainFilters(toggleFilterArray(domainFilters(), d.name))}
+                      onChange={() =>
+                        setDomainFilters(
+                          toggleFilterArray(domainFilters(), d.name),
+                        )
+                      }
                     />
-                    <span>{d.name} ({d.count})</span>
+                    <span>
+                      {d.name} ({d.count})
+                    </span>
                   </label>
                 )}
               </For>
@@ -565,7 +607,12 @@ export default function ProjectCardList(props: Props) {
         Page {page()} of {totalPages()}
       </div>
 
-      <div ref={(el) => (paginationRef = el!)} class="pagination-controls" role="navigation" aria-label="Project pagination">
+      <div
+        ref={(el) => (paginationRef = el!)}
+        class="pagination-controls"
+        role="navigation"
+        aria-label="Project pagination"
+      >
         <button
           class="pagination-button"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
