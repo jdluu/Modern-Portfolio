@@ -205,7 +205,7 @@
 
   /* Reset nav menu to be inline */
   .nav-menu-styles {
-    display: flex;
+    display: flex !important;
     position: static;
     width: auto;
     transform: none;
