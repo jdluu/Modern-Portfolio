@@ -1,14 +1,30 @@
 /**
- * Project card types.
- * Mirrors the props used by src/components/ui/ProjectCard.astro
+ * Project card types — flattened.
  *
- * The UI component expects all props to be strings (no null/undefined),
- * so the interface reflects that to avoid TypeScript narrowing issues
- * when passing values directly to the Astro Image component.
+ * ProjectCard is the top-level listing/document shape returned by loaders
+ * (after flattening) and used directly by templates. ProjectCardProps is
+ * intentionally preserved as a narrow UI prop shape for the ProjectCard component.
+ *
+ * Thumbnail is modeled as a flexible union to match Cosmic/Tina payloads:
+ * string | { url?: string | null } — consumers should use the project's image
+ * resolver (resolveAssetUrl/pickImageString) to obtain a canonical URL.
  */
 export interface ProjectCardProps {
   title: string;
   intro: string;
   url: string;
   thumbnail: string;
+}
+
+export interface ProjectCard {
+  title: string;
+  slug: string;
+  description?: string | null;
+  date?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  thumbnail?: string | { url?: string | null } | null;
+  content?: string | null;
+  programming_languages?: string[] | null;
+  domains?: string[] | null;
 }

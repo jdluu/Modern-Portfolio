@@ -1,21 +1,64 @@
 ---
 import {getAllProjects} from "../../lib/cosmic";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import type { Metadata, PageProps } from "../../types/project";
+import type { Project } from "../../types/project";
 
 
 export async function getStaticPaths() {
-    const projects = await getAllProjects() as unknown as { slug: string; title: string; metadata: Metadata }[];
-
-    return projects.map(({slug, title, metadata}) => {
+    const projects = await getAllProjects() as unknown as Project[];
+ 
+    return projects.map((project) => {
+        const slug = project.slug ?? String(project?.id ?? "");
         return {
             params: { slug },
-            props: { title, metadata },
+            props: project,
         };
     });
 }
+ 
+const project = Astro.props as Project;
+const title = project.title ?? "";
 
-const {title, metadata} = Astro.props as PageProps;
+// Derived/normalized helpers (handle CMS unions: objects vs arrays vs strings)
+const slug = (project as any)?.slug ?? String((project as any)?.id ?? "");
+
+// process may be an object with title/plan or an array of strings
+const processTitle: string =
+  project.process && typeof project.process === "object" && "title" in project.process
+    ? (project.process as any).title ?? ""
+    : "";
+const processPlan: any[] =
+  project.process && typeof project.process === "object" && Array.isArray((project.process as any).plan)
+    ? (project.process as any).plan
+    : Array.isArray(project.process)
+    ? (project.process as any).map((s: any) => ({ steps: s }))
+    : [];
+
+// background/problem/solution normalization (accept object or string)
+const backgroundDescription: string =
+  project.background && typeof project.background === "object"
+    ? (project.background as any).description ?? ""
+    : "";
+const problemDesc: string =
+  project.problem && typeof project.problem === "object"
+    ? (project.problem as any).description ?? ""
+    : (project.problem as any) ?? "";
+const solutionTitle: string =
+  project.solution && typeof project.solution === "object"
+    ? (project.solution as any).title ?? ""
+    : "";
+const solutionDesc: string =
+  project.solution && typeof project.solution === "object"
+    ? (project.solution as any).description ?? (project.solution as any) ?? ""
+    : (project.solution as any) ?? "";
+
+// reflection may be an array of strings or an object with points[]
+const reflectionPoints: { point?: string }[] =
+  Array.isArray(project.reflection)
+    ? (project.reflection as any).map((p: any) => (typeof p === "string" ? { point: p } : p))
+    : (project.reflection && typeof project.reflection === "object" && Array.isArray((project.reflection as any).points))
+    ? (project.reflection as any).points
+    : [];
 ---
 
 <BaseLayout title={title}>
@@ -28,7 +71,7 @@ const {title, metadata} = Astro.props as PageProps;
                 <a href="#background" id="idb" class="nav-item" aria-current="false">Background</a>
             </li>
             <li>
-                <a href="#process" id="idd" class="nav-item" aria-current="false">{metadata.process.title}</a>
+                <a href="#process" id="idd" class="nav-item" aria-current="false">{processTitle}</a>
             </li>
             <li>
                 <a href="#results" id="idf" class="nav-item" aria-current="false">Final Product</a>
@@ -51,16 +94,16 @@ const {title, metadata} = Astro.props as PageProps;
         <article class="project-page-div">
             <section id="overview" aria-labelledby="project-title">
                 <h1 id="project-title" class="project-title">{title}</h1>
-                <p class="section-content lead">{metadata.description}</p>
+                <p class="section-content lead">{project.description}</p>
                 <figure class="project-figure">
                     <img
                         class="project-image"
-                        src={metadata.home.image.imgix_url + '?w=800'}
-                        srcset={`${metadata.home.image.imgix_url}?w=400 400w,
-                                ${metadata.home.image.imgix_url}?w=800 800w,
-                                ${metadata.home.image.imgix_url}?w=1200 1200w`}
+                        src={project.home?.image?.imgix_url + '?w=800'}
+                        srcset={`${project.home?.image?.imgix_url}?w=400 400w,
+                                ${project.home?.image?.imgix_url}?w=800 800w,
+                                ${project.home?.image?.imgix_url}?w=1200 1200w`}
                         sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={metadata.home.imagealt}
+                        alt={project.home?.imagealt}
                         loading="eager"
                         fetchpriority="high"
                     />
@@ -69,22 +112,22 @@ const {title, metadata} = Astro.props as PageProps;
                 <div class="info-grid">
                     <div class="info-card">
                         <h3>Timeline</h3>
-                        <p>{metadata.logistics.date}</p>
+                        <p>{project.logistics?.date}</p>
                     </div>
                     <div class="info-card">
-                        <h3>{metadata.logistics.techtitle}</h3>
-                        <p>{metadata.logistics.technologies}</p>
+                        <h3>{project.logistics?.techtitle}</h3>
+                        <p>{project.logistics?.technologies}</p>
                     </div>
                     <div class="info-card">
                         <h3>Tools</h3>
-                        <p>{metadata.logistics.tools}</p>
+                        <p>{project.logistics?.tools}</p>
                     </div>
                 </div>
-
+ 
                 <div class="responsibilities">
-                    <h2>My Responsibilities as {metadata.work.role}</h2>
+                    <h2>My Responsibilities as {project.work?.role}</h2>
                     <ul>
-                        {metadata.work.responsibilities.map((responsibility, index) => (
+                        {(project.work?.responsibilities ?? []).map((responsibility: any, index: number) => (
                             <li class="role-bullet-item">
                                 {responsibility.duties}
                             </li>
@@ -92,69 +135,69 @@ const {title, metadata} = Astro.props as PageProps;
                     </ul>
                 </div>
             </section>
-
+ 
             <section id="background" class="content-section">
                 <h2>Background</h2>
-                <p class="section-content">{metadata.background.description}</p>
+                <p class="section-content">{backgroundDescription}</p>
                 
                 <h2>Problem Statement</h2>
-                <p class="section-content">{metadata.problem.description}</p>
+                <p class="section-content">{problemDesc}</p>
                 
-                <h2>{metadata.solution.title}</h2>
-                <p class="section-content">{metadata.solution.description}</p>
+                <h2>{solutionTitle}</h2>
+                <p class="section-content">{solutionDesc}</p>
             </section>
-
+ 
             <section id="process" class="content-section">
-                <h2>{metadata.process.title}</h2>
-                {metadata.process.plan.map((plan, index) => (
+                <h2>{processTitle}</h2>
+                {processPlan.map((plan: any, index: number) => (
                     <p class="section-content">{plan.steps}</p>
                 ))}
                 <figure class="project-figure">
                     <img
                         class="project-image"
-                        src={metadata.prototype.image.imgix_url + '?w=800'}
-                        srcset={`${metadata.prototype.image.imgix_url}?w=400 400w,
-                                ${metadata.prototype.image.imgix_url}?w=800 800w,
-                                ${metadata.prototype.image.imgix_url}?w=1200 1200w`}
+                        src={project.prototype?.image?.imgix_url + '?w=800'}
+                        srcset={`${project.prototype?.image?.imgix_url}?w=400 400w,
+                                ${project.prototype?.image?.imgix_url}?w=800 800w,
+                                ${project.prototype?.image?.imgix_url}?w=1200 1200w`}
                         sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={metadata.prototype.imagealt}
+                        alt={project.prototype?.imagealt}
                         loading="lazy"
                         decoding="async"
                     />
                 </figure>
             </section>
-
+ 
             <section id="results" class="content-section">
                 <h2>Final Product</h2>
-                <p class="section-content">{metadata.final.description}</p>
+                <p class="section-content">{project.final?.description}</p>
                 <figure class="project-figure">
                     <img
                         class="project-image"
-                        src={metadata.final.image.imgix_url + '?w=800'}
-                        srcset={`${metadata.final.image.imgix_url}?w=400 400w,
-                                ${metadata.final.image.imgix_url}?w=800 800w,
-                                ${metadata.final.image.imgix_url}?w=1200 1200w`}
+                        src={project.final?.image?.imgix_url + '?w=800'}
+                        srcset={`${project.final?.image?.imgix_url}?w=400 400w,
+                                ${project.final?.image?.imgix_url}?w=800 800w,
+                                ${project.final?.image?.imgix_url}?w=1200 1200w`}
                         sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={metadata.final.imagealt}
+                        alt={project.final?.imagealt}
                         loading="lazy"
                         decoding="async"
                     />
                 </figure>
             </section>
-
+ 
             <section id="reflection" class="content-section">
                 <h2>Reflection</h2>
-                {metadata.reflection.points.map((reflection, index) => (
+                {reflectionPoints.map((reflection: any, index: number) => (
                     <p class="section-content">{reflection.point}</p>
                 ))}
                 <a
-                    href={metadata.source.link}
+                    href={project.source?.link}
                     class="source-link"
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={`View source: ${metadata.source.title}`}
+                    aria-label={`View source: ${project.source?.title}`}
                 >
-                    <strong>{metadata.source.title}</strong>
+                    <strong>{project.source?.title}</strong>
                 </a>
             </section>
         </article>

@@ -1,25 +1,30 @@
 ---
 import ProjectCard from "../ui/ProjectCard.astro";
 import { getAllProjectCards } from "../../lib/cosmic";
+import { pickImageString } from "../../lib/utils";
 
 /**
  * Load project cards at build-time and normalize into a small, explicit shape
  * so the template below stays simple and self-documenting.
+ *
+ * Note: cosmic.getAllProjectCards() now returns flattened objects where `thumbnail`
+ * may be a string or an object. Use pickImageString() to derive a canonical URL.
  */
 const rawProjects = (await getAllProjectCards()) || [];
 
 function mapRawProject(raw: any) {
+  const thumbnailRaw = raw?.thumbnail ?? null;
   return {
     title: raw?.title ?? "Untitled",
     slug: raw?.slug ?? "",
-    description: raw?.metadata?.description ?? "",
-    thumbnailUrl: raw?.metadata?.thumbnail?.url ?? "",
+    description: raw?.description ?? "",
+    thumbnailUrl: pickImageString(thumbnailRaw) ?? "",
   };
 }
 
 const projects = rawProjects.map(mapRawProject);
 ---
-
+ 
 <section class="content-section">
 	<h2 id="projects" class="page-h2">Projects</h2>
 	<div class="card-grid">
