@@ -1,12 +1,13 @@
 import { defineCollection, z } from "astro:content";
 
-
 //  * Content Collections configuration
 //  *
 //  * Collections:
 //  * - posts: src/content/posts/**/*.{md,mdx}
 //  * - experiences: src/content/experiences/**/*.{md,mdx}
 //  * - experiencecards: src/content/experiencecards/**/*.{md,mdx}
+//  * - projects: src/content/projects/**/*.{md,mdx}
+//  * - projectcards: src/content/projectcards/**/*.{md,mdx}
 //  *
 //  * Schemas mirror existing frontmatter found under the legacy ./content/ directory.
 
@@ -108,4 +109,6 @@ export const collections = {
   posts,
   experiences,
   experiencecards,
+  projects,
+  projectcards,
 };
