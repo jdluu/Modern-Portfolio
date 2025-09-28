@@ -15,6 +15,7 @@ const posts = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string().optional(),
     // Accept either a string or a parsed Date (MD frontmatter may be parsed as Date)
     date: z.union([z.string(), z.coerce.date()]).optional(),
@@ -29,7 +30,6 @@ const posts = defineCollection({
         }),
       )
       .optional(),
-    slug: z.string().optional(),
   }),
 });
 
@@ -37,6 +37,7 @@ const experiences = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     draft: z.boolean().optional(),
     company: z
       .object({
@@ -83,7 +84,6 @@ const experiences = defineCollection({
         summary: z.string().optional(),
       })
       .optional(),
-    slug: z.string().optional(),
   }),
 });
 
@@ -91,13 +91,14 @@ const experiencecards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     company: z.string().optional(),
     date: z.union([z.string(), z.coerce.date()]).optional(),
     startDate: z.union([z.string(), z.coerce.date()]).optional(),
     endDate: z.union([z.string(), z.coerce.date()]).optional(),
     thumbnail: z.string().optional(),
     summary: z.string().optional(),
-    slug: z.string().optional(),
+
   }),
 });
 
@@ -131,6 +132,7 @@ const projectcards = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string().optional(),
     date: z.union([z.string(), z.coerce.date()]).optional(),
     startDate: z.union([z.string(), z.coerce.date()]).optional(),
@@ -138,7 +140,6 @@ const projectcards = defineCollection({
     thumbnail: z.object({ url: z.string().optional() }).optional(),
     programming_languages: z.array(z.string()).optional(),
     domains: z.array(z.string()).optional(),
-    slug: z.string().optional(),
   }),
 });
 
