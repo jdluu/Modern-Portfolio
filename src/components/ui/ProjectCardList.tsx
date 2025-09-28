@@ -23,7 +23,7 @@ function getComparableTsFromItem(item: ProjectCard): number {
   if (isSentinelEnd(endStr)) return Infinity;
   const endTs = parseDateToTs(endStr);
   if (!Number.isNaN(endTs)) return endTs;
-  
+
   // Return 0 if no valid date is found
   return 0;
 }
