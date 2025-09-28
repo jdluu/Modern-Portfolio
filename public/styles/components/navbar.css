@@ -169,6 +169,30 @@
 @media (max-width: 767px) {
   .nav-menu-styles[data-open="true"] .nav-item.md\:hidden { display: block; }
 }
+
+/* Mobile: ensure comfortable tap targets (>=44x44) and spacing */
+@media (max-width: 767px) {
+  .nav-link,
+  .home-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 0.625rem; /* ~10px top/bottom */
+    line-height: 1.2;
+  }
+
+  /* Ensure items inside mobile menu / nav list meet minimum touch targets */
+  .nav-menu-styles[data-open="true"] .nav-list a,
+  .nav-menu-styles[data-open="true"] .nav-link,
+  .nav-list a,
+  .mobile-menu a {
+    min-height: 44px;
+    padding-block: 0.625rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
 @media (min-width: 768px) {
   .md\:flex { display: flex; }
 }

@@ -6,10 +6,17 @@ import type { ProjectCardProps } from '@/src/types/project-card';
 export interface Props extends ProjectCardProps {}
 
 const { title, intro, url, thumbnail } = Astro.props;
+
+const baseId = ((Astro.props as any)?.slug || url || title)
+  .toString()
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-");
+const titleId = `project-${baseId}`;
+const ctaExtraId = `${titleId}-cta`;
 ---
 
 <!-- Markup: structure and class names preserved exactly -->
-<section class="project-card background">
+<section class="project-card background" role="group" aria-labelledby={titleId}>
 	<Image
 		src={thumbnail}
 		alt={title}
@@ -22,11 +29,18 @@ const { title, intro, url, thumbnail } = Astro.props;
 	/>
 	<div class="project-container">
 		<section class="more-info">
-			<span class="project-title">{title}</span>
+			<h3 class="project-title" id={titleId}>{title}</h3>
 			<p class="project-description">
 				{intro}
 			</p>
 		</section>
-		<a class="learn-more" href={`/projects/${url}`}>Learn More</a>
+		<a
+			class="learn-more"
+			href={`/projects/${url}`}
+			aria-labelledby={`${titleId} ${ctaExtraId}`}
+		>
+			Learn More
+		</a>
+		<span id={ctaExtraId} class="visually-hidden">Open project</span>
 	</div>
 </section>
