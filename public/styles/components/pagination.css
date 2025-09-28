@@ -246,8 +246,8 @@
   }
 }
 /* Emphasize Reset buttons in experience & project controls
-   - Keep a single stable background color across all states to avoid flashing.
-   - Use box-shadow / transform for hover/active affordance and a focus ring for accessibility. */
+   - Use stable background + explicit hover/active states to avoid flashing
+   - Keep a visible accessible focus ring without changing the button color */
 .experience-controls .btn-reset,
 .project-controls .btn-reset {
   background-color: var(--color-accent);
@@ -255,26 +255,28 @@
   border-color: var(--color-accent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transform: translateY(0);
-  transition: box-shadow 0.12s ease, transform 0.08s ease;
+  transition: background-color 0.12s ease, color 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
 }
 
-/* Hover: elevation only (do not change background color) */
+/* Hover: slight darken for emphasis (use color-mix towards black for consistent contrast) */
 @media (hover: hover) {
   .experience-controls .btn-reset:hover,
   .project-controls .btn-reset:hover {
+    background-color: color-mix(in oklab, var(--color-accent) 88%, black 12%);
+    color: var(--m3-color-on-primary);
     transform: translateY(-1px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
   }
 }
 
-/* Active: press effect without changing fill color */
+/* Active: slightly stronger press effect */
 .experience-controls .btn-reset:active,
 .project-controls .btn-reset:active {
+  background-color: color-mix(in oklab, var(--color-accent) 80%, black 20%);
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) inset, 0 1px 4px rgba(0,0,0,0.06);
 }
 
-/* Focus: visible ring but keep background unchanged so text remains readable */
+/* Focus: visible ring but do not change background color (prevents permanent flash) */
 .experience-controls .btn-reset:focus,
 .project-controls .btn-reset:focus {
   outline: none;

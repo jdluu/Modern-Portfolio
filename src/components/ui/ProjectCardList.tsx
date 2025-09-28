@@ -37,6 +37,7 @@ export default function ProjectCardList(props: Props) {
     "date-desc",
   );
   const [page, setPage] = createSignal(1);
+  // Default page size for projects: 6 items per page
   const [pageSize, setPageSize] = createSignal(6);
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
@@ -449,7 +450,6 @@ export default function ProjectCardList(props: Props) {
               setPage(1);
             }}
           >
-            <option value="3">3</option>
             <option value="6">6</option>
             <option value="12">12</option>
             <option value="24">24</option>
