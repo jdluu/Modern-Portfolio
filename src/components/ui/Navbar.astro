@@ -1,176 +1,271 @@
 ---
 import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 ---
+
 <header class="header">
-	<nav class="nav-container" aria-label="Main navigation">
-		<div class="nav-content">
-			<a href="/" class="home-link" aria-label="Home">
-				<svg
-					viewBox="0 0 32 32"
-					xmlns="http://www.w3.org/2000/svg"
-					class="home-icon"
-					aria-hidden="true"
-				>
-					<path
-						fill="currentColor"
-						d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
-					></path>
-				</svg>
-			</a>
+  <nav class="nav-container" aria-label="Main navigation">
+    <div class="nav-content">
+      <div class="menu-icon-wrapper">
+        <button
+          id="menu-toggle-btn"
+          class="menu-icon-button"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="main-menu"
+        >
+          <svg
+            class="open-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 50 50"
+            aria-hidden="true"
+            fill="currentColor"
+          >
+            <title>Open menu icon</title>
+            <path
+              d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
+            ></path>
+          </svg>
+        </button>
+      </div>
 
-			<div class="menu-icon-wrapper">
-				<button
-					id="menu-toggle-btn"
-					class="menu-icon-button"
-					aria-label="Toggle menu"
-					aria-expanded="false"
-					aria-controls="main-menu"
-				>
-					<svg
-						class="open-icon"
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 50 50"
-						aria-hidden="true"
-						fill="currentColor"
-					>
-						<title>Open menu icon</title>
-						<path
-							d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
-						></path>
-					</svg>
-					<svg
-						class="close-icon"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="2.5"
-						stroke="currentColor"
-						aria-hidden="true"
-					>
-						<title>Close menu icon</title>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M6 18L18 6M6 6l12 12"></path>
-					</svg>
-				</button>
-			</div>
+      <a href="/" class="home-link desktop-home-link" aria-label="Home">
+        <svg
+          viewBox="0 0 32 32"
+          xmlns="http://www.w.org/2000/svg"
+          class="home-icon"
+          aria-hidden="true"
+        >
+          <path
+            fill="currentColor"
+            d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
+          ></path>
+        </svg>
+      </a>
 
-			<div id="main-menu" class="nav-menu-styles" hidden inert data-open="false">
-				<ul class="nav-list">
-					<li class="nav-item">
-						<a
-							href="/about"
-							class="nav-link"
-							aria-current={Astro.url.pathname === "/about" ? "page" : undefined}
-						>
-							About
-						</a>
-					</li>
-					<li class="nav-item">
-						<a
-							href="/work"
-							class="nav-link"
-							aria-current={Astro.url.pathname === "/work" ? "page" : undefined}
-						>
-							Work
-						</a>
-					</li>
-					<li class="nav-item">
-						<a
-							href="/blog"
-							class="nav-link"
-							aria-current={Astro.url.pathname.startsWith("/blog") ? "page" : undefined}
-						>
-							Blog
-						</a>
-					</li>
-					<li class="nav-item">
-						<a
-							href="/contact"
-							class="nav-link"
-							aria-current={Astro.url.pathname === "/contact" ? "page" : undefined}
-						>
-							Contact
-						</a>
-					</li>
-					<li class="nav-item md:hidden">
-						<ThemeToggleButton client:idle transition:persist />
-					</li>
-				</ul>
-			</div>
-			<div class="theme-toggle-container">
-				<ThemeToggleButton client:idle transition:persist />
-			</div>
-		</div>
-	</nav>
+      <div class="nav-spacer"></div>
+
+      <div
+        id="main-menu"
+        class="nav-menu-styles"
+        tabindex="-1"
+        hidden
+        inert
+        data-open="false"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Main menu panel"
+      >
+        <div class="offcanvas-inner">
+          <div class="panel-header">
+            <a href="/" class="home-link" aria-label="Home">
+              <svg
+                viewBox="0 0 32 32"
+                xmlns="http://www.w3.org/2000/svg"
+                class="home-icon"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
+                ></path>
+              </svg>
+            </a>
+            <button
+              id="menu-close-btn"
+              class="menu-close-btn"
+              type="button"
+              aria-label="Close menu"
+              title="Close menu"
+            >
+              <span class="menu-close-label" aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="/about" class="nav-link" aria-current={Astro.url.pathname === "/about" ? "page" : undefined}>
+                About
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/work" class="nav-link" aria-current={Astro.url.pathname === "/work" ? "page" : undefined}>
+                Work
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/blog" class="nav-link" aria-current={Astro.url.pathname.startsWith("/blog") ? "page" : undefined}>
+                Blog
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/contact" class="nav-link" aria-current={Astro.url.pathname === "/contact" ? "page" : undefined}>
+                Contact
+              </a>
+            </li>
+            <li class="nav-item md-hidden">
+              <ThemeToggleButton client:idle transition:persist />
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="theme-toggle-container">
+        <ThemeToggleButton client:idle transition:persist />
+      </div>
+    </div>
+  </nav>
+
+  <div id="menu-backdrop" class="menu-backdrop" hidden aria-hidden="true"></div>
 </header>
 
 <script>
-	document.addEventListener("DOMContentLoaded", () => {
-		const menuToggleBtn = document.getElementById("menu-toggle-btn");
-		const mainMenu = document.getElementById("main-menu");
-		// Early exit if critical elements missing
-		if (!menuToggleBtn || !mainMenu) return;
+  document.addEventListener("DOMContentLoaded", () => {
+    const mainMenu = document.getElementById("main-menu");
 
-		const btn = menuToggleBtn;
-		const menu = mainMenu;
-		const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
+	if (!mainMenu) {
+		console.error("Navigation menu element #main-menu not found.");
+		return; 
+	}
 
-		// Helpers: open / close / toggle menu, and key handling.
-		function openMenu() {
-			btn.setAttribute("aria-expanded", "true");
-			btn.classList.add("is-open");
-			menu.removeAttribute("hidden");
-			// Guarded inert access (some browsers support it)
-			if ("inert" in menu) (menu as any).inert = false;
-			menu.setAttribute("data-open", "true");
-			const first = menu.querySelector(firstFocusable);
-			if (first && typeof (first as HTMLElement).focus === "function") (first as HTMLElement).focus();
-			document.addEventListener("keydown", onDocumentKeydown);
-		}
+	const menuToggleBtn = document.getElementById("menu-toggle-btn");
+	const backdrop = document.getElementById("menu-backdrop");
+	const menuCloseBtn = document.getElementById("menu-close-btn");
 
-		function closeMenu(returnFocus = true) {
-			btn.setAttribute("aria-expanded", "false");
-			btn.classList.remove("is-open");
-			if ("inert" in menu) (menu as any).inert = true;
-			menu.setAttribute("hidden", "");
-			menu.setAttribute("data-open", "false");
-			if (returnFocus) btn.focus();
-			document.removeEventListener("keydown", onDocumentKeydown);
-		}
+	if (!menuToggleBtn || !backdrop) {
+		return; 
+	}
+    
+    const btn = menuToggleBtn;
+    const menu = mainMenu;
+    const back = backdrop;
+    const closeBtn = menuCloseBtn;
+    const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
+    
+    let isAnimating = false;
+    
+    function onDocumentKeydown(e: KeyboardEvent) {
+        if (e.key === "Escape" || e.key === "Esc") {
+            if (btn.getAttribute("aria-expanded") === "true") {
+                e.preventDefault();
+                closeMenu();
+            }
+        }
+    }
+    
+    let openFallbackTimer: number | undefined;
+	let closeFallbackTimer: number | undefined;
+    
+    function onMenuTransitionEnd(e: TransitionEvent) {
+        if (e.target !== menu) return;
+        isAnimating = false;
+        window.clearTimeout(openFallbackTimer);
+        window.clearTimeout(closeFallbackTimer);
+        menu.removeEventListener("transitionend", onMenuTransitionEnd);
+    }
+    
+    function openMenu() {
+        if (isAnimating) return;
+        isAnimating = true;
+        btn.setAttribute("aria-expanded", "true");
+        menu.removeAttribute("hidden");
+        menu.inert = false;
+        menu.setAttribute("data-open", "true");
+        back.removeAttribute("hidden");
+        back.classList.add("visible");
+        document.body.style.overflow = "hidden";
+        requestAnimationFrame(() => {
+            void menu.offsetWidth;
+            menu.classList.add("is-open");
+            menu.focus();
+            const first = menu.querySelector<HTMLElement>(firstFocusable);
+            if (first) first.focus();
+            document.addEventListener("keydown", onDocumentKeydown);
+            menu.addEventListener("transitionend", onMenuTransitionEnd);
+        });
+        openFallbackTimer = window.setTimeout(() => {
+            if (isAnimating) {
+                isAnimating = false;
+                menu.removeEventListener("transitionend", onMenuTransitionEnd);
+            }
+        }, 600);
+    }
+    
+    function closeMenu(returnFocus = true) {
+        if (isAnimating) return;
+        isAnimating = true;
+        btn.setAttribute("aria-expanded", "false");
+        menu.classList.remove("is-open");
+        menu.classList.add("is-closing");
+        back.classList.remove("visible");
+        function onEnd(e: TransitionEvent) {
+            if (e.target !== menu) return;
+            menu.setAttribute("hidden", "");
+            menu.setAttribute("data-open", "false");
+            menu.inert = true;
+            menu.classList.remove("is-closing");
+            back.setAttribute("hidden", "");
+            document.body.style.overflow = "";
+            isAnimating = false;
+            window.clearTimeout(closeFallbackTimer);
+            menu.removeEventListener("transitionend", onEnd);
+        }
+        menu.addEventListener("transitionend", onEnd);
+        closeFallbackTimer = window.setTimeout(() => {
+            if (isAnimating) {
+                menu.setAttribute("hidden", "");
+                menu.setAttribute("data-open", "false");
+                menu.inert = true;
+                menu.classList.remove("is-closing");
+                back.setAttribute("hidden", "");
+                document.body.style.overflow = "";
+                isAnimating = false;
+                menu.removeEventListener("transitionend", onEnd);
+            }
+        }, 600);
+        document.removeEventListener("keydown", onDocumentKeydown);
+        if (returnFocus) btn.focus();
+    }
+    
+    function toggleMenu() {
+        const isExpanded = btn.getAttribute("aria-expanded") === "true";
+        if (isExpanded) closeMenu();
+        else openMenu();
+    }
+    
+    btn.addEventListener("click", toggleMenu);
+    if (closeBtn) closeBtn.addEventListener("click", () => closeMenu());
+    back.addEventListener("click", () => closeMenu());
+    menu.addEventListener("click", (e) => {
+        if (e.target && e.target instanceof HTMLElement) {
+            const link = e.target.closest("a,button");
+            if (link) closeMenu();
+        }
+    });
 
-		function toggleMenu() {
-			const isExpanded = btn.getAttribute("aria-expanded") === "true";
-			if (isExpanded) closeMenu();
-			else openMenu();
-		}
 
-		function onDocumentKeydown(e: KeyboardEvent) {
-			if (e.key === "Escape" || e.key === "Esc") {
-				if (btn.getAttribute("aria-expanded") === "true") {
-					e.preventDefault();
-					closeMenu();
-				}
+    const desktopBreakpoint = 768;
+
+    function setDesktopNavState() {
+		if (!mainMenu) return;
+
+		if (window.innerWidth >= desktopBreakpoint) {
+			// On desktop, ensure the menu is always visible and interactive.
+			mainMenu.removeAttribute('hidden');
+			mainMenu.inert = false;
+		} else {
+			// On mobile, ensure the menu is hidden and inert unless it's open.
+			const isOpen = mainMenu.getAttribute('data-open') === 'true';
+			if (!isOpen) {
+			mainMenu.setAttribute('hidden', '');
+			mainMenu.inert = true;
 			}
 		}
+	}
 
-		btn.addEventListener("click", toggleMenu);
+    // Run on initial page load
+    setDesktopNavState();
 
-		// Close menu when a link inside is activated.
-		menu.addEventListener("click", (e) => {
-			const target = e.target;
-			if (target && target instanceof HTMLElement) {
-				const link = target.closest("a,button");
-				if (link) closeMenu();
-			}
-		});
-
-		// Initial desktop visibility: if viewport is wide, let CSS control visibility
-		if (typeof window !== "undefined" && window.innerWidth >= 768) {
-			menu.removeAttribute("hidden");
-			if ("inert" in menu) (menu as any).inert = false;
-			menu.setAttribute("data-open", "false");
-		}
-	});
+    // Run when the window is resized
+    window.addEventListener('resize', setDesktopNavState);
+  });
 </script>
