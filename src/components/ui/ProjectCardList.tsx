@@ -13,12 +13,18 @@ function normalizeSlug(value: unknown): string {
 }
 
 function getComparableTsFromItem(item: ProjectCard): number {
+  // Prioritize startDate for sorting
+  const startStr = (item as any)?.startDate ?? "";
+  const startTs = parseDateToTs(startStr);
+  if (!Number.isNaN(startTs)) return startTs;
+
+  // Fallback to endDate or a generic date field if startDate is not available
   const endStr = (item as any)?.endDate ?? (item as any)?.date ?? "";
   if (isSentinelEnd(endStr)) return Infinity;
   const endTs = parseDateToTs(endStr);
   if (!Number.isNaN(endTs)) return endTs;
-  const startTs = parseDateToTs((item as any)?.startDate ?? "");
-  if (!Number.isNaN(startTs)) return startTs;
+  
+  // Return 0 if no valid date is found
   return 0;
 }
 
