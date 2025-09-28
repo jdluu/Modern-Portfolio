@@ -157,3 +157,88 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Dropdown multi-select (Languages / Domains) */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-width: 12rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--m3-color-outline);
+  border-radius: 8px;
+  background: var(--m3-color-surface);
+  color: var(--m3-color-on-surface);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  text-align: left;
+}
+
+.dropdown-toggle:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.dropdown-panel {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  min-width: 12rem;
+  max-width: 22rem;
+  max-height: 220px;
+  overflow: auto;
+  background: var(--m3-color-surface);
+  border: 1px solid var(--m3-color-outline);
+  border-radius: 8px;
+  padding: 0.35rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: none;
+}
+
+.dropdown-panel.open {
+  display: block;
+}
+
+.dropdown-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--m3-color-on-surface);
+  font-size: var(--m3-font-body-medium);
+}
+
+.dropdown-item:hover {
+  background: color-mix(in oklab, var(--color-accent) 6%, transparent);
+}
+
+.dropdown-item input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+/* Ensure dropdown in control-pair aligns nicely on small screens */
+@media (max-width: 640px) {
+  .dropdown-toggle {
+    min-width: 10rem;
+  }
+  .dropdown-panel {
+    min-width: 10rem;
+    max-width: 100vw;
+    left: 0;
+    right: 0;
+  }
+}

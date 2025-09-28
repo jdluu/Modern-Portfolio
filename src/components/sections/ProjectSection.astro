@@ -1,40 +1,60 @@
 ---
+import ProjectCardList from "../ui/ProjectCardList";
 import ProjectCard from "../ui/ProjectCard.astro";
-import { getAllProjectCards } from "../../lib/cosmic";
+import { getCollection } from "astro:content";
 import { pickImageString } from "../../lib/utils";
 
 /**
- * Load project cards at build-time and normalize into a small, explicit shape
- * so the template below stays simple and self-documenting.
- *
- * Note: cosmic.getAllProjectCards() now returns flattened objects where `thumbnail`
- * may be a string or an object. Use pickImageString() to derive a canonical URL.
+ * Load projectcards collection at build time and normalize fields so the
+ * template below remains small and self-documenting.
  */
-const rawProjects = (await getAllProjectCards()) || [];
+const rawCollection = (await getCollection("projectcards")) ?? [];
 
-function mapRawProject(raw: any) {
-  const thumbnailRaw = raw?.thumbnail ?? null;
+function mapEntryToProject(item: any) {
+  const entrySlug =
+    typeof item?.slug === "string"
+      ? item.slug
+      : String(item?.id ?? "").replace(/\.(md|mdx)$/i, "");
+  const d = item?.data ?? {};
   return {
-    title: raw?.title ?? "Untitled",
-    slug: raw?.slug ?? "",
-    description: raw?.description ?? "",
-    thumbnailUrl: pickImageString(thumbnailRaw) ?? "",
+    title: d?.title ?? "Untitled",
+    slug: entrySlug,
+    description: d?.description ?? "",
+    // Read flattened date fields (may be string or Date)
+    date: d?.date ?? null,
+    startDate: d?.startDate ?? null,
+    endDate: d?.endDate ?? null,
+    thumbnail: pickImageString(d?.thumbnail ?? null) ?? "",
+    programming_languages: d?.programming_languages ?? [],
+    domains: d?.domains ?? [],
   };
 }
 
-const projects = rawProjects.map(mapRawProject);
+const projects = (rawCollection ?? []).map(mapEntryToProject);
 ---
- 
+
 <section class="content-section">
-	<h2 id="projects" class="page-h2">Projects</h2>
-	<div class="card-grid">
-		{projects.map((p) => (
-			<ProjectCard
-				title={p.title}
-				intro={p.description}
-				thumbnail={p.thumbnailUrl}
-				url={p.slug}
-			/>
-		))}
-	</div>
+  <h2 id="projects" class="page-h2">Projects</h2>
+
+  <!-- Client island (controls + visibility) -->
+  <ProjectCardList client:load initialItems={projects} />
+
+  <!-- Server-rendered grid of ProjectCard items for SEO and initial markup.
+       The client island will toggle visibility of these cards via data-slug attributes. -->
+  <div class="project-grid card-grid">
+    {projects.map((p) => (
+      <div class="project-item" data-slug={p.slug ?? ""}>
+        <ProjectCard
+          title={p.title}
+          intro={p.description}
+          thumbnail={p.thumbnail}
+          url={p.slug}
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- Pagination portal: client island will move the pagination controls here so they render
+       visually underneath the server-rendered card grid while controls remain in the client island. -->
+  <div id="project-pagination-portal" class="experience-pagination-portal" aria-hidden="false"></div>
 </section>
