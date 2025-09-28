@@ -17,18 +17,6 @@
   text-align: center;
 }
 
-.section-desc {
-  font-family: var(--m3-font-family-body);
-  font-size: clamp(1.6rem, 1.5rem + 0.2vw, 1.85rem);
-  font-weight: 420;
-  line-height: var(--font-line-height-body);
-  letter-spacing: -0.005em;
-  color: var(--m3-color-on-surface-variant);
-  margin-bottom: var(--space-8);
-  max-width: 70ch;
-  text-align: center;
-}
-
 .card-grid {
   display: grid;
   gap: var(--grid-gap-sm);
