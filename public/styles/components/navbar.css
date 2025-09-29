@@ -199,11 +199,19 @@
     display: flex;
   }
   .nav-spacer {
-    display: block;
-    flex-grow: 1;
+    display: none;
   }
 
-  /* Reset nav menu to be inline */
+  /* Use grid to center nav: left home, centered links, right theme */
+  .nav-content {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  /* Reset nav menu to be inline and center it */
   .nav-menu-styles {
     display: flex !important;
     position: static;
@@ -212,6 +220,7 @@
     background-color: transparent;
     box-shadow: none;
     overflow: visible;
+    justify-self: center;
   }
   .offcanvas-inner {
     padding: 0;
