@@ -59,6 +59,19 @@ export default function PostsList(props: Props) {
     return tags().filter((t) => t.toLowerCase().includes(term));
   });
 
+  // Tag counts used to show counts next to each tag (computed from all posts)
+  const tagCounts = createMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of all) {
+      if (!Array.isArray(p.tags)) continue;
+      for (const t of p.tags) {
+        if (typeof t !== "string" || !t.trim()) continue;
+        counts.set(t, (counts.get(t) ?? 0) + 1);
+      }
+    }
+    return counts;
+  });
+
   // Close tag panel when clicking outside
   createEffect(() => {
     if (typeof document === "undefined") return;
@@ -200,24 +213,14 @@ export default function PostsList(props: Props) {
   return (
     <section>
       <div class="posts-controls experience-controls">
-        <div
-          class="controls-left"
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            "flex-wrap": "wrap",
-            "align-items": "center",
-          }}
-        >
-          <div>
-            <label
-              for="sort"
-              style={{ "margin-right": "0.5rem", "font-weight": "600" }}
-            >
+        <div class="controls-left">
+          <div class="control-pair">
+            <label for="sort" class="control-label">
               Sort
             </label>
             <select
               id="sort"
+              class="control-select"
               value={sortOrder()}
               onChange={(e) => {
                 setSortOrder((e.target as HTMLSelectElement).value as any);
@@ -229,15 +232,13 @@ export default function PostsList(props: Props) {
             </select>
           </div>
 
-          <div>
-            <label
-              for="pageSize"
-              style={{ "margin-right": "0.5rem", "font-weight": "600" }}
-            >
+          <div class="control-pair">
+            <label for="pageSize" class="control-label">
               Per page
             </label>
             <select
               id="pageSize"
+              class="control-select compact"
               value={String(pageSize())}
               onChange={(e) =>
                 changePageSize(Number((e.target as HTMLSelectElement).value))
@@ -250,180 +251,89 @@ export default function PostsList(props: Props) {
           </div>
         </div>
 
-        <div
-          class="controls-right"
-          style={{
-            display: "flex",
-            gap: "0.5rem",
-            "align-items": "center",
-          }}
-        >
+        <div class="controls-right">
           <Show when={tags().length > 0}>
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                "align-items": "center",
-              }}
-            >
-              <label style={{ "font-weight": "600", "margin-right": "0.5rem" }}>
-                Filter by Tag
-              </label>
-
-              <div style={{ position: "relative" }}>
+            <div class="control-pair">
+              <label class="control-label">Filter by Tag</label>
+              <div class="dropdown" style={{ position: "relative" } as any}>
                 <button
                   type="button"
                   onClick={() => setShowTagPanel((s) => !s)}
                   aria-expanded={showTagPanel()}
-                  style={{
-                    padding: "0.25rem 0.6rem",
-                    "border-radius": "6px",
-                    border: "1px solid var(--m3-color-outline)",
-                    background: "transparent",
-                    display: "inline-flex",
-                    gap: "0.5rem",
-                    "align-items": "center",
-                  }}
+                  aria-haspopup="true"
+                  aria-controls="tag-panel"
+                  class="control-select dropdown-toggle"
                 >
-                  <span
-                    style={{
-                      background: "var(--m3-color-surface-variant)",
-                      "border-radius": "999px",
-                      padding: "0 0.4rem",
-                      "font-weight": "600",
-                    }}
-                  >
-                    {selectedTags().length === 0
-                      ? "All"
-                      : selectedTags().length}
+                  <span class="sr-only">Toggle tag selector</span>
+                  <span style={{ "border-radius": "999px", padding: "0 0.4rem", "font-weight": "600" } as any}>
+                    {selectedTags().length === 0 ? "All" : selectedTags().length}
                   </span>
                 </button>
 
-                <Show when={showTagPanel()}>
-                  <div
-                    ref={(el) => (tagPanelRef = el!)}
-                    role="dialog"
-                    aria-label="Tag selector"
-                    style={{
-                      position: "absolute",
-                      right: "0px",
-                      "z-index": "1000",
-                      "min-width": "220px",
-                      "max-width": "360px",
-                      padding: "0.5rem",
-                      "margin-top": "0.5rem",
-                      "border-radius": "8px",
-                      border: "1px solid var(--m3-color-outline)",
-                      background: "var(--m3-color-surface)",
-                      "box-shadow": "0 6px 18px rgba(0,0,0,0.08)",
-                      "max-height": "260px",
-                      overflow: "auto",
-                    }}
-                  >
-                    <input
-                      placeholder="Search tags"
-                      value={tagFilterTerm()}
-                      onInput={(e) =>
-                        setTagFilterTerm((e.target as HTMLInputElement).value)
-                      }
-                      style={{
-                        width: "100%",
-                        padding: "0.45rem 0.5rem",
-                        "border-radius": "6px",
-                        border: "1px solid var(--m3-color-outline)",
-                        "margin-bottom": "0.5rem",
-                      }}
-                    />
+                <div
+                  ref={(el) => (tagPanelRef = el!)}
+                  id="tag-panel"
+                  role="menu"
+                  aria-label="Tag selector"
+                  class={`dropdown-panel ${showTagPanel() ? "open" : ""}`}
+                >
+                  <input
+                    placeholder="Search tags"
+                    value={tagFilterTerm()}
+                    onInput={(e) =>
+                      setTagFilterTerm((e.target as HTMLInputElement).value)
+                    }
+                    class="control-select"
+                    style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
+                  />
 
-                    <div
-                      style={{
-                        display: "flex",
-                        "flex-direction": "column",
-                        gap: "0.25rem",
+                  <div style={{ display: "flex", "flex-direction": "column", gap: "0.25rem" } as any}>
+                    <button
+                      type="button"
+                      role="menuitemcheckbox"
+                      aria-checked={selectedTags().length === 0}
+                      onClick={() => {
+                        setSelectedTags([]);
+                        setPage(1);
                       }}
+                      class="dropdown-item"
+                      style={{ "justify-content": "space-between" } as any}
                     >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedTags([]);
-                          setPage(1);
-                        }}
-                        style={{
-                          padding: "0.35rem 0.5rem",
-                          "border-radius": "6px",
-                          border: "1px solid var(--m3-color-outline)",
-                          background:
-                            selectedTags().length === 0
-                              ? "var(--m3-color-primary)"
-                              : "transparent",
-                          color:
-                            selectedTags().length === 0
-                              ? "var(--m3-color-on-primary)"
-                              : "inherit",
-                          "text-align": "left",
-                        }}
-                      >
-                        <span style={{ "margin-right": "0.5rem" }}>
+                      <span>
+                        <span style={{ "margin-right": "0.5rem" } as any}>
                           {selectedTags().length === 0 ? "✓" : "○"}
                         </span>
                         All
-                      </button>
+                      </span>
+                    </button>
 
-                      <For each={visibleTags()}>
-                        {(t) => {
-                          const isSel = () => selectedTags().includes(t);
-                          return (
-                            <label
-                              style={{
-                                display: "flex",
-                                "align-items": "center",
-                                gap: "0.5rem",
-                                padding: "0.25rem 0.25rem",
-                                "border-radius": "6px",
-                                cursor: "pointer",
-                                background: isSel()
-                                  ? "var(--m3-color-surface-variant)"
-                                  : "transparent",
-                              }}
-                            >
+                    <For each={visibleTags()}>
+                      {(t) => {
+                        const isSel = () => selectedTags().includes(t);
+                        const count = tagCounts().get(t) ?? 0;
+                        return (
+                          <label
+                            class="dropdown-item"
+                            role="menuitemcheckbox"
+                            aria-checked={isSel()}
+                            style={{ display: "flex", "align-items": "center", "justify-content": "space-between", gap: "0.75rem" } as any}
+                          >
+                            <span style={{ display: "flex", "align-items": "center", gap: "0.5rem" } as any}>
                               <input
                                 type="checkbox"
                                 checked={isSel()}
                                 onChange={() => toggleTag(t)}
                                 aria-checked={isSel()}
                               />
-                              <span style={{ flex: "1 1 auto" }}>{t}</span>
-                              <span style={{ opacity: isSel() ? 1 : 0.45 }}>
-                                {isSel() ? "✓" : "○"}
-                              </span>
-                            </label>
-                          );
-                        }}
-                      </For>
-                    </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        "justify-content": "flex-end",
-                        "margin-top": "0.5rem",
+                              <span>{t}</span>
+                            </span>
+                            <span style={{ opacity: isSel() ? 1 : 0.75 }}>{count}</span>
+                          </label>
+                        );
                       }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setShowTagPanel(false)}
-                        style={{
-                          padding: "0.35rem 0.5rem",
-                          "border-radius": "6px",
-                          border: "1px solid var(--m3-color-outline)",
-                          background: "transparent",
-                        }}
-                      >
-                        Done
-                      </button>
-                    </div>
+                    </For>
                   </div>
-                </Show>
+                </div>
               </div>
             </div>
           </Show>
