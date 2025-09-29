@@ -55,6 +55,8 @@ export default function ProjectCardList(props: Props) {
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
   const [langDropdownOpen, setLangDropdownOpen] = createSignal(false);
   const [domDropdownOpen, setDomDropdownOpen] = createSignal(false);
+  const [langSearchTerm, setLangSearchTerm] = createSignal("");
+  const [domSearchTerm, setDomSearchTerm] = createSignal("");
   let paginationRef: HTMLDivElement | undefined;
   let langDropdownRef: HTMLDivElement | undefined;
   let domDropdownRef: HTMLDivElement | undefined;
@@ -120,66 +122,72 @@ export default function ProjectCardList(props: Props) {
    * - Returns array of { name, count } sorted by count desc then name.
    */
   const languageCounts = createMemo(() => {
-    const yf = yearFilter();
-    const currentDomainFilters = domainFilters() ?? [];
+    try {
+      const yf = yearFilter();
+      const currentDomainFilters = domainFilters() ?? [];
 
-    // Start from all initial items and apply Year + Domain filters (but NOT languageFilters)
-    let items = props.initialItems ?? [];
+      // Start from all initial items and apply Year + Domain filters (but NOT languageFilters)
+      let items = props.initialItems ?? [];
 
-    // Year filtering (same logic as processedAll)
-    if (yf) {
-      items = items.filter((it) => {
-        const cand = [
-          (it as any)?.startDate ?? "",
-          (it as any)?.endDate ?? "",
-          (it as any)?.date ?? "",
-        ];
-        const yearsFound = new Set<string>();
-        for (const v of cand) {
-          if (!v) continue;
-          if (isSentinelEnd(v)) yearsFound.add("Present");
-          else {
-            const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts))
-              yearsFound.add(String(new Date(ts).getFullYear()));
+      // Year filtering (same logic as processedAll)
+      if (yf) {
+        items = items.filter((it) => {
+          const cand = [
+            (it as any)?.startDate ?? "",
+            (it as any)?.endDate ?? "",
+            (it as any)?.date ?? "",
+          ];
+          const yearsFound = new Set<string>();
+          for (const v of cand) {
+            if (!v) continue;
+            if (isSentinelEnd(v)) yearsFound.add("Present");
+            else {
+              const ts = parseDateToTs(v);
+              if (!Number.isNaN(ts))
+                yearsFound.add(String(new Date(ts).getFullYear()));
+            }
           }
-        }
-        return yearsFound.has(yf);
-      });
-    }
-
-    // Domain filters (apply current domain filters)
-    if (currentDomainFilters && currentDomainFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemDomains = Array.isArray((it as any)?.domains)
-          ? (it as any).domains.map((x: any) => String(x))
-          : [];
-        return currentDomainFilters.some((f) => itemDomains.includes(f));
-      });
-    }
-
-    // Tally languages
-    const counts = new Map<string, number>();
-    items.forEach((it) => {
-      const list = (it as any)?.programming_languages ?? [];
-      if (Array.isArray(list)) {
-        list.forEach((l: any) => {
-          if (!l) return;
-          const name = String(l);
-          counts.set(name, (counts.get(name) ?? 0) + 1);
+          return yearsFound.has(yf);
         });
       }
-    });
 
-    const arr = Array.from(counts.entries()).map(([name, count]) => ({
-      name,
-      count,
-    }));
-    arr.sort((a, b) => {
-      if (b.count !== a.count) return b.count - a.count;
-      return a.name.localeCompare(b.name);
-    });
-    return arr;
+      // Domain filters (apply current domain filters)
+      if (currentDomainFilters && currentDomainFilters.length > 0) {
+        items = items.filter((it) => {
+          const itemDomains = Array.isArray((it as any)?.domains)
+            ? (it as any).domains.map((x: any) => String(x))
+            : [];
+          return currentDomainFilters.some((f) => itemDomains.includes(f));
+        });
+      }
+
+      // Tally languages
+      const counts = new Map<string, number>();
+      items.forEach((it) => {
+        const list = (it as any)?.programming_languages ?? [];
+        if (Array.isArray(list)) {
+          list.forEach((l: any) => {
+            if (!l) return;
+            const name = String(l);
+            counts.set(name, (counts.get(name) ?? 0) + 1);
+          });
+        }
+      });
+
+      const arr = Array.from(counts.entries()).map(([name, count]) => ({
+        name,
+        count,
+      }));
+      arr.sort((a, b) => {
+        if (b.count !== a.count) return b.count - a.count;
+        return a.name.localeCompare(b.name);
+      });
+      return arr;
+    } catch (e) {
+      // Defensive fallback for SSR/runtime errors
+      console.error("languageCounts error:", e);
+      return [];
+    }
   });
 
   /**
@@ -189,66 +197,86 @@ export default function ProjectCardList(props: Props) {
    * - Returns array of { name, count } sorted by count desc then name.
    */
   const domainCounts = createMemo(() => {
-    const yf = yearFilter();
-    const currentLanguageFilters = languageFilters() ?? [];
+    try {
+      const yf = yearFilter();
+      const currentLanguageFilters = languageFilters() ?? [];
 
-    // Start from all initial items and apply Year + Language filters (but NOT domainFilters)
-    let items = props.initialItems ?? [];
+      // Start from all initial items and apply Year + Language filters (but NOT domainFilters)
+      let items = props.initialItems ?? [];
 
-    // Year filtering
-    if (yf) {
-      items = items.filter((it) => {
-        const cand = [
-          (it as any)?.startDate ?? "",
-          (it as any)?.endDate ?? "",
-          (it as any)?.date ?? "",
-        ];
-        const yearsFound = new Set<string>();
-        for (const v of cand) {
-          if (!v) continue;
-          if (isSentinelEnd(v)) yearsFound.add("Present");
-          else {
-            const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts))
-              yearsFound.add(String(new Date(ts).getFullYear()));
+      // Year filtering
+      if (yf) {
+        items = items.filter((it) => {
+          const cand = [
+            (it as any)?.startDate ?? "",
+            (it as any)?.endDate ?? "",
+            (it as any)?.date ?? "",
+          ];
+          const yearsFound = new Set<string>();
+          for (const v of cand) {
+            if (!v) continue;
+            if (isSentinelEnd(v)) yearsFound.add("Present");
+            else {
+              const ts = parseDateToTs(v);
+              if (!Number.isNaN(ts))
+                yearsFound.add(String(new Date(ts).getFullYear()));
+            }
           }
-        }
-        return yearsFound.has(yf);
-      });
-    }
-
-    // Language filters (apply current language filters)
-    if (currentLanguageFilters && currentLanguageFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemLangs = Array.isArray((it as any)?.programming_languages)
-          ? (it as any).programming_languages.map((x: any) => String(x))
-          : [];
-        return currentLanguageFilters.some((f) => itemLangs.includes(f));
-      });
-    }
-
-    // Tally domains
-    const counts = new Map<string, number>();
-    items.forEach((it) => {
-      const list = (it as any)?.domains ?? [];
-      if (Array.isArray(list)) {
-        list.forEach((d: any) => {
-          if (!d) return;
-          const name = String(d);
-          counts.set(name, (counts.get(name) ?? 0) + 1);
+          return yearsFound.has(yf);
         });
       }
-    });
 
-    const arr = Array.from(counts.entries()).map(([name, count]) => ({
-      name,
-      count,
-    }));
-    arr.sort((a, b) => {
-      if (b.count !== a.count) return b.count - a.count;
-      return a.name.localeCompare(b.name);
-    });
-    return arr;
+      // Language filters (apply current language filters)
+      if (currentLanguageFilters && currentLanguageFilters.length > 0) {
+        items = items.filter((it) => {
+          const itemLangs = Array.isArray((it as any)?.programming_languages)
+            ? (it as any).programming_languages.map((x: any) => String(x))
+            : [];
+          return currentLanguageFilters.some((f) => itemLangs.includes(f));
+        });
+      }
+
+      // Tally domains
+      const counts = new Map<string, number>();
+      items.forEach((it) => {
+        const list = (it as any)?.domains ?? [];
+        if (Array.isArray(list)) {
+          list.forEach((d: any) => {
+            if (!d) return;
+            const name = String(d);
+            counts.set(name, (counts.get(name) ?? 0) + 1);
+          });
+        }
+      });
+
+      const arr = Array.from(counts.entries()).map(([name, count]) => ({
+        name,
+        count,
+      }));
+      arr.sort((a, b) => {
+        if (b.count !== a.count) return b.count - a.count;
+        return a.name.localeCompare(b.name);
+      });
+      return arr;
+    } catch (e) {
+      console.error("domainCounts error:", e);
+      return [];
+    }
+  });
+
+  // Visible lists filtered by search term (preserve counts from languageCounts/domainCounts)
+  const visibleLanguageCounts = createMemo(() => {
+    const term = langSearchTerm().trim().toLowerCase();
+    const all = languageCounts();
+    if (!term) return all;
+    return all.filter((l) => l.name.toLowerCase().includes(term));
+  });
+
+  const visibleDomainCounts = createMemo(() => {
+    const term = domSearchTerm().trim().toLowerCase();
+    const all = domainCounts();
+    if (!term) return all;
+    return all.filter((d) => d.name.toLowerCase().includes(term));
   });
 
   // Reset pagination when filters change
@@ -499,6 +527,7 @@ export default function ProjectCardList(props: Props) {
               aria-haspopup="true"
               aria-expanded={langDropdownOpen()}
               onClick={() => setLangDropdownOpen((v) => !v)}
+              aria-controls="lang-panel"
               type="button"
             >
               {languageFilters().length
@@ -507,11 +536,22 @@ export default function ProjectCardList(props: Props) {
             </button>
 
             <div
+              id="lang-panel"
               class={`dropdown-panel ${langDropdownOpen() ? "open" : ""}`}
               role="menu"
               aria-label="Programming languages"
             >
-              <For each={languageCounts()}>
+              <input
+                placeholder="Search languages"
+                value={langSearchTerm()}
+                onInput={(e) =>
+                  setLangSearchTerm((e.target as HTMLInputElement).value)
+                }
+                class="control-select"
+                style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
+              />
+
+              <For each={visibleLanguageCounts()}>
                 {(l: { name: string; count: number }) => (
                   <label class="dropdown-item" role="menuitemcheckbox">
                     <input
@@ -544,6 +584,7 @@ export default function ProjectCardList(props: Props) {
               aria-haspopup="true"
               aria-expanded={domDropdownOpen()}
               onClick={() => setDomDropdownOpen((v) => !v)}
+              aria-controls="dom-panel"
               type="button"
             >
               {domainFilters().length
@@ -552,11 +593,22 @@ export default function ProjectCardList(props: Props) {
             </button>
 
             <div
+              id="dom-panel"
               class={`dropdown-panel ${domDropdownOpen() ? "open" : ""}`}
               role="menu"
               aria-label="Domains"
             >
-              <For each={domainCounts()}>
+              <input
+                placeholder="Search domains"
+                value={domSearchTerm()}
+                onInput={(e) =>
+                  setDomSearchTerm((e.target as HTMLInputElement).value)
+                }
+                class="control-select"
+                style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
+              />
+
+              <For each={visibleDomainCounts()}>
                 {(d: { name: string; count: number }) => (
                   <label class="dropdown-item" role="menuitemcheckbox">
                     <input
