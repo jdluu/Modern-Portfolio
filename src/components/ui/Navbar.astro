@@ -108,10 +108,10 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
       </div>
 
       <div class="theme-toggle-container">
-        <ThemeToggleButton client:idle transition:persist />
+        <ThemeToggleButton client:media="(min-width: 768px)" transition:persist />
       </div>
       <div class="mobile-theme-toggle md-hidden" style="margin-left: auto;">
-        <ThemeToggleButton client:idle transition:persist />
+        <ThemeToggleButton client:media="(max-width: 767px)" transition:persist />
       </div>
     </div>
   </nav>
