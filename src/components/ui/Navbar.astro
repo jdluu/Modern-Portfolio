@@ -103,14 +103,14 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
                 Contact
               </a>
             </li>
-            <li class="nav-item md-hidden">
-              <ThemeToggleButton client:idle transition:persist />
-            </li>
           </ul>
         </div>
       </div>
 
       <div class="theme-toggle-container">
+        <ThemeToggleButton client:idle transition:persist />
+      </div>
+      <div class="mobile-theme-toggle md-hidden" style="margin-left: auto;">
         <ThemeToggleButton client:idle transition:persist />
       </div>
     </div>
