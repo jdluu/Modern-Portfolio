@@ -5,7 +5,7 @@
   inline-size: 7rem;
   block-size: 3.6rem;
   padding: 0.4rem;
-  border: 0;
+  border: 1px solid var(--color-border); /* added border for definition */
   border-radius: 9999px;
   background: var(--color-surface);
   box-shadow:
@@ -17,7 +17,8 @@
   justify-content: flex-start;
   transition:
     background-color 180ms ease,
-    box-shadow 180ms ease;
+    box-shadow 180ms ease,
+    border-color 180ms ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -25,9 +26,14 @@
 /* Container color shifts slightly per theme for contrast */
 [data-theme="light"] .btn {
   background: #ffffff;
+  border-color: var(--color-border); /* neutral outline in light mode */
+  box-shadow:
+    0 4px 12px rgba(16, 24, 40, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.04) inset;
 }
 [data-theme="dark"] .btn {
   background: #262a3b;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.04) inset;
@@ -37,7 +43,7 @@
 @media (hover: hover) {
   .btn:hover {
     box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.08),
+      0 6px 18px rgba(16, 24, 40, 0.08),
       0 0 0 1px rgba(0, 0, 0, 0.04) inset;
   }
 }
@@ -53,7 +59,7 @@
   outline: none;
   box-shadow:
     0 0 0 2px color-mix(in oklab, var(--color-accent) 35%, transparent),
-    0 0 0 6px color-mix(in oklab, var(--color-accent) 15%, transparent);
+    0 0 0 8px color-mix(in oklab, var(--color-accent) 14%, transparent); /* slightly larger outer ring for visibility */
 }
 
 /* Thumb */
@@ -65,18 +71,21 @@
   block-size: 2.8rem;
   border-radius: 50%;
   background: var(--m3-color-surface-variant);
+  border: 1px solid color-mix(in oklab, var(--m3-color-outline) 45%, transparent 55%); /* subtle definition */
   box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.18),
+    0 4px 10px rgba(16, 24, 40, 0.12),
     0 1px 1px rgba(0, 0, 0, 0.06);
   transform: translateX(0);
   transition:
     transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
     background-color 180ms ease,
-    box-shadow 180ms ease;
+    box-shadow 180ms ease,
+    border-color 180ms ease;
   view-transition-name: theme-thumb;
   will-change: transform;
 }
 
+/* Ensure base non-VT positioning still works */
 html:not([data-theme-vt="driving"]) .btn__indicator {
   transform: translateX(0);
 }
@@ -86,10 +95,11 @@ html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
 
 /* Dark-mode thumb position and color */
 [data-theme="dark"] .btn__indicator {
-  background: #11131c;
+  background: #0f1116; /* slightly darker to contrast with dark track */
+  border: 1px solid rgba(255, 255, 255, 0.06);
   transform: translateX(3.8rem);
   box-shadow:
-    0 6px 10px rgba(0, 0, 0, 0.35),
+    0 8px 18px rgba(0, 0, 0, 0.45),
     0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -103,19 +113,22 @@ html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
 }
 
 .btn__icon {
-  font-size: 1.3rem;
+  font-size: 1.55rem; /* increased for visibility */
   position: absolute;
   transition:
     opacity 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    color 180ms ease;
   opacity: 0;
   transform: scale(0.8);
 }
 
+/* Icon colors and sizes adjusted for contrast */
 [data-theme="light"] .btn__icon--sun {
   opacity: 1;
   transform: scale(1);
-  color: var(--light-icon-color);
+  /* darken the light icon a bit to improve contrast on white thumb */
+  color: color-mix(in oklab, var(--light-icon-color) 60%, black 40%);
 }
 
 [data-theme="dark"] .btn__icon--moon {
