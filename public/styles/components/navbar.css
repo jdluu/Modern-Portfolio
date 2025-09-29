@@ -158,6 +158,16 @@
   padding-left: 0.5rem;
 }
 
+/* Ensure mobile theme toggle sits at the top-right within .nav-content
+   and doesn't inherit the in-menu spacing. This overrides .md-hidden for
+   the element we added in the markup (`.mobile-theme-toggle.md-hidden`). */
+.mobile-theme-toggle {
+  margin-left: auto; /* push to right within flex container */
+  margin-top: 0;     /* vertically center with other header controls */
+  align-self: center;
+  display: block;
+}
+
 /* Backdrop */
 .menu-backdrop {
   position: fixed;
