@@ -139,58 +139,126 @@
   overflow: hidden;
 }
 
-/* Controls shared by the PostsList island (kept in section CSS to avoid global loading) */
-.posts-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  margin-bottom: 1rem;
-  width: 100%;
-}
-.posts-controls .controls-left,
-.posts-controls .controls-right {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-.posts-controls .controls-right {
-  margin-left: auto;
-}
-.posts-controls .btn-reset {
-  padding: 0.35rem 0.6rem;
-  border-radius: 6px;
-  border: 1px solid var(--m3-color-outline);
-  background: transparent;
+/* Controls (posts) now rely on the shared .experience-controls, .control-pair, .control-select,
+   .dropdown, and pagination styles provided by /styles/components/pagination.css.
+   Local .posts-controls rules removed so PostsList can inherit the shared styles used
+   by Experience/Project controls and keep a consistent UI across pages. */
+
+/* Controls (posts) - enforce Experience/Work spacing tokens and stronger specificity
+   - Use higher-specificity selectors and !important to beat competing rules (pagination.css,
+     component-level inline styles, or legacy rules) so the blog controls get identical layout.
+   - Mirror exact values from /public/styles/components/pagination.css:
+     * gap: var(--spacing-md)
+     * control-pair gap: 0.6rem
+     * control-select min-width: 8rem
+     * dropdown-toggle min-width: 12rem
+*/
+.posts-controls,
+.experience-controls.posts-controls,
+.posts-container .posts-controls {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--spacing-md) !important;
+  row-gap: var(--spacing-md) !important;
+  column-gap: var(--spacing-md) !important;
+  margin-bottom: var(--spacing-md) !important;
+  padding: 0 var(--spacing-md) !important;
 }
 
-/* Small-screen adjustments for controls */
+/* Ensure label+control group spacing matches Work */
+.posts-controls .control-pair,
+.posts-controls .control-group {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important; /* same as .experience-controls .control-pair */
+}
+
+/* Normalize children margins so legacy margins can't cause overlap */
+.posts-controls > * {
+  margin: 0 !important;
+}
+
+/* Tag/filter/actions areas: allow wrapping and small gaps (mirror Work tokens) */
+.posts-controls .tag-filters,
+.posts-controls .actions,
+.posts-controls .controls-right,
+.posts-controls .controls-left {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: var(--spacing-sm) !important;
+  align-items: center !important;
+}
+
+/* Dropdown and select sizing to match Work controls (exact tokens from pagination.css) */
+.posts-controls .dropdown-toggle {
+  min-width: 12rem !important; /* mirrors .dropdown-toggle in pagination.css */
+}
+
+.posts-controls .control-select,
+.posts-controls select {
+  min-width: 8rem !important; /* mirrors .experience-controls .control-select */
+}
+
+.posts-controls .control-select.compact {
+  min-width: 6.4rem !important; /* mirrors compact variant */
+}
+
+/* Ensure dropdown panels in posts inherit sensible constraints (same as component) */
+.posts-controls .dropdown-panel {
+  min-width: 10rem !important;
+  max-width: 22rem !important;
+}
+
+/* Responsive: keep same breakpoint behaviour as Work/Experience */
 @media (max-width: 640px) {
   .posts-controls {
-    justify-content: center;
+    padding: 0 var(--spacing-sm) !important;
+    gap: var(--spacing-sm) !important;
   }
-  .posts-controls .controls-right {
-    margin-left: 0;
+  .posts-controls .dropdown-toggle {
+    min-width: 10rem !important;
   }
-  .posts-controls .controls-left,
-  .posts-controls .controls-right {
-    flex: 1 1 100%;
-    justify-content: center;
-  }
-  .posts-controls .controls-left {
-    margin-bottom: 0.5rem;
-  }
-  .posts-controls .controls-right {
-    gap: 0.5rem;
-  }
-  .posts-controls .controls-right .btn-reset {
-    margin-left: 0.25rem;
-  }
-  .posts-controls .controls-right [role="dialog"] {
-    left: 0 !important;
-    right: auto !important;
-    min-width: 200px !important;
-    max-width: calc(100% - 32px) !important;
+}
+
+/* Controls (posts) - ensure blog filter controls mirror Work spacing tokens
+   We intentionally mirror the structural approach used by .experience-controls in
+   /public/styles/components/pagination.css so spacing is identical across pages.
+   This block provides a local hook (.posts-controls) that uses the same variables
+   and gap values and adds a couple of small helper rules to align dropdowns/control-pair spacing. */
+.posts-controls,
+.posts-container .posts-controls {
+  display: flex;
+  gap: var(--spacing-md); /* matches .experience-controls gap */
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+}
+
+.posts-controls .control-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem; /* same spacing used in Work controls */
+}
+
+/* Ensure dropdown toggles and selects in the blog get the same min-width behavior */
+.posts-controls .dropdown-toggle,
+.posts-controls .control-select {
+  min-width: 8rem;
+}
+
+/* Compact variant */
+.posts-controls .control-select.compact {
+  min-width: 6.4rem;
+}
+
+/* Keep responsive behaviour consistent with Work controls */
+@media (max-width: 640px) {
+  .posts-controls {
+    padding: 0 var(--spacing-sm);
+    gap: var(--spacing-sm);
   }
 }
