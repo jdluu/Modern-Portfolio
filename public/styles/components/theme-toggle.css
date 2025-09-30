@@ -71,7 +71,8 @@
   block-size: 2.8rem;
   border-radius: 50%;
   background: var(--m3-color-surface-variant);
-  border: 1px solid color-mix(in oklab, var(--m3-color-outline) 45%, transparent 55%); /* subtle definition */
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 45%, transparent 55%); /* subtle definition */
   box-shadow:
     0 4px 10px rgba(16, 24, 40, 0.12),
     0 1px 1px rgba(0, 0, 0, 0.06);

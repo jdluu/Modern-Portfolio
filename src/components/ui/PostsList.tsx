@@ -265,8 +265,18 @@ export default function PostsList(props: Props) {
                   class="control-select dropdown-toggle"
                 >
                   <span class="sr-only">Toggle tag selector</span>
-                  <span style={{ "border-radius": "999px", padding: "0 0.4rem", "font-weight": "600" } as any}>
-                    {selectedTags().length === 0 ? "All" : selectedTags().length}
+                  <span
+                    style={
+                      {
+                        "border-radius": "999px",
+                        padding: "0 0.4rem",
+                        "font-weight": "600",
+                      } as any
+                    }
+                  >
+                    {selectedTags().length === 0
+                      ? "All"
+                      : selectedTags().length}
                   </span>
                 </button>
 
@@ -287,7 +297,15 @@ export default function PostsList(props: Props) {
                     style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
                   />
 
-                  <div style={{ display: "flex", "flex-direction": "column", gap: "0.25rem" } as any}>
+                  <div
+                    style={
+                      {
+                        display: "flex",
+                        "flex-direction": "column",
+                        gap: "0.25rem",
+                      } as any
+                    }
+                  >
                     <button
                       type="button"
                       role="menuitemcheckbox"
@@ -316,9 +334,24 @@ export default function PostsList(props: Props) {
                             class="dropdown-item"
                             role="menuitemcheckbox"
                             aria-checked={isSel()}
-                            style={{ display: "flex", "align-items": "center", "justify-content": "space-between", gap: "0.75rem" } as any}
+                            style={
+                              {
+                                display: "flex",
+                                "align-items": "center",
+                                "justify-content": "space-between",
+                                gap: "0.75rem",
+                              } as any
+                            }
                           >
-                            <span style={{ display: "flex", "align-items": "center", gap: "0.5rem" } as any}>
+                            <span
+                              style={
+                                {
+                                  display: "flex",
+                                  "align-items": "center",
+                                  gap: "0.5rem",
+                                } as any
+                              }
+                            >
                               <input
                                 type="checkbox"
                                 checked={isSel()}
@@ -327,7 +360,9 @@ export default function PostsList(props: Props) {
                               />
                               <span>{t}</span>
                             </span>
-                            <span style={{ opacity: isSel() ? 1 : 0.75 }}>{count}</span>
+                            <span style={{ opacity: isSel() ? 1 : 0.75 }}>
+                              {count}
+                            </span>
                           </label>
                         );
                       }}
