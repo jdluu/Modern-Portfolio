@@ -42,5 +42,155 @@ const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 	<!-- Pagination portal: client island will move the pagination controls here so they render
 	     visually underneath the server-rendered card grid while controls remain in the client island. -->
 	<div id="experience-pagination-portal" class="experience-pagination-portal" aria-hidden="false"></div>
+
+	<!-- Inline script: promote above-the-fold images to eager using IntersectionObserver.
+	     - Defaults are lazy in the card components for performance/SSR.
+	     - This uses an IntersectionObserver so the browser determines visibility (future-proof).
+	     - A MutationObserver re-syncs observations when the server-rendered grid is reordered by the client island (pagination/filters).
+	     - Only the first visible image gets fetchpriority="high" to help LCP candidates.
+	-->
+	<script type="text/javascript">
+	  (function () {
+	    if (typeof window === "undefined") return;
+
+	    const containerSelector = ".experience-grid";
+	    const itemSelector = ".experience-item";
+	    const imgSelector = ".experience-image";
+	    const observerOptions = { root: null, rootMargin: "0px", threshold: 0.01 };
+
+	    let io = null;
+	    let observedItems = new Set();
+
+	    function setImageState(img, state, highestPriority = false) {
+	      if (!img || !(img instanceof HTMLImageElement)) return;
+	      try {
+	        img.loading = state === "eager" ? "eager" : "lazy";
+	        if (highestPriority) img.setAttribute("fetchpriority", "high");
+	        else img.removeAttribute("fetchpriority");
+	      } catch (e) {
+	        /* ignore DOM exceptions on some environments */
+	      }
+	    }
+
+	    function recomputePriorities() {
+	      const container = document.querySelector(containerSelector);
+	      if (!container) return;
+
+	      // Collect visible items in DOM order
+	      const items = Array.from(container.querySelectorAll(itemSelector));
+	      const visible = items.filter((it) => {
+	        const img = it.querySelector(imgSelector);
+	        return img && img instanceof HTMLImageElement && img.loading === "eager";
+	      });
+
+	      // Reset all images' fetchpriority
+	      items.forEach((it) => {
+	        const img = it.querySelector(imgSelector);
+	        if (img && img instanceof HTMLImageElement) {
+	          img.removeAttribute("fetchpriority");
+	        }
+	      });
+
+	      // Give fetchpriority to the first visible image (if any)
+	      if (visible.length > 0) {
+	        const firstImg = visible[0].querySelector(imgSelector);
+	        if (firstImg && firstImg instanceof HTMLImageElement) {
+	          firstImg.setAttribute("fetchpriority", "high");
+	        }
+	      }
+	    }
+
+	    function handleIntersections(entries) {
+	      // Toggle loading based on intersection state
+	      entries.forEach((entry) => {
+	        const target = entry.target;
+	        const img = target.querySelector(imgSelector);
+	        if (!img || !(img instanceof HTMLImageElement)) return;
+	        if (entry.isIntersecting) {
+	          setImageState(img, "eager");
+	        } else {
+	          // Keep behavior conservative: when item is clearly not intersecting, lazily load.
+	          setImageState(img, "lazy");
+	        }
+	      });
+
+	      // After toggling, ensure a single high-priority image
+	      recomputePriorities();
+	    }
+
+	    function observeAllItems() {
+	      const container = document.querySelector(containerSelector);
+	      if (!container) return;
+	      // Disconnect existing observer
+	      if (io) {
+	        io.disconnect();
+	        observedItems.clear();
+	      } else {
+	        io = new IntersectionObserver(handleIntersections, observerOptions);
+	      }
+
+	      // Observe all current items
+	      const items = Array.from(container.querySelectorAll(itemSelector));
+	      items.forEach((it) => {
+	        if (!observedItems.has(it)) {
+	          io.observe(it);
+	          observedItems.add(it);
+	        }
+	      });
+
+	      // Run a synchronous pass to promote items already in view (some browsers may not fire immediately)
+	      // Use getBoundingClientRect as a quick initial pass to set eager for items currently in viewport.
+	      items.forEach((it) => {
+	        const rect = it.getBoundingClientRect();
+	        const img = it.querySelector(imgSelector);
+	        if (!img || !(img instanceof HTMLImageElement)) return;
+	        if (rect.top < window.innerHeight && rect.bottom > 0) {
+	          setImageState(img, "eager");
+	        } else {
+	          setImageState(img, "lazy");
+	        }
+	      });
+
+	      recomputePriorities();
+	    }
+
+	    // Watch for structural changes in the grid (client island reorders / toggles nodes on pagination/filter)
+	    let mo = null;
+	    function ensureMutationObserver() {
+	      const container = document.querySelector(containerSelector);
+	      if (!container) return;
+	      if (mo) mo.disconnect();
+	      mo = new MutationObserver((mutations) => {
+	        // Re-observe when children change
+	        observeAllItems();
+	      });
+	      mo.observe(container, { childList: true, subtree: false });
+	    }
+
+	    function init() {
+	      observeAllItems();
+	      ensureMutationObserver();
+	      // Recompute priorities on resize to handle viewport changes
+	      window.addEventListener("resize", recomputePriorities, { passive: true });
+	      // Expose for debugging
+	      window.__promoteExperienceImages = () => {
+	        observeAllItems();
+	        recomputePriorities();
+	      };
+	    }
+
+	    if (document.readyState === "complete" || document.readyState === "interactive") {
+	      init();
+	    } else {
+	      document.addEventListener("DOMContentLoaded", init, { once: true });
+	    }
+
+	    // Cleanup if the page unloads (defensive)
+	    window.addEventListener("beforeunload", () => {
+	      if (io) io.disconnect();
+	      if (mo) mo.disconnect();
+	    });
+	  })();
+	</script>
 </section>
 

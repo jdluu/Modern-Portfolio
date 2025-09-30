@@ -189,6 +189,9 @@ export default function ExperienceCardList(props: Props) {
         }
       });
     }
+
+    // IntersectionObserver + MutationObserver in the section handle image promotion;
+    // no manual event dispatch is required here.
   });
 
   // Helpers for pagination controls
