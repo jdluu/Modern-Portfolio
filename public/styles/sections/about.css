@@ -1,8 +1,8 @@
-/* About Section styles (moved from AboutSection.astro) */
+/* About Section styles (refactored to match screenshot layout and visual hierarchy) */
 
 /* Container and headings */
 .content-section {
-  padding: 4.8rem 2.4rem;
+  padding: var(--space-8) var(--space-4);
   max-width: 1280px;
   margin: 0 auto;
 }
@@ -11,24 +11,25 @@
   font-family: var(--m3-font-family-display);
   color: var(--color-text-primary);
   text-align: center;
-  margin-bottom: 3.2rem;
+  margin-bottom: var(--space-5);
 }
 
-/* Layout */
+/* Layout: left intro column + right education column */
 #flex-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3.2rem;
+  gap: var(--space-4);
   align-items: start;
 }
 #about-wrapper {
-  padding: 2.4rem;
-  background-color: var(--color-surface);
+  padding: var(--space-4) var(--space-5);
+  background-color: transparent;
   border-radius: 12px;
+  max-width: 46rem;
 }
 #about-desc {
   font-size: var(--m3-font-body-large);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   line-height: 1.6;
   max-width: 70ch;
 }
@@ -37,120 +38,242 @@
   font-size: var(--m3-font-headline-medium);
   font-family: var(--m3-font-family-display);
   color: var(--color-accent);
-  margin-bottom: 1.6rem;
+  margin-bottom: var(--space-4);
+  font-weight: 600;
 }
 
-/* Skills area */
-#skills-wrapper {
-  background-color: var(--color-card);
+/* CTA card placed under the intro (left column) */
+.cta-card {
+  margin-top: var(--space-3);
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  padding: var(--space-5);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+.cta-card .projects-text {
+  font-size: var(--m3-font-body-medium);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-3);
+}
+.cta-card .projects-link {
+  display: inline-block;
+  font-size: var(--m3-font-label-large);
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Education column */
+#education-wrapper {
+  background-color: transparent;
   border-radius: 12px;
-  padding: 2.4rem;
+  padding: 0;
+  margin-top: var(--space-4);
 }
 .skills-title {
   font-size: var(--m3-font-headline-medium);
   font-family: var(--m3-font-family-display);
-  color: var(--color-text-tertiary);
-  text-align: center;
-  margin-bottom: 2.4rem;
-}
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.6rem;
-}
-.domain-section {
-  background-color: var(--color-surface);
-  border-radius: 8px;
-  padding: 1.6rem;
-}
-.domain-section:not(:last-child) {
-  border-right: 1px solid var(--color-border);
-}
-.domain-section h4 {
-  font-size: var(--m3-font-title-large);
   color: var(--color-accent);
-  text-align: center;
-  margin-bottom: 1.6rem;
+  text-align: left;
+  margin-bottom: var(--space-5);
+  font-weight: 600;
 }
-.tech-grid {
+
+/* Education list and individual cards */
+.education-list {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: var(--space-2);
+}
+.edu-card {
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  padding: var(--space-4);
+  box-shadow: 0 1px 0 var(--color-border);
+  border: 1px solid color-mix(in oklab, var(--color-border) 18%, transparent 82%);
+}
+.edu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-1);
+}
+.edu-degree {
+  font-size: var(--m3-font-title-large);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1);
+  line-height: 1.22;
+  font-weight: 600;
+}
+.edu-status {
+  color: var(--color-text-tertiary);
+  font-size: var(--m3-font-label-medium);
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+.edu-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  text-align: right;
+}
+.edu-location {
+  color: var(--color-text-tertiary);
+  font-size: var(--m3-font-label-medium);
+}
+
+.edu-institution {
+  color: var(--color-text-tertiary);
+  margin-top: 0;
+  margin-bottom: var(--space-1);
+}
+.edu-minor {
+  display: inline-block;
+  margin-left: var(--space-2);
+  color: var(--color-text-tertiary);
+  font-size: var(--m3-font-label-medium);
+}
+.edu-minor-inline {
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: var(--m3-font-label-medium);
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+  line-height: 1.2;
+  vertical-align: baseline;
+}
+.edu-gpa {
+  margin: var(--space-2) 0;
+  color: var(--color-text-primary);
+}
+
+/* Coursework layout: two-column list inside each card */
+.edu-coursework {
+  margin-top: var(--space-2);
+}
+.coursework-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.6rem;
-  justify-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 
-/* Tech item + tooltip (tooltip uses title attribute) */
-.tech-item {
-  position: relative;
-  width: 6rem;
-  height: 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-card);
-  border-radius: 50%;
-  transition: all 0.2s ease;
+.course-list {
+  list-style: disc;
+  margin-left: var(--space-6);
+  color: var(--color-text-secondary);
+  padding-left: var(--space-4);
 }
-.tech-item:hover {
-  transform: scale(1.1);
-  background-color: var(--color-accent-hover);
-}
-.tech-item img {
-  width: 3.2rem;
-  height: 3.2rem;
-  object-fit: contain;
-}
-/* Tooltip pseudo-element displays the element's title attribute */
-.tech-item::after {
-  content: attr(title);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: var(--m3-font-body-small);
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease;
-}
-.tech-item:hover::after {
-  opacity: 1;
-  visibility: visible;
+.course-list li {
+  margin-bottom: var(--space-1);
+  line-height: 1.5;
 }
 
-/* Projects link block */
-.projects-link-wrapper {
-  text-align: center;
-  margin-top: 3.2rem;
-  padding-top: 1.6rem;
-  border-top: 1px solid var(--color-border);
+/* Smaller screens: collapse coursework columns to one */
+@media (max-width: 720px) {
+  .coursework-grid {
+    grid-template-columns: 1fr;
+  }
 }
-.projects-text {
-  font-size: var(--m3-font-body-medium);
-  color: var(--color-text-tertiary);
-  margin-bottom: 0.8rem;
+/* Stack header meta on small screens */
+@media (max-width: 720px) {
+  .edu-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  .edu-meta {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
-.projects-link {
-  font-size: var(--m3-font-label-large);
-  color: var(--color-accent);
-  text-decoration: none;
-  font-weight: 500;
-}
+
+/* Hover focus states for links */
 @media (hover: hover) {
-  .projects-link:hover {
+  .projects-link:hover,
+  .cta-card .projects-link:hover {
     text-decoration: underline;
+    color: var(--color-accent-hover);
   }
 }
 
+/* Adjust two-column layout on wide screens to match screenshot proportions */
 @media (min-width: 960px) {
+  /* left column narrower than right column (approx 35% / 65%) */
   #flex-container {
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr 2fr;
   }
+
+  #about-wrapper {
+    padding-right: var(--space-6);
+  }
+
+  .education-list {
+    gap: var(--space-6);
+  }
+
+  .edu-card {
+    padding: var(--space-6);
+  }
+}
+
+/* Slightly increase spacing for very large screens */
+@media (min-width: 1280px) {
+  .content-section {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+/* Compact adjustments per feedback: reduce vertical spacing and align columns */
+.content-section { padding: var(--space-6) var(--space-4); }
+.page-h2 { margin-bottom: var(--space-4); }
+
+/* Tighter grid gap between left and right columns */
+#flex-container { gap: var(--space-3); }
+
+/* Align Education heading with intro by removing extra top offsets on each column */
+#about-wrapper { padding: 0 var(--space-4) var(--space-4) 0; align-self: start; }
+#education-wrapper { margin-top: 0; align-self: start; }
+
+/* Accent the Education heading and tighten spacing beneath it */
+.skills-title { color: var(--color-accent); font-weight: 600; margin-bottom: var(--space-4); }
+
+/* Compress card spacing */
+.education-list { gap: var(--space-2); }
+.edu-card { padding: var(--space-3); }
+.edu-header { margin-bottom: 0; }
+.edu-institution { margin-bottom: var(--space-2); }
+.edu-coursework { margin-top: var(--space-1); }
+.coursework-grid { gap: var(--space-1); margin-top: var(--space-1); }
+.course-list li { margin-bottom: var(--space-1); }
+.cta-card { margin-top: var(--space-2); padding: var(--space-4); }
+
+/* Align institution and location on the same line */
+.edu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: var(--space-1) 0 var(--space-2);
+}
+.edu-row .edu-institution { margin: 0; }
+.edu-row .edu-location {
+  color: var(--color-text-tertiary);
+  font-size: var(--m3-font-label-medium);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Small screens: stack institution and location */
+@media (max-width: 720px) {
+  .edu-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+  .edu-row .edu-location { text-align: left; }
 }

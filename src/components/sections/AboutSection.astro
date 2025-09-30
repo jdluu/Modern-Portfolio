@@ -1,44 +1,9 @@
----
-const webIcons = [
-  { title: "HTML5", src: "/icons/tech/html5.svg", alt: "HTML5" },
-  { title: "CSS3", src: "/icons/tech/css3.svg", alt: "CSS3" },
-  { title: "JavaScript", src: "/icons/tech/javascript.svg", alt: "JavaScript" },
-  { title: "TypeScript", src: "/icons/tech/typescript.svg", alt: "TypeScript" },
-  { title: "React", src: "/icons/tech/react.svg", alt: "React" },
-  { title: "Node.js", src: "/icons/tech/nodejs.svg", alt: "Node.js" },
-];
-
-const softwareIcons = [
-  { title: "Android", src: "/icons/tech/android.svg", alt: "Android" },
-  { title: "Java", src: "/icons/tech/java.svg", alt: "Java" },
-  { title: "Unity", src: "/icons/tech/unity.svg", alt: "Unity" },
-  { title: "C#", src: "/icons/tech/csharp.svg", alt: "C#" },
-  { title: "C", src: "/icons/tech/c.svg", alt: "C" },
-  { title: "C++", src: "/icons/tech/cpp.svg", alt: "C++" },
-];
-
-const aiIcons = [
-  { title: "Python", src: "/icons/tech/python.svg", alt: "Python" },
-  { title: "Pandas", src: "/icons/tech/pandas.svg", alt: "Pandas" },
-  { title: "SQL", src: "/icons/tech/sql.svg", alt: "SQL" },
-  { title: "R", src: "/icons/tech/r.svg", alt: "R" },
-  { title: "TensorFlow", src: "/icons/tech/tensorflow.svg", alt: "TensorFlow" },
-  { title: "PyTorch", src: "/icons/tech/pytorch.svg", alt: "PyTorch" },
-];
-
-const domains = [
-  { title: "Web Dev", icons: webIcons },
-  { title: "Software & Mobile", icons: softwareIcons },
-  { title: "Data Science & AI", icons: aiIcons },
-];
----
-
 <section class="content-section" aria-labelledby="about">
 	<h2 id="about" class="page-h2">About Me</h2>
 	<div id="flex-container" role="main">
 		<div id="about-wrapper">
 			<p id="about-desc">
-				<span class="intro-text">Hi, I'm Jeffrey Luu!</span> I'm pursuing my M.S.
+				<span class="intro-text">Hi, I'm Jeffrey Luu!</span> I'm currently pursuing my M.S.
 				in Computer Science at California State University Long Beach, building upon
 				my B.S. Human Computer Interaction degree from UC San Diego.
 				<br />
@@ -47,31 +12,83 @@ const domains = [
 				Currently, my research focuses on enhancing AI agent capabilities by combining
 				raytracing techniques with reinforcement learning.
 			</p>
+
+			<div class="cta-card" role="note" aria-label="Projects call to action">
+				<p class="projects-text">Want to see some work?</p>
+				<a href="/work" class="projects-link" aria-label="View my projects">
+					Click here for projects!
+				</a>
+			</div>
 		</div>
 
-		<div id="skills-wrapper">
-			<h3 class="skills-title">Technical Domains</h3>
+		<div id="education-wrapper">
+			<h3 class="skills-title">Education</h3>
 
-			<div class="skills-grid">
-				{domains.map((domain) => (
-					<div class="domain-section">
-						<h4>{domain.title}</h4>
-						<div class="tech-grid">
-							{domain.icons.map((icon) => (
-								<div class="tech-item" title={icon.title}>
-									<img src={icon.src} alt={icon.alt} width="32" height="32" loading="lazy" decoding="async" />
-								</div>
-							))}
+			<div class="education-list">
+				<article class="edu-card">
+					<header class="edu-header">
+						<h4 class="edu-degree">M.S. Computer Science</h4>
+						<div class="edu-meta">
+							<span class="edu-status">Aug. 2024 — Expected Graduation: Dec. 2025</span>
+						</div>
+					</header>
+
+					<div class="edu-row">
+						<div class="edu-institution">California State University - Long Beach</div>
+						<div class="edu-location">Long Beach, CA</div>
+					</div>
+
+					<div class="edu-gpa"><strong>GPA:</strong> 3.75</div>
+
+					<div class="edu-coursework">
+						<strong>Coursework:</strong>
+						<div class="coursework-grid">
+							<ul class="course-list">
+								<li>Artificial Intelligence</li>
+								<li>Machine Vision</li>
+								<li>Search Engine Technology</li>
+								
+							</ul>
+							<ul class="course-list">
+								<li>Advanced Algorithms</li>
+								<li>Advanced Software Engineering</li>
+								<li>Software Maintenance &amp Testing</li>
+							</ul>
 						</div>
 					</div>
-				))}
-			</div>
+				</article>
 
-			<div class="projects-link-wrapper">
-				<p class="projects-text">Want to see these skills in action?</p>
-				<a href="/work" class="projects-link" aria-label="View my projects">
-					Click here for projects
-				</a>
+				<article class="edu-card">
+					<header class="edu-header">
+						<h4 class="edu-degree">B.S. Human Computer Interaction <span class="edu-minor-inline">Minor in Computer Science</span></h4>
+						<div class="edu-meta">
+							<span class="edu-status">Oct. 2020 — June 2023</span>
+						</div>
+					</header>
+
+					<div class="edu-row">
+						<div class="edu-institution">University of California San Diego</div>
+						<div class="edu-location">San Diego, CA</div>
+					</div>
+
+					<div class="edu-gpa"><strong>GPA:</strong> 3.52</div>
+
+					<div class="edu-coursework">
+						<strong>Coursework:</strong>
+						<div class="coursework-grid">
+							<ul class="course-list">
+								<li>Front-end Development</li>
+								<li>Back-end Development</li>
+								<li>User-Interface Design</li>
+							</ul>
+							<ul class="course-list">
+								<li>Advanced Data Structures</li>
+								<li>Data Science</li>
+								<li>Social Computing</li>
+							</ul>
+						</div>
+					</div>
+				</article>
 			</div>
 		</div>
 	</div>
