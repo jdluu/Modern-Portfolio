@@ -254,7 +254,7 @@ export default function PostsList(props: Props) {
         <div class="controls-right">
           <Show when={tags().length > 0}>
             <div class="control-pair">
-              <label class="control-label">Filter by Tag</label>
+              <label for="tagFilter" class="control-label">Filter by Tag</label>
               <div class="dropdown" style={{ position: "relative" } as any}>
                 <button
                   type="button"
