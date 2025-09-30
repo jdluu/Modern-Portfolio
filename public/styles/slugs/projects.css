@@ -1,0 +1,688 @@
+/* New stylesheet for project detail pages
+   Uses global design tokens defined in public/styles/global.css
+   Desktop-first layout: two-column grid, hero overlay, sticky right TOC card,
+   cards, lists, and minimal token-based CTA buttons.
+*/
+
+/* Container + Grid */
+.project-detail {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--grid-gap-lg);
+  align-items: start;
+  position: relative;
+}
+
+/* Content column (left) and TOC column (right) */
+.project-content {
+  min-width: 0;
+}
+
+.project-toc {
+  width: 100%;
+}
+
+/* HERO */
+.project-hero {
+  position: relative;
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  box-shadow: 0 8px 24px color-mix(in oklab, black 8%, transparent);
+  margin-bottom: var(--spacing-lg);
+}
+
+.project-hero-figure {
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  display: block;
+  background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+}
+
+.project-hero-figure::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 70%, rgba(0,0,0,0.6) 100%);
+}
+
+.project-hero-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center;
+  transition: transform 0.6s ease;
+}
+
+.project-hero:hover .project-hero-figure img,
+.project-hero:focus-within .project-hero-figure img {
+  transform: scale(1.03);
+}
+
+/* Hero title overlay bottom-left */
+.project-hero-title {
+  position: absolute;
+  left: var(--spacing-md);
+  bottom: calc(var(--spacing-md) * 0.9);
+  right: calc(var(--spacing-md) * 0.9);
+  color: white;
+  text-shadow: 0 8px 22px rgba(0,0,0,0.65);
+  padding: calc(var(--spacing-sm) * 0.7) calc(var(--spacing-sm) * 0.9);
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.28) 35%, rgba(0,0,0,0.52) 100%);
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+/* Use the global fluid heading tokens but keep local scale for hero */
+.project-hero-title h1,
+.project-hero-title .project-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: #fff;
+  font-size: clamp(2rem, 3.2vw, 3.2rem);
+  line-height: 1.05;
+}
+
+/* Summary (lead) below hero */
+.project-summary {
+  margin: calc(var(--spacing-sm) * 0.6) 0 var(--spacing-lg);
+  color: var(--color-text-secondary);
+  font-size: clamp(1.4rem, 1.5vw, 1.62rem);
+  max-width: 84%;
+}
+
+/* Two-column info row (My Role / Tech & Tools) inside content column */
+.info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gap-md);
+  margin: var(--spacing-lg) 0;
+  align-items: start; /* prevent grid items (cards) from stretching to equal height */
+}
+
+.card {
+  padding: var(--spacing-md);
+  background: var(--color-card);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 6px 18px color-mix(in oklab, black 6%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+}
+
+/* Role text */
+.role-heading {
+  margin: 0 0 var(--spacing-sm);
+  font-weight: 700;
+}
+
+.role-body {
+  color: var(--color-text-secondary);
+  font-size: clamp(1.4rem, 1.2vw, 1.55rem);
+  line-height: 1.65;
+}
+
+/* Technologies & Tools two-column grid inside the card:
+   - Desktop: two equal columns (Technologies | Tools) with a subtle vertical divider
+   - Mobile: stacks into one column (divider removed)
+*/
+.tt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--spacing-sm) * 0.6);
+  align-items: start;
+  margin-top: calc(var(--spacing-sm) * 0.25);
+}
+
+.tt-column {
+  min-width: 0;
+  padding: 0;
+}
+
+.tt-subheading {
+  margin: 0 0 calc(var(--spacing-sm) * 0.5);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.tt-column .tech-list {
+  margin: 0;
+  padding: 0;
+}
+
+.tt-column .tech-list li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Desktop: show a subtle vertical divider between the two columns and add breathing room */
+@media (min-width: 981px) {
+  .tt-column + .tt-column {
+    padding-left: calc(var(--spacing-md));
+    border-left: 1px solid color-mix(in oklab, var(--color-border) 12%, transparent);
+    margin-left: 0;
+  }
+  /* Slightly offset the subheading so it visually anchors to its column */
+  .tt-subheading {
+    margin-left: 0;
+  }
+}
+
+/* Small screens: stack into a single column and remove divider */
+@media (max-width: 560px) {
+  .tt-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .tt-column + .tt-column {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .tech-pill {
+    font-size: 1.2rem;
+    padding: calc(var(--spacing-xs, 4px) * 1) calc(var(--spacing-sm) * 0.75);
+  }
+}
+
+/* Technologies / Tools list */
+.tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap; /* allow pills to wrap into multiple rows to reduce vertical whitespace */
+  gap: calc(var(--spacing-sm) * 0.6);
+}
+
+/* Individual tech list items: remove stacked layout and extra gaps */
+.tech-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  margin: 0; /* remove default bottom spacing that was adding vertical space */
+  padding: 0;
+}
+
+/* Style pills a bit tighter so more items fit per row */
+.tech-pill {
+  display: inline-block;
+  padding: calc(var(--spacing-xs, 4px) * 1.25) calc(var(--spacing-sm) * 0.8);
+  background: color-mix(in oklab, var(--color-accent) 9%, transparent);
+  border-radius: 999px;
+  font-size: 1.25rem; /* slightly smaller to improve density */
+  color: var(--text-color);
+  line-height: 1;
+}
+
+/* Main narrative sections */
+.project-section {
+  margin: var(--spacing-lg) 0;
+}
+
+/* Section headings spacing */
+.project-section h2 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-color);
+}
+
+/* Process steps: prefer bullet list for arrays */
+.process-list {
+  list-style: disc;
+  margin-left: 1.6rem;
+  color: var(--color-text-secondary);
+}
+
+/* Media figure for final product */
+.final-figure {
+  margin: var(--spacing-lg) 0;
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  box-shadow: 0 10px 26px color-mix(in oklab, black 8%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+}
+
+.final-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Impact and reflection lists */
+.simple-list {
+  list-style: disc;
+  margin-left: 1.6rem;
+  color: var(--color-text-secondary);
+}
+
+/* CTA Row */
+.cta-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0 0;
+  align-items: center;
+  flex-wrap: nowrap; /* keep CTAs on one line; allow horizontal scroll if needed */
+  overflow-x: auto;
+}
+/* Stronger CTA-specific overrides to avoid conflicts with other .btn definitions (theme-toggle, etc.) */
+.cta-row .btn {
+  /* reset any component-level forced sizing */
+  inline-size: auto !important;
+  block-size: auto !important;
+  width: auto !important;
+  height: auto !important;
+  padding: calc(var(--spacing-sm) * 0.9) var(--spacing-md) !important;
+  min-width: 10rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 6px 16px color-mix(in oklab, var(--accent-color) 18%, transparent);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  font-weight: 600; /* make CTA labels bolder so they read as buttons */
+  letter-spacing: 0.01em;
+}
+
+/* Make secondary CTAs more visible: subtle filled background, stronger border and shadow */
+.cta-row .btn.btn-secondary {
+  background: color-mix(in oklab, var(--color-accent) 8%, var(--color-card) 92%);
+  color: var(--text-color);
+  border: 1px solid color-mix(in oklab, var(--color-border) 36%, transparent);
+  box-shadow: 0 6px 18px color-mix(in oklab, black 6%, transparent);
+}
+
+/* Stronger primary appearance: saturated accent, clearer text color, and slightly larger shadow */
+.project-detail .btn-primary {
+  background: var(--accent-color);
+  color: var(--color-on-accent);
+  box-shadow: 0 10px 28px color-mix(in oklab, var(--accent-color) 22%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent-color) 60%, transparent);
+  transform: translateZ(0);
+}
+
+/* Hover/focus states to make the affordance clear */
+.cta-row .btn:hover,
+.cta-row .btn:focus {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 34px color-mix(in oklab, var(--accent-color) 20%, transparent);
+}
+
+/* Slightly stronger focus ring for accessibility (visible on both primary and secondary) */
+.project-detail .btn:focus {
+  outline: 3px solid color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
+  outline-offset: 3px;
+}
+
+/* Ensure secondary button still has distinct hover behavior */
+.cta-row .btn.btn-secondary:hover,
+.cta-row .btn.btn-secondary:focus {
+  background: color-mix(in oklab, var(--color-accent) 14%, var(--color-card) 86%);
+  border-color: color-mix(in oklab, var(--color-border) 50%, transparent);
+  color: var(--text-color);
+}
+
+/* Project-scoped button styles (do not override global .btn used elsewhere) */
+.project-detail .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: calc(var(--spacing-sm) * 0.9) var(--spacing-md);
+  border-radius: 10px;
+  font-size: 1.45rem;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  white-space: nowrap; /* prevent label wrapping into multiple lines */
+  min-width: 10rem; /* ensure buttons have a comfortable minimum width */
+  word-break: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+.project-detail .btn:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.project-detail .btn-primary {
+  background: var(--accent-color);
+  color: var(--color-on-accent);
+  box-shadow: 0 10px 28px color-mix(in oklab, var(--accent-color) 22%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent-color) 60%, transparent);
+  transform: translateZ(0);
+}
+
+.project-detail .btn-primary:hover,
+.project-detail .btn-primary:focus {
+  transform: translateY(-2px);
+  background: var(--color-accent-hover);
+}
+
+.project-detail .btn-secondary {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid color-mix(in oklab, var(--color-border) 26%, transparent);
+}
+
+.project-detail .btn-secondary:hover,
+.project-detail .btn-secondary:focus {
+  background: color-mix(in oklab, var(--color-accent) 6%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Make sure long labels don't break in unexpected places */
+.project-detail .btn strong,
+.project-detail .btn span {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* Right fixed TOC wrapper (always visible) */
+.project-toc {
+  position: fixed;
+  top: calc(var(--nav-height) + var(--space-6));
+  right: clamp(18px, 6vw, 56px);
+  width: 320px;
+  z-index: 120;
+  pointer-events: auto;
+}
+
+/* Inner card is positioned relative inside the fixed wrapper */
+.toc-card {
+  position: relative;
+  padding: var(--spacing-md);
+  background: var(--color-card);
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+  box-shadow: 0 10px 28px color-mix(in oklab, black 8%, transparent);
+  max-height: calc(100vh - calc(var(--nav-height) + var(--space-6)));
+  overflow: auto;
+}
+
+/* Header inside TOC (title + toggle) */
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.toc-toggle {
+  appearance: none;
+  border: none;
+  background: color-mix(in oklab, var(--color-border) 8%, transparent);
+  color: var(--text-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+.toc-toggle:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Collapsed/minimized TOC - still visible with toggle (apply to wrapper) */
+.project-toc.toc-collapsed {
+  width: 56px;
+}
+
+.project-toc.toc-collapsed .toc-card {
+  padding: calc(var(--spacing-sm) * 0.5);
+  width: 56px;
+  overflow: visible;
+}
+
+.project-toc.toc-collapsed .toc-list {
+  display: none;
+}
+
+.project-toc.toc-collapsed h4 {
+  display: none;
+}
+
+.project-toc.toc-collapsed .toc-toggle {
+  width: 44px;
+  height: 44px;
+}
+
+.toc-card h4 {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 1.45rem;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.toc-list a {
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  padding: calc(var(--spacing-xs, 4px) * 2) var(--spacing-sm);
+  border-radius: 8px;
+  display: block;
+  font-size: 1.35rem;
+}
+
+/* Active link (clear, stronger contrast) */
+.toc-list a.link-active {
+  color: var(--text-color);
+  background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  font-weight: 700;
+  box-shadow: 0 2px 6px color-mix(in oklab, var(--color-accent) 6%, transparent);
+}
+
+/* Hover/focus (lighter than active so hover is visually distinct) */
+.toc-list a:hover,
+.toc-list a:focus {
+  color: var(--color-text-tertiary);
+  background: color-mix(in oklab, var(--color-accent) 4%, transparent);
+  font-weight: 600;
+}
+
+/* Small utilities */
+.kv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 6px);
+}
+
+.kv dt {
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+.kv dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+}
+
+/* Responsiveness - Desktop first; reduce to single column below 980px */
+@media (max-width: 980px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-toc {
+    order: 2;
+  }
+
+  .project-hero-figure {
+    height: 320px;
+  }
+
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mobile FAB: stick TOC to bottom-left as hamburger */
+  .project-toc {
+    position: fixed;
+    top: auto;
+    right: clamp(12px, 6vw, 24px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-6));
+    left: auto;
+    width: auto;
+    z-index: 200;
+    max-height: none;
+    box-shadow: none;
+    pointer-events: auto;
+  }
+
+  /* Expanded menu card sizing on mobile */
+  .toc-card {
+    padding: var(--spacing-sm);
+    max-width: min(86vw, 360px);
+    max-height: min(70vh, 520px);
+    overflow: auto;
+    box-shadow: 0 10px 28px color-mix(in oklab, black 12%, transparent);
+  }
+
+  /* Collapsed look as circular FAB */
+  .project-toc.toc-collapsed {
+    width: 56px;
+  }
+
+  .project-toc.toc-collapsed .toc-card {
+    width: 56px;
+    height: 56px;
+    padding: 6px;
+    border-radius: 999px;
+    background: var(--accent-color);
+    box-shadow: 0 10px 28px color-mix(in oklab, var(--accent-color) 28%, transparent);
+    overflow: visible;
+  }
+
+  .project-toc.toc-collapsed .toc-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-on-accent);
+    font-size: 1.6rem;
+  }
+
+  /* Expanded state toggle look on mobile */
+  .project-toc:not(.toc-collapsed) .toc-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--color-border) 8%, transparent);
+    color: var(--text-color);
+  }
+
+  /* Show title only when expanded (collapsed already hides via rules above) */
+  .project-toc:not(.toc-collapsed) h4 {
+    display: block;
+  }
+
+  /* Slightly larger link targets for mobile */
+  .toc-list a {
+    font-size: 1.45rem;
+  }
+}
+
+/* Small screens */
+@media (max-width: 560px) {
+  .project-hero-figure {
+    height: 220px;
+  }
+
+  .project-hero-title h1 {
+    font-size: clamp(1.8rem, 4.4vw, 2.6rem);
+  }
+
+  /* small-screen adjustments for project buttons only */
+  .project-detail .btn {
+    font-size: 1.3rem;
+    padding: calc(var(--spacing-sm) * 0.8) var(--spacing-sm);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-hero-figure img {
+    transition: none;
+  }
+
+  .project-detail .btn,
+  .project-hero {
+    transition: none;
+  }
+}
+
+/* Ensure sections have consistent scroll offset */
+section[id] {
+  scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
+/* Scroll-to-top button (appears after user scrolls > 50%) */
+.scroll-top {
+  position: fixed;
+  right: clamp(12px, 6vw, 24px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-6));
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--accent-color);
+  color: var(--color-on-accent);
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 220;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.scroll-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-top:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+/* Mobile placement: move scroll-top to bottom-left to avoid the mobile TOC FAB (hamburger) */
+@media (max-width: 980px) {
+  .scroll-top {
+    right: auto;
+    left: clamp(12px, 6vw, 24px);
+    /* give it a bit more spacing on mobile so it doesn't collide with other FABs */
+    bottom: calc(env(safe-area-inset-bottom, 0px) + calc(var(--space-6) + 4px));
+  }
+}
