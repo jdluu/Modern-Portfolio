@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "format": "prettier --write .",
     "knip": "knip"
   },
@@ -20,8 +21,7 @@
     "astro": "^5.14.1",
     "sharp": "^0.34.4",
     "solid-devtools": "^0.34.3",
-    "solid-js": "^1.9.9",
-    "vite": "^7.1.7"
+    "solid-js": "^1.9.9"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
@@ -29,6 +29,7 @@
     "prettier": "^3.6.2",
     "terser": "^5.44.0",
     "ts-morph": "^27.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7"
   }
 }
