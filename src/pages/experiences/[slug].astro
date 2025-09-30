@@ -76,12 +76,12 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                                 class="company-logo"
                                 width="80"
                                 height="80"
-                                loading="lazy"
+                                loading="eager"
                                 decoding="async"
                                 aria-hidden="true"
                             />
                             <div class="title-container">
-                                <h1 id="experience-title" class="experience-title" tabindex="-1">{title}</h1>
+                                <h1 id="experience-title" class="experience-title" >{title}</h1>
                                 <p class="company-name"><strong>{companyName}</strong></p>
                             </div>
                         </div>
@@ -89,7 +89,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                 </section>
  
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
-                    <h2 id="responsibilities-title" tabindex="-1">Key Responsibilities</h2>
+                    <h2 id="responsibilities-title" >Key Responsibilities</h2>
                     {responsibilities.length > 0 ? (
                         <ul class="responsibilities-list" role="list">
                             {responsibilities.map((item, index) => (
@@ -102,7 +102,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                 </section>
  
                 <section id="achievements" aria-labelledby="achievements-title">
-                    <h2 id="achievements-title" tabindex="-1">Notable Achievements</h2>
+                    <h2 id="achievements-title" >Notable Achievements</h2>
                     {achievements.length > 0 ? (
                         <ul class="achievements-list" role="list">
                             {achievements.map((item, index) => (
