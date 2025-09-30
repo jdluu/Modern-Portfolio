@@ -251,10 +251,12 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
       closeBtn.addEventListener("click", () => closeMenu());
       back.addEventListener("click", () => closeMenu());
       menu.addEventListener("click", (e) => {
-        if (e.target instanceof HTMLElement) {
-          if (e.target.closest("a, button")) {
-            closeMenu();
-          }
+        if (!(e.target instanceof HTMLElement)) return;
+        const isActivator = e.target.closest("a, button");
+        if (!isActivator) return;
+        // Only close when the off-canvas menu is actually open (mobile state)
+        if (menu.getAttribute("data-open") === "true") {
+          closeMenu();
         }
       });
       
