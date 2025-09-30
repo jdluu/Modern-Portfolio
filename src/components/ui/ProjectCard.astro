@@ -17,12 +17,13 @@ const ctaExtraId = `${titleId}-cta`;
 
 <!-- Markup: structure and class names preserved exactly -->
 <section class="project-card background" role="group" aria-labelledby={titleId}>
+	<!-- Default to lazy loading here; above-the-fold promotion will be handled by a small script in the section wrapper -->
 	<Image
 		src={thumbnail}
 		alt={title}
 		width={800}
 		height={500}
-		loading="eager"
+		loading="lazy"
 		decoding="async"
 		class="project-image"
 		format="webp"
