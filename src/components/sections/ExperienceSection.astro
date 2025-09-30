@@ -24,7 +24,7 @@ function mapEntryToExperience(item: any) {
 }
 const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 ---
-<section class="content-section">
+<section class="experience-section content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
 	<!-- Client island (controls + visibility) -->
 	<ExperienceCardList client:load initialItems={experiences} />

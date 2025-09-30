@@ -1,9 +1,12 @@
 /* Project Section styles (moved from ProjectSection.astro) */
-.content-section {
+.project-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-12) var(--space-5);
+  padding-top: var(--space-3);
+  padding-right: var(--space-5);
+  padding-bottom: var(--space-6);
+  padding-left: var(--space-5);
 }
 
 .page-h2 {

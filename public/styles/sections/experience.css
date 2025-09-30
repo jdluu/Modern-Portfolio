@@ -10,11 +10,14 @@
 }
 
 /* Section layout */
-.content-section {
+.experience-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 2rem;
+  padding-top: var(--space-8);
+  padding-right: var(--space-5);
+  padding-bottom: var(--space-6);
+  padding-left: var(--space-5);
 }
 
 /* Experience grid (server-rendered items rely on these selectors) */
