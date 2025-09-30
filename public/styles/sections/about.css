@@ -90,7 +90,8 @@
   border-radius: 10px;
   padding: var(--space-4);
   box-shadow: 0 1px 0 var(--color-border);
-  border: 1px solid color-mix(in oklab, var(--color-border) 18%, transparent 82%);
+  border: 1px solid
+    color-mix(in oklab, var(--color-border) 18%, transparent 82%);
 }
 .edu-header {
   display: flex;
@@ -229,28 +230,62 @@
 }
 
 /* Compact adjustments per feedback: reduce vertical spacing and align columns */
-.content-section { padding: var(--space-6) var(--space-4); }
-.page-h2 { margin-bottom: var(--space-4); }
+.content-section {
+  padding: var(--space-6) var(--space-4);
+}
+.page-h2 {
+  margin-bottom: var(--space-4);
+}
 
 /* Tighter grid gap between left and right columns */
-#flex-container { gap: var(--space-3); }
+#flex-container {
+  gap: var(--space-3);
+}
 
 /* Align Education heading with intro by removing extra top offsets on each column */
-#about-wrapper { padding: 0 var(--space-4) var(--space-4) 0; align-self: start; }
-#education-wrapper { margin-top: 0; align-self: start; }
+#about-wrapper {
+  padding: 0 var(--space-4) var(--space-4) 0;
+  align-self: start;
+}
+#education-wrapper {
+  margin-top: 0;
+  align-self: start;
+}
 
 /* Accent the Education heading and tighten spacing beneath it */
-.skills-title { color: var(--color-accent); font-weight: 600; margin-bottom: var(--space-4); }
+.skills-title {
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
 
 /* Compress card spacing */
-.education-list { gap: var(--space-2); }
-.edu-card { padding: var(--space-3); }
-.edu-header { margin-bottom: 0; }
-.edu-institution { margin-bottom: var(--space-2); }
-.edu-coursework { margin-top: var(--space-1); }
-.coursework-grid { gap: var(--space-1); margin-top: var(--space-1); }
-.course-list li { margin-bottom: var(--space-1); }
-.cta-card { margin-top: var(--space-2); padding: var(--space-4); }
+.education-list {
+  gap: var(--space-2);
+}
+.edu-card {
+  padding: var(--space-3);
+}
+.edu-header {
+  margin-bottom: 0;
+}
+.edu-institution {
+  margin-bottom: var(--space-2);
+}
+.edu-coursework {
+  margin-top: var(--space-1);
+}
+.coursework-grid {
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+.course-list li {
+  margin-bottom: var(--space-1);
+}
+.cta-card {
+  margin-top: var(--space-2);
+  padding: var(--space-4);
+}
 
 /* Align institution and location on the same line */
 .edu-row {
@@ -260,7 +295,9 @@
   gap: var(--space-3);
   margin: var(--space-1) 0 var(--space-2);
 }
-.edu-row .edu-institution { margin: 0; }
+.edu-row .edu-institution {
+  margin: 0;
+}
 .edu-row .edu-location {
   color: var(--color-text-tertiary);
   font-size: var(--m3-font-label-medium);
@@ -275,5 +312,7 @@
     align-items: flex-start;
     gap: var(--space-1);
   }
-  .edu-row .edu-location { text-align: left; }
+  .edu-row .edu-location {
+    text-align: left;
+  }
 }

@@ -163,7 +163,7 @@
    the element we added in the markup (`.mobile-theme-toggle.md-hidden`). */
 .mobile-theme-toggle {
   margin-left: auto; /* push to right within flex container */
-  margin-top: 0;     /* vertically center with other header controls */
+  margin-top: 0; /* vertically center with other header controls */
   align-self: center;
   display: block;
 }
