@@ -232,6 +232,12 @@
     overflow: visible;
     justify-self: center;
   }
+  /* Prevent any off-canvas transforms from applying on desktop */
+  .nav-menu-styles.is-open,
+  .nav-menu-styles.is-closing {
+    transform: none;
+  }
+
   .offcanvas-inner {
     padding: 0;
   }
