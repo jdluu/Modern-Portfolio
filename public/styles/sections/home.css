@@ -32,9 +32,8 @@
   transform: none;
 }
 .animate-hero .intro-greeting {
-  opacity: 0;
-  transform: translateY(2rem);
-  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+  will-change: transform;
 }
 
 .intro-role {
@@ -49,9 +48,8 @@
   transform: none;
 }
 .animate-hero .intro-role {
-  opacity: 0;
-  transform: translateY(2rem);
-  animation: fadeInUp 0.7s ease-out 0.4s forwards;
+  animation: fadeInUp 0.7s ease-out 0.4s both;
+  will-change: transform;
 }
 
 .intro-tagline {
@@ -66,9 +64,8 @@
   transform: none;
 }
 .animate-hero .intro-tagline {
-  opacity: 0;
-  transform: translateY(2rem);
-  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+  will-change: transform;
 }
 
 .resume-button-wrapper {
@@ -76,9 +73,8 @@
   transform: none;
 }
 .animate-hero .resume-button-wrapper {
-  opacity: 0;
-  transform: translateY(2rem);
-  animation: fadeInUp 0.8s ease-out 0.8s forwards;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+  will-change: transform;
 }
 
 /* CTA styling */
@@ -134,9 +130,13 @@
 }
 
 @keyframes fadeInUp {
-  to {
+  from {
+    transform: translateY(1.2rem);
     opacity: 1;
+  }
+  to {
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
