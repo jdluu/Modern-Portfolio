@@ -1,525 +1,530 @@
 ---
-import {getAllProjects} from "../../lib/cosmic";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import type { Project } from "../../types/project";
+import { getCollection } from "astro:content";
+import {
+  resolveAssetUrl,
+  pickImageString,
+  sanitizeStringForUI,
+  parseSafeDate,
+  formatMonthYear,
+} from "../../lib/utils";
 
-
+// Generate static paths from collection entries
 export async function getStaticPaths() {
-    const projects = await getAllProjects() as unknown as Project[];
- 
-    return projects.map((project) => {
-        const slug = project.slug ?? String(project?.id ?? "");
-        return {
-            params: { slug },
-            props: project,
-        };
+  const entries = await getCollection("projects");
+  const paths = (entries ?? [])
+    .filter((e: any) => e.data?.draft !== true)
+    .map((e: any) => {
+      const canonicalSlug =
+        typeof e.slug === "string" && e.slug.length > 0
+          ? e.slug
+          : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+      return { params: { slug: canonicalSlug } };
     });
+  return paths;
 }
- 
-const project = Astro.props as Project;
-const title = project.title ?? "";
 
-// Derived/normalized helpers (handle CMS unions: objects vs arrays vs strings)
-const slug = (project as any)?.slug ?? String((project as any)?.id ?? "");
+// Props / derived values (load the single project document by slug)
+const slugParam = (Astro.params as any)?.slug as string;
 
-// process may be an object with title/plan or an array of strings
-const processTitle: string =
-  project.process && typeof project.process === "object" && "title" in project.process
-    ? (project.process as any).title ?? ""
-    : "";
-const processPlan: any[] =
-  project.process && typeof project.process === "object" && Array.isArray((project.process as any).plan)
-    ? (project.process as any).plan
-    : Array.isArray(project.process)
-    ? (project.process as any).map((s: any) => ({ steps: s }))
-    : [];
+const projectEntries = await getCollection("projects");
+const entry =
+  (projectEntries ?? []).find((e: any) => {
+    const canonicalSlug =
+      typeof e.slug === "string" && e.slug.length > 0
+        ? e.slug
+        : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+    const canonicalId = String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+    return (
+      slugParam === canonicalSlug ||
+      slugParam === canonicalId ||
+      slugParam === String(e.id ?? "")
+    );
+  }) ?? null;
 
-// background/problem/solution normalization (accept object or string)
-const backgroundDescription: string =
-  project.background && typeof project.background === "object"
-    ? (project.background as any).description ?? ""
-    : "";
-const problemDesc: string =
-  project.problem && typeof project.problem === "object"
-    ? (project.problem as any).description ?? ""
-    : (project.problem as any) ?? "";
-const solutionTitle: string =
-  project.solution && typeof project.solution === "object"
-    ? (project.solution as any).title ?? ""
-    : "";
-const solutionDesc: string =
-  project.solution && typeof project.solution === "object"
-    ? (project.solution as any).description ?? (project.solution as any) ?? ""
-    : (project.solution as any) ?? "";
+if (!entry) {
+  throw new Error(`Project not found for slug: ${slugParam}`);
+}
+const data = entry.data as any as Project;
 
-// reflection may be an array of strings or an object with points[]
-const reflectionPoints: { point?: string }[] =
-  Array.isArray(project.reflection)
-    ? (project.reflection as any).map((p: any) => (typeof p === "string" ? { point: p } : p))
-    : (project.reflection && typeof project.reflection === "object" && Array.isArray((project.reflection as any).points))
-    ? (project.reflection as any).points
-    : [];
+// Derived and resilient values mapped from frontmatter
+const title = data?.title ?? "Untitled";
+const summary = data?.summary ?? data?.description ?? "";
+const dateText = (() => {
+  const d = parseSafeDate(data?.date);
+  return d ? formatMonthYear(d) : (typeof data?.date === "string" ? data.date : "");
+})();
+
+const role = data?.role ?? "";
+const technologiesText = sanitizeStringForUI(data?.technologies) || "";
+const toolsText = sanitizeStringForUI(data?.tools) || "";
+// Split comma-separated strings into arrays for list rendering
+const techArray = technologiesText
+  ? (String(technologiesText).split(",").map((s) => s.trim()).filter(Boolean))
+  : [];
+const toolsArray = toolsText
+  ? (String(toolsText).split(",").map((s) => s.trim()).filter(Boolean))
+  : [];
+const coverUrl =
+  resolveAssetUrl(pickImageString(data?.cover)) ?? (typeof data?.cover === "string" ? data?.cover : "/uploads/placeholder.png");
+const finalUrl =
+  resolveAssetUrl(pickImageString(data?.final)) ?? (typeof data?.final === "string" ? data?.final : null);
+
+const problem = data?.problem ?? "";
+const solution = data?.solution ?? "";
+const processSteps = Array.isArray(data?.process) ? data.process : [];
+const impactPoints = Array.isArray(data?.impact) ? data.impact : [];
+const reflectionPoints = Array.isArray(data?.reflection) ? data.reflection : [];
+
+const liveLink = data?.links?.live ?? "";
+const sourceLink = data?.links?.source ?? "";
 ---
 
 <BaseLayout title={title}>
-    <nav id="left-tray" aria-label="Table of Contents">
-        <ul id="table-of-contents" role="navigation">
-            <li>
-                <a href="#overview" id="ido" class="nav-item" aria-current="false">Overview</a>
-            </li>
-            <li>
-                <a href="#background" id="idb" class="nav-item" aria-current="false">Background</a>
-            </li>
-            <li>
-                <a href="#process" id="idd" class="nav-item" aria-current="false">{processTitle}</a>
-            </li>
-            <li>
-                <a href="#results" id="idf" class="nav-item" aria-current="false">Final Product</a>
-            </li>
-            <li>
-                <a href="#reflection" id="idr" class="nav-item" aria-current="false">Reflection</a>
-            </li>
-            <li>
-                <button id="hide-button" aria-label="Hide Table of Contents" class="toc-button">
-                    Hide Table of Contents ◀
-                </button>
-            </li>
-        </ul>
-        <button id="show-button" aria-label="Show Table of Contents" class="toc-button">
-            Show Table of Contents ≡
-        </button>
-    </nav>
-
+    <!-- Link the new project-specific stylesheet -->
+    <link rel="stylesheet" href="/styles/slugs/projects.css">
+    
     <main class="project-page-container">
-        <article class="project-page-div">
-            <section id="overview" aria-labelledby="project-title">
-                <h1 id="project-title" class="project-title">{title}</h1>
-                <p class="section-content lead">{project.description}</p>
-                <figure class="project-figure">
-                    <img
-                        class="project-image"
-                        src={project.home?.image?.imgix_url + '?w=800'}
-                        srcset={`${project.home?.image?.imgix_url}?w=400 400w,
-                                ${project.home?.image?.imgix_url}?w=800 800w,
-                                ${project.home?.image?.imgix_url}?w=1200 1200w`}
-                        sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={project.home?.imagealt}
-                        loading="eager"
-                        fetchpriority="high"
-                    />
-                </figure>
+      <div class="project-detail">
+        <div class="project-grid">
+          <div class="project-content">
+            <article class="project-page-div">
+                <section id="overview" aria-labelledby="project-title" class="project-section">
+                  {coverUrl ? (
+                    <figure class="project-hero" role="img" aria-label={`${title} hero`}>
+                      <div class="project-hero-figure">
+                        <img
+                          src={coverUrl}
+                          alt={`${title} cover image`}
+                          loading="eager"
+                          fetchpriority="high"
+                        />
+                      </div>
+                      <div class="project-hero-title">
+                        <h1 id="project-title" class="project-title">{title}</h1>
+                      </div>
+                    </figure>
+                  ) : (
+                    <h1 id="project-title" class="project-title">{title}</h1>
+                  )}
 
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>Timeline</h3>
-                        <p>{project.logistics?.date}</p>
+                  <p class="section-content lead project-summary">{summary}</p>
+
+                  <div class="info-row">
+                    <div class="card" aria-hidden="false">
+                      <h3 class="role-heading">Role</h3>
+                      <p class="role-body">{role}</p>
+                      <dl class="kv">
+                        <dt>Timeline</dt>
+                        <dd>{dateText}</dd>
+                      </dl>
                     </div>
-                    <div class="info-card">
-                        <h3>{project.logistics?.techtitle}</h3>
-                        <p>{project.logistics?.technologies}</p>
+                    <div class="card">
+                      <div class="tt-grid" role="group" aria-label="Technologies and tools">
+                        <div class="tt-column" aria-labelledby="tech-label">
+                          <h4 id="tech-label" class="tt-subheading">Technologies</h4>
+                          {techArray.length > 0 ? (
+                            <ul class="tech-list" aria-label="Technologies">
+                              {techArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
+                            </ul>
+                          ) : (
+                            <p class="section-content">No technologies listed.</p>
+                          )}
+                        </div>
+                        <div class="tt-column" aria-labelledby="tool-label">
+                          <h4 id="tool-label" class="tt-subheading">Tools</h4>
+                          {toolsArray.length > 0 ? (
+                            <ul class="tech-list" aria-label="Tools">
+                              {toolsArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
+                            </ul>
+                          ) : (
+                            <p class="section-content">No tools listed.</p>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div class="info-card">
-                        <h3>Tools</h3>
-                        <p>{project.logistics?.tools}</p>
-                    </div>
-                </div>
- 
-                <div class="responsibilities">
-                    <h2>My Responsibilities as {project.work?.role}</h2>
-                    <ul>
-                        {(project.work?.responsibilities ?? []).map((responsibility: any, index: number) => (
-                            <li class="role-bullet-item">
-                                {responsibility.duties}
-                            </li>
+                  </div>
+                </section>
+
+                <section id="background" class="content-section">
+                    <h2>Background</h2>
+                    <p class="section-content">{problem}</p>
+                    
+                    <h2>Solution</h2>
+                    <p class="section-content">{solution}</p>
+                </section>
+
+                <section id="process" class="content-section">
+                    <h2>Process</h2>
+                    {processSteps.length > 0 ? (
+                      <ul class="process-list">
+                        {processSteps.map((step: string, index: number) => (
+                          <li>{step}</li>
                         ))}
-                    </ul>
-                </div>
-            </section>
- 
-            <section id="background" class="content-section">
-                <h2>Background</h2>
-                <p class="section-content">{backgroundDescription}</p>
-                
-                <h2>Problem Statement</h2>
-                <p class="section-content">{problemDesc}</p>
-                
-                <h2>{solutionTitle}</h2>
-                <p class="section-content">{solutionDesc}</p>
-            </section>
- 
-            <section id="process" class="content-section">
-                <h2>{processTitle}</h2>
-                {processPlan.map((plan: any, index: number) => (
-                    <p class="section-content">{plan.steps}</p>
-                ))}
-                <figure class="project-figure">
-                    <img
-                        class="project-image"
-                        src={project.prototype?.image?.imgix_url + '?w=800'}
-                        srcset={`${project.prototype?.image?.imgix_url}?w=400 400w,
-                                ${project.prototype?.image?.imgix_url}?w=800 800w,
-                                ${project.prototype?.image?.imgix_url}?w=1200 1200w`}
-                        sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={project.prototype?.imagealt}
-                        loading="lazy"
-                        decoding="async"
-                    />
-                </figure>
-            </section>
- 
-            <section id="results" class="content-section">
-                <h2>Final Product</h2>
-                <p class="section-content">{project.final?.description}</p>
-                <figure class="project-figure">
-                    <img
-                        class="project-image"
-                        src={project.final?.image?.imgix_url + '?w=800'}
-                        srcset={`${project.final?.image?.imgix_url}?w=400 400w,
-                                ${project.final?.image?.imgix_url}?w=800 800w,
-                                ${project.final?.image?.imgix_url}?w=1200 1200w`}
-                        sizes="(max-width: 768px) 100vw, 80vw"
-                        alt={project.final?.imagealt}
-                        loading="lazy"
-                        decoding="async"
-                    />
-                </figure>
-            </section>
- 
-            <section id="reflection" class="content-section">
-                <h2>Reflection</h2>
-                {reflectionPoints.map((reflection: any, index: number) => (
-                    <p class="section-content">{reflection.point}</p>
-                ))}
-                <a
-                    href={project.source?.link}
-                    class="source-link"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`View source: ${project.source?.title}`}
-                >
-                    <strong>{project.source?.title}</strong>
-                </a>
-            </section>
-        </article>
+                      </ul>
+                    ) : (
+                      <p class="section-content">No process details available.</p>
+                    )}
+                </section>
+
+                <section id="results" class="content-section">
+                    <h2>Final Product</h2>
+                    {data?.final ? (
+                      <>
+                        {finalUrl ? (
+                          <figure class="final-figure" aria-hidden="false">
+                            <img
+                              src={finalUrl}
+                              alt={`${title} final product image`}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </figure>
+                        ) : (
+                          <p class="section-content">{data.final}</p>
+                        )}
+                      </>
+                    ) : (
+                      <p class="section-content">No final product media available.</p>
+                    )}
+                    {impactPoints.length > 0 && (
+                      <div>
+                        <h3>Impact</h3>
+                        <ul class="simple-list">
+                          {impactPoints.map((p: string, i: number) => (
+                            <li>{p}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                </section>
+
+                <section id="reflection" class="content-section">
+                    <h2>Reflection</h2>
+                    {reflectionPoints.length > 0 ? (
+                      <ul class="simple-list">
+                        {reflectionPoints.map((point: string, index: number) => (
+                          <li>{point}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p class="section-content">No reflections available.</p>
+                    )}
+
+                    {(liveLink || sourceLink) && (
+                      <div class="cta-row" role="group" aria-label="Project links">
+                        {liveLink && (
+                          <a
+                            href={liveLink}
+                            class="btn btn-primary"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`View live project: ${title}`}
+                          >
+                            View Live Project
+                          </a>
+                        )}
+
+                        {sourceLink && (
+                          <a
+                            href={sourceLink}
+                            class="btn btn-secondary"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`View source: ${title}`}
+                          >
+                            View Source Code
+                          </a>
+                        )}
+                      </div>
+                    )}
+                </section>
+            </article>
+          </div>
+          <!-- Right column: sticky TOC card -->
+          <aside class="project-toc" aria-label="Table of contents">
+            <div class="toc-card" role="navigation" aria-labelledby="toc-label">
+              <div class="toc-header" aria-hidden="false">
+                <h4 id="toc-label">Table of Contents</h4>
+                <button id="toc-toggle" class="toc-toggle" aria-expanded="true" aria-label="Collapse Table of Contents">−</button>
+              </div>
+              <ul class="toc-list">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#background">Background</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#results">Final Product</a></li>
+                <li><a href="#reflection">Reflection</a></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
     </main>
 </BaseLayout>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableOfContents = document.getElementById("table-of-contents");
-        const hideButton = document.getElementById("hide-button");
-        const showButton = document.getElementById("show-button");
-        const navItems = document.getElementsByClassName("nav-item");
+  document.addEventListener("DOMContentLoaded", function () {
+    // Scope the TOC to a single instance on the page
+    const projectToc = (document.querySelector('.project-toc') || document.querySelector('aside[aria-label="Table of contents"]')) as HTMLElement | null;
+    if (!projectToc) return;
 
-        // Intersection Observer for sections
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Update nav items
-                    Array.from(navItems).forEach(item => {
-                        if (!item || !item.getAttribute) return;
-                        
-                        const href = item.getAttribute('href');
-                        if (!href) return;
+    // Prevent duplicate initialization (HMR/dev reload)
+    if (projectToc.dataset.tocInit === '1') return;
+    projectToc.dataset.tocInit = '1';
+    console.debug('[TOC] init: scoped controller attached');
 
-                        const targetId = entry.target.id;
-                        const itemHref = href.substring(1);
-                        
-                        if (itemHref === targetId) {
-                            item.setAttribute('aria-current', 'true');
-                            item.classList.add('link-active');
-                        } else {
-                            item.setAttribute('aria-current', 'false');
-                            item.classList.remove('link-active');
-                        }
-                    });
-                }
-            });
-        }, { threshold: 0.2 });
+    const tocCard = projectToc.querySelector('.toc-card') as HTMLElement | null;
+    const tocList = tocCard?.querySelector('.toc-list') as HTMLElement | null;
+    const tocLinks = Array.from((tocList?.querySelectorAll('a') || [])) as HTMLAnchorElement[];
+    const tocToggle = ((tocCard && tocCard.querySelector('#toc-toggle')) || document.getElementById('toc-toggle')) as HTMLElement | null;
+    const sections = Array.from(document.querySelectorAll('section[id]')) as HTMLElement[];
 
-        // Observe all sections
-        document.querySelectorAll('section').forEach(section => {
-            if (section) observer.observe(section);
+    // Defensive: nothing to do without sections or links
+    if (!sections.length || !tocLinks.length) {
+      // still wire up toggle so user can open/close
+      if (tocToggle) {
+        tocToggle.addEventListener('click', () => {
+          projectToc.classList.toggle('toc-collapsed');
+          tocCard?.classList.toggle('toc-collapsed');
         });
+      }
+      return;
+    }
 
-        // Table of Contents Toggle
-        function toggleTableOfContents(show: boolean) {
-            if (tableOfContents && showButton) {
-                tableOfContents.style.display = show ? 'block' : 'none';
-                showButton.style.visibility = show ? 'hidden' : 'visible';
-                
-                // Add animation class
-                tableOfContents.classList.toggle('toc-visible', show);
-            }
+    // Maintain latest IntersectionObserverEntry for each section
+    const entryMap = new Map<string, IntersectionObserverEntry>();
+
+    const observer = new IntersectionObserver((entries) => {
+      try {
+        // update map with latest entries
+        for (const e of entries) {
+          const el = e.target as HTMLElement;
+          if (el && el.id) entryMap.set(el.id, e);
         }
 
-        toggleTableOfContents(true);
+        // gather candidates from entryMap in the order of DOM sections
+        const candidates = sections
+          .map((s) => entryMap.get(s.id))
+          .filter((v): v is IntersectionObserverEntry => !!v);
 
-        hideButton?.addEventListener("click", () => toggleTableOfContents(false));
-        showButton?.addEventListener("click", () => toggleTableOfContents(true));
+        // pick the best visible candidate, or nearest-to-top fallback
+        const visible = candidates.filter((c) => c.isIntersecting);
+        let active: IntersectionObserverEntry | null = null;
+        if (visible.length > 0) {
+          visible.sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0));
+          active = visible[0];
+        } else if (candidates.length > 0) {
+          candidates.sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+          active = candidates[0];
+        }
 
-        // Smooth scroll for navigation
-        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener('click', (e) => {
-                e.preventDefault();
-                const href = anchor.getAttribute('href');
-                if (!href) return;
-
-                const targetElement = document.querySelector<HTMLElement>(href);
-                
-                if (targetElement) {
-                    const navHeight = parseInt(getComputedStyle(document.documentElement)
-                        .getPropertyValue('--nav-height')) || 64; // fallback to 64px
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                    const offsetPosition = targetPosition - navHeight - 32; // 32px additional buffer
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    // Update URL without jumping
-                    history.pushState(null, '', href);
-                }
-
-                // Auto-hide TOC on mobile after clicking
-                if (window.innerWidth <= 768) {
-                    toggleTableOfContents(false);
-                }
-            });
+        // Clear only within this tocCard
+        tocLinks.forEach((link) => {
+          link.classList.remove('link-active');
+          link.setAttribute('aria-current', 'false');
         });
+
+        if (active?.target && (active.target as HTMLElement).id) {
+          const id = (active.target as HTMLElement).id;
+          const matching = tocLinks.find((a) => a.getAttribute('href') === '#' + id);
+          if (matching) {
+            matching.classList.add('link-active');
+            matching.setAttribute('aria-current', 'true');
+            console.debug('[TOC] active:', id);
+          }
+        }
+      } catch (err) {
+        // no-op on failure
+      }
+    }, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
+
+    sections.forEach((s) => observer.observe(s));
+
+    // Smooth scroll for local anchors inside this TOC only
+    tocLinks.forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = anchor.getAttribute('href');
+        if (!href) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64;
+        const targetPosition = (target as HTMLElement).getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = targetPosition - navHeight - 24;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        history.pushState(null, '', href);
+      });
     });
+
+    // Responsive TOC positioning: desktop (top-right), mobile (bottom-left at ≤980px)
+    const mql = window.matchMedia('(max-width: 980px)');
+    function applyTocPosition() {
+      if (!projectToc) return;
+      const isMobile = mql.matches;
+      projectToc.style.position = 'fixed';
+      if (isMobile) {
+        projectToc.style.top = '';
+        projectToc.style.left = '';
+        projectToc.style.right = 'clamp(12px, 6vw, 24px)';
+        projectToc.style.bottom = `calc(env(safe-area-inset-bottom, 0px) + var(--space-6))`;
+        projectToc.style.zIndex = '200';
+      } else {
+        projectToc.style.bottom = '';
+        projectToc.style.left = '';
+        projectToc.style.top = `calc(var(--nav-height) + var(--space-6))`;
+        projectToc.style.right = `clamp(18px, 6vw, 56px)`;
+        projectToc.style.zIndex = '120';
+      }
+    }
+
+    // Use explicit per-mode storage keys so mobile collapsed preference does not force desktop closed
+    function getTocStorageKey(isMobileMode: boolean) {
+      return isMobileMode ? 'toc-collapsed-mobile' : 'toc-collapsed-desktop';
+    }
+
+    applyTocPosition();
+    const handleModeChange = () => {
+      applyTocPosition();
+      // Re-apply persisted state for the current mode (mobile vs desktop)
+      try {
+        const isMobile = mql.matches;
+        const key = getTocStorageKey(isMobile);
+        const saved = localStorage.getItem(key);
+        if (saved === null) {
+          setTocCollapsed(isMobile); // default collapsed on mobile, expanded on desktop
+        } else {
+          setTocCollapsed(saved === '1');
+        }
+      } catch (e) {}
+    };
+    if (mql.addEventListener) {
+      mql.addEventListener('change', handleModeChange);
+    } else if (mql.addListener) {
+      // Safari < 14 fallback
+      mql.addListener(handleModeChange);
+    }
+
+    // TOC collapse/expand behavior (persisted). This also applies inline fallbacks to ensure it visually collapses.
+    function setTocCollapsed(collapsed: boolean) {
+      if (!projectToc || !tocCard || !tocToggle) return;
+      projectToc.classList.toggle('toc-collapsed', collapsed);
+      tocCard.classList.toggle('toc-collapsed', collapsed);
+      tocToggle.setAttribute('aria-expanded', String(!collapsed));
+      tocToggle.textContent = collapsed ? '☰' : '−';
+      tocToggle.setAttribute('aria-label', collapsed ? 'Expand Table of Contents' : 'Collapse Table of Contents');
+      // Inline fallbacks in case CSS selectors are overridden by other rules:
+      const list = tocCard.querySelector('.toc-list');
+      const title = tocCard.querySelector('h4');
+      if (collapsed) {
+        if (tocCard instanceof HTMLElement) tocCard.style.width = '56px';
+        if (list instanceof HTMLElement) list.style.display = 'none';
+        if (title instanceof HTMLElement) title.style.display = 'none';
+      } else {
+        if (tocCard instanceof HTMLElement) tocCard.style.width = '';
+        if (list instanceof HTMLElement) list.style.removeProperty('display');
+        if (title instanceof HTMLElement) title.style.removeProperty('display');
+      }
+      try {
+        const desktopKey = 'toc-collapsed-desktop';
+        const mobileKey = 'toc-collapsed-mobile';
+        // Initialize/read saved state with migration:
+        const isMobile = mql.matches;
+        const savedCurrent = localStorage.getItem(isMobile ? mobileKey : desktopKey);
+        const legacy = localStorage.getItem('toc-collapsed');
+        if (savedCurrent !== null) {
+          localStorage.setItem(isMobile ? mobileKey : desktopKey, collapsed ? '1' : '0');
+        } else if (legacy !== null) {
+          localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? (legacy === '1' ? '1' : '0') : '0');
+        } else {
+          localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? '1' : '0');
+        }
+      } catch (e) {}
+    }
+
+    // Initialize from localStorage with explicit per-mode keys and safe migration
+    try {
+      const isMobile = mql.matches;
+      const desktopKey = 'toc-collapsed-desktop';
+      const mobileKey = 'toc-collapsed-mobile';
+      const savedCurrent = localStorage.getItem(isMobile ? mobileKey : desktopKey);
+      const legacy = localStorage.getItem('toc-collapsed'); // migrate from old shared key if present
+      if (savedCurrent !== null) {
+        setTocCollapsed(savedCurrent === '1');
+      } else if (legacy !== null) {
+        // Only apply legacy to mobile; desktop defaults to expanded
+        setTocCollapsed(isMobile ? (legacy === '1') : false);
+        try { localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? (legacy === '1' ? '1' : '0') : '0'); } catch (e) {}
+      } else {
+        // Defaults: collapsed on mobile, expanded on desktop. Persist defaults to avoid legacy interference.
+        setTocCollapsed(isMobile);
+        try { localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? '1' : '0'); } catch (e) {}
+      }
+    } catch (e) {}
+
+    tocToggle?.addEventListener('click', () => {
+      const isCollapsed = projectToc?.classList.contains('toc-collapsed') || tocCard?.classList.contains('toc-collapsed');
+      setTocCollapsed(!isCollapsed);
+    });
+
+    // Scroll-to-top button (appears after user scrolls > 50% of page)
+    function throttle(fn: (...args: any[]) => void, wait: number) {
+      let last = 0;
+      let timer: number | null = null;
+      return (...args: any[]) => {
+        const now = Date.now();
+        if (last && now < last + wait) {
+          if (timer !== null) window.clearTimeout(timer);
+          timer = window.setTimeout(() => {
+            last = Date.now();
+            fn(...args);
+            timer = null;
+          }, wait);
+        } else {
+          last = now;
+          fn(...args);
+        }
+      };
+    }
+
+    const scrollTopBtn = (document.getElementById('scroll-top') || (() => {
+      const btn = document.createElement('button');
+      btn.id = 'scroll-top';
+      btn.className = 'scroll-top';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.setAttribute('aria-hidden', 'true');
+      btn.innerHTML = '↑';
+      document.body.appendChild(btn);
+      return btn;
+    })());
+
+    function updateScrollTopVisibility() {
+      try {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const docHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight;
+        const percent = docHeight > 0 ? scrollY / docHeight : 0;
+        if (percent > 0.5) {
+          scrollTopBtn.classList.add('visible');
+          scrollTopBtn.setAttribute('aria-hidden', 'false');
+        } else {
+          scrollTopBtn.classList.remove('visible');
+          scrollTopBtn.setAttribute('aria-hidden', 'true');
+        }
+      } catch (e) {}
+    }
+
+    const throttledUpdate = throttle(updateScrollTopVisibility, 150);
+    window.addEventListener('scroll', throttledUpdate, { passive: true });
+    window.addEventListener('resize', throttledUpdate);
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // initial check
+    updateScrollTopVisibility();
+  });
 </script>
 
-<style>
-    /* Layout & Container Styles */
-    .project-page-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: var(--spacing-md);
-        margin-left: clamp(5%, 15%, 20%);
-        margin-right: clamp(5%, 15%, 20%);
-    }
-
-    .project-page-div {
-        text-align: left;
-    }
-
-    /* Typography */
-    .project-title {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        line-height: 1.2;
-        margin-bottom: var(--spacing-md);
-        color: var(--text-color);
-    }
-
-    h2 {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-        margin: var(--spacing-md) 0 var(--spacing-sm);
-        color: var(--text-color);
-    }
-
-    h3 {
-        font-family: var(--font-heading);
-        font-weight: bold;
-        font-size: clamp(1.25rem, 3vw, 1.75rem);
-        margin: var(--spacing-sm) 0;
-        color: var(--text-color);
-    }
-
-    .section-content {
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        line-height: 1.6;
-        margin-bottom: var(--spacing-sm);
-        color: var(--text-color);
-    }
-
-    .lead {
-        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-        margin-bottom: var(--spacing-md);
-    }
-
-    /* Navigation */
-    #left-tray {
-        position: fixed;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: var(--spacing-md);
-        border-radius: var(--radius-md);
-        background-color: var(--background-color);
-        box-shadow: var(--shadow-md);
-        z-index: 50;
-        transition: transform var(--transition-normal);
-    }
-
-    #table-of-contents {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        font-family: var(--font-secondary);
-    }
-
-    .nav-item {
-        display: block;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        color: var(--text-color);
-        text-decoration: none;
-        border-radius: var(--radius-sm);
-        transition: all var(--transition-fast);
-    }
-
-    .nav-item:hover,
-    .nav-item:focus {
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        transform: translateX(var(--spacing-xs));
-    }
-
-    .link-active {
-        font-weight: bold;
-        background-color: color-mix(in srgb, var(--text-color) 15%, transparent);
-    }
-
-    /* Buttons */
-    .toc-button {
-        padding: var(--spacing-sm) var(--spacing-md);
-        border: none;
-        border-radius: var(--radius-sm);
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        color: var(--text-color);
-        cursor: pointer;
-        transition: all var(--transition-fast);
-    }
-
-    .toc-button:hover,
-    .toc-button:focus {
-        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
-    }
-
-    /* Images */
-    .project-figure {
-        margin: var(--spacing-md) 0;
-        contain: content;
-    }
-
-    .project-image {
-        width: 100%;
-        height: auto;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
-        will-change: transform;
-    }
-
-    /* Info Grid */
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: var(--spacing-sm);
-        margin: var(--spacing-md) 0;
-    }
-
-    .info-card {
-        padding: var(--spacing-md);
-        background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
-    }
-
-    /* Lists */
-    .role-bullet-item {
-        list-style-type: disc;
-        margin-bottom: var(--spacing-xs);
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        line-height: 1.6;
-        color: var(--text-color);
-    }
-
-    /* Links */
-    .source-link {
-        display: inline-block;
-        margin-top: var(--spacing-lg);
-        padding: var(--spacing-sm) var(--spacing-md);
-        color: var(--text-color);
-        text-decoration: none;
-        border-radius: var(--radius-sm);
-        background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-        transition: all var(--transition-fast);
-    }
-
-    .source-link:hover,
-    .source-link:focus {
-        background-color: color-mix(in srgb, var(--text-color) 20%, transparent);
-        transform: translateY(-2px);
-    }
-
-    /* Sections */
-    section {
-        scroll-margin-top: calc(var(--nav-height) + 1rem);
-        padding-top: calc(var(--nav-height) / 2);
-    }
-
-    .content-section {
-        margin: var(--spacing-lg) 0;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1380px) {
-        .project-page-container {
-            margin-left: 12%;
-            margin-right: 12%;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .project-page-container {
-            margin-left: var(--spacing-sm);
-            margin-right: var(--spacing-sm);
-            padding: var(--spacing-sm);
-        }
-
-        section {
-            padding-top: calc(var(--nav-height) / 3);
-        }
-
-        .content-section {
-            margin: var(--spacing-md) 0;
-        }
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .toc-visible {
-        animation: fadeIn var(--transition-normal);
-    }
-
-    /* Focus Styles */
-    :focus {
-        outline: 2px solid var(--text-color);
-        outline-offset: 2px;
-    }
-
-    /* Print Styles */
-    @media print {
-        #left-tray {
-            display: none;
-        }
-
-        .project-page-container {
-            margin: 0;
-            padding: 0;
-        }
-
-        .project-image {
-            max-width: 100%;
-            page-break-inside: avoid;
-        }
-    }
-</style>
+<!-- Styles moved to /public/styles/projects.css -->
