@@ -54,16 +54,10 @@ const projects = (rawCollection ?? []).map(mapEntryToProject);
     ))}
   </div>
 
-  <!-- Pagination portal: client island will move the pagination controls here so they render
-       visually underneath the server-rendered card grid while controls remain in the client island. -->
+
   <div id="project-pagination-portal" class="experience-pagination-portal" aria-hidden="false"></div>
 
-  <!-- Inline script: promote above-the-fold images to eager using IntersectionObserver.
-       - Defaults are lazy in the card components for performance/SSR.
-       - This uses an IntersectionObserver so the browser determines visibility (future-proof).
-       - A MutationObserver re-syncs observations when the server-rendered grid is reordered by the client island (pagination/filters).
-       - Only the first visible image gets fetchpriority="high" to help LCP candidates.
-  -->
+
   <script type="text/javascript">
     (function () {
       if (typeof window === "undefined") return;
