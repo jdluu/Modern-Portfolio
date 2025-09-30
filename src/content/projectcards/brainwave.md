@@ -10,6 +10,9 @@ thumbnail:
 programming_languages:
   - "Typescript"
   - "React"
+  - "HTML"
+  - "CSS"
+  - "Javascript"
 domains:
   - "Web"
 ---
