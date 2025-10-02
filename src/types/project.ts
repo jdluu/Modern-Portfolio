@@ -82,5 +82,3 @@ export interface Project {
   [x: string]: any;
 }
 
-// Backwards-compatible alias used by pages components
-export type PageProps = Project;
