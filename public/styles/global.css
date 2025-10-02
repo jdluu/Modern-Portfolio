@@ -70,26 +70,36 @@
   --color-surface: var(--m3-color-surface);
   --color-card: var(--m3-color-surface-variant);
   --color-text-primary: var(--m3-color-on-surface);
+
+  /* Fallback first, then color-mix for Safari <16.4 */
+  --color-text-secondary: var(--m3-color-on-surface-variant);
   --color-text-secondary: color-mix(
     in oklab,
     var(--m3-color-on-surface) 78%,
     var(--m3-color-on-surface-variant) 22%
   );
+
   --color-text-tertiary: var(--m3-color-on-surface-variant);
   --color-link: var(--m3-color-primary);
   --color-accent: var(--m3-color-primary);
+
+  /* Fallbacks for Safari <16.4 */
+  --color-accent-hover: var(--color-accent);
   --color-accent-hover: color-mix(
     in oklab,
     var(--color-accent) 82%,
     var(--m3-color-on-surface) 18%
   );
+  --color-accent-muted: transparent;
   --color-accent-muted: color-mix(
     in oklab,
     var(--color-accent) 18%,
     transparent 82%
   );
   --color-on-accent: var(--m3-color-on-primary);
+  --color-focus: rgba(41, 89, 170, 0.45);
   --color-focus: color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
+  --color-border: var(--m3-color-outline);
   --color-border: color-mix(
     in oklab,
     var(--m3-color-outline) 65%,
@@ -118,24 +128,16 @@
   --m3-font-body-medium: 1.6rem;
   --m3-font-body-small: 1.45rem;
 
-  /* Spacing scale (4px baseline) - use these across components for predictable rhythm
-     Rationale:
-       - 4px baseline offers an easily divisible rhythm (4,8,12,16...) that maps well to
-         pixel grids and typographic scales.
-       - Use these tokens for margins, paddings, gaps, and grid gutters to create predictable
-         vertical rhythm and horizontal spacing across breakpoints.
-       - Legacy spacing variables are mapped below for backward compatibility; prefer the
-         --space-* tokens in new / refactored components.
-  */
-  --space-1: 0.4rem; /* 4px */
-  --space-2: 0.8rem; /* 8px */
-  --space-3: 1.2rem; /* 12px */
-  --space-4: 1.6rem; /* 16px */
-  --space-5: 2rem; /* 20px */
-  --space-6: 2.4rem; /* 24px */
-  --space-8: 3.2rem; /* 32px */
-  --space-10: 4rem; /* 40px */
-  --space-12: 4.8rem; /* 48px */
+  /* Spacing scale (4px baseline) */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2rem;
+  --space-6: 2.4rem;
+  --space-8: 3.2rem;
+  --space-10: 4rem;
+  --space-12: 4.8rem;
 
   /* Grid gap aliases */
   --grid-gap-xs: var(--space-3);
@@ -143,7 +145,7 @@
   --grid-gap-md: var(--space-5);
   --grid-gap-lg: var(--space-6);
 
-  /* Back-compat: map existing spacing tokens to the new scale */
+  /* Back-compat spacing tokens */
   --spacing-sm: var(--space-2);
   --spacing-md: var(--space-4);
   --spacing-lg: var(--space-6);
@@ -181,7 +183,7 @@
 
 /* Global Styles */
 html {
-  font-size: 62.5%; /* 1rem = 10px */
+  font-size: 62.5%;
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
@@ -212,6 +214,7 @@ h6 {
   font-family: var(--m3-font-family-display);
   color: var(--color-text-primary);
   margin: 0 0 0.65em;
+  overflow-wrap: break-word; /* Safari <17 fallback */
   text-wrap: balance;
 }
 
@@ -294,6 +297,7 @@ b {
 a {
   color: var(--color-link);
   text-decoration: underline;
+  text-decoration-color: var(--color-link); /* fallback */
   text-decoration-color: color-mix(
     in oklab,
     var(--color-link) 60%,
@@ -318,14 +322,12 @@ a:focus-visible {
 }
 
 ::selection {
+  background-color: var(--color-accent); /* fallback */
   background-color: color-mix(in oklab, var(--color-accent) 75%, black 25%);
   color: var(--color-on-accent);
 }
 
-/* Accessibility helper: use .sr-only as the single canonical helper.
-   The previous `.visually-hidden` definition was removed and replaced by
-   `.sr-only` below. Keep .sr-only as the standard helper for screen-reader-only content. */
-
+/* Accessibility helpers */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -338,7 +340,6 @@ a:focus-visible {
   border: 0;
 }
 
-/* Small utility animations used by the View Transition API */
 @keyframes clip-in {
   from {
     clip-path: circle(0% at 50% 50%);
@@ -376,11 +377,7 @@ html[data-theme-vt="driving"] ::view-transition-new(root) {
   }
 }
 
-/* Accessibility utility: visually-hidden
-   Visually hide content while preserving it for assistive technologies
-   (screen-reader-only pattern). Use .visually-hidden.focusable on elements
-   that need to become visible when focused (e.g., skip links).
-*/
+/* Accessibility utility: visually-hidden */
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -394,8 +391,6 @@ html[data-theme-vt="driving"] ::view-transition-new(root) {
   border: 0 !important;
 }
 
-/* When an element needs to become visible on focus (e.g., keyboard navigation),
-   add the `focusable` modifier class: <element class="visually-hidden focusable"> */
 .visually-hidden.focusable:active,
 .visually-hidden.focusable:focus {
   position: static !important;
@@ -407,4 +402,18 @@ html[data-theme-vt="driving"] ::view-transition-new(root) {
   clip-path: none !important;
   white-space: normal !important;
   border: 0 !important;
+}
+
+/* --- Safari macOS 17+ heading clipping fixes for Roboto Flex --- */
+@supports (font: -apple-system-body) {
+  body {
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --font-line-height-heading-tight: 1.28; /* was 1.22 */
+  }
+  h1, h2, h3 {
+    letter-spacing: -0.005em; /* looser than default to prevent clipping */
+  }
 }

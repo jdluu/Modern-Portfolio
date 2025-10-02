@@ -1,4 +1,6 @@
-/* Modern CSS Reset */
+/* =========================
+   Modern CSS Reset (Safari-Safe)
+   ========================= */
 
 /* Box Sizing */
 *,
@@ -7,12 +9,24 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
+  /* Safari flex/grid overflow fix */
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Core HTML Defaults */
+html {
+  -webkit-text-size-adjust: 100%; /* Prevent iOS Safari auto-zoom/resizing */
+  -webkit-tap-highlight-color: transparent; /* Remove gray highlight on links/buttons in iOS */
 }
 
 /* Core Body Defaults */
 body {
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; /* Smooth text */
+  -moz-osx-font-smoothing: grayscale;  /* Better parity with macOS Safari */
+  text-rendering: optimizeLegibility;
 }
 
 /* Responsive Media */
@@ -23,6 +37,11 @@ canvas,
 svg {
   display: block;
   max-width: 100%;
+  height: auto; /* Safari sometimes distorts images/videos */
+}
+
+svg {
+  overflow: visible; /* Prevent Safari clipping inline SVGs */
 }
 
 /* Form Element Reset */
@@ -34,6 +53,14 @@ select {
   border: none;
   background: none;
   color: inherit;
+  -webkit-appearance: none; /* Remove Safari default styles */
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
 }
 
 /* Typography and Links */
@@ -50,12 +77,14 @@ h6 {
 a {
   color: inherit;
   text-decoration: none;
+  -webkit-touch-callout: none; /* Prevent Safari long-press menus */
 }
 
 /* Remove List Styles */
 ul,
 ol {
   list-style: none;
+  padding-left: 0; /* Safari adds default padding */
 }
 
 /* Accessibility: Reduced Motion */
@@ -63,9 +92,7 @@ ol {
   html:focus-within {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
+  * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
