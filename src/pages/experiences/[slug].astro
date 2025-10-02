@@ -50,8 +50,15 @@ const companyLogo = resolveAssetUrl(pickImageString(experience?.company?.image))
 const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
 // Sanitize tools/skills before splitting/rendering
-const tools = sanitizeStringForUI(experience?.technologies?.tools) || "N/A";
-const skills = sanitizeStringForUI(experience?.technologies?.skills) || "N/A";
+const tools = sanitizeStringForUI(experience?.technologies?.tools) || "";
+const skills = sanitizeStringForUI(experience?.technologies?.skills) || "";
+// Arrays for rendering pill lists (mirror projects layout)
+const techArray = skills
+  ? (String(skills).split(",").map((s) => s.trim()).filter(Boolean))
+  : [];
+const toolsArray = tools
+  ? (String(tools).split(",").map((s) => s.trim()).filter(Boolean))
+  : [];
 const responsibilities = Array.isArray(experience?.work?.responsibilities)
   ? (experience.work!.responsibilities!.filter((r) => r?.duties) as { duties?: string }[])
   : [];
@@ -65,29 +72,91 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
     <link slot="head" rel="stylesheet" href="/styles/slugs/experiences.css" />
     <main class="experience-page-container">
         <article class="experience-page-div">
-            <!-- Main Content Column -->
-            <div class="main-content">
-                <section id="overview" aria-labelledby="experience-title">
-                    <div class="experience-header">
-                        <div class="company-info" role="banner">
-                            <img
-                                src={companyLogo}
-                                alt={`${companyName} logo`}
-                                class="company-logo"
-                                width="80"
-                                height="80"
-                                loading="eager"
-                                decoding="async"
-                                aria-hidden="true"
-                            />
-                            <div class="title-container">
-                                <h1 id="experience-title" class="experience-title" >{title}</h1>
-                                <p class="company-name"><strong>{companyName}</strong></p>
-                            </div>
+            <!-- Title / Header: keep visually first on all viewports -->
+            <section id="overview" aria-labelledby="experience-title">
+                <div class="experience-header">
+                    <div class="company-info" role="banner">
+                        <img
+                            src={companyLogo}
+                            alt={`${companyName} logo`}
+                            class="company-logo"
+                            width="80"
+                            height="80"
+                            loading="eager"
+                            decoding="async"
+                            aria-hidden="true"
+                        />
+                        <div class="title-container">
+                            <h1 id="experience-title" class="experience-title" >{title}</h1>
+                            <p class="company-name"><strong>{companyName}</strong></p>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
+
+
+            <!-- Main Content Column (info-row followed by showcase, responsibilities & achievements) -->
+            <div class="main-content">
+            <!-- Info row (mirrors projects layout): Role card + Topics/Technologies card -->
+            <div class="info-row">
+              <div class="card" aria-hidden="false">
+                <h3 class="role-heading">Role</h3>
+                <p class="role-body">{role}</p>
+                <dl class="kv">
+                  <dt>Timeline</dt>
+                  <dd>{duration}</dd>
+                </dl>
+              </div>
  
+              <div class="card">
+                <div class="tt-grid" role="group" aria-label="Topics and technologies">
+                  <div class="tt-column" aria-labelledby="concept-label">
+                    <h4 id="concept-label" class="tt-subheading">Concepts</h4>
+                    {techArray.length > 0 ? (
+                      <ul class="tech-list" aria-label="Concepts">
+                        {techArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
+                      </ul>
+                    ) : (
+                      <p class="section-content">No concepts listed.</p>
+                    )}
+                  </div>
+ 
+                  <div class="tt-column" aria-labelledby="tool-label">
+                    <h4 id="tool-label" class="tt-subheading">Technologies</h4>
+                    {toolsArray.length > 0 ? (
+                      <ul class="tech-list" aria-label="Technologies">
+                        {toolsArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
+                      </ul>
+                    ) : (
+                      <p class="section-content">No technologies listed.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+ 
+            <!-- Inline Project Showcase inserted into main flow (moved from sidebar). This keeps the logical order:
+                 header → Role/Topics → Showcase → Responsibilities → Achievements -->
+            {showcase.length > 0 && (
+              <div class="showcase-inline sidebar-card">
+                <section id="showcase" aria-labelledby="showcase-title">
+                  <h3 id="showcase-title" tabindex="-1">Project Showcase</h3>
+                  <div class="showcase-grid">
+                    {showcase.map((item) => (
+                      <a href={item.link}
+                         class="showcase-item"
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         aria-label={`View project: ${item.description}`}>
+                        <p><strong>{item.description}</strong></p>
+                        <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
+                      </a>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            )}
+
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
                     <h2 id="responsibilities-title" >Key Responsibilities</h2>
                     {responsibilities.length > 0 ? (
@@ -100,7 +169,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                         <p class="empty-state">No responsibilities available.</p>
                     )}
                 </section>
- 
+
                 <section id="achievements" aria-labelledby="achievements-title">
                     <h2 id="achievements-title" >Notable Achievements</h2>
                     {achievements.length > 0 ? (
@@ -115,58 +184,8 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                 </section>
             </div>
  
-            <!-- Sidebar Column -->
-            <aside class="sidebar-content" aria-label="Experience details">
-                <div class="sidebar-card">
-                    <h3 id="logistics-title">Logistics</h3>
-                    <div class="experience-meta">
-                        <div class="meta-item">
-                            <span class="meta-label" id="role-label">Role</span>
-                            <span class="meta-value" aria-labelledby="role-label"><strong>{role}</strong></span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label" id="duration-label">Duration</span>
-                            <span class="meta-value" aria-labelledby="duration-label"><strong>{duration}</strong></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="sidebar-card">
-                    <h3 id="tech-title">Technology Stack</h3>
-                    <div class="tech-section">
-                        <div class="tech-item">
-                            <h4 id="tools-title">Tools & Technologies</h4>
-                            <div class="tech-text" aria-labelledby="tools-title">
-                              {(tools || 'N/A').split(',').map((t: string) => t.trim()).filter(Boolean).join(', ')}
-                            </div>
-                        </div>
-                        <div class="tech-item">
-                            <h4 id="skills-title">Skills</h4>
-                            <div class="tech-text" aria-labelledby="skills-title">
-                              {(skills || 'N/A').split(',').map((s: string) => s.trim()).filter(Boolean).join(', ')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {showcase.length > 0 && (
-                    <div class="sidebar-card">
-                        <section id="showcase" aria-labelledby="showcase-title">
-                            <h3 id="showcase-title" tabindex="-1">Project Showcase</h3>
-                            <div class="showcase-grid">
-                                {showcase.map((item) => (
-                                    <a href={item.link}
-                                       class="showcase-item"
-                                       target="_blank"
-                                       rel="noopener noreferrer"
-                                       aria-label={`View project: ${item.description}`}>
-                                        <p><strong>{item.description}</strong></p>
-                                        <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
-                                    </a>
-                                ))}
-                            </div>
-                        </section>
-                    </div>
-                )}
-            </aside>
+            <!-- Sidebar Column removed — showcase moved into main flow above to preserve linear reading order.
+                 If you need the sidebar preserved for other content, we can reintroduce it later. -->
         </article>
     </main>
 </BaseLayout>

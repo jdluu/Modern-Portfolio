@@ -1,6 +1,7 @@
 /* Purple accent color for both themes */
 :root {
     --purple-accent: var(--m3-color-secondary); /* Dark purple for light theme */
+    --content-max-width: 880px; /* unify content width so header and info-row align (narrower column) */
 }
 [data-theme="dark"] {
     --purple-accent: var(--m3-color-primary); /* Light violet for dark theme */
@@ -9,32 +10,58 @@
 .experience-page-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md); /* overall page padding */
+    padding-top: calc(var(--spacing-sm) * 0.6); /* tighten top padding to reduce white space under nav/title */
 }
 
 .experience-page-div {
-    display: grid;
-    grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr);
+    /* Convert page wrapper to a single centered vertical column:
+       - stacked layout on all viewports
+       - constrained by --content-max-width and centered
+       - use gap token for consistent section spacing */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
     gap: var(--spacing-xl);
-    align-items: start;
+    align-items: stretch;
 }
 
 .main-content {
-    max-width: 80ch; /* Optimal line-length for reading */
+    /* Align main column width with the info-row/content width so blocks line up horizontally */
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
 }
 
 /* Header Styles */
 .experience-header {
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-md);
+    /* Increase header spacing to create consistent vertical rhythm between sections */
+    margin-bottom: var(--spacing-md);
+    padding-bottom: 0;
     border-bottom: none;
+}
+
+/* Constrain the header inner content to the same content width as the info-row so
+   horizontal start/end edges align. Also remove extra internal padding so cards sit tight. */
+.company-info {
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
 }
 
 .company-info {
     display: flex;
     align-items: flex-start;
-    gap: clamp(1.5rem, 3vw, var(--spacing-lg));
-    margin-bottom: var(--spacing-lg);
+    gap: clamp(1rem, 2.4vw, var(--spacing-md));
+    margin-bottom: calc(var(--spacing-sm) * 0.6); /* reduce space between header and following content */
 }
 
 .company-logo {
@@ -68,6 +95,145 @@
     color: var(--text-color);
     margin: 0.5rem 0;
     word-wrap: break-word;
+}
+/* Info row and card styles (mirroring projects mobile layout)
+   Desktop: make the info-row span the full content width so Role + Topics/Technologies
+   appear directly beneath the title. Internally the row is two columns (left=role, right=topics).
+   Mobile media queries below still stack these columns into one full-width column. */
+.info-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: var(--grid-gap-md);
+  margin: var(--spacing-lg) 0;
+  align-items: start;
+  grid-column: 1 / -1; /* span full width so the row sits directly under the header on desktop */
+  /* On desktop we will align the info-row with the main content using the desktop media rules below. */
+}
+.card {
+  padding: var(--spacing-md);
+  background: var(--color-card);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px color-mix(in oklab, black 6%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+  margin-bottom: var(--spacing-md);
+}
+.card {
+  padding: var(--spacing-md);
+  background: var(--color-card);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 6px 18px color-mix(in oklab, black 6%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+}
+.role-heading {
+  margin: 0 0 var(--spacing-sm);
+  font-weight: 700;
+}
+.role-body {
+  color: var(--color-text-secondary);
+  font-size: clamp(1.4rem, 1.2vw, 1.55rem);
+  line-height: 1.65;
+}
+
+/* Technologies & Tools grid inside card */
+.tt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--spacing-sm) * 0.6);
+  align-items: start;
+  margin-top: calc(var(--spacing-sm) * 0.25);
+}
+.tt-column {
+  min-width: 0;
+  padding: 0;
+}
+.tt-subheading {
+  margin: 0 0 calc(var(--spacing-sm) * 0.5);
+  font-size: 1.6rem; /* increased for better prominence */
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Pill list styles for tech/tools */
+.tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-sm) * 0.6);
+}
+.tech-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  padding: 0;
+  flex: 0 0 auto; /* prevent list items from stretching; allow wrapping to new row */
+  max-width: 100%;
+  overflow: visible;
+  /* allow long words to break inside pills when needed */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.tech-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  background: color-mix(in oklab, var(--color-accent) 9%, transparent);
+  border-radius: 999px;
+  font-size: 1.3rem; /* increased for better readability as requested */
+  color: var(--text-color);
+  line-height: 1.2;
+  max-width: 12rem;          /* cap pill width so long labels wrap into multiple lines */
+  white-space: normal;       /* allow wrapping inside the pill */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Desktop: keep pills compact in side column to avoid long horizontal pills */
+@media (min-width: 981px) {
+  .tech-pill {
+    max-width: 10rem;
+    font-size: 1.1rem; /* slightly larger on desktop for consistency */
+    padding: 6px 9px;
+  }
+
+  .tech-list {
+    gap: calc(var(--spacing-sm) * 0.45);
+  }
+}
+
+/* Small adjustments for very small screens to prevent overflow */
+@media (max-width: 380px) {
+  .tech-pill {
+    font-size: 1.2rem;
+    padding: 6px 10px;
+    max-width: 9.5rem;
+  }
+}
+
+/* Responsive: stack info-row into single column on small screens */
+@media (max-width: 980px) {
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+  .tt-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  .tt-column + .tt-column {
+    border-left: none;
+    padding-left: 0;
+  }
+  .tech-pill {
+    font-size: 1.35rem;
+    padding: 7px 11px;
+  }
 }
 
 /* Sidebar Styles */
@@ -190,12 +356,15 @@
 }
 
 /* Responsive Styles */
-/* Sidebar sticky + TOC */
+/* Sidebar: default to non-sticky so it flows naturally in document order.
+   The header will span both columns so it remains visually first. */
 .sidebar-content {
-  position: sticky;
-  top: calc(var(--nav-height) + var(--spacing-md));
+  position: static;
   align-self: start;
 }
+
+/* Header column spanning is applied only on narrow viewports (see mobile media queries).
+   Removed the global span so the header no longer forces the sidebar to sit below it on desktop. */
 /* Chip hover/focus states */
 .chip:hover,
 .chip:focus-visible {
@@ -208,8 +377,39 @@
         grid-template-columns: 1fr; /* Stack columns */
     }
 
-    .sidebar-content {
+    /* Mobile ordering: header first, then info-row (Role + Topics/Technologies),
+       then the main narrative (responsibilities/achievements), then optional sidebar/showcase.
+       Aggressively tighten vertical spacing between the info-row and the next section. */
+    .experience-header {
+        grid-row: 1;
+        grid-column: 1 / -1;
+    }
+
+    .info-row {
         grid-row: 2;
+        grid-column: 1 / -1;
+        margin-bottom: calc(var(--spacing-xs, 6px) * 0.8); /* much smaller gap below info-row on mobile */
+    }
+
+    .main-content {
+        grid-row: 3;
+        grid-column: 1 / -1;
+    }
+
+    /* Reduce the default top spacing of section headings on mobile so responsibilities sit closer */
+    .main-content h2 {
+        padding-top: calc(var(--spacing-xs, 6px) * 0.6);
+        margin-top: calc(var(--spacing-xs, 6px) * 0.6);
+    }
+
+    /* Also reduce card bottom margins within the info-row on mobile */
+    .info-row .card {
+        margin-bottom: calc(var(--spacing-xs, 6px) * 0.6);
+    }
+
+    .sidebar-content {
+        grid-row: 4;
+        grid-column: 1 / -1;
     }
 }
 
@@ -217,60 +417,108 @@
     .experience-page-container {
         padding: var(--spacing-md);
     }
-
+ 
     .company-info {
         gap: var(--spacing-md);
     }
 }
 
+/* Desktop-only alignment helpers:
+   Ensure header, info-row and main content use the same left/right offsets so their
+   visual left edges align exactly. These rules apply only on larger viewports and
+   will not change the mobile stacking behavior. */
+@media (min-width: 981px) {
+  /* Desktop: unify content gutter so header, the info-row and main content align exactly.
+     Apply a single content width and center it; internal grid columns control left/right split. */
+  .company-info,
+  .info-row,
+  .main-content {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+  }
+
+  /* Use a 2fr / sidebar layout inside the info-row on desktop */
+  .info-row {
+    grid-template-columns: 2fr minmax(280px, 360px);
+  }
+
+  /* Slightly tighten internal card padding for desktop density */
+  .info-row .card {
+    padding: calc(var(--spacing-md) * 0.9);
+  }
+}
+
 @media (max-width: 480px) {
-    .experience-page-container {
-        padding: var(--spacing-sm);
-    }
+  /* Reduce overall vertical rhythm on phones to match project page density */
+  .experience-page-container {
+    padding: calc(var(--spacing-sm) * 0.6);
+  }
 
-/* Sidebar sticky */
-    .sidebar-content {
-      position: sticky;
-      top: calc(var(--nav-height) + var(--spacing-md));
-      align-self: start;
-    }
-    /* Chips */
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--spacing-sm);
-    }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: var(--m3-font-label-medium);
-      background: color-mix(in oklab, var(--m3-color-primary) 10%, var(--m3-color-surface-variant));
-      color: var(--m3-color-on-surface);
-      border: 1px solid color-mix(in oklab, var(--m3-color-primary) 25%, transparent);
-    }
-    /* Print styles (resume-friendly) */
-    @media print {
-      .sidebar-content { position: static !important; }
-      .toc, nav, header, footer { display: none !important; }
-      .sidebar-card { break-inside: avoid; }
-      body { background: white; color: black; }
-      .chip { background: var(--m3-color-surface) !important; border-color: var(--m3-color-outline) !important; }
-    }
-    .company-info {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+  /* Tighten header spacing so the title sits closer to the info-row */
+  .experience-header {
+    margin-bottom: calc(var(--spacing-sm) * 0.3);
+    padding-bottom: 0;
+  }
 
-    .title-container {
-        text-align: center;
-    }
+  .company-info {
+    gap: calc(var(--spacing-xs, 6px) * 0.8);
+    margin-bottom: calc(var(--spacing-xs, 6px) * 0.6);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-    .meta-item {
-        text-align: center;
-    }
+  .title-container {
+    text-align: center;
+  }
+
+  /* Info-row: reduce vertical spacing and card padding for compact cards like projects page */
+  .info-row {
+    margin: calc(var(--spacing-xs, 6px) * 0.8) 0;
+    gap: calc(var(--spacing-xs, 6px) * 0.6);
+  }
+
+  .card {
+    padding: calc(var(--spacing-sm) * 0.9);
+    margin-bottom: calc(var(--spacing-sm) * 0.6);
+    border-radius: 10px;
+  }
+
+  /* Tighten technology pill layout on phones to reduce large whitespace */
+  .tt-grid {
+    gap: calc(var(--spacing-xs, 6px) * 0.6);
+  }
+  .tech-list {
+    gap: calc(var(--spacing-xs, 6px) * 0.5);
+  }
+  .tech-pill {
+    font-size: 0.95rem;
+    padding: 5px 7px;
+    max-width: 7.5rem;
+  }
+
+  /* Sidebar remains non-sticky on mobile */
+  .sidebar-content {
+    position: static;
+    align-self: start;
+  }
+
+  /* Center small meta items in compact view */
+  .meta-item {
+    text-align: center;
+  }
+
+  /* Print styles (resume-friendly) */
+  @media print {
+    .sidebar-content { position: static !important; }
+    .toc, nav, header, footer { display: none !important; }
+    .sidebar-card { break-inside: avoid; }
+    body { background: white; color: black; }
+    .chip { background: var(--m3-color-surface) !important; border-color: var(--m3-color-outline) !important; }
+  }
 }
 /* Typography enhancements */
 .highlight {
