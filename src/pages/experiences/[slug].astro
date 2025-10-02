@@ -19,7 +19,6 @@ export async function getStaticPaths() {
   return paths;
 }
  
-// Props / derived values (load the single experience document by slug)
 const slugParam = (Astro.params as any)?.slug as string;
 
 const experiencesEntries = await getCollection("experiences");
@@ -41,18 +40,13 @@ if (!entry) {
   throw new Error(`Experience not found for slug: ${slugParam}`);
 }
 const experience = entry.data as any as Experience;
- 
-// Derived and resilient values
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
-// Extract a string candidate from image field and resolve with shared helper
 const companyLogo = resolveAssetUrl(pickImageString(experience?.company?.image)) ?? "/placeholder-logo.png";
 const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
-// Sanitize tools/skills before splitting/rendering
 const tools = sanitizeStringForUI(experience?.technologies?.tools) || "";
 const skills = sanitizeStringForUI(experience?.technologies?.skills) || "";
-// Arrays for rendering pill lists (mirror projects layout)
 const techArray = skills
   ? (String(skills).split(",").map((s) => s.trim()).filter(Boolean))
   : [];
@@ -72,7 +66,6 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
     <link slot="head" rel="stylesheet" href="/styles/slugs/experiences.css" />
     <main class="experience-page-container">
         <article class="experience-page-div">
-            <!-- Title / Header: keep visually first on all viewports -->
             <section id="overview" aria-labelledby="experience-title">
                 <div class="experience-header">
                     <div class="company-info" role="banner">
@@ -95,9 +88,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
             </section>
 
 
-            <!-- Main Content Column (info-row followed by showcase, responsibilities & achievements) -->
             <div class="main-content">
-            <!-- Info row (mirrors projects layout): Role card + Topics/Technologies card -->
             <div class="info-row">
               <div class="card" aria-hidden="false">
                 <h3 class="role-heading">Role</h3>
@@ -134,9 +125,6 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                 </div>
               </div>
             </div>
- 
-            <!-- Inline Project Showcase inserted into main flow (moved from sidebar). This keeps the logical order:
-                 header → Role/Topics → Showcase → Responsibilities → Achievements -->
             {showcase.length > 0 && (
               <div class="showcase-inline sidebar-card">
                 <section id="showcase" aria-labelledby="showcase-title">
@@ -183,9 +171,6 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                     )}
                 </section>
             </div>
- 
-            <!-- Sidebar Column removed — showcase moved into main flow above to preserve linear reading order.
-                 If you need the sidebar preserved for other content, we can reintroduce it later. -->
         </article>
     </main>
 </BaseLayout>
