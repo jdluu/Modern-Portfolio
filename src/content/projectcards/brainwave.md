@@ -9,6 +9,7 @@ thumbnail:
   url: "/uploads/thumbnail_brainwave.png"
 programming_languages:
   - "Typescript"
+  - "Next.js"
   - "React"
   - "HTML"
   - "CSS"
