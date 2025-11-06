@@ -49,7 +49,6 @@
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   text-decoration: none;
-  border-bottom: 0 !important;
   border: 2px solid var(--color-border);
   border-radius: 16px;
   padding: 1.5rem;
@@ -58,11 +57,9 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     color 0.2s ease,
-    transform 0.12s ease,
-    outline-color 0.12s ease;
+    transform 0.12s ease;
   cursor: pointer;
-  outline: 2px solid var(--color-border);
-  outline-offset: 2px;
+  outline: none;
 }
 
 @media (hover: hover) {
@@ -70,7 +67,6 @@
     border-color: var(--color-accent);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    outline-color: var(--color-accent);
   }
 }
 
