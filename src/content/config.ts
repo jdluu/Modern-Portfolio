@@ -115,9 +115,9 @@ const projects = defineCollection({
     final: z.string().optional(),
     problem: z.string().optional(),
     solution: z.string().optional(),
-    process: z.array(z.string()).optional(),
-    impact: z.array(z.string()).optional(),
-    reflection: z.array(z.string()).optional(),
+    process: z.string().optional(),
+    impact: z.string().optional(),
+    reflection: z.string().optional(),
     links: z
       .object({
         live: z.string().optional(),

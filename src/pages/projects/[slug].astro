@@ -73,9 +73,9 @@ const finalUrl =
 
 const problem = data?.problem ?? "";
 const solution = data?.solution ?? "";
-const processSteps = Array.isArray(data?.process) ? data.process : [];
-const impactPoints = Array.isArray(data?.impact) ? data.impact : [];
-const reflectionPoints = Array.isArray(data?.reflection) ? data.reflection : [];
+const processText = data?.process ?? "";
+const impactText = data?.impact ?? "";
+const reflectionText = data?.reflection ?? "";
 
 const liveLink = data?.links?.live ?? "";
 const sourceLink = data?.links?.source ?? "";
@@ -157,12 +157,8 @@ const sourceLink = data?.links?.source ?? "";
 
                 <section id="process" class="content-section">
                     <h2>Process</h2>
-                    {processSteps.length > 0 ? (
-                      <ul class="process-list">
-                        {processSteps.map((step: string, index: number) => (
-                          <li>{step}</li>
-                        ))}
-                      </ul>
+                    {processText ? (
+                      <p class="section-content">{processText}</p>
                     ) : (
                       <p class="section-content">No process details available.</p>
                     )}
@@ -188,26 +184,18 @@ const sourceLink = data?.links?.source ?? "";
                     ) : (
                       <p class="section-content">No final product media available.</p>
                     )}
-                    {impactPoints.length > 0 && (
+                    {impactText && (
                       <div>
                         <h3>Impact</h3>
-                        <ul class="simple-list">
-                          {impactPoints.map((p: string, i: number) => (
-                            <li>{p}</li>
-                          ))}
-                        </ul>
+                        <p class="section-content">{impactText}</p>
                       </div>
                     )}
                 </section>
 
                 <section id="reflection" class="content-section">
                     <h2>Reflection</h2>
-                    {reflectionPoints.length > 0 ? (
-                      <ul class="simple-list">
-                        {reflectionPoints.map((point: string, index: number) => (
-                          <li>{point}</li>
-                        ))}
-                      </ul>
+                    {reflectionText ? (
+                      <p class="section-content">{reflectionText}</p>
                     ) : (
                       <p class="section-content">No reflections available.</p>
                     )}
