@@ -49,8 +49,8 @@ export default function ProjectCardList(props: Props) {
     "date-desc",
   );
   const [page, setPage] = createSignal(1);
-  // Default page size for projects: 3 items per page
-  const [pageSize, setPageSize] = createSignal(3);
+  // Default page size for projects: 6 items per page
+  const [pageSize, setPageSize] = createSignal(6);
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
   const [langDropdownOpen, setLangDropdownOpen] = createSignal(false);
@@ -509,7 +509,7 @@ export default function ProjectCardList(props: Props) {
             aria-describedby="project-filters-summary"
             value={pageSize()}
             onChange={(e: any) => {
-              setPageSize(Number(e.target.value) || 3);
+              setPageSize(Number(e.target.value) || 6);
               setPage(1);
             }}
           >
