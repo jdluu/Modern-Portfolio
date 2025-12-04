@@ -6,7 +6,7 @@ date: February 2024 - March 2024
 startDate: 2024-02-01
 endDate: 2024-03-31
 thumbnail:
-  url: "/uploads/brainwave/thumbnail_brainwave.png"
+  url: "/uploads/projects/brainwave/thumbnail_brainwave.png"
 programming_languages:
   - "Typescript"
   - "Next.js"

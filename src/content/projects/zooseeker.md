@@ -19,8 +19,8 @@ tools:
     "Github Actions CI",
   ]
 
-cover: "https://cdn.cosmicjs.com/29840ea0-e1b3-11ee-b074-b5c8fe3ef189-homeZS.png"
-final: "https://cdn.cosmicjs.com/298a0210-e1b3-11ee-b074-b5c8fe3ef189-finalZS.gif"
+cover: "/uploads/projects/zooseeker/cover_zooseeker.png"
+final: "/uploads/projects/zooseeker/final_zooseeker.gif"
 
 background: "Zooseeker is an Android application designed to improve the San Diego Zoo visitor experience through enhanced navigation and exhibit planning. The project addressed usability issues with the official zoo app, where visitors found navigation difficult and relied on paper maps. I worked as part of a development team, focusing on route optimization algorithms, user interface design, and comprehensive testing implementation."
 

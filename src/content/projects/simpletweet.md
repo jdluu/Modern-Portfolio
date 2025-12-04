@@ -9,8 +9,8 @@ role: "Software Developer"
 technologies: ["Java", "Android"]
 tools: ["Git", "GitHub", "Android Studio"]
 
-cover: "https://cdn.cosmicjs.com/e40b5ab0-ec8c-11ee-b074-b5c8fe3ef189-homeST.png"
-final: "https://cdn.cosmicjs.com/ec95fae0-ec8d-11ee-b074-b5c8fe3ef189-finalST.gif"
+cover: "/uploads/projects/simpletweet/cover_simpletweet.png"
+final: "/uploads/projects/simpletweet/final_simpletweet.gif"
 
 background: "SimpleTweet is a minimalistic Android application built with Java that interfaces with the Twitter REST API. The project aimed to create a streamlined alternative to the native Twitter app, focusing on core functionality and simplicity. I handled the Android development, focusing on OAuth authentication, timeline display, and tweet composition features."
 

@@ -6,7 +6,7 @@ date: March 2022 - May 2022
 startDate: 2022-03-17
 endDate: 2022-05-31
 thumbnail:
-  url: "/uploads/zooseeker/thumbnail_zooseeker.png"
+  url: "/uploads/projects/zooseeker/thumbnail_zooseeker.png"
 programming_languages:
   - "Java"
 domains:
