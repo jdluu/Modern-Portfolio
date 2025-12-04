@@ -71,7 +71,7 @@ const coverUrl =
 const finalUrl =
   resolveAssetUrl(pickImageString(data?.final)) ?? (typeof data?.final === "string" ? data?.final : null);
 
-const problem = data?.problem ?? "";
+const background = data?.background ?? "";
 const solution = data?.solution ?? "";
 const processText = data?.process ?? "";
 const impactText = data?.impact ?? "";
@@ -149,7 +149,7 @@ const sourceLink = data?.links?.source ?? "";
 
                 <section id="background" class="content-section">
                     <h2>Background</h2>
-                    <p class="section-content">{problem}</p>
+                    <p class="section-content">{background}</p>
                     
                     <h2>Solution</h2>
                     <p class="section-content">{solution}</p>
