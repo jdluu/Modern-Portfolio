@@ -6,7 +6,7 @@ date: October 2021 - March 2022
 startDate: 2021-10-08
 endDate: 2022-03-22
 thumbnail:
-  url: "/uploads/simpletweet/thumbnail_simpletweet.png"
+  url: "/uploads/projects/simpletweet/thumbnail_simpletweet.png"
 programming_languages:
   - "Java"
 domains:

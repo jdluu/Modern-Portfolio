@@ -9,8 +9,8 @@ role: "Data Scientist"
 technologies: ["Python", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn"]
 tools: ["Jupyter Notebook"]
 
-cover: "https://cdn.cosmicjs.com/29832440-e1b3-11ee-b074-b5c8fe3ef189-homeLH.png"
-final: "https://cdn.cosmicjs.com/2987df30-e1b3-11ee-b074-b5c8fe3ef189-finalLH.png"
+cover: "/uploads/projects/learning_from_health/cover_learning_from_health.png"
+final: "/uploads/projects/learning_from_health/final_learning_from_health.png"
 
 background: "Learning From Health is a data science project that analyzes the relationship between health indicators and household income using CDC datasets. The project aimed to quantify correlations between health conditions like diabetes and cholesterol with economic status. I worked as part of a team to develop predictive models that could estimate income levels based on health statistics and geographic factors."
 
