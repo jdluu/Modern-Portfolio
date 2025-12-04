@@ -113,7 +113,7 @@ const projects = defineCollection({
     tools: z.array(z.string()).optional(),
     cover: z.string().optional(),
     final: z.string().optional(),
-    problem: z.string().optional(),
+    background: z.string().optional(),
     solution: z.string().optional(),
     process: z.string().optional(),
     impact: z.string().optional(),
