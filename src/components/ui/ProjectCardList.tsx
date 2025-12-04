@@ -507,7 +507,7 @@ export default function ProjectCardList(props: Props) {
             class="control-select compact"
             aria-label="Items per page"
             aria-describedby="project-filters-summary"
-            value={pageSize()}
+            value={String(pageSize())}
             onChange={(e: any) => {
               setPageSize(Number(e.target.value) || 6);
               setPage(1);
