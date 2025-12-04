@@ -37,9 +37,8 @@ export interface Project {
     achievements?: { points?: string | null }[] | null;
   } | null;
 
-  // Background / problem / solution
-  background?: { description?: string | null } | null;
-  problem?: { description?: string | null } | string | null;
+  // Background / solution
+  background?: { description?: string | null } | string | null;
   solution?:
     | { title?: string | null; description?: string | null }
     | string
