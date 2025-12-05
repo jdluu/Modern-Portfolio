@@ -1,7 +1,7 @@
 ---
 title: "ZooSeeker"
 slug: "zooseeker"
-description: "An android app that allows a user to view his Twitter timeline and post a new tweet."
+description: "An Android app to enhance the San Diego Zoo visitor experience by creating custom exhibit plans and optimizing routes for minimal walking distance."
 date: March 2022 - May 2022
 startDate: 2022-03-17
 endDate: 2022-05-31
