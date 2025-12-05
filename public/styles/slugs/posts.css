@@ -4,7 +4,7 @@
 article.post-grid {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 5rem 2rem;
   background-color: var(--m3-color-surface);
   color: var(--m3-color-on-surface);
   display: grid;
@@ -14,7 +14,7 @@ article.post-grid {
     "header header"
     "main   aside"
     "links  links";
-  gap: 2.4rem;
+  gap: 3.2rem;
   align-items: start;
   box-sizing: border-box;
 }
@@ -23,31 +23,177 @@ article.post-grid {
   /* Place header in its own full-width row above columns so aside cannot affect its height.
      Visually it's left-aligned to match the main content column. */
   grid-area: header;
-  margin: 0 0 1.6rem 0;
+  margin: 0 0 3.2rem 0;
   text-align: left;
   align-self: start;
   max-width: min(80ch, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+/* Center header when there's no hero image - make it wider than content */
+article.post-grid.no-hero .post-header {
+  max-width: 110ch;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  align-items: center;
+}
+
+article.post-grid.no-hero .post-header-actions {
+  justify-content: center;
+  width: 100%;
+}
+
+/* Align header with main content when there is a hero image */
+article.post-grid:not(.no-hero) .post-header {
+  max-width: min(100ch, 100%);
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.post-header-content {
+  width: 100%;
+}
+
+.post-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .post-title {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
   color: var(--m3-color-primary);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
   line-height: 1.2;
+}
+
+/* Center title text when no hero */
+article.post-grid.no-hero .post-title {
+  text-align: center;
 }
 
 .publish-date {
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-label-large);
   color: var(--m3-color-on-surface-variant);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0;
+}
+
+/* Center date text when no hero */
+article.post-grid.no-hero .publish-date {
+  text-align: center;
+}
+
+/* Copy as Markdown button */
+.copy-markdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
+  background-color: var(--m3-color-surface-variant);
+  color: var(--m3-color-on-surface);
+  border: 1px solid color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
+  border-radius: 8px;
+  font-family: var(--m3-font-family-body);
+  font-size: var(--m3-font-label-medium);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.copy-markdown-btn:hover {
+  background-color: var(--m3-color-primary-container);
+  color: var(--m3-color-on-primary-container);
+  border-color: var(--m3-color-primary);
+  transform: translateY(-1px);
+}
+
+.copy-markdown-btn:active {
+  transform: translateY(0);
+}
+
+.copy-markdown-btn:focus-visible {
+  outline: 2px solid var(--m3-color-primary);
+  outline-offset: 2px;
+}
+
+.copy-markdown-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.copy-markdown-btn.copied {
+  background-color: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  border-color: var(--m3-color-primary);
+}
+
+.copy-markdown-btn.copied .copy-markdown-text::after {
+  content: "Copied!";
+}
+
+.copy-markdown-btn.copied .copy-markdown-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Hide text on mobile, show only icon */
+@media (max-width: 600px) {
+  .copy-markdown-btn {
+    padding: 0.8rem;
+  }
+  
+  .copy-markdown-text {
+    display: none;
+  }
+  
+  .copy-markdown-btn.copied .copy-markdown-text {
+    display: none;
+  }
+  
+  .copy-markdown-btn.copied::after {
+    content: "Copied!";
+    font-size: var(--m3-font-label-small);
+  }
+}
+
+article.post-grid:not(.no-hero) .post-header-actions {
+  flex-shrink: 0;
+  margin-top: 0.4rem;
 }
 
 .main-content {
   grid-area: main;
   min-width: 0;
   width: 100%;
+}
+
+/* When there's no hero image, center the content and use full width */
+article.post-grid.no-hero {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "main"
+    "links";
+}
+
+article.post-grid.no-hero .main-content {
+  max-width: 75ch;
+  margin: 0 auto;
+}
+
+article.post-grid.no-hero .prose {
+  max-width: 100%;
+  text-align: left;
 }
 
 .aside {
@@ -175,22 +321,28 @@ article.post-grid {
 .prose {
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-body-large);
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--m3-color-on-surface);
   min-width: 0;
-  max-width: none; /* allow the prose to fill the left 50% column */
+  max-width: 70ch; /* Optimal reading width */
   width: 100%;
   margin: 0; /* ensure left alignment within the left column */
+}
+
+/* First h1 in prose should have less top margin */
+.prose > h1:first-child {
+  margin-top: 0;
 }
 
 .prose h1 {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
   color: var(--m3-color-on-surface);
-  margin-top: 3.2rem;
-  margin-bottom: 1.6rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .prose h2,
@@ -198,10 +350,11 @@ article.post-grid {
 .prose h4 {
   font-family: var(--m3-font-family-display);
   color: var(--m3-color-on-surface);
-  margin-top: 2.6rem;
-  margin-bottom: 1.2rem;
+  margin-top: 3.2rem;
+  margin-bottom: 1.4rem;
   font-weight: 600;
   line-height: 1.4;
+  letter-spacing: -0.008em;
 }
 
 .prose h2 {
@@ -210,14 +363,18 @@ article.post-grid {
 
 .prose h3 {
   font-size: var(--m3-font-title-large);
+  margin-top: 2.8rem;
+  margin-bottom: 1.2rem;
 }
 
 .prose h4 {
   font-size: var(--m3-font-title-medium);
+  margin-top: 2.4rem;
+  margin-bottom: 1rem;
 }
 
 .prose p {
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.8rem;
   color: var(--m3-color-on-surface);
 }
 
@@ -248,14 +405,22 @@ article.post-grid {
 /* Lists */
 .prose ul,
 .prose ol {
-  margin: 1.6rem 0;
+  margin: 2rem 0;
   padding-left: 2.4rem;
   color: var(--m3-color-on-surface);
 }
 
 .prose li {
-  margin: 0.8rem 0;
-  line-height: 1.7;
+  margin: 0.6rem 0;
+  line-height: 1.75;
+}
+
+.prose li:first-child {
+  margin-top: 0;
+}
+
+.prose li:last-child {
+  margin-bottom: 0;
 }
 
 .prose ul {
@@ -278,12 +443,12 @@ article.post-grid {
   background-color: var(--m3-color-surface-variant);
   border: 1px solid color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
   border-radius: 8px;
-  padding: 1.6rem;
-  margin: 2rem 0;
+  padding: 1.8rem;
+  margin: 2.4rem 0;
   overflow-x: auto;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
   font-size: 1.4rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--m3-color-on-surface);
 }
 
@@ -313,10 +478,10 @@ article.post-grid {
 /* Blockquotes */
 .prose blockquote {
   border-left: 4px solid var(--m3-color-primary);
-  padding-left: 1.6rem;
-  margin: 2rem 0;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
+  padding-left: 2rem;
+  margin: 2.4rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   background-color: color-mix(in oklab, var(--m3-color-primary) 5%, transparent);
   border-radius: 0 8px 8px 0;
   font-style: italic;
@@ -334,9 +499,16 @@ article.post-grid {
 /* Horizontal rules */
 .prose hr {
   border: none;
-  border-top: 2px solid color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
-  margin: 3.2rem 0;
+  border-top: 1px solid color-mix(in oklab, var(--m3-color-outline) 25%, transparent);
+  margin: 4rem 0;
   background: none;
+  height: 0;
+}
+
+/* Add extra spacing after hr when followed by h1 or h2 */
+.prose hr + h1,
+.prose hr + h2 {
+  margin-top: 2.4rem;
 }
 
 /* Lightbox */
@@ -394,7 +566,8 @@ article.post-grid {
 @media (max-width: 900px) {
   article.post-grid {
     grid-template-columns: 1fr;
-    padding: 2.4rem 1.6rem;
+    padding: 3.2rem 1.6rem;
+    gap: 2.4rem;
     /* Mobile stacking order: Header → Image (aside) → Links → Text (main) */
     grid-template-areas:
       "header"
@@ -402,10 +575,39 @@ article.post-grid {
       "links"
       "main";
   }
+  
+  .prose {
+    max-width: 100%;
+  }
+  
+  .prose h1 {
+    margin-top: 3.2rem;
+  }
+  
+  .prose h2,
+  .prose h3 {
+    margin-top: 2.4rem;
+  }
 
   .post-header {
     grid-area: header;
-    text-align: center;
+    text-align: left;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .post-header {
+    flex-direction: column;
+  }
+  
+  .post-header-actions {
+    width: 100%;
+  }
+  
+  .copy-markdown-btn {
+    width: 100%;
+    justify-content: center;
   }
 
   /* Restore normal flow for mobile */
