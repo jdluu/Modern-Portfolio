@@ -6,7 +6,7 @@ date: September 2021 - April 2022
 startDate: 2021-09-18
 endDate: 2022-04-16
 thumbnail:
-  url: "/uploads/projects/flixster/thumbnail_flixster.png"
+  url: "/uploads/projects/flixster/thumbnail_flixster.min.png"
 programming_languages:
   - "Java"
 domains:

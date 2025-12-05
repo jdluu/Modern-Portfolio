@@ -6,7 +6,7 @@ date: May 2023 - June 2023
 startDate: 2023-05-01
 endDate: 2023-06-14
 thumbnail:
-  url: "/uploads/projects/web_analytics_dashboard/thumbnail_web_analytics_dashboard.png"
+  url: "/uploads/projects/web_analytics_dashboard/thumbnail_web_analytics_dashboard.min.png"
 programming_languages:
   - "HTML"
   - "CSS"

@@ -16,8 +16,8 @@ technologies:
   ]
 tools: ["GitHub", "uv", "Rich", "httpx"]
 
-cover: "/uploads/projects/truthseeker/cover_truthseeker.png"
-final: "/uploads/projects/truthseeker/final_truthseeker.png"
+cover: "/uploads/projects/truthseeker/cover_truthseeker.min.png"
+final: "/uploads/projects/truthseeker/final_truthseeker.min.png"
 
 background: "TruthSeeker is an AI-powered fact-checking application built with Python and Streamlit. The project addresses the challenge of verifying information accuracy in an era of widespread misinformation. I developed this tool to help users quickly verify statements by combining real-time web searches with advanced language model analysis. I handled the full-stack development, focusing on integrating search APIs, LLM processing, and creating both web and CLI interfaces."
 
