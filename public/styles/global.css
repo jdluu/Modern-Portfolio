@@ -417,3 +417,52 @@ html[data-theme-vt="driving"] ::view-transition-new(root) {
     letter-spacing: -0.005em; /* looser than default to prevent clipping */
   }
 }
+
+/* Scroll-to-top button (appears after user scrolls > 50%) */
+.scroll-top {
+  position: fixed;
+  right: clamp(12px, 6vw, 24px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-6));
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--accent-color);
+  color: var(--color-on-accent);
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 220;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.scroll-top:hover {
+  background: var(--color-accent-hover);
+}
+
+@media (max-width: 980px) {
+  .scroll-top {
+    right: auto;
+    left: clamp(12px, 6vw, 24px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + calc(var(--space-6) + 4px));
+  }
+}
