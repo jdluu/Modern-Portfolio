@@ -513,7 +513,6 @@ export default function ProjectCardList(props: Props) {
               setPage(1);
             }}
           >
-            <option value="3">3</option>
             <option value="6">6</option>
             <option value="12">12</option>
             <option value="24">24</option>
