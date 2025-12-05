@@ -25,6 +25,6 @@
     "plugins": [{ "name": "@astrojs/ts-plugin" }],
     "types": ["vite/client", "astro/client", "solid-js"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "dist"]
 }

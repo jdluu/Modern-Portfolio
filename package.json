@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "format": "prettier --write .",
-    "knip": "knip"
+    "knip": "knip",
+    "compress-images": "tsx scripts/compress-images.ts",
+    "compress-images:dry": "tsx scripts/compress-images.ts --dry-run"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -24,9 +26,12 @@
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.6",
     "@types/node": "^24.10.1",
+    "dotenv": "^17.2.3",
     "knip": "^5.71.0",
     "prettier": "^3.7.4",
     "terser": "^5.44.1",
+    "tinify": "^1.8.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^7.2.6"
   }
