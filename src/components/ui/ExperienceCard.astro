@@ -5,6 +5,7 @@ import {
   resolveAssetUrl,
   sanitizeStringForUI,
   formatMonthYear,
+  generateSrcSet,
 } from "../../lib/utils";
 
 export interface Props {
@@ -69,6 +70,8 @@ const safeDateDisplay = dateDisplay ?? "";
   {safeThumbnail ? (
     <img
       src={safeThumbnail}
+      srcset={generateSrcSet(safeThumbnail, [400, 800])}
+      sizes="(max-width: 768px) 400px, 800px"
       alt={imgAlt}
       class="experience-image"
       loading="lazy"
