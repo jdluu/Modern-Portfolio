@@ -8,6 +8,7 @@ import {
   sanitizeStringForUI,
   parseSafeDate,
   formatMonthYear,
+  generateSrcSet,
 } from "../../lib/utils";
 
 // Generate static paths from collection entries
@@ -96,6 +97,8 @@ const sourceLink = data?.links?.source ?? "";
                       <div class="project-hero-figure">
                         <img
                           src={coverUrl}
+                          srcset={generateSrcSet(coverUrl, [800, 1200, 1600])}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                           alt={`${title} cover`}
                           loading="eager"
                           fetchpriority="high"
@@ -172,6 +175,8 @@ const sourceLink = data?.links?.source ?? "";
                           <figure class="final-figure" aria-hidden="false">
                             <img
                               src={finalUrl}
+                              srcset={generateSrcSet(finalUrl, [800, 1200])}
+                              sizes="(max-width: 768px) 100vw, 800px"
                               alt={`${title} final product`}
                               loading="lazy"
                               decoding="async"
