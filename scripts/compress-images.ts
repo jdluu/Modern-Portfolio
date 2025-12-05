@@ -45,6 +45,7 @@ interface CompressionStats {
   errors: number;
   totalOriginalSize: number;
   totalCompressedSize: number;
+  resizes: number;
 }
 
 const stats: CompressionStats = {
@@ -54,6 +55,7 @@ const stats: CompressionStats = {
   errors: 0,
   totalOriginalSize: 0,
   totalCompressedSize: 0,
+  resizes: 0,
 };
 
 // Supported image extensions
@@ -109,15 +111,43 @@ function calculateSavings(original: number, compressed: number): string {
 }
 
 /**
- * Compress a single image file
+ * Detect image type from filename to determine which sizes to generate
+ */
+function getImageSizesByType(filename: string): number[] {
+  const basename = path.basename(filename, path.extname(filename)).toLowerCase();
+  
+  if (basename.startsWith("thumbnail_")) {
+    // Thumbnails: 400w, 800w
+    return [400, 800];
+  } else if (basename.startsWith("cover_")) {
+    // Cover images: 800w, 1200w, 1600w
+    return [800, 1200, 1600];
+  } else if (basename.startsWith("final_")) {
+    // Final images: 800w, 1200w
+    return [800, 1200];
+  }
+  
+  // Other images: no resizes, just compression
+  return [];
+}
+
+/**
+ * Compress a single image file and generate size variants
  */
 async function compressImage(filePath: string): Promise<void> {
   try {
     const originalSize = await getFileSize(filePath);
     stats.totalOriginalSize += originalSize;
 
+    const filename = path.basename(filePath);
+    const sizes = getImageSizesByType(filename);
+    const ext = path.extname(filePath);
+    const baseName = path.basename(filePath, ext);
+    const dir = path.dirname(filePath);
+
     if (dryRun) {
-      console.log(`  📄 Would compress: ${path.basename(filePath)} (${formatBytes(originalSize)})`);
+      const resizeCount = sizes.length;
+      console.log(`  📄 Would compress: ${filename} (${formatBytes(originalSize)})${resizeCount > 0 ? ` + ${resizeCount} resizes` : ""}`);
       stats.total++;
       return;
     }
@@ -125,24 +155,55 @@ async function compressImage(filePath: string): Promise<void> {
     // Read the image file
     const sourceData = await fs.readFile(filePath);
     
-    // Compress using TinyPNG
-    const compressedData = await tinify.fromBuffer(sourceData).toBuffer();
+    // Compress base image using TinyPNG
+    const source = tinify.fromBuffer(sourceData);
+    const compressedData = await source.toBuffer();
     const compressedSize = compressedData.length;
     stats.totalCompressedSize += compressedSize;
 
-    // Determine output path
-    const outputPath = overwrite 
+    // Determine base output path
+    const baseOutputPath = overwrite 
       ? filePath 
-      : filePath.replace(/(\.[^.]+)$/, ".min$1");
+      : path.join(dir, `${baseName}.min${ext}`);
 
-    // Write compressed image
-    await fs.writeFile(outputPath, compressedData);
+    // Write compressed base image
+    await fs.writeFile(baseOutputPath, compressedData);
 
     const savings = calculateSavings(originalSize, compressedSize);
-    console.log(`  ✅ ${path.basename(filePath)}: ${formatBytes(originalSize)} → ${formatBytes(compressedSize)} (${savings})`);
+    console.log(`  ✅ ${filename}: ${formatBytes(originalSize)} → ${formatBytes(compressedSize)} (${savings})`);
     
     stats.compressed++;
     stats.total++;
+
+    // Generate resized versions if sizes are specified
+    if (sizes.length > 0) {
+      const baseNameWithoutExt = baseName.replace(/\.min$/, ""); // Remove .min if already present
+      const finalBaseName = overwrite ? baseNameWithoutExt : `${baseNameWithoutExt}.min`;
+      
+      for (const size of sizes) {
+        try {
+          // Resize using TinyPNG API (each resize counts as 1 compression)
+          // Use "scale" method which only requires width to maintain aspect ratio
+          const resized = source.resize({
+            method: "scale",
+            width: size,
+          });
+          
+          const resizedData = await resized.toBuffer();
+          const resizedPath = path.join(dir, `${finalBaseName}-${size}w${ext}`);
+          await fs.writeFile(resizedPath, resizedData);
+          
+          const resizedSize = resizedData.length;
+          stats.totalCompressedSize += resizedSize;
+          stats.resizes++;
+          
+          console.log(`    📐 ${size}w: ${formatBytes(resizedSize)}`);
+        } catch (resizeError: any) {
+          console.error(`    ❌ Error creating ${size}w variant:`, resizeError.message);
+          stats.errors++;
+        }
+      }
+    }
   } catch (error: any) {
     console.error(`  ❌ Error compressing ${path.basename(filePath)}:`, error.message);
     stats.errors++;
@@ -186,7 +247,7 @@ async function processDirectory(dirPath: string): Promise<void> {
 async function validateApiKey(): Promise<boolean> {
   try {
     await new Promise<void>((resolve, reject) => {
-      tinify.validate((err) => {
+      tinify.validate((err: any) => {
         if (err) reject(err);
         else resolve();
       });
@@ -227,8 +288,10 @@ async function main() {
   console.log("=".repeat(50));
   console.log(`Total files processed: ${stats.total}`);
   console.log(`Successfully compressed: ${stats.compressed}`);
+  console.log(`Resized variants created: ${stats.resizes}`);
   console.log(`Skipped: ${stats.skipped}`);
   console.log(`Errors: ${stats.errors}`);
+  console.log(`Total compressions used: ${stats.compressed + stats.resizes}`);
   
   if (stats.compressed > 0 && !dryRun) {
     const totalSavings = calculateSavings(stats.totalOriginalSize, stats.totalCompressedSize);
