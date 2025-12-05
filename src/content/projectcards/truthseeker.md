@@ -9,6 +9,8 @@ thumbnail:
   url: "/uploads/projects/truthseeker/thumbnail_truthseeker.min.jpg"
 programming_languages:
   - "Python"
+  - "HTML"
+  - "CSS"
 domains:
   - "Web"
   - "AI/ML"
