@@ -177,8 +177,12 @@ async function compressImage(filePath: string): Promise<void> {
 
     // Generate resized versions if sizes are specified
     if (sizes.length > 0) {
-      const baseNameWithoutExt = baseName.replace(/\.min$/, ""); // Remove .min if already present
-      const finalBaseName = overwrite ? baseNameWithoutExt : `${baseNameWithoutExt}.min`;
+      // Preserve .min in filename if it exists, or add it if not overwriting
+      const hasMin = baseName.includes(".min");
+      const baseNameWithoutExt = baseName.replace(/\.min$/, ""); // Remove trailing .min if present
+      const finalBaseName = overwrite 
+        ? (hasMin ? baseName : baseNameWithoutExt) // Keep original name structure when overwriting
+        : `${baseNameWithoutExt}.min`; // Add .min when creating new files
       
       for (const size of sizes) {
         try {
@@ -228,8 +232,8 @@ async function processDirectory(dirPath: string): Promise<void> {
         }
         await processDirectory(fullPath);
       } else if (entry.isFile() && isCompressibleImage(fullPath)) {
-        // Skip already compressed files
-        if (entry.name.includes(".min.")) {
+        // Skip already compressed files (unless overwrite is enabled)
+        if (!overwrite && entry.name.includes(".min")) {
           stats.skipped++;
           continue;
         }
