@@ -163,9 +163,13 @@ export function getResponsiveImagePaths(
 /**
  * Generate srcset string for responsive images
  * Returns: "path-400w.png 400w, path-800w.png 800w, ..."
+ * Note: GIF files are skipped as they typically don't have responsive variants
  */
 export function generateSrcSet(basePath: string | null, sizes: number[] | null = null): string {
   if (!basePath) return '';
+  
+  // Skip GIF files - they typically don't have responsive variants
+  if (basePath.toLowerCase().endsWith('.gif')) return '';
   
   const paths = getResponsiveImagePaths(basePath, sizes);
   if (!paths || Object.keys(paths.sizes).length === 0) return '';
