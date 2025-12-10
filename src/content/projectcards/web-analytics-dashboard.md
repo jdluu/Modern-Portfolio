@@ -10,7 +10,7 @@ thumbnail:
 programming_languages:
   - "HTML"
   - "CSS"
-  - "Javascript"
+  - "JavaScript"
 domains:
   - "Web"
 ---

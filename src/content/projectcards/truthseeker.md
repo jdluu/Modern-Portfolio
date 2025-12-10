@@ -11,6 +11,7 @@ programming_languages:
   - "Python"
   - "HTML"
   - "CSS"
+  - "JavaScript"
 domains:
   - "Web"
   - "AI/ML"
