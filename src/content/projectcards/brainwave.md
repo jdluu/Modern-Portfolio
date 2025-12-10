@@ -8,12 +8,13 @@ endDate: 2024-03-31
 thumbnail:
   url: "/uploads/projects/brainwave/thumbnail_brainwave.min.png"
 programming_languages:
-  - "Typescript"
+  - "TypeScript"
   - "Next.js"
   - "React"
   - "HTML"
   - "CSS"
-  - "Javascript"
+  - "JavaScript"
 domains:
   - "Web"
+  - "AI/ML"
 ---
