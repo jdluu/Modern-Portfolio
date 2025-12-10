@@ -4,11 +4,22 @@
  * 
  * Usage:
  *   pnpm compress-images [options]
+ *   pnpm compress-images --path <file-or-directory>
+ * 
+ * Examples:
+ *   pnpm compress-images                                    # Compress all images in uploads/
+ *   pnpm compress-images --path public/uploads/projects/brainwave/thumbnail.png
+ *   pnpm compress-images --path public/uploads/projects/brainwave
+ *   pnpm compress-images --overwrite --path public/uploads/projects/brainwave
  * 
  * Options:
- *   --path <path>     Specific directory to compress (default: all uploads)
+ *   --path <path>     Specific file or directory to compress (default: all uploads)
  *   --dry-run         Show what would be compressed without actually compressing
  *   --overwrite       Overwrite original files (default: creates .min versions)
+ * 
+ * Notes:
+ *   - Files with size suffixes (e.g., -800w.png) are automatically skipped
+ *   - Already compressed files (.min) are skipped unless --overwrite is used
  */
 
 import * as fs from "fs/promises";
@@ -216,10 +227,35 @@ async function compressImage(filePath: string): Promise<void> {
 }
 
 /**
+ * Check if a filename already has a size suffix (e.g., -800w, -1200w)
+ */
+function hasSizeSuffix(filename: string): boolean {
+  // Match patterns like -400w, -800w, -1200w, -1600w before the file extension
+  return /-\d+w\.(png|jpg|jpeg|webp)$/i.test(filename);
+}
+
+/**
  * Recursively find and compress images in a directory
  */
 async function processDirectory(dirPath: string): Promise<void> {
   try {
+    // Check if the path is a file instead of a directory
+    const stat = await fs.stat(dirPath);
+    if (stat.isFile() && isCompressibleImage(dirPath)) {
+      // Skip files with size suffixes (already resized)
+      if (hasSizeSuffix(path.basename(dirPath))) {
+        stats.skipped++;
+        return;
+      }
+      // Skip already compressed files (unless overwrite is enabled)
+      if (!overwrite && path.basename(dirPath).includes(".min")) {
+        stats.skipped++;
+        return;
+      }
+      await compressImage(dirPath);
+      return;
+    }
+
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
 
     for (const entry of entries) {
@@ -232,6 +268,11 @@ async function processDirectory(dirPath: string): Promise<void> {
         }
         await processDirectory(fullPath);
       } else if (entry.isFile() && isCompressibleImage(fullPath)) {
+        // Skip files with size suffixes (already resized variants)
+        if (hasSizeSuffix(entry.name)) {
+          stats.skipped++;
+          continue;
+        }
         // Skip already compressed files (unless overwrite is enabled)
         if (!overwrite && entry.name.includes(".min")) {
           stats.skipped++;
