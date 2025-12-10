@@ -7,19 +7,36 @@
  *   pnpm compress-images --path <file-or-directory>
  * 
  * Examples:
- *   pnpm compress-images                                    # Compress all images in uploads/
- *   pnpm compress-images --path public/uploads/projects/brainwave/thumbnail.png
+ *   # Compress all images in uploads/
+ *   pnpm compress-images
+ * 
+ *   # Compress only a specific file (and generate its responsive sizes)
+ *   pnpm compress-images --path public/uploads/projects/learning_from_health/thumbnail.png
+ *   pnpm compress-images --path public/uploads/projects/brainwave/cover_brainwave.png
+ * 
+ *   # Compress all images in a specific directory
  *   pnpm compress-images --path public/uploads/projects/brainwave
- *   pnpm compress-images --overwrite --path public/uploads/projects/brainwave
+ * 
+ *   # Overwrite existing .min files
+ *   pnpm compress-images --overwrite --path public/uploads/projects/brainwave/thumbnail.png
+ * 
+ *   # Dry run to see what would be processed
+ *   pnpm compress-images --dry-run --path public/uploads/projects/brainwave
  * 
  * Options:
  *   --path <path>     Specific file or directory to compress (default: all uploads)
+ *                     When targeting a file, only that file is processed (with its resizes)
  *   --dry-run         Show what would be compressed without actually compressing
  *   --overwrite       Overwrite original files (default: creates .min versions)
  * 
  * Notes:
  *   - Files with size suffixes (e.g., -800w.png) are automatically skipped
  *   - Already compressed files (.min) are skipped unless --overwrite is used
+ *   - When targeting a single file, only that file is processed (not the entire directory)
+ *   - Responsive sizes are generated based on filename prefix:
+ *     * thumbnail_* → 400w, 800w
+ *     * cover_* → 800w, 1200w, 1600w
+ *     * final_* → 800w, 1200w
  */
 
 import * as fs from "fs/promises";
@@ -77,8 +94,13 @@ const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
 const overwrite = args.includes("--overwrite");
 const pathIndex = args.indexOf("--path");
-const targetPath = pathIndex !== -1 && args[pathIndex + 1] 
+const targetPathArg = pathIndex !== -1 && args[pathIndex + 1] 
   ? args[pathIndex + 1] 
+  : null;
+const targetPath = targetPathArg
+  ? path.isAbsolute(targetPathArg) 
+    ? targetPathArg 
+    : path.resolve(process.cwd(), targetPathArg)
   : path.join(__dirname, "..", "public", "uploads");
 
 if (dryRun) {
