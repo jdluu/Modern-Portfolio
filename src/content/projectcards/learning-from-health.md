@@ -10,5 +10,5 @@ thumbnail:
 programming_languages:
   - "Python"
 domains:
-  - "Machine Learning"
+  - "AI/ML"
 ---
