@@ -6,7 +6,7 @@ date: December 2024
 startDate: 2024-12-01
 endDate: 2024-12-13
 thumbnail:
-  url: "/uploads/projects/truthseeker/thumbnail_truthseeker.min.jpg"
+  url: "/uploads/projects/truthseeker/thumbnail_truthseeker.min.png"
 programming_languages:
   - "Python"
   - "HTML"
