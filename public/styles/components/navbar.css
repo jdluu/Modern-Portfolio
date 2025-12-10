@@ -39,10 +39,16 @@
   cursor: pointer;
   color: var(--color-text-primary);
   border-radius: 50%;
+  transition: background-color 0.2s ease, filter 0.2s ease;
+  box-sizing: border-box;
+}
+.menu-icon-button:hover {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 .menu-icon-button:focus-visible {
   outline: 2px solid var(--color-accent);
   background-color: var(--m3-color-primary-container);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 .open-icon {
   width: 24px;
@@ -112,6 +118,11 @@
   cursor: pointer;
   color: var(--color-text-primary);
   border-radius: 50%;
+  transition: background-color 0.2s ease, filter 0.2s ease;
+  box-sizing: border-box;
+}
+.menu-close-btn:hover {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 .menu-close-label {
   font-size: 2rem;
@@ -138,10 +149,12 @@
   text-decoration: none;
   color: var(--m3-color-on-surface-variant);
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, filter 0.2s ease;
+  box-sizing: border-box;
 }
 .nav-link:hover {
   background-color: rgba(128, 128, 128, 0.1);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 .nav-link[aria-current="page"] {
   background-color: var(--m3-color-primary-container);
@@ -200,6 +213,13 @@
     display: flex;
     align-items: center;
     color: var(--color-text-primary);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, filter 0.2s ease;
+    box-sizing: border-box;
+  }
+  .desktop-home-link:hover {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
   }
   .desktop-home-link .home-icon {
     width: 28px;
