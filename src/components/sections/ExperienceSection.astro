@@ -13,7 +13,7 @@ function mapEntryToExperience(item: any) {
   return {
     title: d?.title ?? "Untitled",
     slug: entrySlug,
-    // Read flattened frontmatter fields (migrated to top-level in content/config.ts)
+    // Flatten frontmatter fields
     company: d.company ?? null,
     date: d.date ?? null,
     startDate: d.startDate ?? null,
@@ -26,11 +26,10 @@ const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 ---
 <section class="experience-section content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
-	<!-- Client island (controls + visibility) -->
+	<!-- Client island -->
 	<ExperienceCardList client:load initialItems={experiences} />
 
-	<!-- Server-rendered grid of ExperienceCard items for SEO and initial markup.
-	     The client island will toggle visibility of these cards via data-slug attributes. -->
+	<!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
 	<div class="experience-grid">
 		{experiences.map((e) => (
 			<div class="experience-item" data-slug={e.slug ?? ""}>
@@ -39,16 +38,14 @@ const experiences = (rawCollection ?? []).map(mapEntryToExperience);
 		))}
 	</div>
 
-	<!-- Pagination portal: client island will move the pagination controls here so they render
-	     visually underneath the server-rendered card grid while controls remain in the client island. -->
+	<!-- Pagination portal -->
 	<div id="experience-pagination-portal" class="experience-pagination-portal" aria-hidden="false"></div>
 
-	<!-- Inline script: promote above-the-fold images to eager using IntersectionObserver.
-	     - Defaults are lazy in the card components for performance/SSR.
-	     - This uses an IntersectionObserver so the browser determines visibility (future-proof).
-	     - A MutationObserver re-syncs observations when the server-rendered grid is reordered by the client island (pagination/filters).
-	     - Only the first visible image gets fetchpriority="high" to help LCP candidates.
-	-->
+	<!-- 
+     Inline script: Promotes above-the-fold images to eager using IntersectionObserver.
+     Defaults are lazy for performance. Uses IntersectionObserver for visibility and 
+     MutationObserver to handle reordering by the client island.
+  -->
 	<script type="text/javascript">
 	  (function () {
 	    if (typeof window === "undefined") return;

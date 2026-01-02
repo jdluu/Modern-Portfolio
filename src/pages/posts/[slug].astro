@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, render } from "astro:content";
 import { resolveAssetUrl } from "../../lib/utils";
 
-// Generate static paths from Astro content collection
+// Generate static paths
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const paths = (posts ?? [])
@@ -20,13 +20,9 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// Props / derived values (receive the content entry as `post`)
 const { post } = Astro.props as { post: any };
-
-// Render the Markdown/MDX body to a Content component
 const { Content } = await render(post);
 
-// Derived and resilient values from frontmatter
 const title = post?.data?.title ?? "Untitled";
 const date = post?.data?.date ?? null;
 const links = Array.isArray(post?.data?.links) ? post.data.links : [];
@@ -209,14 +205,12 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
 
       copyBtn.addEventListener('click', async function() {
         try {
-          // Get the post content
           const prose = document.querySelector('.prose') as HTMLElement;
           if (!prose) return;
 
           // Convert HTML to markdown
           const markdown = htmlToMarkdown(prose);
           
-          // Add title and date to the markdown
           const title = document.querySelector('.post-title')?.textContent || '';
           const date = document.querySelector('.publish-date')?.textContent || '';
           
@@ -229,7 +223,6 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
           }
           fullMarkdown += markdown;
 
-          // Copy to clipboard
           await navigator.clipboard.writeText(fullMarkdown);
           
           // Show feedback
@@ -252,7 +245,10 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
         }
       });
 
-      // Convert HTML element to markdown
+      /**
+       * Convert HTML element to markdown.
+       * Recursively processes child nodes.
+       */
       function htmlToMarkdown(element: HTMLElement): string {
         let markdown = '';
         const nodes = Array.from(element.childNodes);

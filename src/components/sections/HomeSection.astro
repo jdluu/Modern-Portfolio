@@ -46,12 +46,9 @@
 			// Attach a lightweight, rAF-throttled parallax only when allowed
 			if (!prefersReducedMotion && hero && section) {
 				let rafScheduled = false;
-				// Narrow the type to HTMLElement so DOM mouse properties are available
 				const container = section as HTMLElement;
 
-				// Named handler so we can remove it later (prevents leaks during client-side navigation).
-				// Use the EventListener type so add/removeEventListener accept the same value.
-				// We cast to PointerEvent to handle both pointer and mouse inputs.
+				// Named handler to allow removal
 				const onMove: EventListener = (event) => {
 					if (rafScheduled) return;
 					rafScheduled = true;

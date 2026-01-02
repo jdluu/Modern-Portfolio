@@ -34,11 +34,9 @@ const summaryRaw = summary ?? "";
 // Ensure client links use extensionless, lowercase slugs to match getStaticPaths()
 const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "");
 
-// Parse dates (helpers handle invalid values)
 const startDateObj = parseSafeDate(startDateStr);
 const endDateObj = parseSafeDate(endDateStr);
 
-// Resolve thumbnail once
 const safeThumbnail = resolveAssetUrl(thumbnailSrc) ?? "";
 
 // Compute display date with sentinel handling
@@ -62,7 +60,6 @@ if (!dateDisplay) {
 const titleCompany = company ? `${title} @ ${company}` : title;
 const imgAlt = company ? `${title} @ ${company}` : title;
 
-// Sanitized summary for UI
 const safeSummary = sanitizeStringForUI(summaryRaw);
 const safeDateDisplay = dateDisplay ?? "";
 ---

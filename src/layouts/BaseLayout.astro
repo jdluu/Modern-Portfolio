@@ -152,12 +152,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
 		</script>
 		<script>
-			// Scroll-to-top button functionality (available site-wide)
+			// Scroll-to-top button
 			document.addEventListener("DOMContentLoaded", function () {
-				// Prevent duplicate initialization
 				if (document.getElementById('scroll-top')) return;
 
-				// Throttle function for performance
 				function throttle(fn: (...args: any[]) => void, wait: number) {
 					let last = 0;
 					let timer: number | null = null;
@@ -177,7 +175,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					};
 				}
 
-				// Create scroll-to-top button
 				const scrollTopBtn = document.createElement('button');
 				scrollTopBtn.id = 'scroll-top';
 				scrollTopBtn.className = 'scroll-top';
@@ -187,7 +184,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				scrollTopBtn.innerHTML = '↑';
 				document.body.appendChild(scrollTopBtn);
 
-				// Update button visibility based on scroll position
 				function updateScrollTopVisibility() {
 					try {
 						const scrollY = window.scrollY || window.pageYOffset;
@@ -201,21 +197,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 							scrollTopBtn.setAttribute('aria-hidden', 'true');
 						}
 					} catch (e) {
-						// Silently fail if there's an error
+						// Fail silently
 					}
 				}
 
-				// Throttled scroll and resize handlers
 				const throttledUpdate = throttle(updateScrollTopVisibility, 150);
 				window.addEventListener('scroll', throttledUpdate, { passive: true });
 				window.addEventListener('resize', throttledUpdate);
 
-				// Scroll to top on button click
 				scrollTopBtn.addEventListener('click', () => {
 					window.scrollTo({ top: 0, behavior: 'smooth' });
 				});
 
-				// Initial check
 				updateScrollTopVisibility();
 			});
 		</script>

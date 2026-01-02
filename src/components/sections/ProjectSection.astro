@@ -20,7 +20,7 @@ function mapEntryToProject(item: any) {
     title: d?.title ?? "Untitled",
     slug: entrySlug,
     description: d?.description ?? "",
-    // Read flattened date fields (may be string or Date)
+// Read flattened date fields
     date: d?.date ?? null,
     startDate: d?.startDate ?? null,
     endDate: d?.endDate ?? null,
@@ -36,11 +36,10 @@ const projects = (rawCollection ?? []).map(mapEntryToProject);
 <section class="project-section content-section">
   <h2 id="projects" class="page-h2">Projects</h2>
 
-  <!-- Client island (controls + visibility) -->
+  <!-- Client island -->
   <ProjectCardList client:load initialItems={projects} />
 
-  <!-- Server-rendered grid of ProjectCard items for SEO and initial markup.
-       The client island will toggle visibility of these cards via data-slug attributes. -->
+  <!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
   <div class="project-grid card-grid">
     {projects.map((p) => (
       <div class="project-item" data-slug={p.slug ?? ""}>

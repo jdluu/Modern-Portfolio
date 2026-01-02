@@ -4,7 +4,7 @@ import type { Experience } from "../../types/experience";
 import { getCollection } from "astro:content";
 import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "../../lib/utils";
   
-// Generate static paths from collection entries
+// Generate static paths
 export async function getStaticPaths() {
   const entries = await getCollection("experiences");
   const paths = (entries ?? [])
@@ -47,6 +47,8 @@ const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
 const tools = sanitizeStringForUI(experience?.technologies?.tools) || "";
 const skills = sanitizeStringForUI(experience?.technologies?.skills) || "";
+
+// Split comma-separated strings into arrays for list rendering
 const techArray = skills
   ? (String(skills).split(",").map((s) => s.trim()).filter(Boolean))
   : [];

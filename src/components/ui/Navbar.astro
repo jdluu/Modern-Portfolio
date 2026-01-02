@@ -121,15 +121,13 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // --- 1. Get all required elements ---
     const mainMenu = document.getElementById("main-menu");
     const menuToggleBtn = document.getElementById("menu-toggle-btn");
     const backdrop = document.getElementById("menu-backdrop");
     const menuCloseBtn = document.getElementById("menu-close-btn");
 
-    // --- 2. Check if all elements exist before proceeding ---
+    // Check if all elements exist before proceeding
     if (mainMenu && menuToggleBtn && backdrop && menuCloseBtn) {
-      // --- 3. All logic is now safely scoped inside this block ---
       
       const btn = menuToggleBtn;
       const menu = mainMenu;
@@ -246,7 +244,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
         }
       }
 
-      // --- Attach all event listeners ---
+      // Attach all event listeners
       btn.addEventListener("click", toggleMenu);
       closeBtn.addEventListener("click", () => closeMenu());
       back.addEventListener("click", () => closeMenu());
@@ -260,7 +258,7 @@ import ThemeToggleButton from "../ui/ThemeToggleButton.tsx";
         }
       });
       
-      // --- Initial setup and resize listener ---
+      // Initial setup and resize listener
       setDesktopNavState();
       window.addEventListener("resize", setDesktopNavState);
 

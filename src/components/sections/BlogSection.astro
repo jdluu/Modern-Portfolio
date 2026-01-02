@@ -11,18 +11,17 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
   <h2 id="blog" class="page-h2">Blog</h2>
  
   <div class="posts-container">
-    <!-- Client island: controls, filtering, and pagination only -->
+    <!-- Client island: controls, filtering, and pagination -->
     <PostsList client:load initialItems={posts} />
-    <!-- Server-rendered list for SEO & initial markup. Each Post renders an <li data-slug="...">.
-         The client island controls visibility of these server nodes to implement pagination/filters. -->
+    
+    <!-- Server-rendered list for SEO & initial markup. Client island controls visibility. -->
     <ul class="post-list" role="list">
       {posts.map((post) => (
         <Post item={post} />
       ))}
     </ul>
 
-    <!-- Pagination placeholder: the PostsList island will render interactive pagination
-         controls here so they appear visually below the posts list. -->
+    <!-- Pagination placeholder for island controls -->
     <div class="posts-pagination-placeholder"></div>
   </div>
 </section>

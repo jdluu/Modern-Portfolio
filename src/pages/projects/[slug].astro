@@ -11,7 +11,7 @@ import {
   generateSrcSet,
 } from "../../lib/utils";
 
-// Generate static paths from collection entries
+// Generate static paths
 export async function getStaticPaths() {
   const entries = await getCollection("projects");
   const paths = (entries ?? [])
@@ -26,7 +26,6 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// Props / derived values (load the single project document by slug)
 const slugParam = (Astro.params as any)?.slug as string;
 
 const projectEntries = await getCollection("projects");
@@ -49,7 +48,6 @@ if (!entry) {
 }
 const data = entry.data as any as Project;
 
-// Derived and resilient values mapped from frontmatter
 const title = data?.title ?? "Untitled";
 const summary = data?.summary ?? data?.description ?? "";
 const dateText = (() => {
@@ -83,7 +81,6 @@ const sourceLink = data?.links?.source ?? "";
 ---
 
 <BaseLayout title={title}>
-    <!-- Link the new project-specific stylesheet -->
     <link rel="stylesheet" href="/styles/slugs/projects.css">
     
     <main class="project-page-container">
@@ -235,7 +232,7 @@ const sourceLink = data?.links?.source ?? "";
                 </section>
             </article>
           </div>
-          <!-- Right column: sticky TOC card -->
+          <!-- Sticky TOC card -->
           <aside class="project-toc" aria-label="Table of contents">
             <div class="toc-card" role="navigation" aria-labelledby="toc-label">
               <div class="toc-header" aria-hidden="false">

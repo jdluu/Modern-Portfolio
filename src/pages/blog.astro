@@ -4,12 +4,12 @@ import BlogSection from "../components/sections/BlogSection.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { PostIndexItem } from "../types/post";
 
-/* Page title (consistent naming across pages) */
+// Page title
 const pageTitle = "Blog";
 
-/* Helpers for transforming Astro content collection entries into
-   the PostIndexItem shape expected by the UI.
-*/
+/**
+ * Transforms Astro content collection entries into the PostIndexItem shape.
+ */
 function normalizeDate(value: unknown): string | null {
   if (!value) return null;
   const d = value instanceof Date ? value : new Date(String(value));
@@ -18,10 +18,7 @@ function normalizeDate(value: unknown): string | null {
 
 type PostEntry = CollectionEntry<"posts">;
 
-/* Fetch all entries for the "posts" collection at build-time.
-   Keep the transformation local to this page to avoid adding new
-   cross-cutting modules while improving clarity and types.
-*/
+// Fetch all entries for the "posts" collection at build-time.
 const entries: PostEntry[] = (await getCollection("posts")) ?? [];
 
 const postIndexItems: PostIndexItem[] = entries

@@ -1,5 +1,4 @@
 ---
-/* Frontmatter: imports, Props, prop destructuring */
 import { Image } from 'astro:assets';
 import type { ProjectCardProps } from '@/src/types/project-card';
 
@@ -15,9 +14,8 @@ const titleId = `project-${baseId}`;
 const ctaExtraId = `${titleId}-cta`;
 ---
 
-<!-- Markup: structure and class names preserved exactly -->
 <section class="project-card background" role="group" aria-labelledby={titleId}>
-	<!-- Default to lazy loading here; above-the-fold promotion will be handled by a small script in the section wrapper -->
+	<!-- Default to lazy loading; above-the-fold promotion handled by the section wrapper -->
 	<Image
 		src={thumbnail}
 		alt={title}
