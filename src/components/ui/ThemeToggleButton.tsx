@@ -50,6 +50,12 @@ const isStartViewTransitionAvailable = (
   startViewTransition: (cb: () => void) => { finished: Promise<void> };
 } => typeof doc?.startViewTransition === "function";
 
+/**
+ * ThemeToggleButton
+ *
+ * Toggles dark/light mode and synchronizes with localStorage and system preferences.
+ * Uses View Transitions API if available.
+ */
 const ThemeToggleButton = () => {
   const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
   let thumbRef: HTMLDivElement | undefined;
@@ -75,7 +81,7 @@ const ThemeToggleButton = () => {
     const next = !isDarkMode();
     const root = document.documentElement;
 
-    // If View Transition API is unavailable, apply immediately.
+    // Use standard transition if View Transitions API is unsupported
     if (!isStartViewTransitionAvailable(anyDoc)) {
       setDarkMode(next);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
@@ -104,7 +110,7 @@ const ThemeToggleButton = () => {
       root.setAttribute("data-theme", next ? "dark" : "light");
     });
 
-    // Cleanup after VT completes: remove inline transform and driving flag.
+    // Cleanup after VT completes
     vt.finished.finally(() => {
       const cleanup = () => {
         thumbRef?.removeEventListener("transitionend", cleanup);

@@ -9,17 +9,15 @@ import {
 import type { PostIndexItem } from "../../types/post";
 
 /**
- * PostsList (Solid.js) — interactive island
+ * PostsList
  *
- * Client-side behavior (in-memory only):
- * - Holds the full list of posts in memory (props.initialItems)
- * - Sorting (newest-first / oldest-first)
- * - Filter by tag
- * - Pagination with page size selector (5,10,20) and Prev/Next controls
- * - Drafts are always excluded (no toggle)
+ * Client-side island that provides filtering, sorting, and pagination for blog posts.
  *
- * Important: This component performs NO network requests. All operations are
- * pure array transforms on the initialItems passed from the server.
+ * @remarks
+ * This component handles UI logic in-memory. The actual post components are
+ * server-rendered and their visibility is toggled by this component.
+ *
+ * @param props.initialItems - Statically rendered items passed from Astro.
  */
 type Props = {
   initialItems: PostIndexItem[];
@@ -30,17 +28,18 @@ export default function PostsList(props: Props) {
 
   // UI state
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
-  // support multiple selected tags
   const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
-  const [pageSize, setPageSize] = createSignal<number>(5); // default view shows 5 posts
+  const [pageSize, setPageSize] = createSignal<number>(5);
   const [page, setPage] = createSignal<number>(1);
 
-  // Tag panel UI helpers (searchable, toggleable panel for many tags)
+  // Tag panel UI helpers
   const [showTagPanel, setShowTagPanel] = createSignal<boolean>(false);
   const [tagFilterTerm, setTagFilterTerm] = createSignal<string>("");
   let tagPanelRef: HTMLElement | undefined;
 
-  // Derived unique tags from all posts (for filter UI)
+  /**
+   * Derive unique tags from all posts.
+   */
   const tags = createMemo(() => {
     const s = new Set<string>();
     for (const p of all) {
@@ -59,7 +58,7 @@ export default function PostsList(props: Props) {
     return tags().filter((t) => t.toLowerCase().includes(term));
   });
 
-  // Tag counts used to show counts next to each tag (computed from all posts)
+  // Tag counts
   const tagCounts = createMemo(() => {
     const counts = new Map<string, number>();
     for (const p of all) {
@@ -86,12 +85,13 @@ export default function PostsList(props: Props) {
     onCleanup(() => document.removeEventListener("click", handler));
   });
 
-  // Filter + Sort (pure, in-memory)
+  // Filter + Sort (in-memory)
   const filteredAndSorted = createMemo(() => {
     let items = all.slice();
-    // always exclude drafts (server and UI)
+    // Exclude drafts
     items = items.filter((i) => !i.draft);
-    // tag filter (support multiple tags — include item if it matches any selected tag)
+    
+    // Tag filter
     const sel = selectedTags();
     if (sel.length > 0) {
       const s = new Set(sel);
@@ -99,7 +99,8 @@ export default function PostsList(props: Props) {
         (i) => Array.isArray(i.tags) && i.tags.some((t) => s.has(t)),
       );
     }
-    // sort by date (newest/oldest)
+    
+    // Sort
     items.sort((a, b) => {
       const ta = a?.date ? Date.parse(a.date as string) : 0;
       const tb = b?.date ? Date.parse(b.date as string) : 0;
@@ -113,7 +114,6 @@ export default function PostsList(props: Props) {
     Math.max(1, Math.ceil(totalItems() / pageSize())),
   );
 
-  // Current page items
   const pageItems = createMemo(() => {
     const pg = Math.max(1, Math.min(page(), totalPages()));
     const size = pageSize();
@@ -142,7 +142,10 @@ export default function PostsList(props: Props) {
     setPage(Math.min(totalPages(), page() + 1));
   }
 
-  // When pageItems (server list window) changes, toggle visibility of server-rendered .post-item nodes.
+  /**
+   * Sync visual state with server-rendered DOM.
+   * Toggles visibility of .post-item nodes based on current page items.
+   */
   createEffect(() => {
     if (typeof document === "undefined") return;
     const visibleSlugs = new Set(
@@ -165,21 +168,21 @@ export default function PostsList(props: Props) {
     });
   });
 
-  // Render pagination controls into the server-rendered placeholder below the posts.
-  // This keeps the server list as the canonical DOM for SEO while the island controls
-  // pagination/filters via toggling and by mounting controls into the placeholder.
+  /**
+   * Render pagination controls into the server-rendered placeholder.
+   */
   createEffect(() => {
     if (typeof document === "undefined") return;
     const placeholder = document.querySelector<HTMLElement>(
       ".posts-pagination-placeholder",
     );
     if (!placeholder) return;
-    // Build controls HTML (use theme-aware CSS classes instead of inline colours)
+    
     const prevDisabled = page() <= 1;
     const nextDisabled = page() >= totalPages();
     placeholder.innerHTML = "";
+    
     const container = document.createElement("div");
-    // assign both a generic pagination-controls class and a posts-specific wrapper
     container.className = "pagination-controls posts-pagination-controls";
     container.style.display = "flex";
     container.style.gap = "1rem";

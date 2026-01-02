@@ -39,6 +39,13 @@ function sortProjectCardsByDateDesc(items: ProjectCard[]): ProjectCard[] {
   });
 }
 
+/**
+ * ProjectCardList
+ *
+ * Client-side island for project filtering, sorting, and pagination.
+ *
+ * @param props.initialItems - Statically rendered items passed from Astro.
+ */
 type Props = {
   initialItems: ProjectCard[];
 };
@@ -61,7 +68,8 @@ export default function ProjectCardList(props: Props) {
   let langDropdownRef: HTMLDivElement | undefined;
   let domDropdownRef: HTMLDivElement | undefined;
 
-  // Utility to toggle an item in a string-array (returns new array)
+  // Utility to toggle an item in a string-array
+
   function toggleFilterArray(arr: string[], value: string) {
     const s = new Set(arr);
     if (s.has(value)) s.delete(value);
@@ -83,7 +91,10 @@ export default function ProjectCardList(props: Props) {
     onCleanup(() => document.removeEventListener("click", onDocClick));
   });
 
-  // Derive available years (and "Present") from date fields
+  /**
+   * Derive unique years from date fields.
+   * Includes "Present" if sentinel date is found.
+   */
   const years = createMemo(() => {
     const out = new Set<string>();
     (props.initialItems ?? []).forEach((it) => {
@@ -117,9 +128,7 @@ export default function ProjectCardList(props: Props) {
 
   /**
    * Languages with dynamic counts.
-   * - Counts are computed dynamically based on current Year and Domain filters,
-   *   but EXCLUDING the current language selections (per requirement).
-   * - Returns array of { name, count } sorted by count desc then name.
+   * Counts computed based on other filters (Year + Domain), excluding self.
    */
   const languageCounts = createMemo(() => {
     try {
@@ -192,9 +201,7 @@ export default function ProjectCardList(props: Props) {
 
   /**
    * Domains with dynamic counts.
-   * - Counts are computed dynamically based on current Year and Language filters,
-   *   but EXCLUDING the current domain selections (per requirement).
-   * - Returns array of { name, count } sorted by count desc then name.
+   * Counts computed based on other filters (Year + Language), excluding self.
    */
   const domainCounts = createMemo(() => {
     try {
@@ -264,7 +271,8 @@ export default function ProjectCardList(props: Props) {
     }
   });
 
-  // Visible lists filtered by search term (preserve counts from languageCounts/domainCounts)
+  // Filtered lists for dropdowns
+
   const visibleLanguageCounts = createMemo(() => {
     const term = langSearchTerm().trim().toLowerCase();
     const all = languageCounts();
@@ -281,7 +289,6 @@ export default function ProjectCardList(props: Props) {
 
   // Reset pagination when filters change
   createEffect(() => {
-    // When any of these signals change, reset to page 1
     yearFilter();
     sortOption();
     languageFilters();
@@ -289,7 +296,8 @@ export default function ProjectCardList(props: Props) {
     setPage(1);
   });
 
-  // Core processing pipeline: filter -> sort -> paginate
+  // Filter -> Sort -> Paginate
+
   const processedAll = createMemo(() => {
     let items = props.initialItems ?? [];
     // Year filter
@@ -359,7 +367,10 @@ export default function ProjectCardList(props: Props) {
     return all.slice(start, start + size);
   });
 
-  // Toggle visibility of the server-rendered cards.
+  /**
+   * Sync visual state with server-rendered DOM.
+   * Toggles visibility of .project-item nodes based on current page items.
+   */
   createEffect(() => {
     if (typeof document === "undefined") return;
 
@@ -402,7 +413,8 @@ export default function ProjectCardList(props: Props) {
   const canPrev = createMemo(() => page() > 1);
   const canNext = createMemo(() => page() < totalPages());
 
-  // Move pagination controls into the portal rendered in the parent server template
+  // Portal pagination controls to the parent container
+
   createEffect(() => {
     if (typeof document === "undefined") return;
     // Wait until the paginationRef is available
@@ -432,7 +444,7 @@ export default function ProjectCardList(props: Props) {
     setter(selected);
   }
 
-  // Provide a compact, screen-reader-friendly summary of current filters.
+  // Provide a compact summary of current filters.
   const filtersSummary = createMemo(() => {
     const parts: string[] = [];
     const yf = yearFilter();

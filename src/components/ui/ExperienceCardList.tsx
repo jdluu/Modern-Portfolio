@@ -36,15 +36,16 @@ function sortExperienceCardsByDateDesc(
 }
 
 /**
- * ExperienceCardList (Solid.js)
+ * ExperienceCardList
  *
- * Features added/required:
- * - Sorting (default: newest first). Options: Newest first, Oldest first, Company A–Z
- * - Filtering: search, company, year (based on startDate/endDate/date; "Present" supported)
- * - Pagination: page size selector + prev/next controls
+ * Client-side island that handles filtering, sorting, and pagination for experience items.
  *
- * Props:
- * - initialItems: ExperienceCard[] (rendered statically by Astro and passed into the hydrated component)
+ * Features:
+ * - Sorting: Newest, Oldest
+ * - Filtering: Year (including "Present")
+ * - Pagination: Adjustable page size
+ *
+ * @param props.initialItems - Statically rendered items passed from Astro.
  */
 type Props = {
   initialItems: ExperienceCard[];
@@ -59,7 +60,10 @@ export default function ExperienceCardList(props: Props) {
   const [pageSize, setPageSize] = createSignal(6);
   let paginationRef: HTMLDivElement | undefined;
 
-  // Derive available years (and "Present") from date fields
+  /**
+   * Derive unique years from date fields.
+   * Includes "Present" if sentinel date is found.
+   */
   const years = createMemo(() => {
     const out = new Set<string>();
     (props.initialItems ?? []).forEach((it) => {
@@ -93,13 +97,12 @@ export default function ExperienceCardList(props: Props) {
 
   // Reset pagination when filters change
   createEffect(() => {
-    // When any of these signals change, reset to page 1
     yearFilter();
     sortOption();
     setPage(1);
   });
 
-  // Core processing pipeline: filter -> sort -> paginate
+  // Filter -> Sort -> Paginate
   const processedAll = createMemo(() => {
     let items = props.initialItems ?? [];
     // Year filter
@@ -147,12 +150,13 @@ export default function ExperienceCardList(props: Props) {
     return all.slice(start, start + size);
   });
 
-  // Toggle visibility of the server-rendered cards.
-  // The server renders a sibling .experience-grid with children:
-  // <div class="experience-item" data-slug="..."><ExperienceCard .../></div>
-  // This effect hides/shows those nodes based on the currently paginated items
-  // and reorders visible nodes to match the client-side pagination order so
-  // the grid displays cards left-to-right/top-to-bottom in the expected sequence.
+  /**
+   * Sync visual state with server-rendered DOM.
+   *
+   * The actual card markup is rendered by Astro (SSR).
+   * This effect toggles visibility (`display: none`) and reorders DOM nodes
+   * to match the current client-side filter/sort state.
+   */
   createEffect(() => {
     if (typeof document === "undefined") return;
 
@@ -167,7 +171,7 @@ export default function ExperienceCardList(props: Props) {
       ),
     );
 
-    // First, toggle visibility for accessibility and layout
+    // Toggle visibility
     nodes.forEach((node) => {
       const slug = normalizeSlug(node.dataset.slug);
       const shouldShow = visibleSlugs.includes(slug);
@@ -175,42 +179,33 @@ export default function ExperienceCardList(props: Props) {
       node.setAttribute("aria-hidden", shouldShow ? "false" : "true");
     });
 
-    // Then, reorder the DOM so visible nodes appear in the same order as paginated()
+    // Reorder DOM to match pagination
     const grid = document.querySelector<HTMLElement>(".experience-grid");
     if (grid) {
       visibleSlugs.forEach((slug) => {
-        // Use a attribute selector that matches the data-slug value exactly
         const selector = `.experience-item[data-slug="${slug}"]`;
         const node = grid.querySelector<HTMLElement>(selector);
         if (node) {
-          // appendChild moves the node to the end in sequence — doing this in order
-          // results in the desired left-to-right/top-to-bottom visual order.
           grid.appendChild(node);
         }
       });
     }
-
-    // IntersectionObserver + MutationObserver in the section handle image promotion;
-    // no manual event dispatch is required here.
   });
 
   // Helpers for pagination controls
   const canPrev = createMemo(() => page() > 1);
   const canNext = createMemo(() => page() < totalPages());
 
-  // Move pagination controls into the portal rendered in the parent server template
+  // Portal pagination controls to the parent container
   createEffect(() => {
     if (typeof document === "undefined") return;
-    // Wait until the paginationRef is available
     const node = paginationRef;
     const portal = document.getElementById("experience-pagination-portal");
     if (!node || !portal) return;
-    // Append the pagination controls to the portal so they appear under the server-rendered grid
     if (portal !== node.parentElement) {
       portal.appendChild(node);
     }
     onCleanup(() => {
-      // Remove node from DOM when component unmounts (keep portal clean)
       try {
         node.remove();
       } catch (e) {
@@ -297,8 +292,7 @@ export default function ExperienceCardList(props: Props) {
         Page {page()} of {totalPages()}
       </div>
 
-      {/* Server-rendered grid of ExperienceCard entries lives in the parent (ExperienceSection).
-          This client island controls visibility only (via data-slug on each .experience-item). */}
+      {/* Server-rendered grid lives in parent. Island controls visibility via data-slug. */}
 
       {/* Pagination Controls */}
       <div ref={(el) => (paginationRef = el!)} class="pagination-controls">
