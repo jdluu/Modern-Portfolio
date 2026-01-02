@@ -43,10 +43,12 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { config } from "dotenv";
-
 // Load .env file
-config();
+try {
+  process.loadEnvFile();
+} catch (e) {
+  // .env file might not exist, which is fine if env vars are set otherwise
+}
 
 const require = createRequire(import.meta.url);
 const tinify = require("tinify");
