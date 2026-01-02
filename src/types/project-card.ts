@@ -1,13 +1,10 @@
 /**
  * Project card types — flattened.
  *
- * ProjectCard is the top-level listing/document shape returned by loaders
- * (after flattening) and used directly by templates. ProjectCardProps is
- * intentionally preserved as a narrow UI prop shape for the ProjectCard component.
+ * ProjectCard is the top-level shape used by templates.
  *
- * Thumbnail is modeled as a flexible union to match Cosmic/Tina payloads:
- * string | { url?: string | null } — consumers should use the project's image
- * resolver (resolveAssetUrl/pickImageString) to obtain a canonical URL.
+ * Thumbnail is a flexible union to match CMS payloads:
+ * string | { url?: string | null }
  */
 export interface ProjectCardProps {
   title: string;

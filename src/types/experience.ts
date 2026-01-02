@@ -1,7 +1,6 @@
 /**
  * Full Experience document shape used on detail pages.
- * Mirrors the Tina schema for the `experience` collection but keeps fields optional
- * to remain resilient to schema changes.
+ * Mirrors the schema for the `experience` collection.
  */
 export interface Experience {
   title: string;

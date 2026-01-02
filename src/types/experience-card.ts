@@ -1,9 +1,6 @@
 /**
- * Experience card (listing) type — flattened.
- * Previously this was wrapped as { title, slug, metadata: { ... } }.
- * Now the top-level object exposes the metadata fields directly for easier consumption.
- *
- * Mirrors the Tina collection "experiencecard" (tina/config.ts).
+ * Experience card type (flattened).
+ * Mirrors the "experiencecard" collection.
  */
 export interface ExperienceCard {
   title: string;

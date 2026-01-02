@@ -1,5 +1,6 @@
-// Misc helpers used across the site for safe frontmatter handling and asset resolution.
-// Designed to be small, defensive, and self-documenting.
+/**
+ * Misc helpers used across the site for safe frontmatter handling and asset resolution.
+ */
 
 type ImageLike = {
   src?: string;
@@ -30,16 +31,29 @@ function getImagePathOrNull(value: unknown): string | null {
   return null;
 }
 
-// Backwards-compatible exports kept with original names.
+/**
+ * Resolves an asset URL from a string or image-like object.
+ * Kept for backwards compatibility.
+ * @param v - The value to resolve (string or object).
+ */
 export function resolveAssetUrl(v: any): string | null {
   return getImagePathOrNull(v);
 }
 
+/**
+ * Extracts an image path from a field.
+ * Kept for backwards compatibility.
+ * @param field - The field to extract from.
+ */
 export function pickImageString(field: any): string | null {
   return getImagePathOrNull(field);
 }
 
-// Sanitize values for UI consumption: strings, arrays -> comma list, others -> trimmed string
+/**
+ * Sanitizes values for UI display.
+ * @param v - The value to sanitize.
+ * @returns A trimmed string, combined array string, or empty string on failure.
+ */
 export function sanitizeStringForUI(v: any): string {
   if (v == null) return "";
   if (typeof v === "string") return v.trim();
@@ -52,8 +66,9 @@ export function sanitizeStringForUI(v: any): string {
 }
 
 /**
- * parseSafeDate
- * - Accepts string, number, or Date and returns a Date object or null on failure.
+ * Parses a date input into a Date object.
+ * @param input - The input to parse (string, number, or Date).
+ * @returns A valid Date object or null if parsing fails.
  */
 export function parseSafeDate(input: any): Date | null {
   if (input === null || input === undefined) return null;
@@ -73,8 +88,9 @@ export function parseSafeDate(input: any): Date | null {
 }
 
 /**
- * parseDateToTs
- * - Returns numeric timestamp (ms) or NaN
+ * Parses a date input into a timestamp.
+ * @param input - The input to parse.
+ * @returns The timestamp in milliseconds or NaN.
  */
 export function parseDateToTs(input: any): number {
   const d = parseSafeDate(input);
@@ -82,9 +98,9 @@ export function parseDateToTs(input: any): number {
 }
 
 /**
- * isSentinelEnd
- * - Some frontmatter uses 9999-12-31 to indicate "Present". This helper
- *   returns true when the year is >= 9999.
+ * Checks if a date represents a sentinel end date (e.g., "Present").
+ * @param input - The date input to check.
+ * @returns True if the year is >= 9999.
  */
 export function isSentinelEnd(input: any): boolean {
   const d = parseSafeDate(input);
@@ -93,8 +109,8 @@ export function isSentinelEnd(input: any): boolean {
 }
 
 /**
- * formatMonthYear
- * - Human-friendly "Month YYYY" display (en-US)
+ * Formats a Date object into a "Month YYYY" string.
+ * @param d - The Date object to format.
  */
 export function formatMonthYear(d: Date): string {
   if (!d || !(d instanceof Date) || isNaN(d.getTime())) return "";
@@ -102,7 +118,9 @@ export function formatMonthYear(d: Date): string {
 }
 
 /**
- * Determine which sizes to generate based on filename pattern
+ * Determines which image sizes to generate based on the filename pattern.
+ * @param filename - The image filename.
+ * @returns An array of widths to generate.
  */
 export function getImageSizesByType(filename: string): number[] {
   const basename = filename.toLowerCase();
@@ -118,21 +136,14 @@ export function getImageSizesByType(filename: string): number[] {
     return [800, 1200];
   }
   
-  // Other images: no resizes
   return [];
 }
 
 /**
- * Generate responsive image paths from a base path
- * Converts: "/uploads/projects/brainwave/cover_brainwave.min.png"
- * To: {
- *   base: "/uploads/projects/brainwave/cover_brainwave.min.png",
- *   sizes: {
- *     "400w": "/uploads/projects/brainwave/cover_brainwave.min-400w.png",
- *     "800w": "/uploads/projects/brainwave/cover_brainwave.min-800w.png",
- *     ...
- *   }
- * }
+ * Generates responsive image paths and sizes from a base path.
+ * @param basePath - The base path of the image.
+ * @param sizes - Optional explicit sizes to generate.
+ * @returns An object containing the base path and a map of sizes to paths, or null if invalid.
  */
 export function getResponsiveImagePaths(
   basePath: string | null,
@@ -161,9 +172,10 @@ export function getResponsiveImagePaths(
 }
 
 /**
- * Generate srcset string for responsive images
- * Returns: "path-400w.png 400w, path-800w.png 800w, ..."
- * Note: GIF files are skipped as they typically don't have responsive variants
+ * Generates a srcset string for responsive images.
+ * @param basePath - The base path of the image.
+ * @param sizes - Optional explicit sizes.
+ * @returns A srcset string or empty string.
  */
 export function generateSrcSet(basePath: string | null, sizes: number[] | null = null): string {
   if (!basePath) return '';

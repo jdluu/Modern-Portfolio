@@ -1,12 +1,12 @@
-// Type definitions for project pages.
-// Mirrors the frontmatter shape used by src/content/projects/*.md
-// Exported for reuse across the codebase.
+/**
+ * Type definitions for project pages.
+ * Mirrors the frontmatter shape used by src/content/projects/*.md
+ */
 
 /**
  * Project
- * - Flattened top-level shape for project pages (previously 'metadata').
- * - Includes nested sub-objects where the templates expect them (home, logistics, work, process, prototype, final, reflection, source).
- * - Fields are optional to remain resilient to CMS/frontmatter variations.
+ * - Flattened top-level shape for project pages.
+ * - Fields are optional to remain resilient to CMS variations.
  */
 export interface Project {
   id?: string;
@@ -16,13 +16,11 @@ export interface Project {
   date?: string | null;
   summary?: string | null;
 
-  // Home/hero section
   home?: {
     image?: { imgix_url?: string; url?: string } | null;
     imagealt?: string | null;
   } | null;
 
-  // Logistics / timeline / tech summary
   logistics?: {
     date?: string | null;
     techtitle?: string | null;
@@ -30,40 +28,34 @@ export interface Project {
     tools?: string | null;
   } | null;
 
-  // Work / responsibilities
   work?: {
     role?: string | null;
     responsibilities?: { duties?: string | null }[] | null;
     achievements?: { points?: string | null }[] | null;
   } | null;
 
-  // Background / solution
   background?: { description?: string | null } | string | null;
   solution?:
     | { title?: string | null; description?: string | null }
     | string
     | null;
 
-  // Process (may include title and a plan array)
   process?: {
     title?: string | null;
     plan?: { steps?: string | null }[] | null;
   } | null;
 
-  // Prototype / images used in process
   prototype?: {
     image?: { imgix_url?: string; url?: string } | null;
     imagealt?: string | null;
   } | null;
 
-  // Final product
   final?: {
     description?: string | null;
     image?: { imgix_url?: string; url?: string } | null;
     imagealt?: string | null;
   } | null;
 
-  // Reflection / points
   reflection?:
     | {
         points?: { point?: string | null }[] | null;
@@ -71,7 +63,6 @@ export interface Project {
     | string[]
     | null;
 
-  // Source / external links used by the page
   source?: {
     link?: string | null;
     title?: string | null;
