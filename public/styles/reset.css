@@ -24,7 +24,7 @@ html {
 /* Core Body Defaults */
 body {
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased; /* Smooth text */
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;  /* Better parity with macOS Safari */
   text-rendering: optimizeLegibility;
 }
