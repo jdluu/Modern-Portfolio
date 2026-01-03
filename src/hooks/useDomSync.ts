@@ -34,7 +34,6 @@ export function useDomSync(options: UseDomSyncOptions) {
     const slugs = visibleSlugs().map(normalizeSlug);
     
     // Attempt to find container with retries to handle hydration race conditions
-    // Attempt to find container with retries to handle hydration race conditions
     const attemptSync = (retries = 0) => {
       const container = document.querySelector<HTMLElement>(containerSelector);
       
