@@ -7,6 +7,12 @@ export function normalizeSlug(value: unknown): string {
   return String(value ?? "").replace(/\.(md|mdx)$/i, "");
 }
 
+export interface DateSortable {
+  startDate?: string | null;
+  endDate?: string | null;
+  date?: string | null;
+}
+
 /**
  * Comparison helper for sorting items by date (descending/ascending).
  * Handles "Present" (infinity) and undefined dates.
