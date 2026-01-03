@@ -10,31 +10,10 @@ export function normalizeSlug(value: unknown): string {
 /**
  * Comparison helper for sorting items by date (descending/ascending).
  * Handles "Present" (infinity) and undefined dates.
+ * 
+ * @param direction "asc" | "desc"
+ * @param mode "start-first" (Project) | "end-first" (Experience)
  */
-export interface DateSortable {
-  startDate?: string | null;
-  endDate?: string | null;
-  date?: string | null;
-}
-
-export function getComparableTsFromItem(item: DateSortable): number {
-  // Prioritize startDate for strict timeline sorting if available (like in Projects)
-  // or fall through logic depending on usage. 
-  // Refactored to cover both Experience (Prioritizes End) and Project (Prioritizes Start) logic if possible,
-  // or just stick to a consistent standard.
-  // The existing Experience logic: End > Start > 0.
-  // The existing Project logic: Start > End > 0.
-  
-  // Let's verify usage. Experience wants to show "Current" things first (End date).
-  // Projects want to show "Newest created" (Start date) usually?
-  // Actually, ExperienceCardList.tsx uses EndDate primarily (sentinel check).
-  // ProjectCardList.tsx uses StartDate primarily.
-  
-  // To keep it simple, we might need two getters or a config.
-  // For now, let's export the generic Date parser and specific comparators.
-  return 0; // Placeholder, better to implement specific sorters below.
-}
-
 export function dateSortComparator(
   a: DateSortable, 
   b: DateSortable, 
@@ -48,14 +27,14 @@ export function dateSortComparator(
         if (!Number.isNaN(startTs)) return startTs;
     }
     
-    // Fallback to End Date (or primary for end-first)
+    // Primary: End Date (or fallback for projects)
     const endStr = item.endDate ?? item.date ?? "";
-    if (isSentinelEnd(endStr)) return Infinity; // "Present"
+    if (isSentinelEnd(endStr)) return Infinity;
     const endTs = parseDateToTs(endStr);
     if (!Number.isNaN(endTs)) return endTs;
     
     if (mode === "end-first") {
-        // Fallback to start if end is missing
+        // Fallback: Start Date
         const sStr = item.startDate ?? "";
         const sTs = parseDateToTs(sStr);
         if (!Number.isNaN(sTs)) return sTs;
