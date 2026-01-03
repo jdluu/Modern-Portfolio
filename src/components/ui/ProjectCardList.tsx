@@ -6,45 +6,29 @@ import {
   onCleanup,
 } from "solid-js";
 import type { ProjectCard } from "../../types/project-card";
-import { parseDateToTs, isSentinelEnd } from "../../lib/utils";
+import { usePagination } from "../../hooks/usePagination";
+import { useDomSync } from "../../hooks/useDomSync";
+import {
+  normalizeSlug,
+  getYearsFromItems,
+  dateSortComparator,
+  type DateSortable
+} from "../../lib/sort-utils";
+import PaginationControls from "./PaginationControls";
+import { isSentinelEnd, parseDateToTs } from "../../lib/utils";
 
-function normalizeSlug(value: unknown): string {
-  return String(value ?? "").replace(/\.(md|mdx)$/i, "");
-}
-
-function getComparableTsFromItem(item: ProjectCard): number {
-  // Prioritize startDate for sorting
-  const startStr = (item as any)?.startDate ?? "";
-  const startTs = parseDateToTs(startStr);
-  if (!Number.isNaN(startTs)) return startTs;
-
-  // Fallback to endDate or a generic date field if startDate is not available
-  const endStr = (item as any)?.endDate ?? (item as any)?.date ?? "";
-  if (isSentinelEnd(endStr)) return Infinity;
-  const endTs = parseDateToTs(endStr);
-  if (!Number.isNaN(endTs)) return endTs;
-
-  // Return 0 if no valid date is found
-  return 0;
-}
-
-function sortProjectCardsByDateDesc(items: ProjectCard[]): ProjectCard[] {
-  return [...items].sort((a, b) => {
-    const ta = getComparableTsFromItem(a);
-    const tb = getComparableTsFromItem(b);
-    if (ta === tb) return 0;
-    if (tb === Infinity && ta !== Infinity) return 1;
-    if (ta === Infinity && tb !== Infinity) return -1;
-    return tb - ta;
-  });
+// Utility to toggle an item in a string-array
+function toggleFilterArray(arr: string[], value: string) {
+  const s = new Set(arr);
+  if (s.has(value)) s.delete(value);
+  else s.add(value);
+  return Array.from(s);
 }
 
 /**
  * ProjectCardList
  *
  * Client-side island for project filtering, sorting, and pagination.
- *
- * @param props.initialItems - Statically rendered items passed from Astro.
  */
 type Props = {
   initialItems: ProjectCard[];
@@ -52,30 +36,17 @@ type Props = {
 
 export default function ProjectCardList(props: Props) {
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
-  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">(
-    "date-desc",
-  );
-  const [page, setPage] = createSignal(1);
-  // Default page size for projects: 6 items per page
-  const [pageSize, setPageSize] = createSignal(6);
+  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">("date-desc");
+  
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
   const [langDropdownOpen, setLangDropdownOpen] = createSignal(false);
   const [domDropdownOpen, setDomDropdownOpen] = createSignal(false);
   const [langSearchTerm, setLangSearchTerm] = createSignal("");
   const [domSearchTerm, setDomSearchTerm] = createSignal("");
-  let paginationRef: HTMLDivElement | undefined;
+  
   let langDropdownRef: HTMLDivElement | undefined;
   let domDropdownRef: HTMLDivElement | undefined;
-
-  // Utility to toggle an item in a string-array
-
-  function toggleFilterArray(arr: string[], value: string) {
-    const s = new Set(arr);
-    if (s.has(value)) s.delete(value);
-    else s.add(value);
-    return Array.from(s);
-  }
 
   // Close dropdowns when clicking outside
   createEffect(() => {
@@ -91,77 +62,46 @@ export default function ProjectCardList(props: Props) {
     onCleanup(() => document.removeEventListener("click", onDocClick));
   });
 
-  /**
-   * Derive unique years from date fields.
-   * Includes "Present" if sentinel date is found.
-   */
-  const years = createMemo(() => {
-    const out = new Set<string>();
-    (props.initialItems ?? []).forEach((it) => {
-      const candidates = [
-        (it as any)?.startDate ?? "",
-        (it as any)?.endDate ?? "",
-        (it as any)?.date ?? "",
-      ];
-      candidates.forEach((v) => {
-        if (!v) return;
-        if (isSentinelEnd(v)) {
-          out.add("Present");
-          return;
+  // Derive unique years
+  const years = createMemo(() => getYearsFromItems(props.initialItems as DateSortable[]));
+
+  // Shared filter helper
+  const filterByYear = (items: ProjectCard[], yf: string) => {
+    if (!yf) return items;
+    return items.filter((it) => {
+        const cand = [
+           (it as any)?.startDate,
+           (it as any)?.endDate,
+           (it as any)?.date,
+        ];
+        for (const v of cand) {
+             if (!v) continue;
+             if (isSentinelEnd(v)) {
+                 if (yf === "Present") return true;
+                 continue;
+             }
+             const ts = parseDateToTs(v);
+             if (!Number.isNaN(ts)) {
+                 if (String(new Date(ts).getFullYear()) === yf) return true;
+             }
         }
-        const ts = parseDateToTs(v);
-        if (!Number.isNaN(ts)) {
-          const y = new Date(ts).getFullYear();
-          out.add(String(y));
-        }
-      });
+        return false;
     });
-    // Sort years descending (Present at top)
-    const arr = Array.from(out.values());
-    arr.sort((a, b) => {
-      if (a === "Present") return -1;
-      if (b === "Present") return 1;
-      return Number(b) - Number(a);
-    });
-    return arr;
-  });
+  };
 
   /**
    * Languages with dynamic counts.
-   * Counts computed based on other filters (Year + Domain), excluding self.
    */
   const languageCounts = createMemo(() => {
     try {
       const yf = yearFilter();
       const currentDomainFilters = domainFilters() ?? [];
 
-      // Start from all initial items and apply Year + Domain filters (but NOT languageFilters)
-      let items = props.initialItems ?? [];
+      // Base: Year + Domain (excluding Lang)
+      let items = filterByYear(props.initialItems, yf);
 
-      // Year filtering (same logic as processedAll)
-      if (yf) {
-        items = items.filter((it) => {
-          const cand = [
-            (it as any)?.startDate ?? "",
-            (it as any)?.endDate ?? "",
-            (it as any)?.date ?? "",
-          ];
-          const yearsFound = new Set<string>();
-          for (const v of cand) {
-            if (!v) continue;
-            if (isSentinelEnd(v)) yearsFound.add("Present");
-            else {
-              const ts = parseDateToTs(v);
-              if (!Number.isNaN(ts))
-                yearsFound.add(String(new Date(ts).getFullYear()));
-            }
-          }
-          return yearsFound.has(yf);
-        });
-      }
-
-      // Domain filters (apply current domain filters)
-      if (currentDomainFilters && currentDomainFilters.length > 0) {
+      // Domain filters
+      if (currentDomainFilters.length > 0) {
         items = items.filter((it) => {
           const itemDomains = Array.isArray((it as any)?.domains)
             ? (it as any).domains.map((x: any) => String(x))
@@ -193,7 +133,6 @@ export default function ProjectCardList(props: Props) {
       });
       return arr;
     } catch (e) {
-      // Defensive fallback for SSR/runtime errors
       console.error("languageCounts error:", e);
       return [];
     }
@@ -201,40 +140,17 @@ export default function ProjectCardList(props: Props) {
 
   /**
    * Domains with dynamic counts.
-   * Counts computed based on other filters (Year + Language), excluding self.
    */
   const domainCounts = createMemo(() => {
     try {
       const yf = yearFilter();
       const currentLanguageFilters = languageFilters() ?? [];
 
-      // Start from all initial items and apply Year + Language filters (but NOT domainFilters)
-      let items = props.initialItems ?? [];
+      // Base: Year + Lang (excluding Domain)
+      let items = filterByYear(props.initialItems, yf);
 
-      // Year filtering
-      if (yf) {
-        items = items.filter((it) => {
-          const cand = [
-            (it as any)?.startDate ?? "",
-            (it as any)?.endDate ?? "",
-            (it as any)?.date ?? "",
-          ];
-          const yearsFound = new Set<string>();
-          for (const v of cand) {
-            if (!v) continue;
-            if (isSentinelEnd(v)) yearsFound.add("Present");
-            else {
-              const ts = parseDateToTs(v);
-              if (!Number.isNaN(ts))
-                yearsFound.add(String(new Date(ts).getFullYear()));
-            }
-          }
-          return yearsFound.has(yf);
-        });
-      }
-
-      // Language filters (apply current language filters)
-      if (currentLanguageFilters && currentLanguageFilters.length > 0) {
+      // Language filters
+      if (currentLanguageFilters.length > 0) {
         items = items.filter((it) => {
           const itemLangs = Array.isArray((it as any)?.programming_languages)
             ? (it as any).programming_languages.map((x: any) => String(x))
@@ -272,7 +188,6 @@ export default function ProjectCardList(props: Props) {
   });
 
   // Filtered lists for dropdowns
-
   const visibleLanguageCounts = createMemo(() => {
     const term = langSearchTerm().trim().toLowerCase();
     const all = languageCounts();
@@ -287,45 +202,12 @@ export default function ProjectCardList(props: Props) {
     return all.filter((d) => d.name.toLowerCase().includes(term));
   });
 
-  // Reset pagination when filters change
-  createEffect(() => {
-    yearFilter();
-    sortOption();
-    languageFilters();
-    domainFilters();
-    setPage(1);
-  });
+  // Ensure pagination resets when filters change
+  const processedItems = createMemo(() => {
+    let items = filterByYear(props.initialItems, yearFilter());
 
-  // Filter -> Sort -> Paginate
-
-  const processedAll = createMemo(() => {
-    let items = props.initialItems ?? [];
-    // Year filter
-    const yf = yearFilter();
-    if (yf) {
-      items = items.filter((it) => {
-        const cand = [
-          (it as any)?.startDate ?? "",
-          (it as any)?.endDate ?? "",
-          (it as any)?.date ?? "",
-        ];
-        const yearsFound = new Set<string>();
-        for (const v of cand) {
-          if (!v) continue;
-          if (isSentinelEnd(v)) yearsFound.add("Present");
-          else {
-            const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts))
-              yearsFound.add(String(new Date(ts).getFullYear()));
-          }
-        }
-        return yearsFound.has(yf);
-      });
-    }
-
-    // Language filters (OR logic within group)
     const langFilters = languageFilters();
-    if (langFilters && langFilters.length > 0) {
+    if (langFilters.length > 0) {
       items = items.filter((it) => {
         const itemLangs = Array.isArray((it as any)?.programming_languages)
           ? (it as any).programming_languages.map((x: any) => String(x))
@@ -334,115 +216,48 @@ export default function ProjectCardList(props: Props) {
       });
     }
 
-    // Domain filters (OR logic within group)
     const domFilters = domainFilters();
-    if (domFilters && domFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemDomains = Array.isArray((it as any)?.domains)
-          ? (it as any).domains.map((x: any) => String(x))
-          : [];
-        return domFilters.some((f) => itemDomains.includes(f));
-      });
+    if (domFilters.length > 0) {
+        items = items.filter((it) => {
+          const itemDomains = Array.isArray((it as any)?.domains)
+            ? (it as any).domains.map((x: any) => String(x))
+            : [];
+          return domFilters.some((f) => itemDomains.includes(f));
+        });
     }
 
-    // Sorting
-    if (sortOption() === "date-desc") {
-      items = sortProjectCardsByDateDesc(items);
-    } else if (sortOption() === "date-asc") {
-      items = sortProjectCardsByDateDesc(items).reverse();
-    }
-
-    return items;
+    const dir = sortOption() === "date-desc" ? "desc" : "asc";
+    return items.slice().sort((a, b) => {
+        return dateSortComparator(
+          a as DateSortable, 
+          b as DateSortable, 
+          dir, 
+          "start-first"
+        );
+    });
   });
 
-  const totalCount = createMemo(() => processedAll().length);
-  const totalPages = createMemo(() =>
-    Math.max(1, Math.ceil(totalCount() / pageSize())),
+  const pagination = usePagination(processedItems, { defaultPageSize: 6 });
+
+  const visibleSlugsChecker = createMemo(() => 
+    pagination.paginatedItems().map(it => (it as any).slug)
   );
-  const paginated = createMemo(() => {
-    const p = Math.min(Math.max(1, page()), totalPages());
-    const size = pageSize();
-    const all = processedAll();
-    const start = (p - 1) * size;
-    return all.slice(start, start + size);
+
+  useDomSync({
+    visibleSlugs: visibleSlugsChecker,
+    containerSelector: ".project-grid",
+    itemSelector: ".project-item",
+    normalizeSlug: normalizeSlug,
   });
 
-  /**
-   * Sync visual state with server-rendered DOM.
-   * Toggles visibility of .project-item nodes based on current page items.
-   */
+  // Reset pagination when filters change
   createEffect(() => {
-    if (typeof document === "undefined") return;
-
-    // Build ordered list of visible slugs from the paginated items
-    const visibleSlugs = (paginated() ?? []).map((it) =>
-      normalizeSlug((it as any)?.slug),
-    );
-
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(".project-grid > .project-item"),
-    );
-
-    // First, toggle visibility for accessibility and layout
-    nodes.forEach((node) => {
-      const slug = normalizeSlug(node.dataset.slug);
-      const shouldShow = visibleSlugs.includes(slug);
-      node.style.display = shouldShow ? "" : "none";
-      node.setAttribute("aria-hidden", shouldShow ? "false" : "true");
-    });
-
-    // Then, reorder the DOM so visible nodes appear in the same order as paginated()
-    const grid = document.querySelector<HTMLElement>(".project-grid");
-    if (grid) {
-      visibleSlugs.forEach((slug) => {
-        // Use an attribute selector that matches the data-slug value exactly
-        const selector = `.project-item[data-slug="${slug}"]`;
-        const node = grid.querySelector<HTMLElement>(selector);
-        if (node) {
-          // appendChild moves the node to the end in sequence
-          grid.appendChild(node);
-        }
-      });
-    }
-
-    // IntersectionObserver + MutationObserver in the section handle image promotion;
-    // no manual event dispatch is required here.
+    yearFilter();
+    sortOption();
+    languageFilters();
+    domainFilters();
+    pagination.setPage(1);
   });
-
-  // Helpers for pagination controls
-  const canPrev = createMemo(() => page() > 1);
-  const canNext = createMemo(() => page() < totalPages());
-
-  // Portal pagination controls to the parent container
-
-  createEffect(() => {
-    if (typeof document === "undefined") return;
-    // Wait until the paginationRef is available
-    const node = paginationRef;
-    const portal = document.getElementById("project-pagination-portal");
-    if (!node || !portal) return;
-    // Append the pagination controls to the portal so they appear under the server-rendered grid
-    if (portal !== node.parentElement) {
-      portal.appendChild(node);
-    }
-    onCleanup(() => {
-      // Remove node from DOM when component unmounts (keep portal clean)
-      try {
-        node.remove();
-      } catch (e) {
-        /* ignore */
-      }
-    });
-  });
-
-  function onMultiSelectChange(e: Event, setter: (v: string[]) => void) {
-    const target = e.target as HTMLSelectElement;
-    const selected: string[] = [];
-    Array.from(target.selectedOptions).forEach((opt) => {
-      if (opt.value) selected.push(opt.value);
-    });
-    setter(selected);
-  }
 
   // Provide a compact summary of current filters.
   const filtersSummary = createMemo(() => {
@@ -458,8 +273,8 @@ export default function ProjectCardList(props: Props) {
         ? "Sorted: Newest first"
         : "Sorted: Oldest first",
     );
-    parts.push(`Per page: ${pageSize()}`);
-    parts.push(`Page: ${page()} of ${totalPages()}`);
+    parts.push(`Per page: ${pagination.pageSize()}`);
+    parts.push(`Page: ${pagination.page()} of ${pagination.totalPages()}`);
     return parts.join("; ");
   });
 
@@ -475,9 +290,7 @@ export default function ProjectCardList(props: Props) {
         </h3>
 
         <div class="control-pair">
-          <label for="project-year-select" class="control-label">
-            Year
-          </label>
+          <label for="project-year-select" class="control-label">Year</label>
           <select
             id="project-year-select"
             class="control-select"
@@ -494,9 +307,7 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-sort-select" class="control-label">
-            Sort by
-          </label>
+          <label for="project-sort-select" class="control-label">Sort by</label>
           <select
             id="project-sort-select"
             class="control-select"
@@ -511,18 +322,16 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-perpage-select" class="control-label">
-            Per page
-          </label>
+          <label for="project-perpage-select" class="control-label">Per page</label>
           <select
             id="project-perpage-select"
             class="control-select compact"
             aria-label="Items per page"
             aria-describedby="project-filters-summary"
-            value={String(pageSize())}
+            value={String(pagination.pageSize())}
             onChange={(e: any) => {
-              setPageSize(Number(e.target.value) || 6);
-              setPage(1);
+              pagination.setPageSize(Number(e.target.value) || 6);
+              pagination.setPage(1);
             }}
           >
             <option value="6">6</option>
@@ -532,9 +341,7 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-language-button" class="control-label">
-            Languages
-          </label>
+          <label for="project-language-button" class="control-label">Languages</label>
           <div class="dropdown" ref={(el) => (langDropdownRef = el)}>
             <button
               id="project-language-button"
@@ -572,11 +379,10 @@ export default function ProjectCardList(props: Props) {
                     <input
                       type="checkbox"
                       checked={languageFilters().includes(l.name)}
-                      onChange={() =>
-                        setLanguageFilters(
-                          toggleFilterArray(languageFilters(), l.name),
-                        )
-                      }
+                      onChange={() => {
+                        setLanguageFilters((prev) => toggleFilterArray(prev, l.name));
+                        pagination.setPage(1);
+                      }}
                     />
                     <span>
                       {l.name} ({l.count})
@@ -589,9 +395,7 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-domain-button" class="control-label">
-            Domains
-          </label>
+          <label for="project-domain-button" class="control-label">Domains</label>
           <div class="dropdown" ref={(el) => (domDropdownRef = el)}>
             <button
               id="project-domain-button"
@@ -629,11 +433,10 @@ export default function ProjectCardList(props: Props) {
                     <input
                       type="checkbox"
                       checked={domainFilters().includes(d.name)}
-                      onChange={() =>
-                        setDomainFilters(
-                          toggleFilterArray(domainFilters(), d.name),
-                        )
-                      }
+                      onChange={() => {
+                        setDomainFilters((prev) => toggleFilterArray(prev, d.name));
+                        pagination.setPage(1);
+                      }}
                     />
                     <span>
                       {d.name} ({d.count})
@@ -650,10 +453,10 @@ export default function ProjectCardList(props: Props) {
           onClick={() => {
             setYearFilter("");
             setSortOption("date-desc");
-            setPage(1);
+            pagination.setPage(1);
             setLanguageFilters([]);
             setDomainFilters([]);
-            setPageSize(6);
+            pagination.setPageSize(6);
           }}
           aria-label="Reset filters"
         >
@@ -661,7 +464,7 @@ export default function ProjectCardList(props: Props) {
         </button>
       </div>
 
-      {/* Screen-reader-only summary (kept live so ATs announce changes) */}
+      {/* SR Only Summary */}
       <div
         id="project-filters-summary"
         class="sr-only"
@@ -677,37 +480,14 @@ export default function ProjectCardList(props: Props) {
         aria-atomic="true"
         style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"
       >
-        Page {page()} of {totalPages()}
+        Page {pagination.page()} of {pagination.totalPages()}
       </div>
 
-      <div
-        ref={(el) => (paginationRef = el!)}
-        class="pagination-controls"
-        role="navigation"
-        aria-label="Project pagination"
-      >
-        <button
-          class="pagination-button"
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={!canPrev()}
-          aria-disabled={!canPrev()}
-          aria-label={`Previous page, currently on page ${page()}`}
-        >
-          Previous
-        </button>
-        <div class="pagination-info" aria-live="polite">
-          Page {page()} of {totalPages()}
-        </div>
-        <button
-          class="pagination-button"
-          onClick={() => setPage((p) => Math.min(totalPages(), p + 1))}
-          disabled={!canNext()}
-          aria-disabled={!canNext()}
-          aria-label={`Next page, currently on page ${page()}`}
-        >
-          Next
-        </button>
-      </div>
+      {/* Pagination Controls Portal */}
+      <PaginationControls 
+        pagination={pagination} 
+        portalTargetId="project-pagination-portal" 
+      />
     </section>
   );
 }

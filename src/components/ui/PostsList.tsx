@@ -7,17 +7,14 @@ import {
   onCleanup,
 } from "solid-js";
 import type { PostIndexItem } from "../../types/post";
+import { usePagination } from "../../hooks/usePagination";
+import { useDomSync } from "../../hooks/useDomSync";
+import PaginationControls from "./PaginationControls";
 
 /**
  * PostsList
  *
  * Client-side island that provides filtering, sorting, and pagination for blog posts.
- *
- * @remarks
- * This component handles UI logic in-memory. The actual post components are
- * server-rendered and their visibility is toggled by this component.
- *
- * @param props.initialItems - Statically rendered items passed from Astro.
  */
 type Props = {
   initialItems: PostIndexItem[];
@@ -29,17 +26,13 @@ export default function PostsList(props: Props) {
   // UI state
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
   const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
-  const [pageSize, setPageSize] = createSignal<number>(5);
-  const [page, setPage] = createSignal<number>(1);
-
+  
   // Tag panel UI helpers
   const [showTagPanel, setShowTagPanel] = createSignal<boolean>(false);
   const [tagFilterTerm, setTagFilterTerm] = createSignal<string>("");
   let tagPanelRef: HTMLElement | undefined;
 
-  /**
-   * Derive unique tags from all posts.
-   */
+  // Derive tags
   const tags = createMemo(() => {
     const s = new Set<string>();
     for (const p of all) {
@@ -71,7 +64,7 @@ export default function PostsList(props: Props) {
     return counts;
   });
 
-  // Close tag panel when clicking outside
+  // Close tag panel
   createEffect(() => {
     if (typeof document === "undefined") return;
     if (!showTagPanel()) return;
@@ -85,7 +78,7 @@ export default function PostsList(props: Props) {
     onCleanup(() => document.removeEventListener("click", handler));
   });
 
-  // Filter + Sort (in-memory)
+  // Filter + Sort
   const filteredAndSorted = createMemo(() => {
     let items = all.slice();
     // Exclude drafts
@@ -101,7 +94,7 @@ export default function PostsList(props: Props) {
     }
     
     // Sort
-    items.sort((a, b) => {
+    items.slice().sort((a, b) => {
       const ta = a?.date ? Date.parse(a.date as string) : 0;
       const tb = b?.date ? Date.parse(b.date as string) : 0;
       return sortOrder() === "newest" ? tb - ta : ta - tb;
@@ -109,17 +102,8 @@ export default function PostsList(props: Props) {
     return items;
   });
 
-  const totalItems = createMemo(() => filteredAndSorted().length);
-  const totalPages = createMemo(() =>
-    Math.max(1, Math.ceil(totalItems() / pageSize())),
-  );
-
-  const pageItems = createMemo(() => {
-    const pg = Math.max(1, Math.min(page(), totalPages()));
-    const size = pageSize();
-    const start = (pg - 1) * size;
-    return filteredAndSorted().slice(start, start + size);
-  });
+  // Pagination
+  const pagination = usePagination(filteredAndSorted, { defaultPageSize: 5 });
 
   // Helpers
   function toggleTag(tag: string) {
@@ -129,88 +113,17 @@ export default function PostsList(props: Props) {
       else set.add(tag);
       return Array.from(set);
     });
-    setPage(1);
-  }
-  function changePageSize(n: number) {
-    setPageSize(n);
-    setPage(1);
-  }
-  function goPrev() {
-    setPage(Math.max(1, page() - 1));
-  }
-  function goNext() {
-    setPage(Math.min(totalPages(), page() + 1));
+    pagination.setPage(1);
   }
 
-  /**
-   * Sync visual state with server-rendered DOM.
-   * Toggles visibility of .post-item nodes based on current page items.
-   */
-  createEffect(() => {
-    if (typeof document === "undefined") return;
-    const visibleSlugs = new Set(
-      (pageItems() ?? []).map((p) =>
-        String(p.slug ?? "").replace(/\.(md|mdx)$/, ""),
-      ),
-    );
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(".post-list > .post-item"),
-    );
-    nodes.forEach((n) => {
-      const slug = String(
-        n.dataset.slug ??
-          n.querySelector("a")?.getAttribute("href")?.split("/posts/")[1] ??
-          "",
-      ).replace(/\.(md|mdx)$/, "");
-      const show = visibleSlugs.has(slug);
-      n.style.display = show ? "" : "none";
-      n.setAttribute("aria-hidden", show ? "false" : "true");
-    });
-  });
-
-  /**
-   * Render pagination controls into the server-rendered placeholder.
-   */
-  createEffect(() => {
-    if (typeof document === "undefined") return;
-    const placeholder = document.querySelector<HTMLElement>(
-      ".posts-pagination-placeholder",
-    );
-    if (!placeholder) return;
-    
-    const prevDisabled = page() <= 1;
-    const nextDisabled = page() >= totalPages();
-    placeholder.innerHTML = "";
-    
-    const container = document.createElement("div");
-    container.className = "pagination-controls posts-pagination-controls";
-    container.style.display = "flex";
-    container.style.gap = "1rem";
-    container.style.alignItems = "center";
-    container.style.justifyContent = "center";
-
-    const prevBtn = document.createElement("button");
-    prevBtn.type = "button";
-    prevBtn.className = "pagination-button";
-    prevBtn.textContent = "Previous";
-    prevBtn.disabled = prevDisabled;
-    prevBtn.addEventListener("click", () => goPrev());
-
-    const info = document.createElement("div");
-    info.className = "pagination-info";
-    info.textContent = `Page ${page()} of ${totalPages()}`;
-
-    const nextBtn = document.createElement("button");
-    nextBtn.type = "button";
-    nextBtn.className = "pagination-button";
-    nextBtn.textContent = "Next";
-    nextBtn.disabled = nextDisabled;
-    nextBtn.addEventListener("click", () => goNext());
-
-    container.appendChild(prevBtn);
-    container.appendChild(info);
-    container.appendChild(nextBtn);
-    placeholder.appendChild(container);
+  // DOM Sync
+  useDomSync({
+    visibleSlugs: createMemo(() => pagination.paginatedItems().map(it => {
+         return String(it.slug ?? "").replace(/\.(md|mdx)$/, "");
+    })),
+    containerSelector: ".post-list",
+    itemSelector: ".post-item",
+    normalizeSlug: (s) => String(s ?? "").replace(/\.(md|mdx)$/, "").replace(/^\/posts\//, "") 
   });
 
   return (
@@ -218,16 +131,14 @@ export default function PostsList(props: Props) {
       <div class="posts-controls experience-controls">
         <div class="controls-left">
           <div class="control-pair">
-            <label for="sort" class="control-label">
-              Sort
-            </label>
-            <select
+             <label for="sort" class="control-label">Sort</label>
+             <select
               id="sort"
               class="control-select"
               value={sortOrder()}
               onChange={(e) => {
                 setSortOrder((e.target as HTMLSelectElement).value as any);
-                setPage(1);
+                pagination.setPage(1);
               }}
             >
               <option value="newest">Newest first</option>
@@ -236,16 +147,15 @@ export default function PostsList(props: Props) {
           </div>
 
           <div class="control-pair">
-            <label for="pageSize" class="control-label">
-              Per page
-            </label>
-            <select
+            <label for="pageSize" class="control-label">Per page</label>
+             <select
               id="pageSize"
               class="control-select compact"
-              value={String(pageSize())}
-              onChange={(e) =>
-                changePageSize(Number((e.target as HTMLSelectElement).value))
-              }
+              value={String(pagination.pageSize())}
+              onChange={(e) => {
+                pagination.setPageSize(Number((e.target as HTMLSelectElement).value));
+                pagination.setPage(1);
+              }}
             >
               <option value="5">5</option>
               <option value="10">10</option>
@@ -315,7 +225,7 @@ export default function PostsList(props: Props) {
                       aria-checked={selectedTags().length === 0}
                       onClick={() => {
                         setSelectedTags([]);
-                        setPage(1);
+                        pagination.setPage(1);
                       }}
                       class="dropdown-item"
                       style={{ "justify-content": "space-between" } as any}
@@ -381,8 +291,8 @@ export default function PostsList(props: Props) {
             onClick={() => {
               setSortOrder("newest");
               setSelectedTags([]);
-              setPageSize(5);
-              setPage(1);
+              pagination.setPageSize(5);
+              pagination.setPage(1);
             }}
           >
             Reset
@@ -390,7 +300,11 @@ export default function PostsList(props: Props) {
         </div>
       </div>
 
-      {/* Note: The actual list elements are server-rendered in BlogSection. This island only controls visibility. */}
+      <PaginationControls 
+        pagination={pagination} 
+        portalTargetId="posts-pagination-portal"
+        class="posts-pagination-controls" // Preserve class for styling if any
+      />
     </section>
   );
 }
