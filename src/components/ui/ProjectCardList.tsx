@@ -1,11 +1,4 @@
-import {
-  For,
-  createSignal,
-  createMemo,
-  createEffect,
-  onCleanup,
-  onMount,
-} from "solid-js";
+import { For, createSignal, createMemo, createEffect } from "solid-js";
 import type { ProjectCard } from "@app-types/project-card";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
@@ -17,14 +10,7 @@ import {
 } from "@lib/sort-utils";
 import PaginationControls from "./PaginationControls";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
-
-// Utility to toggle an item in a string-array
-function toggleFilterArray(arr: string[], value: string) {
-  const s = new Set(arr);
-  if (s.has(value)) s.delete(value);
-  else s.add(value);
-  return Array.from(s);
-}
+import FilterDropdown from "./FilterDropdown";
 
 /**
  * ProjectCardList
@@ -43,27 +29,6 @@ export default function ProjectCardList(props: Props) {
 
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
-  const [langDropdownOpen, setLangDropdownOpen] = createSignal(false);
-  const [domDropdownOpen, setDomDropdownOpen] = createSignal(false);
-  const [langSearchTerm, setLangSearchTerm] = createSignal("");
-  const [domSearchTerm, setDomSearchTerm] = createSignal("");
-
-  let langDropdownRef: HTMLDivElement | undefined;
-  let domDropdownRef: HTMLDivElement | undefined;
-
-  // Close dropdowns when clicking outside
-  createEffect(() => {
-    if (typeof document === "undefined") return;
-    function onDocClick(e: MouseEvent) {
-      const t = e.target as Node;
-      if (langDropdownRef && !langDropdownRef.contains(t))
-        setLangDropdownOpen(false);
-      if (domDropdownRef && !domDropdownRef.contains(t))
-        setDomDropdownOpen(false);
-    }
-    document.addEventListener("click", onDocClick);
-    onCleanup(() => document.removeEventListener("click", onDocClick));
-  });
 
   // Derive unique years
   const years = createMemo(() =>
@@ -94,105 +59,62 @@ export default function ProjectCardList(props: Props) {
    * Languages with dynamic counts.
    */
   const languageCounts = createMemo(() => {
-    try {
-      const yf = yearFilter();
-      const currentDomainFilters = domainFilters() ?? [];
+    const yf = yearFilter();
+    const currentDomainFilters = domainFilters() ?? [];
 
-      // Base: Year + Domain (excluding Lang)
-      let items = filterByYear(props.initialItems, yf);
+    let items = filterByYear(props.initialItems, yf);
 
-      // Domain filters
-      if (currentDomainFilters.length > 0) {
-        items = items.filter((it) => {
-          const itemDomains = it.domains ?? [];
-          return currentDomainFilters.some((f) => itemDomains.includes(f));
-        });
-      }
-
-      // Tally languages
-      const counts = new Map<string, number>();
-      items.forEach((it) => {
-        const list = it.programming_languages ?? [];
-        list.forEach((l) => {
-          if (!l) return;
-          const name = String(l);
-          counts.set(name, (counts.get(name) ?? 0) + 1);
-        });
+    if (currentDomainFilters.length > 0) {
+      items = items.filter((it) => {
+        const itemDomains = it.domains ?? [];
+        return currentDomainFilters.some((f) => itemDomains.includes(f));
       });
-
-      const arr = Array.from(counts.entries()).map(([name, count]) => ({
-        name,
-        count,
-      }));
-      arr.sort((a, b) => {
-        if (b.count !== a.count) return b.count - a.count;
-        return a.name.localeCompare(b.name);
-      });
-      return arr;
-    } catch (e) {
-      console.error("languageCounts error:", e);
-      return [];
     }
+
+    const counts = new Map<string, number>();
+    items.forEach((it) => {
+      const list = it.programming_languages ?? [];
+      list.forEach((l) => {
+        if (!l) return;
+        const name = String(l);
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+      });
+    });
+
+    return Array.from(counts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   });
 
   /**
    * Domains with dynamic counts.
    */
   const domainCounts = createMemo(() => {
-    try {
-      const yf = yearFilter();
-      const currentLanguageFilters = languageFilters() ?? [];
+    const yf = yearFilter();
+    const currentLanguageFilters = languageFilters() ?? [];
 
-      // Base: Year + Lang (excluding Domain)
-      let items = filterByYear(props.initialItems, yf);
+    let items = filterByYear(props.initialItems, yf);
 
-      // Language filters
-      if (currentLanguageFilters.length > 0) {
-        items = items.filter((it) => {
-          const itemLangs = it.programming_languages ?? [];
-          return currentLanguageFilters.some((f) => itemLangs.includes(f));
-        });
-      }
-
-      // Tally domains
-      const counts = new Map<string, number>();
-      items.forEach((it) => {
-        const list = it.domains ?? [];
-        list.forEach((d) => {
-          if (!d) return;
-          const name = String(d);
-          counts.set(name, (counts.get(name) ?? 0) + 1);
-        });
+    if (currentLanguageFilters.length > 0) {
+      items = items.filter((it) => {
+        const itemLangs = it.programming_languages ?? [];
+        return currentLanguageFilters.some((f) => itemLangs.includes(f));
       });
-
-      const arr = Array.from(counts.entries()).map(([name, count]) => ({
-        name,
-        count,
-      }));
-      arr.sort((a, b) => {
-        if (b.count !== a.count) return b.count - a.count;
-        return a.name.localeCompare(b.name);
-      });
-      return arr;
-    } catch (e) {
-      console.error("domainCounts error:", e);
-      return [];
     }
-  });
 
-  // Filtered lists for dropdowns
-  const visibleLanguageCounts = createMemo(() => {
-    const term = langSearchTerm().trim().toLowerCase();
-    const all = languageCounts();
-    if (!term) return all;
-    return all.filter((l) => l.name.toLowerCase().includes(term));
-  });
+    const counts = new Map<string, number>();
+    items.forEach((it) => {
+      const list = it.domains ?? [];
+      list.forEach((d) => {
+        if (!d) return;
+        const name = String(d);
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+      });
+    });
 
-  const visibleDomainCounts = createMemo(() => {
-    const term = domSearchTerm().trim().toLowerCase();
-    const all = domainCounts();
-    if (!term) return all;
-    return all.filter((d) => d.name.toLowerCase().includes(term));
+    return Array.from(counts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   });
 
   // Ensure pagination resets when filters change
@@ -335,121 +257,25 @@ export default function ProjectCardList(props: Props) {
           </select>
         </div>
 
-        <div class="control-pair">
-          <label for="project-language-button" class="control-label">
-            Languages
-          </label>
-          <div class="dropdown" ref={(el) => (langDropdownRef = el)}>
-            <button
-              id="project-language-button"
-              class="control-select dropdown-toggle"
-              aria-haspopup="true"
-              aria-expanded={langDropdownOpen()}
-              onClick={() => setLangDropdownOpen((v) => !v)}
-              aria-controls="lang-panel"
-              type="button"
-            >
-              {languageFilters().length
-                ? `${languageFilters().length} selected`
-                : "All languages"}
-            </button>
+        <FilterDropdown
+          id="project-language-button"
+          label="Languages"
+          items={languageCounts}
+          selectedItems={languageFilters}
+          setSelectedItems={setLanguageFilters}
+          placeholder="Search languages"
+          onPageReset={() => pagination.setPage(1)}
+        />
 
-            <div
-              id="lang-panel"
-              class={`dropdown-panel ${langDropdownOpen() ? "open" : ""}`}
-              role="menu"
-              aria-label="Programming languages"
-            >
-              <input
-                placeholder="Search languages"
-                value={langSearchTerm()}
-                onInput={(e) =>
-                  setLangSearchTerm((e.target as HTMLInputElement).value)
-                }
-                class="control-select"
-                style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
-              />
-
-              <For each={visibleLanguageCounts()}>
-                {(l: { name: string; count: number }) => (
-                  <label class="dropdown-item" role="menuitemcheckbox">
-                    <input
-                      type="checkbox"
-                      checked={languageFilters().includes(l.name)}
-                      onChange={() => {
-                        setLanguageFilters((prev) =>
-                          toggleFilterArray(prev, l.name),
-                        );
-                        pagination.setPage(1);
-                      }}
-                    />
-                    <span>
-                      {l.name} ({l.count})
-                    </span>
-                  </label>
-                )}
-              </For>
-            </div>
-          </div>
-        </div>
-
-        <div class="control-pair">
-          <label for="project-domain-button" class="control-label">
-            Domains
-          </label>
-          <div class="dropdown" ref={(el) => (domDropdownRef = el)}>
-            <button
-              id="project-domain-button"
-              class="control-select dropdown-toggle"
-              aria-haspopup="true"
-              aria-expanded={domDropdownOpen()}
-              onClick={() => setDomDropdownOpen((v) => !v)}
-              aria-controls="dom-panel"
-              type="button"
-            >
-              {domainFilters().length
-                ? `${domainFilters().length} selected`
-                : "All domains"}
-            </button>
-
-            <div
-              id="dom-panel"
-              class={`dropdown-panel ${domDropdownOpen() ? "open" : ""}`}
-              role="menu"
-              aria-label="Domains"
-            >
-              <input
-                placeholder="Search domains"
-                value={domSearchTerm()}
-                onInput={(e) =>
-                  setDomSearchTerm((e.target as HTMLInputElement).value)
-                }
-                class="control-select"
-                style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
-              />
-
-              <For each={visibleDomainCounts()}>
-                {(d: { name: string; count: number }) => (
-                  <label class="dropdown-item" role="menuitemcheckbox">
-                    <input
-                      type="checkbox"
-                      checked={domainFilters().includes(d.name)}
-                      onChange={() => {
-                        setDomainFilters((prev) =>
-                          toggleFilterArray(prev, d.name),
-                        );
-                        pagination.setPage(1);
-                      }}
-                    />
-                    <span>
-                      {d.name} ({d.count})
-                    </span>
-                  </label>
-                )}
-              </For>
-            </div>
-          </div>
-        </div>
+        <FilterDropdown
+          id="project-domain-button"
+          label="Domains"
+          items={domainCounts}
+          selectedItems={domainFilters}
+          setSelectedItems={setDomainFilters}
+          placeholder="Search domains"
+          onPageReset={() => pagination.setPage(1)}
+        />
 
         <button
           class="btn-reset"
@@ -478,11 +304,8 @@ export default function ProjectCardList(props: Props) {
         {filtersSummary()}
       </div>
 
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"
-      >
+      {/* Pagination summary for screen readers */}
+      <div aria-live="polite" aria-atomic="true" class="sr-only">
         Page {pagination.page()} of {pagination.totalPages()}
       </div>
 
