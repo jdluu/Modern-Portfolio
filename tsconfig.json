@@ -10,7 +10,11 @@
       "@images/*": ["src/assets/images/*"],
       "@scripts/*": ["src/scripts/*"],
       "@fonts/*": ["public/fonts/*"],
-      "@icons/*": ["public/icons/*"]
+      "@icons/*": ["public/icons/*"],
+      "@styles/*": ["src/styles/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@lib/*": ["src/lib/*"],
+      "@app-types/*": ["src/types/*"]
     },
     "target": "ES2024",
     "module": "ESNext",
