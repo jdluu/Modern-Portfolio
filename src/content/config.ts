@@ -7,15 +7,23 @@ import { defineCollection, z } from "astro:content";
  * Schemas mirror existing frontmatter found found in the content directory.
  */
 
+const baseSchema = z.object({
+  title: z.string(),
+  slug: z.string().optional(),
+  date: z.union([z.string(), z.coerce.date()]).optional(),
+  draft: z.boolean().optional(),
+});
+
+const baseCardSchema = baseSchema.extend({
+  summary: z.string().optional(),
+  startDate: z.union([z.string(), z.coerce.date()]).optional(),
+  endDate: z.union([z.string(), z.coerce.date()]).optional(),
+});
+
 const posts = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    slug: z.string().optional(),
+  schema: baseSchema.extend({
     description: z.string().optional(),
-    // Accept either a string or a parsed Date (MD frontmatter may be parsed as Date)
-    date: z.union([z.string(), z.coerce.date()]).optional(),
-    draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
     hero: z.string().optional(),
     links: z
@@ -32,10 +40,7 @@ const posts = defineCollection({
 const experiences = defineCollection({
   type: "content",
   schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      slug: z.string().optional(),
-      draft: z.boolean().optional(),
+    baseSchema.extend({
       company: z
         .object({
           name: z.string().optional(),
@@ -47,7 +52,6 @@ const experiences = defineCollection({
         .object({
           role: z.string().optional(),
           duration: z.string().optional(),
-          // Allow either string or Date (frontmatter may be parsed into a Date)
           startDate: z.union([z.string(), z.coerce.date()]).optional(),
           endDate: z.union([z.string(), z.coerce.date()]).optional(),
         })
@@ -87,25 +91,16 @@ const experiences = defineCollection({
 const experiencecards = defineCollection({
   type: "content",
   schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      slug: z.string().optional(),
+    baseCardSchema.extend({
       company: z.string().optional(),
-      date: z.union([z.string(), z.coerce.date()]).optional(),
-      startDate: z.union([z.string(), z.coerce.date()]).optional(),
-      endDate: z.union([z.string(), z.coerce.date()]).optional(),
       thumbnail: image().optional(),
-      summary: z.string().optional(),
     }),
 });
 
 const projects = defineCollection({
   type: "content",
   schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      slug: z.string().optional(),
-      date: z.union([z.string(), z.coerce.date()]).optional(),
+    baseSchema.extend({
       summary: z.string().optional(),
       role: z.string().optional(),
       technologies: z.array(z.string()).optional(),
@@ -129,13 +124,8 @@ const projects = defineCollection({
 const projectcards = defineCollection({
   type: "content",
   schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      slug: z.string().optional(),
+    baseCardSchema.extend({
       description: z.string().optional(),
-      date: z.union([z.string(), z.coerce.date()]).optional(),
-      startDate: z.union([z.string(), z.coerce.date()]).optional(),
-      endDate: z.union([z.string(), z.coerce.date()]).optional(),
       thumbnail: image().optional(),
       programming_languages: z.array(z.string()).optional(),
       domains: z.array(z.string()).optional(),
