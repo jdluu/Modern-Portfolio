@@ -144,7 +144,7 @@
 /* Controls (posts) - enforce Experience/Work spacing tokens and stronger specificity
    - Use higher-specificity selectors and !important to beat competing rules (pagination.css,
      component-level inline styles, or legacy rules) so the blog controls get identical layout.
-   - Mirror exact values from /public/styles/components/pagination.css:
+   - Mirror exact values from /src/styles/components/pagination.css:
      * gap: var(--spacing-md)
      * control-pair gap: 0.6rem
      * control-select min-width: 8rem
@@ -221,7 +221,7 @@
 
 /* Controls (posts) - ensure blog filter controls mirror Work spacing tokens
    We intentionally mirror the structural approach used by .experience-controls in
-   /public/styles/components/pagination.css so spacing is identical across pages.
+   /src/styles/components/pagination.css so spacing is identical across pages.
    This block provides a local hook (.posts-controls) that uses the same variables
    and gap values and adds a couple of small helper rules to align dropdowns/control-pair spacing. */
 .posts-controls,

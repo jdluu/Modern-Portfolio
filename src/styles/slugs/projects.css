@@ -1,5 +1,5 @@
 /* New stylesheet for project detail pages
-   Uses global design tokens defined in public/styles/global.css
+   Uses global design tokens defined in src/styles/global.css
    Desktop-first layout: two-column grid, hero overlay, sticky right TOC card,
    cards, lists, and minimal token-based CTA buttons.
 */

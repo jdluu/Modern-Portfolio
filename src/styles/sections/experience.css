@@ -51,6 +51,6 @@
   }
 }
 
-/* Note: controls/pagination visuals are in /public/styles/components/pagination.css
+/* Note: controls/pagination visuals are in /src/styles/components/pagination.css
    This file confines layout and section-specific spacing, while shared control styles
    live in the component CSS to be globally available where client islands expect them. */
