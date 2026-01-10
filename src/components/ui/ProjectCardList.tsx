@@ -4,18 +4,19 @@ import {
   createMemo,
   createEffect,
   onCleanup,
+  onMount,
 } from "solid-js";
-import type { ProjectCard } from "../../types/project-card";
-import { usePagination } from "../../hooks/usePagination";
-import { useDomSync } from "../../hooks/useDomSync";
+import type { ProjectCard } from "@app-types/project-card";
+import { usePagination } from "@hooks/usePagination";
+import { useDomSync } from "@hooks/useDomSync";
 import {
   normalizeSlug,
   getYearsFromItems,
   dateSortComparator,
   type DateSortable
-} from "../../lib/sort-utils";
+} from "@lib/sort-utils";
 import PaginationControls from "./PaginationControls";
-import { isSentinelEnd, parseDateToTs } from "../../lib/utils";
+import { isSentinelEnd, parseDateToTs } from "@lib/utils";
 
 // Utility to toggle an item in a string-array
 function toggleFilterArray(arr: string[], value: string) {

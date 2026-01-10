@@ -4,17 +4,17 @@ import {
   createMemo,
   createEffect,
 } from "solid-js";
-import type { ExperienceCard } from "../../types/experience-card";
-import { usePagination } from "../../hooks/usePagination";
-import { useDomSync } from "../../hooks/useDomSync";
+import type { ExperienceCard } from "@app-types/experience-card";
+import { usePagination } from "@hooks/usePagination";
+import { useDomSync } from "@hooks/useDomSync";
 import {
   normalizeSlug,
   getYearsFromItems,
   dateSortComparator,
   type DateSortable
-} from "../../lib/sort-utils";
+} from "@lib/sort-utils";
 import PaginationControls from "./PaginationControls";
-import { isSentinelEnd, parseDateToTs } from "../../lib/utils";
+import { isSentinelEnd, parseDateToTs } from "@lib/utils";
 
 /**
  * ExperienceCardList

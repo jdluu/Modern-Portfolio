@@ -1,8 +1,9 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import BlogSection from "../components/sections/BlogSection.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import BlogSection from "@components/sections/BlogSection.astro";
+import "@styles/sections/blog.css";
 import { getCollection, type CollectionEntry } from "astro:content";
-import type { PostIndexItem } from "../types/post";
+import type { PostIndexItem } from "@app-types/post";
 
 // Page title
 const pageTitle = "Blog";
@@ -42,6 +43,6 @@ const postIndexItems: PostIndexItem[] = entries
   });
 ---
 <BaseLayout title={pageTitle}>
-  <link slot="head" rel="stylesheet" href="/styles/sections/blog.css" />
+
   <BlogSection posts={postIndexItems} />
 </BaseLayout>

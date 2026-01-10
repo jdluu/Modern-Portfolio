@@ -1,6 +1,6 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { Portal } from "solid-js/web";
-import type { UsePaginationResult } from "../../hooks/usePagination";
+import type { UsePaginationResult } from "@hooks/usePagination";
 
 interface PaginationControlsProps {
   pagination: UsePaginationResult<any>;

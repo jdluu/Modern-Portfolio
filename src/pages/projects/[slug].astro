@@ -1,7 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import type { Project } from "../../types/project";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { Project } from "@app-types/project";
 import { getCollection } from "astro:content";
+import "@styles/slugs/projects.css";
 import {
   resolveAssetUrl,
   pickImageString,
@@ -9,7 +10,7 @@ import {
   parseSafeDate,
   formatMonthYear,
   generateSrcSet,
-} from "../../lib/utils";
+} from "@lib/utils";
 
 // Generate static paths
 export async function getStaticPaths() {
@@ -81,7 +82,6 @@ const sourceLink = data?.links?.source ?? "";
 ---
 
 <BaseLayout title={title}>
-    <link rel="stylesheet" href="/styles/slugs/projects.css">
     
     <main class="project-page-container">
       <div class="project-detail">
@@ -461,4 +461,4 @@ const sourceLink = data?.links?.source ?? "";
   });
 </script>
 
-<!-- Styles moved to /public/styles/projects.css -->
+<!-- Styles moved to /src/styles/projects.css -->

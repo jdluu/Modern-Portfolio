@@ -1,15 +1,15 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import ExperienceSection from "../components/sections/ExperienceSection.astro";
-import ProjectSection from "../components/sections/ProjectSection.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ExperienceSection from "@components/sections/ExperienceSection.astro";
+import "@styles/sections/experience.css";
+import "@styles/sections/project.css";
+import ProjectSection from "@components/sections/ProjectSection.astro";
  
 // Page title
 const pageTitle = "Experience & Projects";
 ---
  
 <BaseLayout title={pageTitle}>
-	<link slot="head" rel="stylesheet" href="/styles/sections/experience.css" />
-	<link slot="head" rel="stylesheet" href="/styles/sections/project.css" />
 	<ExperienceSection />
 	<ProjectSection />
 </BaseLayout>

@@ -1,7 +1,7 @@
 ---
-import ExperienceCardList from "../ui/ExperienceCardList";
-import ExperienceCard from "../ui/ExperienceCard.astro";
-import ImagePriorityLoader from "../utils/ImagePriorityLoader.astro";
+import ExperienceCardList from "@components/ui/ExperienceCardList";
+import ExperienceCard from "@components/ui/ExperienceCard.astro";
+import ImagePriorityLoader from "@components/utils/ImagePriorityLoader.astro";
 import { getCollection } from "astro:content";
   
 const rawCollection = (await getCollection("experiencecards")) ?? [];

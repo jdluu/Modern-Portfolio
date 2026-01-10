@@ -6,9 +6,9 @@ import {
   Show,
   onCleanup,
 } from "solid-js";
-import type { PostIndexItem } from "../../types/post";
-import { usePagination } from "../../hooks/usePagination";
-import { useDomSync } from "../../hooks/useDomSync";
+import type { PostIndexItem } from "@app-types/post";
+import { usePagination } from "@hooks/usePagination";
+import { useDomSync } from "@hooks/useDomSync";
 import PaginationControls from "./PaginationControls";
 
 /**

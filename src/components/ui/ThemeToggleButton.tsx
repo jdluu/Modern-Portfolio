@@ -44,12 +44,6 @@ const MoonIcon = (props: { class?: string }) => (
   </svg>
 );
 
-const isStartViewTransitionAvailable = (
-  doc: any,
-): doc is {
-  startViewTransition: (cb: () => void) => { finished: Promise<void> };
-} => typeof doc?.startViewTransition === "function";
-
 /**
  * ThemeToggleButton
  *
@@ -77,12 +71,11 @@ const ThemeToggleButton = () => {
   const getThumbX = (dark: boolean) => (dark ? 3.8 : 0); // rem units align with CSS
 
   const toggle = () => {
-    const anyDoc = document as any;
     const next = !isDarkMode();
     const root = document.documentElement;
 
     // Use standard transition if View Transitions API is unsupported
-    if (!isStartViewTransitionAvailable(anyDoc)) {
+    if (!document.startViewTransition) {
       setDarkMode(next);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       root.setAttribute("data-theme", next ? "dark" : "light");
@@ -104,7 +97,7 @@ const ThemeToggleButton = () => {
       thumbRef.style.transform = `translateX(${targetX}rem)`;
     }
 
-    const vt = anyDoc.startViewTransition(() => {
+    const vt = document.startViewTransition(() => {
       setDarkMode(next);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       root.setAttribute("data-theme", next ? "dark" : "light");

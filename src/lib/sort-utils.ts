@@ -1,4 +1,4 @@
-import { parseDateToTs, isSentinelEnd } from "../lib/utils";
+import { parseDateToTs, isSentinelEnd } from "@lib/utils";
 
 /**
  * Normalizes a slug or filename value.

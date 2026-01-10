@@ -1,6 +1,14 @@
 ---
-import Navbar from "../components/ui/Navbar.astro";
-import Footer from "../components/ui/Footer.astro";
+import Navbar from "@components/ui/Navbar.astro";
+import Footer from "@components/ui/Footer.astro";
+import "@styles/reset.css";
+import "@styles/global.css";
+import "@styles/components/pagination.css";
+import "@styles/components/theme-toggle.css";
+import "@styles/components/navbar.css";
+import "@styles/components/footer.css";
+import "@styles/components/project-card.css";
+import "@styles/components/experience-card.css";
 
 interface Props {
 	title: string;
@@ -115,25 +123,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			crossorigin
 			media="(min-width: 768px)"
 		/>
-		<link rel="preload" href="/styles/reset.css" as="style" />
-		<link rel="preload" href="/styles/global.css" as="style" />
-		<link rel="preload" href="/styles/components/pagination.css" as="style" />
-		<link rel="preload" href="/styles/components/theme-toggle.css" as="style" />
-		<link rel="preload" href="/styles/components/navbar.css" as="style" />
-		<link rel="preload" href="/styles/components/footer.css" as="style" />
-		<link rel="preload" href="/styles/components/project-card.css" as="style" />
-		<link rel="preload" href="/styles/components/experience-card.css" as="style" />
 		
-		<!-- Styles -->
-		<link rel="stylesheet" href="/styles/reset.css" />
-		<link rel="stylesheet" href="/styles/global.css" />
-		<link rel="stylesheet" href="/styles/components/pagination.css" />
-		<link rel="stylesheet" href="/styles/components/theme-toggle.css" />
-		<link rel="stylesheet" href="/styles/components/navbar.css" />
-		<link rel="stylesheet" href="/styles/components/footer.css" />
-		<link rel="stylesheet" href="/styles/components/project-card.css" />
-		<link rel="stylesheet" href="/styles/components/experience-card.css" />
-		<!-- Page-specific CSS can be injected by pages via the named head slot -->
 		<slot name="head" />
 	</head>
 	<body class:list={["no-transitions", { "homepage-gradient-bg": isHomepage }]}>

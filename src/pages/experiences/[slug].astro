@@ -1,8 +1,9 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import type { Experience } from "../../types/experience";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { Experience } from "@app-types/experience";
 import { getCollection } from "astro:content";
-import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "../../lib/utils";
+import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "@lib/utils";
+import "@styles/slugs/experiences.css";
   
 // Generate static paths
 export async function getStaticPaths() {
@@ -65,7 +66,6 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
 ---
  
 <BaseLayout title={title}>
-    <link slot="head" rel="stylesheet" href="/styles/slugs/experiences.css" />
     <main class="experience-page-container">
         <article class="experience-page-div">
             <section id="overview" aria-labelledby="experience-title">

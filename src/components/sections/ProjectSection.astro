@@ -1,9 +1,9 @@
 ---
-import ProjectCardList from "../ui/ProjectCardList";
-import ProjectCard from "../ui/ProjectCard.astro";
-import ImagePriorityLoader from "../utils/ImagePriorityLoader.astro";
+import ProjectCardList from "@components/ui/ProjectCardList";
+import ProjectCard from "@components/ui/ProjectCard.astro";
+import ImagePriorityLoader from "@components/utils/ImagePriorityLoader.astro";
 import { getCollection } from "astro:content";
-import { pickImageString } from "../../lib/utils";
+import { pickImageString } from "@lib/utils";
 
 /**
  * Load projectcards collection at build time and normalize fields so the

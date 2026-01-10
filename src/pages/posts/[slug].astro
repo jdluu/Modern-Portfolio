@@ -1,7 +1,8 @@
---- 
-import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
 import { getCollection, render } from "astro:content";
-import { resolveAssetUrl } from "../../lib/utils";
+import { resolveAssetUrl } from "@lib/utils";
+import "@styles/slugs/posts.css";
 
 // Generate static paths
 export async function getStaticPaths() {
@@ -39,7 +40,6 @@ const heroUrl = resolveAssetUrl(post?.data?.hero) ?? null;
 ---
 
 <BaseLayout title={title}>
-  <link slot="head" rel="stylesheet" href="/styles/slugs/posts.css" />
   <article class={`post-grid ${!heroUrl ? 'no-hero' : ''}`}>
     <header class="post-header">
       <div class="post-header-content">

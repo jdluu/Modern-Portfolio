@@ -1,7 +1,7 @@
 ---
-import PostsList from "../ui/PostsList";
-import Post from "../ui/Post.astro";
-import type { PostIndexItem } from "../../types/post";
+import PostsList from "@components/ui/PostsList";
+import Post from "@components/ui/Post.astro";
+import type { PostIndexItem } from "@app-types/post";
  
 // Accept posts from the parent page (server-side fetched in /pages/blog.astro)
 const { posts } = Astro.props as { posts: PostIndexItem[] };
