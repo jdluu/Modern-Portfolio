@@ -1,10 +1,15 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ProjectCardProps } from '@/src/types/project-card';
 
 export interface Props extends ProjectCardProps {}
 
 const { title, intro, url, thumbnail } = Astro.props;
+
+// Generate low-quality placeholder for the thumbnail
+const thumbnailPlaceholder = thumbnail 
+  ? await getImage({ src: thumbnail, width: 20, quality: 10, format: 'webp' }) 
+  : null;
 
 const baseId = ((Astro.props as any)?.slug || url || title)
   .toString()
@@ -14,19 +19,32 @@ const titleId = `project-${baseId}`;
 const ctaExtraId = `${titleId}-cta`;
 ---
 
-<section class="project-card background" role="group" aria-labelledby={titleId}>
+<section 
+	class="project-card background" 
+	role="group" 
+	aria-labelledby={titleId}
+	style={thumbnailPlaceholder ? {
+		'background-image': `url(${thumbnailPlaceholder.src})`,
+		'background-size': 'cover',
+		'background-position': 'center'
+	} : {}}
+>
 	<!-- Default to lazy loading; above-the-fold promotion handled by the section wrapper -->
-	<Image
-		src={thumbnail}
-		alt={title}
-		width={800}
-		height={500}
-		loading="lazy"
-		decoding="async"
-		class="project-image"
-		format="webp"
-		sizes="(max-width: 768px) 100vw, 800px"
-	/>
+	{thumbnail ? (
+		<Image
+			src={thumbnail}
+			alt={title}
+			width={800}
+			height={500}
+			loading="lazy"
+			decoding="async"
+			class="project-image"
+			format="webp"
+			sizes="(max-width: 768px) 100vw, 800px"
+		/>
+	) : (
+		<div class="project-image placeholder" aria-hidden="true"></div>
+	)}
 	<div class="project-container">
 		<section class="more-info">
 			<h3 class="project-title" id={titleId}>{title}</h3>

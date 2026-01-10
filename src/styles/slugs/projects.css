@@ -44,6 +44,8 @@
   overflow: hidden;
   display: block;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.02));
+  background-size: cover;
+  background-position: center;
 }
 
 .project-hero-figure::after {

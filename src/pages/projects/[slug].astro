@@ -8,7 +8,7 @@ import {
   parseSafeDate,
   formatMonthYear,
 } from "@lib/utils";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 
 // Generate static paths
 export async function getStaticPaths() {
@@ -67,6 +67,11 @@ const toolsArray = toolsText
 const coverUrl = data?.cover ?? null;
 const finalUrl = data?.final ?? null;
 
+// Generate low-quality placeholder for the hero image
+const coverPlaceholder = coverUrl && typeof coverUrl !== 'string' 
+  ? await getImage({ src: coverUrl, width: 20, quality: 10, format: 'webp' }) 
+  : null;
+
 const background = data?.background ?? "";
 const solution = data?.solution ?? "";
 const processText = data?.process ?? "";
@@ -87,7 +92,14 @@ const sourceLink = data?.links?.source ?? "";
                 <section id="overview" aria-labelledby="project-title" class="project-section">
                   {coverUrl ? (
                     <figure class="project-hero" role="img" aria-label={`${title} hero`}>
-                      <div class="project-hero-figure">
+                      <div 
+                        class="project-hero-figure" 
+                        style={coverPlaceholder ? {
+                          'background-image': `url(${coverPlaceholder.src})`,
+                          'background-size': 'cover',
+                          'background-position': 'center'
+                        } : {}}
+                      >
                          {typeof coverUrl === 'string' ? (
                             <img src={coverUrl} alt={`${title} cover`} class="project-hero-img" />
                          ) : (
@@ -98,6 +110,7 @@ const sourceLink = data?.links?.source ?? "";
                               fetchpriority="high"
                               widths={[800, 1200, 1600]}
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                              class="project-hero-img"
                             />
                          )}
                       </div>

@@ -1,6 +1,6 @@
 ---
 import type { ExperienceCard } from "@app-types/experience-card";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import {
   parseSafeDate,
   sanitizeStringForUI,
@@ -11,7 +11,11 @@ export interface Props {
   item: ExperienceCard;
 }
 
+// Generate low-quality placeholder for the thumbnail
 const { item } = Astro.props as Props;
+const thumbnailPlaceholder = item.thumbnail 
+  ? await getImage({ src: item.thumbnail, width: 20, quality: 10, format: 'webp' }) 
+  : null;
 
 // Minimal, type-driven extraction — flattened ExperienceCard exposes metadata fields at top-level
 const {
@@ -59,7 +63,14 @@ const imgAlt = company ? `${title} @ ${company}` : title;
 const safeSummary = sanitizeStringForUI(summaryRaw);
 const safeDateDisplay = dateDisplay ?? "";
 ---
-<section class="experience-card background">
+<section 
+  class="experience-card background"
+  style={thumbnailPlaceholder ? {
+    'background-image': `url(${thumbnailPlaceholder.src})`,
+    'background-size': 'cover',
+    'background-position': 'center'
+  } : {}}
+>
   {thumbnail ? (
     <Image
       src={thumbnail}
