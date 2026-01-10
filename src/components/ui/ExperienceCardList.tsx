@@ -1,9 +1,4 @@
-import {
-  For,
-  createSignal,
-  createMemo,
-  createEffect,
-} from "solid-js";
+import { For, createSignal, createMemo, createEffect } from "solid-js";
 import type { ExperienceCard } from "@app-types/experience-card";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
@@ -11,7 +6,7 @@ import {
   normalizeSlug,
   getYearsFromItems,
   dateSortComparator,
-  type DateSortable
+  type DateSortable,
 } from "@lib/sort-utils";
 import PaginationControls from "./PaginationControls";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
@@ -27,10 +22,14 @@ type Props = {
 
 export default function ExperienceCardList(props: Props) {
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
-  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">("date-desc");
+  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">(
+    "date-desc",
+  );
 
   // Derive years
-  const years = createMemo(() => getYearsFromItems(props.initialItems as DateSortable[]));
+  const years = createMemo(() =>
+    getYearsFromItems(props.initialItems as DateSortable[]),
+  );
 
   // Filter & Sort
   const processedItems = createMemo(() => {
@@ -40,36 +39,36 @@ export default function ExperienceCardList(props: Props) {
     const yf = yearFilter();
     if (yf) {
       items = items.filter((it) => {
-         const candidates = [
-           (it as any)?.startDate,
-           (it as any)?.endDate,
-           (it as any)?.date,
-         ];
-         for (const v of candidates) {
-            if (!v) continue;
-            if (isSentinelEnd(v)) {
-                if (yf === "Present") return true;
-                continue;
-            }
-            const ts = parseDateToTs(v);
-            if (!Number.isNaN(ts)) {
-                if (String(new Date(ts).getFullYear()) === yf) return true;
-            }
-         }
-         return false;
+        const candidates = [
+          (it as any)?.startDate,
+          (it as any)?.endDate,
+          (it as any)?.date,
+        ];
+        for (const v of candidates) {
+          if (!v) continue;
+          if (isSentinelEnd(v)) {
+            if (yf === "Present") return true;
+            continue;
+          }
+          const ts = parseDateToTs(v);
+          if (!Number.isNaN(ts)) {
+            if (String(new Date(ts).getFullYear()) === yf) return true;
+          }
+        }
+        return false;
       });
     }
 
     // Sort
     const dir = sortOption() === "date-desc" ? "desc" : "asc";
-    items.slice().sort((a, b) => dateSortComparator(
-        a as DateSortable, 
-        b as DateSortable, 
-        dir, 
-        "end-first" // Experiences prioritize end date usually
-    ));
-    
-    return items;
+    return items.slice().sort((a, b) =>
+      dateSortComparator(
+        a as DateSortable,
+        b as DateSortable,
+        dir,
+        "end-first", // Experiences prioritize end date usually
+      ),
+    );
   });
 
   // Pagination
@@ -77,7 +76,9 @@ export default function ExperienceCardList(props: Props) {
 
   // DOM Sync
   useDomSync({
-    visibleSlugs: createMemo(() => pagination.paginatedItems().map(it => (it as any).slug)),
+    visibleSlugs: createMemo(() =>
+      pagination.paginatedItems().map((it) => (it as any).slug),
+    ),
     containerSelector: ".experience-grid",
     itemSelector: ".experience-item",
     normalizeSlug: normalizeSlug,
@@ -94,7 +95,9 @@ export default function ExperienceCardList(props: Props) {
     <section>
       <div class="experience-controls">
         <div class="control-pair">
-          <label for="year-select" class="control-label">Year</label>
+          <label for="year-select" class="control-label">
+            Year
+          </label>
           <select
             id="year-select"
             class="control-select"
@@ -110,7 +113,9 @@ export default function ExperienceCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="sort-select" class="control-label">Sort by</label>
+          <label for="sort-select" class="control-label">
+            Sort by
+          </label>
           <select
             id="sort-select"
             class="control-select"
@@ -124,7 +129,9 @@ export default function ExperienceCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="perpage-select" class="control-label">Per page</label>
+          <label for="perpage-select" class="control-label">
+            Per page
+          </label>
           <select
             id="perpage-select"
             class="control-select compact"
@@ -163,9 +170,9 @@ export default function ExperienceCardList(props: Props) {
       </div>
 
       {/* Pagination Controls Portal */}
-      <PaginationControls 
-        pagination={pagination} 
-        portalTargetId="experience-pagination-portal" 
+      <PaginationControls
+        pagination={pagination}
+        portalTargetId="experience-pagination-portal"
       />
     </section>
   );
