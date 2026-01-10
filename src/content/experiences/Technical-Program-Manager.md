@@ -2,7 +2,7 @@
 title: Technical Program Manager
 company:
   name: CodePath
-  image: /uploads/experiences/codepath/thumbnail_codepath.min.png
+  image: ../../assets/images/experiences/codepath/thumbnail_codepath.min.png
   imagealt: >-
     CodePath.org logo with the words 'CODE PATH' in black and 'ORG' in teal,
     inside a rounded white square on a black background.

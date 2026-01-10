@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 /**
  * Full Experience document shape used on detail pages.
  * Mirrors the schema for the `experience` collection.
@@ -7,7 +9,7 @@ export interface Experience {
   draft?: boolean;
   company?: {
     name?: string;
-    image?: string | { url?: string; imgix_url?: string } | null;
+    image?: ImageMetadata | null;
     imagealt?: string | null;
   } | null;
   logistics?: {

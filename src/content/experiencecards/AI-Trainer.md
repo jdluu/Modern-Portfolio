@@ -4,6 +4,6 @@ company: Outlier
 date: November 2023 - February 2024
 startDate: 2023-11-28T08:00:00.000Z
 endDate: 2024-02-13T08:00:00.000Z
-thumbnail: /uploads/experiences/outlier/thumbnail_outlier.min.jpg
+thumbnail: ../../assets/images/experiences/outlier/thumbnail_outlier.min.jpg
 summary: Enhancing Code Quality and Output Accuracy
 ---

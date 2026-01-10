@@ -2,7 +2,7 @@
 title: Graduate Research Assistant
 company:
   name: California State University - Long Beach
-  image: /uploads/experiences/csulb/thumbnail_csulb.min.png
+  image: ../../assets/images/experiences/csulb/thumbnail_csulb.min.png
   imagealt: >-
     Interlocking gold 'LB' logo representing California State University Long
     Beach on a black square background.

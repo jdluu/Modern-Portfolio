@@ -2,8 +2,9 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { Experience } from "@app-types/experience";
 import { getCollection } from "astro:content";
-import { resolveAssetUrl, pickImageString, sanitizeStringForUI } from "@lib/utils";
+import { sanitizeStringForUI } from "@lib/utils";
 import "@styles/slugs/experiences.css";
+import { Image } from "astro:assets";
   
 // Generate static paths
 export async function getStaticPaths() {
@@ -43,7 +44,7 @@ if (!entry) {
 const experience = entry.data as any as Experience;
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
-const companyLogo = resolveAssetUrl(pickImageString(experience?.company?.image)) ?? "/placeholder-logo.png";
+const companyLogo = experience?.company?.image ?? "/placeholder-logo.png";
 const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
 const tools = sanitizeStringForUI(experience?.technologies?.tools) || "";
@@ -71,16 +72,28 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
             <section id="overview" aria-labelledby="experience-title">
                 <div class="experience-header">
                     <div class="company-info" role="banner">
-                        <img
-                            src={companyLogo}
-                            alt={`${companyName} logo`}
-                            class="company-logo"
-                            width="80"
-                            height="80"
-                            loading="eager"
-                            decoding="async"
-                            aria-hidden="true"
-                        />
+                        {companyLogo && typeof companyLogo !== "string" ? (
+                            <Image
+                                src={companyLogo}
+                                alt={`${companyName} logo`}
+                                class="company-logo"
+                                width={80}
+                                height={80}
+                                loading="eager"
+                                decoding="async"
+                            />
+                        ) : (
+                            <img
+                                src={companyLogo as string}
+                                alt={`${companyName} logo`}
+                                class="company-logo"
+                                width="80"
+                                height="80"
+                                loading="eager"
+                                decoding="async"
+                                aria-hidden="true"
+                            />
+                        )}
                         <div class="title-container">
                             <h1 id="experience-title" class="experience-title" >{title}</h1>
                             <p class="company-name"><strong>{companyName}</strong></p>

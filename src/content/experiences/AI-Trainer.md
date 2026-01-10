@@ -2,7 +2,7 @@
 title: AI Trainer
 company:
   name: Outlier
-  image: /uploads/experiences/outlier/thumbnail_outlier.min.jpg
+  image: ../../assets/images/experiences/outlier/thumbnail_outlier.min.jpg
   imagealt: >-
     Outlier logo featuring an abstract overlapping circular design with a
     gradient of teal, blue, and purple, alongside the word 'Outlier' in bold

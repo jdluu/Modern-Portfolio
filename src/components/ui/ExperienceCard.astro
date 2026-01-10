@@ -1,11 +1,10 @@
 ---
 import type { ExperienceCard } from "@app-types/experience-card";
+import { Image } from "astro:assets";
 import {
   parseSafeDate,
-  resolveAssetUrl,
   sanitizeStringForUI,
   formatMonthYear,
-  generateSrcSet,
 } from "@lib/utils";
 
 export interface Props {
@@ -28,7 +27,6 @@ const {
 
 const startDateStr = startDate ?? undefined;
 const endDateStr = endDate ?? undefined;
-const thumbnailSrc = thumbnail ?? undefined;
 const summaryRaw = summary ?? "";
 
 // Ensure client links use extensionless, lowercase slugs to match getStaticPaths()
@@ -36,8 +34,6 @@ const safeSlug = String(slug ?? "").replace(/\.(md|mdx)$/, "");
 
 const startDateObj = parseSafeDate(startDateStr);
 const endDateObj = parseSafeDate(endDateStr);
-
-const safeThumbnail = resolveAssetUrl(thumbnailSrc) ?? "";
 
 // Compute display date with sentinel handling
 const explicitDate = date ?? "";
@@ -64,17 +60,13 @@ const safeSummary = sanitizeStringForUI(summaryRaw);
 const safeDateDisplay = dateDisplay ?? "";
 ---
 <section class="experience-card background">
-  {safeThumbnail ? (
-    <img
-      src={safeThumbnail}
-      srcset={generateSrcSet(safeThumbnail, [400, 800])}
-      sizes="(max-width: 768px) 400px, 800px"
+  {thumbnail ? (
+    <Image
+      src={thumbnail}
       alt={imgAlt}
       class="experience-image"
-      loading="lazy"
-      decoding="async"
-      width="600"
-      height="400"
+      width={600}
+      height={400}
     />
   ) : (
     <div class="experience-image placeholder" aria-hidden="true"></div>
