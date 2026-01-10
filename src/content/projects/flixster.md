@@ -9,8 +9,8 @@ role: "Android Developer"
 technologies: ["Java", "Android SDK", "Android Async HTTP"]
 tools: ["Android Studio", "Git", "GitHub", "Glide"]
 
-cover: "https://raw.githubusercontent.com/jdluu/Flixster/master/walkthrough.gif"
-final: "https://raw.githubusercontent.com/jdluu/Flixster/master/walkthrough.gif"
+cover: "../../assets/images/projects/flixster/cover_flixster.png"
+final: "../../assets/images/projects/flixster/final_flixster.gif"
 
 background: "Flixster is a movie browsing Android application built with Java and the Android SDK. The project was designed to practice core mobile development skills, specifically working with REST APIs and displaying dynamic data in a user-friendly interface. I handled the Android development, focusing on integrating The Movie Database API and implementing a master-detail navigation pattern."
 

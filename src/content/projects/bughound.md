@@ -6,17 +6,11 @@ date: "2025-01-15"
 summary: "A comprehensive web-based bug tracking software system built with React, Bun, and PostgreSQL, featuring secure session-based authentication, file attachment management, and advanced bug report tracking with full CRUD operations."
 
 role: "Full Stack Developer"
-technologies:
-  [
-    "React",
-    "TypeScript",
-    "Bun",
-    "Hono",
-  ]
+technologies: ["React", "TypeScript", "Bun", "Hono"]
 tools: ["GitHub", "GitHub Actions", "Docker", "Supabase"]
 
-cover: "/uploads/projects/bughound/cover_bughound.min.png"
-final: "/uploads/projects/bughound/final_bughound.min.png"
+cover: "../../assets/images/projects/bughound/cover_bughound.min.png"
+final: "../../assets/images/projects/bughound/final_bughound.min.png"
 
 background: "Bughound is a full-stack web-based bug tracking system developed as part of CECS-544. The project addresses the need for a comprehensive bug management solution that enables teams to track, assign, and resolve software defects efficiently. I handled the full-stack development, building both the React frontend and Bun/Hono backend with secure authentication, relational database design, and file attachment capabilities."
 

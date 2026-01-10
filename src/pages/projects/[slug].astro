@@ -4,13 +4,11 @@ import type { Project } from "@app-types/project";
 import { getCollection } from "astro:content";
 import "@styles/slugs/projects.css";
 import {
-  resolveAssetUrl,
-  pickImageString,
   sanitizeStringForUI,
   parseSafeDate,
   formatMonthYear,
-  generateSrcSet,
 } from "@lib/utils";
+import { Image } from "astro:assets";
 
 // Generate static paths
 export async function getStaticPaths() {
@@ -66,10 +64,8 @@ const techArray = technologiesText
 const toolsArray = toolsText
   ? (String(toolsText).split(",").map((s) => s.trim()).filter(Boolean))
   : [];
-const coverUrl =
-  resolveAssetUrl(pickImageString(data?.cover)) ?? (typeof data?.cover === "string" ? data?.cover : "/uploads/placeholder.png");
-const finalUrl =
-  resolveAssetUrl(pickImageString(data?.final)) ?? (typeof data?.final === "string" ? data?.final : null);
+const coverUrl = data?.cover ?? null;
+const finalUrl = data?.final ?? null;
 
 const background = data?.background ?? "";
 const solution = data?.solution ?? "";
@@ -92,14 +88,18 @@ const sourceLink = data?.links?.source ?? "";
                   {coverUrl ? (
                     <figure class="project-hero" role="img" aria-label={`${title} hero`}>
                       <div class="project-hero-figure">
-                        <img
-                          src={coverUrl}
-                          srcset={generateSrcSet(coverUrl, [800, 1200, 1600])}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                          alt={`${title} cover`}
-                          loading="eager"
-                          fetchpriority="high"
-                        />
+                         {typeof coverUrl === 'string' ? (
+                            <img src={coverUrl} alt={`${title} cover`} class="project-hero-img" />
+                         ) : (
+                            <Image
+                              src={coverUrl}
+                              alt={`${title} cover`}
+                              loading="eager"
+                              fetchpriority="high"
+                              widths={[800, 1200, 1600]}
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                            />
+                         )}
                       </div>
                       <div class="project-hero-title">
                         <h1 id="project-title" class="project-title">{title}</h1>
@@ -170,14 +170,27 @@ const sourceLink = data?.links?.source ?? "";
                       <>
                         {finalUrl ? (
                           <figure class="final-figure" aria-hidden="false">
-                            <img
-                              src={finalUrl}
-                              srcset={generateSrcSet(finalUrl, [800, 1200])}
-                              sizes="(max-width: 768px) 100vw, 800px"
-                              alt={`${title} final product`}
-                              loading="lazy"
-                              decoding="async"
-                            />
+                            {typeof finalUrl === 'string' ? (
+                                <img src={finalUrl} alt={`${title} final product`} loading="lazy" decoding="async" />
+                            ) : finalUrl.format === 'gif' ? (
+                                <img
+                                  src={finalUrl.src}
+                                  width={finalUrl.width}
+                                  height={finalUrl.height}
+                                  alt={`${title} final product`}
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                            ) : (
+                                <Image
+                                  src={finalUrl}
+                                  alt={`${title} final product`}
+                                  widths={[800, 1200]}
+                                  sizes="(max-width: 768px) 100vw, 800px"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                            )}
                           </figure>
                         ) : (
                           <p class="section-content">{data.final}</p>

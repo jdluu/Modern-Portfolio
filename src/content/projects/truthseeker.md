@@ -7,17 +7,11 @@ summary: "An AI-powered fact-checking application that verifies statements in re
 
 role: "Full Stack Developer"
 technologies:
-  [
-    "Python",
-    "Streamlit",
-    "Pydantic",
-    "DeepSeek API",
-    "Brave Search API",
-  ]
+  ["Python", "Streamlit", "Pydantic", "DeepSeek API", "Brave Search API"]
 tools: ["GitHub", "uv", "Rich", "httpx"]
 
-cover: "/uploads/projects/truthseeker/cover_truthseeker.min.png"
-final: "/uploads/projects/truthseeker/final_truthseeker.min.png"
+cover: "../../assets/images/projects/truthseeker/cover_truthseeker.min.png"
+final: "../../assets/images/projects/truthseeker/final_truthseeker.min.png"
 
 background: "TruthSeeker is an AI-powered fact-checking application built with Python and Streamlit. The project addresses the challenge of verifying information accuracy in an era of widespread misinformation. I developed this tool to help users quickly verify statements by combining real-time web searches with advanced language model analysis. I handled the full-stack development, focusing on integrating search APIs, LLM processing, and creating both web and CLI interfaces."
 
@@ -33,4 +27,3 @@ links:
   live: "https://journeytotruth.streamlit.app"
   source: "https://github.com/jdluu/TruthSeeker"
 ---
-

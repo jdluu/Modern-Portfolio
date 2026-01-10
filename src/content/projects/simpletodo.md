@@ -9,8 +9,8 @@ role: "Android Developer"
 technologies: ["Java", "Android SDK"]
 tools: ["Android Studio", "Git", "GitHub"]
 
-cover: "https://raw.githubusercontent.com/jdluu/SimpleTodo/master/walkthrough.gif"
-final: "https://raw.githubusercontent.com/jdluu/SimpleTodo/master/walkthrough.gif"
+cover: "../../assets/images/projects/simpletodo/cover_simpletodo.png"
+final: "../../assets/images/projects/simpletodo/final_simpletodo.gif"
 
 background: "SimpleTodo is a fundamental to-do list application for Android built with Java and the Android SDK. The project was designed to practice core Android development concepts including UI management, user input handling, and local data persistence. I handled the Android development, focusing on creating an interactive application that maintains task data across app sessions."
 

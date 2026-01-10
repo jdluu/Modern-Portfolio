@@ -19,8 +19,8 @@ technologies:
   ]
 tools: ["DigitalOcean", "GitHub", "MySQL Workbench", "Postman"]
 
-cover: "/uploads/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"
-final: "/uploads/projects/web_analytics_dashboard/final_web_analytics_dashboard.min.png"
+cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"
+final: "../../assets/images/projects/web_analytics_dashboard/final_web_analytics_dashboard.min.png"
 
 background: "Web Analytics Dashboard is a full-stack web application built with Node.js, Express.js, and MySQL to provide custom analytics tracking and visualization. The project addresses the challenge of accurately interpreting web analytics data, where metrics like bounce rates can be misunderstood without proper context. I handled the full-stack development, focusing on data collection, storage, and visualization capabilities."
 

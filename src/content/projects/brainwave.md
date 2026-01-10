@@ -19,8 +19,8 @@ technologies:
   ]
 tools: ["GitHub", "Clerk", "Shadcn UI"]
 
-cover: "/uploads/projects/brainwave/cover_brainwave.min.png"
-final: "/uploads/projects/brainwave/final_brainwave.gif"
+cover: "../../assets/images/projects/brainwave/cover_brainwave.min.png"
+final: "../../assets/images/projects/brainwave/final_brainwave.gif"
 
 background: "BrainWave is an intelligent note-taking application built with Next.js, TypeScript, and AI integration. The goal was to create a personalized note-taking experience where users could retrieve information using natural language queries rather than traditional keyword search. I handled the full-stack development, focusing on integrating OpenAI, Pinecone, and the Vercel AI SDK to enable semantic search capabilities."
 

@@ -9,8 +9,8 @@ role: "Android Developer"
 technologies: ["Java", "Android", "Parse"]
 tools: ["Android Studio", "Git", "GitHub"]
 
-cover: "https://raw.githubusercontent.com/jdluu/Parsegram/master/walkthrough.gif"
-final: "https://raw.githubusercontent.com/jdluu/Parsegram/master/walkthrough.gif"
+cover: "../../assets/images/projects/parsegram/cover_parsegram.png"
+final: "../../assets/images/projects/parsegram/final_parsegram.gif"
 
 background: "Parsegram is a photo-sharing Android application built with Java and the Parse backend platform. The project was designed to practice fundamental mobile development concepts including user authentication, backend integration, and media handling. I handled the Android development, focusing on implementing Instagram-like functionality with user accounts, photo posting, and a social feed."
 
