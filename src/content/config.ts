@@ -125,17 +125,18 @@ const projects = defineCollection({
 
 const projectcards = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    slug: z.string().optional(),
-    description: z.string().optional(),
-    date: z.union([z.string(), z.coerce.date()]).optional(),
-    startDate: z.union([z.string(), z.coerce.date()]).optional(),
-    endDate: z.union([z.string(), z.coerce.date()]).optional(),
-    thumbnail: z.object({ url: z.string().optional() }).optional(),
-    programming_languages: z.array(z.string()).optional(),
-    domains: z.array(z.string()).optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      slug: z.string().optional(),
+      description: z.string().optional(),
+      date: z.union([z.string(), z.coerce.date()]).optional(),
+      startDate: z.union([z.string(), z.coerce.date()]).optional(),
+      endDate: z.union([z.string(), z.coerce.date()]).optional(),
+      thumbnail: image().optional(),
+      programming_languages: z.array(z.string()).optional(),
+      domains: z.array(z.string()).optional(),
+    }),
 });
 
 export const collections = {

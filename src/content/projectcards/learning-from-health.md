@@ -5,8 +5,7 @@ description: "A data science project that leverages data to develop predictive m
 date: January 2022 - March 2022
 startDate: 2022-01-01
 endDate: 2022-03-31
-thumbnail:
-  url: "/uploads/projects/learning_from_health/thumbnail_learning_from_health.min.png"
+thumbnail: "../../assets/images/projects/learning_from_health/thumbnail_learning_from_health.min.png"
 programming_languages:
   - "Python"
 domains:

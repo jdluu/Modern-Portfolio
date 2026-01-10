@@ -5,8 +5,7 @@ description: "An android app that allows a user to view their Twitter timeline a
 date: October 2021 - March 2022
 startDate: 2021-10-08
 endDate: 2022-03-22
-thumbnail:
-  url: "/uploads/projects/simpletweet/thumbnail_simpletweet.min.png"
+thumbnail: "../../assets/images/projects/simpletweet/thumbnail_simpletweet.min.png"
 programming_languages:
   - "Java"
 domains:

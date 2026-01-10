@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 /**
  * Project card types — flattened.
  *
@@ -10,7 +12,7 @@ export interface ProjectCardProps {
   title: string;
   intro: string;
   url: string;
-  thumbnail: string;
+  thumbnail: ImageMetadata | null;
 }
 
 export interface ProjectCard {
@@ -20,7 +22,7 @@ export interface ProjectCard {
   date?: string | null;
   startDate?: string | null;
   endDate?: string | null;
-  thumbnail?: string | { url?: string | null } | null;
+  thumbnail?: ImageMetadata | null;
   content?: string | null;
   programming_languages?: string[] | null;
   domains?: string[] | null;

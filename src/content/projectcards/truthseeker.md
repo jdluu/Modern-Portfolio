@@ -5,8 +5,7 @@ description: "An AI-powered fact-checking application that verifies statements u
 date: December 2024
 startDate: 2024-12-01
 endDate: 2024-12-13
-thumbnail:
-  url: "/uploads/projects/truthseeker/thumbnail_truthseeker.min.png"
+thumbnail: "../../assets/images/projects/truthseeker/thumbnail_truthseeker.min.png"
 programming_languages:
   - "Python"
   - "HTML"
@@ -16,4 +15,3 @@ domains:
   - "Web"
   - "AI/ML"
 ---
-

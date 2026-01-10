@@ -3,7 +3,7 @@ import ProjectCardList from "@components/ui/ProjectCardList";
 import ProjectCard from "@components/ui/ProjectCard.astro";
 import ImagePriorityLoader from "@components/utils/ImagePriorityLoader.astro";
 import { getCollection } from "astro:content";
-import { pickImageString } from "@lib/utils";
+
 
 /**
  * Load projectcards collection at build time and normalize fields so the
@@ -25,7 +25,7 @@ function mapEntryToProject(item: any) {
     date: d?.date ?? null,
     startDate: d?.startDate ?? null,
     endDate: d?.endDate ?? null,
-    thumbnail: pickImageString(d?.thumbnail ?? null) ?? "",
+    thumbnail: d?.thumbnail ?? null,
     programming_languages: d?.programming_languages ?? [],
     domains: d?.domains ?? [],
   };
