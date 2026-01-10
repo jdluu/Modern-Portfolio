@@ -13,7 +13,7 @@ import {
   normalizeSlug,
   getYearsFromItems,
   dateSortComparator,
-  type DateSortable
+  type DateSortable,
 } from "@lib/sort-utils";
 import PaginationControls from "./PaginationControls";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
@@ -37,15 +37,17 @@ type Props = {
 
 export default function ProjectCardList(props: Props) {
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
-  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">("date-desc");
-  
+  const [sortOption, setSortOption] = createSignal<"date-desc" | "date-asc">(
+    "date-desc",
+  );
+
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
   const [langDropdownOpen, setLangDropdownOpen] = createSignal(false);
   const [domDropdownOpen, setDomDropdownOpen] = createSignal(false);
   const [langSearchTerm, setLangSearchTerm] = createSignal("");
   const [domSearchTerm, setDomSearchTerm] = createSignal("");
-  
+
   let langDropdownRef: HTMLDivElement | undefined;
   let domDropdownRef: HTMLDivElement | undefined;
 
@@ -64,29 +66,27 @@ export default function ProjectCardList(props: Props) {
   });
 
   // Derive unique years
-  const years = createMemo(() => getYearsFromItems(props.initialItems as DateSortable[]));
+  const years = createMemo(() =>
+    getYearsFromItems(props.initialItems as DateSortable[]),
+  );
 
   // Shared filter helper
   const filterByYear = (items: ProjectCard[], yf: string) => {
     if (!yf) return items;
     return items.filter((it) => {
-        const cand = [
-           (it as any)?.startDate,
-           (it as any)?.endDate,
-           (it as any)?.date,
-        ];
-        for (const v of cand) {
-             if (!v) continue;
-             if (isSentinelEnd(v)) {
-                 if (yf === "Present") return true;
-                 continue;
-             }
-             const ts = parseDateToTs(v);
-             if (!Number.isNaN(ts)) {
-                 if (String(new Date(ts).getFullYear()) === yf) return true;
-             }
+      const cand = [it.startDate, it.endDate, it.date];
+      for (const v of cand) {
+        if (!v) continue;
+        if (isSentinelEnd(v)) {
+          if (yf === "Present") return true;
+          continue;
         }
-        return false;
+        const ts = parseDateToTs(v);
+        if (!Number.isNaN(ts)) {
+          if (String(new Date(ts).getFullYear()) === yf) return true;
+        }
+      }
+      return false;
     });
   };
 
@@ -104,9 +104,7 @@ export default function ProjectCardList(props: Props) {
       // Domain filters
       if (currentDomainFilters.length > 0) {
         items = items.filter((it) => {
-          const itemDomains = Array.isArray((it as any)?.domains)
-            ? (it as any).domains.map((x: any) => String(x))
-            : [];
+          const itemDomains = it.domains ?? [];
           return currentDomainFilters.some((f) => itemDomains.includes(f));
         });
       }
@@ -114,14 +112,12 @@ export default function ProjectCardList(props: Props) {
       // Tally languages
       const counts = new Map<string, number>();
       items.forEach((it) => {
-        const list = (it as any)?.programming_languages ?? [];
-        if (Array.isArray(list)) {
-          list.forEach((l: any) => {
-            if (!l) return;
-            const name = String(l);
-            counts.set(name, (counts.get(name) ?? 0) + 1);
-          });
-        }
+        const list = it.programming_languages ?? [];
+        list.forEach((l) => {
+          if (!l) return;
+          const name = String(l);
+          counts.set(name, (counts.get(name) ?? 0) + 1);
+        });
       });
 
       const arr = Array.from(counts.entries()).map(([name, count]) => ({
@@ -153,9 +149,7 @@ export default function ProjectCardList(props: Props) {
       // Language filters
       if (currentLanguageFilters.length > 0) {
         items = items.filter((it) => {
-          const itemLangs = Array.isArray((it as any)?.programming_languages)
-            ? (it as any).programming_languages.map((x: any) => String(x))
-            : [];
+          const itemLangs = it.programming_languages ?? [];
           return currentLanguageFilters.some((f) => itemLangs.includes(f));
         });
       }
@@ -163,14 +157,12 @@ export default function ProjectCardList(props: Props) {
       // Tally domains
       const counts = new Map<string, number>();
       items.forEach((it) => {
-        const list = (it as any)?.domains ?? [];
-        if (Array.isArray(list)) {
-          list.forEach((d: any) => {
-            if (!d) return;
-            const name = String(d);
-            counts.set(name, (counts.get(name) ?? 0) + 1);
-          });
-        }
+        const list = it.domains ?? [];
+        list.forEach((d) => {
+          if (!d) return;
+          const name = String(d);
+          counts.set(name, (counts.get(name) ?? 0) + 1);
+        });
       });
 
       const arr = Array.from(counts.entries()).map(([name, count]) => ({
@@ -210,38 +202,34 @@ export default function ProjectCardList(props: Props) {
     const langFilters = languageFilters();
     if (langFilters.length > 0) {
       items = items.filter((it) => {
-        const itemLangs = Array.isArray((it as any)?.programming_languages)
-          ? (it as any).programming_languages.map((x: any) => String(x))
-          : [];
+        const itemLangs = it.programming_languages ?? [];
         return langFilters.some((f) => itemLangs.includes(f));
       });
     }
 
     const domFilters = domainFilters();
     if (domFilters.length > 0) {
-        items = items.filter((it) => {
-          const itemDomains = Array.isArray((it as any)?.domains)
-            ? (it as any).domains.map((x: any) => String(x))
-            : [];
-          return domFilters.some((f) => itemDomains.includes(f));
-        });
+      items = items.filter((it) => {
+        const itemDomains = it.domains ?? [];
+        return domFilters.some((f) => itemDomains.includes(f));
+      });
     }
 
     const dir = sortOption() === "date-desc" ? "desc" : "asc";
     return items.slice().sort((a, b) => {
-        return dateSortComparator(
-          a as DateSortable, 
-          b as DateSortable, 
-          dir, 
-          "start-first"
-        );
+      return dateSortComparator(
+        a as DateSortable,
+        b as DateSortable,
+        dir,
+        "start-first",
+      );
     });
   });
 
   const pagination = usePagination(processedItems, { defaultPageSize: 6 });
 
-  const visibleSlugsChecker = createMemo(() => 
-    pagination.paginatedItems().map(it => (it as any).slug)
+  const visibleSlugsChecker = createMemo(() =>
+    pagination.paginatedItems().map((it) => (it as any).slug),
   );
 
   useDomSync({
@@ -291,7 +279,9 @@ export default function ProjectCardList(props: Props) {
         </h3>
 
         <div class="control-pair">
-          <label for="project-year-select" class="control-label">Year</label>
+          <label for="project-year-select" class="control-label">
+            Year
+          </label>
           <select
             id="project-year-select"
             class="control-select"
@@ -308,7 +298,9 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-sort-select" class="control-label">Sort by</label>
+          <label for="project-sort-select" class="control-label">
+            Sort by
+          </label>
           <select
             id="project-sort-select"
             class="control-select"
@@ -323,7 +315,9 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-perpage-select" class="control-label">Per page</label>
+          <label for="project-perpage-select" class="control-label">
+            Per page
+          </label>
           <select
             id="project-perpage-select"
             class="control-select compact"
@@ -342,7 +336,9 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-language-button" class="control-label">Languages</label>
+          <label for="project-language-button" class="control-label">
+            Languages
+          </label>
           <div class="dropdown" ref={(el) => (langDropdownRef = el)}>
             <button
               id="project-language-button"
@@ -381,7 +377,9 @@ export default function ProjectCardList(props: Props) {
                       type="checkbox"
                       checked={languageFilters().includes(l.name)}
                       onChange={() => {
-                        setLanguageFilters((prev) => toggleFilterArray(prev, l.name));
+                        setLanguageFilters((prev) =>
+                          toggleFilterArray(prev, l.name),
+                        );
                         pagination.setPage(1);
                       }}
                     />
@@ -396,7 +394,9 @@ export default function ProjectCardList(props: Props) {
         </div>
 
         <div class="control-pair">
-          <label for="project-domain-button" class="control-label">Domains</label>
+          <label for="project-domain-button" class="control-label">
+            Domains
+          </label>
           <div class="dropdown" ref={(el) => (domDropdownRef = el)}>
             <button
               id="project-domain-button"
@@ -435,7 +435,9 @@ export default function ProjectCardList(props: Props) {
                       type="checkbox"
                       checked={domainFilters().includes(d.name)}
                       onChange={() => {
-                        setDomainFilters((prev) => toggleFilterArray(prev, d.name));
+                        setDomainFilters((prev) =>
+                          toggleFilterArray(prev, d.name),
+                        );
                         pagination.setPage(1);
                       }}
                     />
@@ -485,9 +487,9 @@ export default function ProjectCardList(props: Props) {
       </div>
 
       {/* Pagination Controls Portal */}
-      <PaginationControls 
-        pagination={pagination} 
-        portalTargetId="project-pagination-portal" 
+      <PaginationControls
+        pagination={pagination}
+        portalTargetId="project-pagination-portal"
       />
     </section>
   );

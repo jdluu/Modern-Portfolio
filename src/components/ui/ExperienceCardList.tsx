@@ -39,11 +39,7 @@ export default function ExperienceCardList(props: Props) {
     const yf = yearFilter();
     if (yf) {
       items = items.filter((it) => {
-        const candidates = [
-          (it as any)?.startDate,
-          (it as any)?.endDate,
-          (it as any)?.date,
-        ];
+        const candidates = [it.startDate, it.endDate, it.date];
         for (const v of candidates) {
           if (!v) continue;
           if (isSentinelEnd(v)) {
@@ -77,7 +73,7 @@ export default function ExperienceCardList(props: Props) {
   // DOM Sync
   useDomSync({
     visibleSlugs: createMemo(() =>
-      pagination.paginatedItems().map((it) => (it as any).slug),
+      pagination.paginatedItems().map((it) => it.slug),
     ),
     containerSelector: ".experience-grid",
     itemSelector: ".experience-item",
