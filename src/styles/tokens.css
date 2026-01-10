@@ -1,0 +1,167 @@
+/* Material 3 Design System Tokens */
+
+/* 1. Color System */
+[data-theme="light"] {
+  --m3-color-primary: #2959aa;
+  --m3-color-on-primary: #e6e7ed;
+  --m3-color-primary-container: #e6e7ed;
+  --m3-color-on-primary-container: #2959aa;
+  --m3-color-secondary: #5a3e8e;
+  --m3-color-on-secondary: #e6e7ed;
+  --m3-color-tertiary: #8c4351;
+  --m3-color-on-tertiary: #e6e7ed;
+  --m3-color-background: #e6e7ed;
+  --m3-color-on-background: #343b58;
+  --m3-color-surface: #e6e7ed;
+  --m3-color-on-surface: #343b58;
+  --m3-color-surface-variant: #e6e7ed;
+  --m3-color-on-surface-variant: #40434f;
+  --m3-color-outline: #6c6e75;
+}
+
+[data-theme="dark"] {
+  --m3-color-primary: #bb9af7;
+  --m3-color-on-primary: #1a1b26;
+  --m3-color-primary-container: #414868;
+  --m3-color-on-primary-container: #bb9af7;
+  --m3-color-secondary: #7aa2f7;
+  --m3-color-on-secondary: #11121b;
+  --m3-color-tertiary: #f7768e;
+  --m3-color-on-tertiary: #11121b;
+  --m3-color-background: #1a1b26;
+  --m3-color-on-background: #dce1ff;
+  --m3-color-surface: #202436;
+  --m3-color-on-surface: #e7ebff;
+  --m3-color-surface-variant: #2c3147;
+  --m3-color-on-surface-variant: #bfc6f4;
+  --m3-color-outline: #6e78a8;
+}
+
+:root {
+  /* COLORS */
+  --color: var(--color-accent);
+  --dark-color: #2b2b2b;
+  --dark-icon-color: #ffffff;
+  --light-color: #f7f7f7;
+  --light-icon-color: #ffcc00;
+  --color-background: var(--m3-color-background);
+  --color-surface: var(--m3-color-surface);
+  --color-card: var(--m3-color-surface-variant);
+  --color-text-primary: var(--m3-color-on-surface);
+
+  /* Fallback first, then color-mix for Safari <16.4 */
+  --color-text-secondary: var(--m3-color-on-surface-variant);
+  --color-text-secondary: color-mix(
+    in oklab,
+    var(--m3-color-on-surface) 78%,
+    var(--m3-color-on-surface-variant) 22%
+  );
+
+  --color-text-tertiary: var(--m3-color-on-surface-variant);
+  --color-link: var(--m3-color-primary);
+  --color-accent: var(--m3-color-primary);
+
+  /* Fallbacks for Safari <16.4 */
+  --color-accent-hover: var(--color-accent);
+  --color-accent-hover: color-mix(
+    in oklab,
+    var(--color-accent) 82%,
+    var(--m3-color-on-surface) 18%
+  );
+  --color-accent-muted: transparent;
+  --color-accent-muted: color-mix(
+    in oklab,
+    var(--color-accent) 18%,
+    transparent 82%
+  );
+  --color-on-accent: var(--m3-color-on-primary);
+  --color-focus: rgba(41, 89, 170, 0.45);
+  --color-focus: color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
+  --color-border: var(--m3-color-outline);
+  --color-border: color-mix(
+    in oklab,
+    var(--m3-color-outline) 65%,
+    transparent 35%
+  );
+  --color-border-strong: var(--m3-color-outline);
+
+  /* Font Families */
+  --m3-font-family-display: "Roboto Flex", sans-serif;
+  --m3-font-family-body: "Roboto Flex", sans-serif;
+
+  /* Type Scale */
+  --m3-font-display-large: 5.7rem;
+  --m3-font-display-medium: 4.5rem;
+  --m3-font-display-small: 3.6rem;
+  --m3-font-headline-large: 3.2rem;
+  --m3-font-headline-medium: 2.8rem;
+  --m3-font-headline-small: 2.4rem;
+  --m3-font-title-large: 2.4rem;
+  --m3-font-title-medium: 1.8rem;
+  --m3-font-title-small: 1.6rem;
+  --m3-font-label-large: 1.4rem;
+  --m3-font-label-medium: 1.3rem;
+  --m3-font-label-small: 1.2rem;
+  --m3-font-body-large: 1.8rem;
+  --m3-font-body-medium: 1.6rem;
+  --m3-font-body-small: 1.45rem;
+
+  /* Spacing scale (4px baseline) */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2rem;
+  --space-6: 2.4rem;
+  --space-8: 3.2rem;
+  --space-10: 4rem;
+  --space-12: 4.8rem;
+
+  /* Grid gap aliases */
+  --grid-gap-xs: var(--space-3);
+  --grid-gap-sm: var(--space-4);
+  --grid-gap-md: var(--space-5);
+  --grid-gap-lg: var(--space-6);
+
+  /* Back-compat spacing tokens */
+  --spacing-sm: var(--space-2);
+  --spacing-md: var(--space-4);
+  --spacing-lg: var(--space-6);
+  --spacing-xl: var(--space-8);
+
+  --nav-height: 64px;
+  --text-color: var(--color-text-primary);
+  --accent-color: var(--color-accent);
+  --font-heading: var(--m3-font-family-display);
+
+  /* Fluid typography tokens */
+  --font-size-h1-min: 3.2rem;
+  --font-size-h1-max: 5.6rem;
+  --font-size-h2-min: 2.4rem;
+  --font-size-h2-max: 4rem;
+  --font-size-h3-min: 2rem;
+  --font-size-h3-max: 3rem;
+  --font-size-h4: 1.8rem;
+  --font-size-h5: 1.6rem;
+  --font-size-h6: 1.45rem;
+  --font-size-body-min: 1.6rem;
+  --font-size-body-max: 1.8rem;
+
+  --font-weight-h1: 560;
+  --font-weight-h2: 520;
+  --font-weight-h3: 500;
+  --font-weight-h4: 480;
+  --font-weight-h5: 470;
+  --font-weight-h6: 460;
+
+  --font-line-height-heading-tight: 1.22;
+  --font-line-height-heading: 1.24;
+  --font-line-height-body: 1.6;
+}
+
+/* Safari macOS 17+ heading clipping fixes for Roboto Flex */
+@supports (font: -apple-system-body) {
+  :root {
+    --font-line-height-heading-tight: 1.28; /* was 1.22 */
+  }
+}

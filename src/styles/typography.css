@@ -1,0 +1,109 @@
+/* Typography System */
+
+/* Font Definitions */
+@font-face {
+  font-family: "Roboto Flex";
+  src: url("/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+@font-face {
+  font-family: "Roboto Flex";
+  src: url("/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2") format("woff2");
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: optional;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
+    U+FFFD;
+}
+
+/* Heading Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--m3-font-family-display);
+  color: var(--color-text-primary);
+  margin: 0 0 0.65em;
+  overflow-wrap: break-word; /* Safari <17 fallback */
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(
+    var(--font-size-h1-min),
+    calc(var(--font-size-h1-min) + 2.2vw),
+    var(--font-size-h1-max)
+  );
+  font-weight: var(--font-weight-h1);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(
+    var(--font-size-h2-min),
+    calc(var(--font-size-h2-min) + 1.6vw),
+    var(--font-size-h2-max)
+  );
+  font-weight: var(--font-weight-h2);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.012em;
+}
+
+h3 {
+  font-size: clamp(
+    var(--font-size-h3-min),
+    calc(var(--font-size-h3-min) + 0.9vw),
+    var(--font-size-h3-max)
+  );
+  font-weight: var(--font-weight-h3);
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.008em;
+}
+
+h4 {
+  font-size: clamp(1.8rem, 1.62rem + 0.35vw, var(--font-size-h4));
+  font-weight: var(--font-weight-h4);
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.004em;
+}
+
+h5 {
+  font-size: clamp(1.6rem, 1.5rem + 0.2vw, var(--font-size-h5));
+  font-weight: var(--font-weight-h5);
+  line-height: 1.28;
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-h6);
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+strong,
+b {
+  font-weight: 640;
+}
+
+/* Safari macOS 17+ heading clipping fixes for Roboto Flex */
+@supports (font: -apple-system-body) {
+  body {
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.005em; /* looser than default to prevent clipping */
+  }
+}
