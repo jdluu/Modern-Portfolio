@@ -1,6 +1,6 @@
 /* Footer component styles (extracted from src/components/ui/Footer.astro) */
 #footer {
-  background-color: var(--color-background);
+  background-color: transparent;
   padding: 2.4rem 0;
 }
 

@@ -3,8 +3,12 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--color-surface);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* Glassmorphism: Semi-transparent background with blur */
+  background-color: color-mix(in srgb, var(--color-surface), transparent 20%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  /* Subtle hairline border instead of shadow */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 .nav-container {
   display: flex;
@@ -13,7 +17,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  height: 4rem; /* 64px */
+  height: 4.5rem; /* Increased vertical spacing */
 }
 .nav-content {
   display: flex;
@@ -39,7 +43,9 @@
   cursor: pointer;
   color: var(--color-text-primary);
   border-radius: 50%;
-  transition: background-color 0.2s ease, filter 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    filter 0.2s ease;
   box-sizing: border-box;
 }
 .menu-icon-button:hover {
@@ -118,7 +124,9 @@
   cursor: pointer;
   color: var(--color-text-primary);
   border-radius: 50%;
-  transition: background-color 0.2s ease, filter 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    filter 0.2s ease;
   box-sizing: border-box;
 }
 .menu-close-btn:hover {
@@ -149,7 +157,9 @@
   text-decoration: none;
   color: var(--m3-color-on-surface-variant);
   font-weight: 500;
-  transition: background-color 0.2s ease, filter 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    filter 0.2s ease;
   box-sizing: border-box;
 }
 .nav-link:hover {
@@ -215,7 +225,9 @@
     color: var(--color-text-primary);
     padding: 0.5rem;
     border-radius: 50%;
-    transition: background-color 0.2s ease, filter 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      filter 0.2s ease;
     box-sizing: border-box;
   }
   .desktop-home-link:hover {
