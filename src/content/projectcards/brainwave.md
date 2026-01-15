@@ -10,8 +10,6 @@ programming_languages:
   - "TypeScript"
   - "Next.js"
   - "React"
-  - "HTML"
-  - "CSS"
   - "JavaScript"
 domains:
   - "Web"

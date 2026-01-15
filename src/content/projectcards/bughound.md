@@ -9,8 +9,6 @@ thumbnail: "../../assets/images/projects/bughound/thumbnail_bughound.min.png"
 programming_languages:
   - "TypeScript"
   - "React"
-  - "HTML"
-  - "CSS"
   - "JavaScript"
 domains:
   - "Web"

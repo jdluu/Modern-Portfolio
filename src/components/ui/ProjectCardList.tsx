@@ -74,9 +74,25 @@ export default function ProjectCardList(props: Props) {
     const counts = new Map<string, number>();
     items.forEach((it) => {
       const list = it.programming_languages ?? [];
+      const normalizedInProject = new Set<string>();
+
       list.forEach((l) => {
         if (!l) return;
         const name = String(l);
+        const lower = name.toLowerCase();
+
+        // Exclude HTML and CSS
+        if (lower === "html" || lower === "css") return;
+
+        // Normalize JS/TS variants
+        if (["javascript", "js", "typescript"].includes(lower)) {
+          normalizedInProject.add("JavaScript / TypeScript");
+        } else {
+          normalizedInProject.add(name);
+        }
+      });
+
+      normalizedInProject.forEach((name) => {
         counts.set(name, (counts.get(name) ?? 0) + 1);
       });
     });
@@ -124,7 +140,14 @@ export default function ProjectCardList(props: Props) {
     const langFilters = languageFilters();
     if (langFilters.length > 0) {
       items = items.filter((it) => {
-        const itemLangs = it.programming_languages ?? [];
+        const itemLangs = (it.programming_languages ?? []).map((l) => {
+          const name = String(l);
+          const lower = name.toLowerCase();
+          if (["javascript", "js", "typescript"].includes(lower)) {
+            return "JavaScript / TypeScript";
+          }
+          return name;
+        });
         return langFilters.some((f) => itemLangs.includes(f));
       });
     }

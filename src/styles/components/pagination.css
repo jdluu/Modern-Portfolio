@@ -79,9 +79,11 @@
 
 /* Individual label+control grouping */
 .experience-controls .control-pair {
-  display: inline-flex;
+  display: flex !important;
+  display: inline-flex !important;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.8rem;
+  flex-wrap: nowrap;
 }
 
 /* Visual label styling */
@@ -90,6 +92,7 @@
   font-size: var(--m3-font-label-medium);
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Shared select styling used across the site (blog-like) */

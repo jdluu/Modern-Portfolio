@@ -8,9 +8,6 @@ endDate: 2024-12-13
 thumbnail: "../../assets/images/projects/truthseeker/thumbnail_truthseeker.min.png"
 programming_languages:
   - "Python"
-  - "HTML"
-  - "CSS"
-  - "JavaScript"
 domains:
   - "Web"
   - "AI/ML"

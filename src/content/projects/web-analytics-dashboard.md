@@ -6,17 +6,7 @@ date: "2023-05"
 summary: "A full-stack web application featuring a custom, secured web analytics dashboard and reporting system to enable data-driven decision-making for web development."
 
 role: "Software Developer"
-technologies:
-  [
-    "HTML",
-    "CSS",
-    "JS",
-    "Node.js",
-    "Express.js",
-    "MySQL",
-    "ZingChart",
-    "ZingGrid",
-  ]
+technologies: ["JS", "Node.js", "Express.js", "MySQL", "ZingChart", "ZingGrid"]
 tools: ["DigitalOcean", "GitHub", "MySQL Workbench", "Postman"]
 
 cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"

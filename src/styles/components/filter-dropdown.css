@@ -2,7 +2,8 @@
 
 .dropdown {
   position: relative;
-  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .dropdown-panel {
