@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+function initNavbar() {
   const mainMenu = document.getElementById("main-menu");
   const menuToggleBtn = document.getElementById("menu-toggle-btn");
   const backdrop = document.getElementById("menu-backdrop");
@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = menuCloseBtn;
     const firstFocusable = 'a, button, [tabindex]:not([tabindex="-1"])';
 
+    // Remove existing listeners to prevent duplicates if init runs multiple times
+    // (A simple way is to clone the nodes, but that kills internal state.
+    // Better: check if we attached a listener or use a cleanup function if possible.
+    // However, given the DOM replacement in Astro, fresh elements are likely.)
+
     let isAnimating = false;
     let openFallbackTimer: number | undefined;
     let closeFallbackTimer: number | undefined;
@@ -19,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function cleanupAfterClose() {
       menu.setAttribute("hidden", "");
       menu.setAttribute("data-open", "false");
-      menu.inert = true;
+      menu.setAttribute("inert", ""); // Ensure inert attribute is set
       menu.classList.remove("is-closing");
       back.setAttribute("hidden", "");
       document.body.style.overflow = "";
@@ -48,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isAnimating = true;
       btn.setAttribute("aria-expanded", "true");
       menu.removeAttribute("hidden");
-      menu.inert = false;
+      menu.removeAttribute("inert"); // Explicitly remove inert attribute
       menu.setAttribute("data-open", "true");
       back.removeAttribute("hidden");
       back.classList.add("visible");
@@ -110,22 +115,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const isMenuOpen = menu.getAttribute("data-open") === "true";
 
       if (isDesktop) {
-        menu.inert = false;
+        menu.removeAttribute("inert");
         if (isMenuOpen) {
           closeMenu(false);
           document.body.style.overflow = "";
           back.setAttribute("hidden", "");
         }
       } else {
-        menu.inert = !isMenuOpen;
+        if (!isMenuOpen) {
+          menu.setAttribute("inert", "");
+        } else {
+          menu.removeAttribute("inert");
+        }
       }
     }
 
     // Attach all event listeners
-    btn.addEventListener("click", toggleMenu);
-    closeBtn.addEventListener("click", () => closeMenu());
-    back.addEventListener("click", () => closeMenu());
-    menu.addEventListener("click", (e) => {
+    // Note: If using View Transitions, elements are replaced, so simple addEventListener is fine.
+    btn.onclick = toggleMenu; // Use onclick property to auto-replace previous listener
+    closeBtn.onclick = () => closeMenu();
+    back.onclick = () => closeMenu();
+
+    // For delegate listener on menu, we can't use onclick property easily for complex logic?
+    // Actually we can.
+    menu.onclick = (e) => {
       if (!(e.target instanceof HTMLElement)) return;
       const isActivator = e.target.closest("a, button");
       if (!isActivator) return;
@@ -133,12 +146,27 @@ document.addEventListener("DOMContentLoaded", () => {
       if (menu.getAttribute("data-open") === "true") {
         closeMenu();
       }
-    });
+    };
 
     // Initial setup and resize listener
     setDesktopNavState();
-    window.addEventListener("resize", setDesktopNavState);
+
+    // Debounced resize listener
+    let resizeTimer: number;
+    window.onresize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(setDesktopNavState, 100);
+    };
   } else {
-    console.error("One or more required navigation elements were not found.");
+    // console.warn("Navigation elements not found (this is normal on pages without navbar)");
   }
-});
+}
+
+// Support Astro View Transitions
+document.addEventListener("astro:page-load", initNavbar);
+// Fallback for initial load if View Transitions not active or first load
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initNavbar);
+} else {
+  initNavbar();
+}

@@ -78,22 +78,11 @@ const experiences = defineCollection({
           description: z.string().optional(),
         })
         .optional(),
-      card: z
-        .object({
-          date: z.union([z.string(), z.coerce.date()]).optional(),
-          thumbnail: z.string().optional(),
-          summary: z.string().optional(),
-        })
-        .optional(),
-    }),
-});
-
-const experiencecards = defineCollection({
-  type: "content",
-  schema: ({ image }) =>
-    baseCardSchema.extend({
-      company: z.string().optional(),
+      // Flattened fields for easier card access
+      startDate: z.union([z.string(), z.coerce.date()]).optional(),
+      endDate: z.union([z.string(), z.coerce.date()]).optional(),
       thumbnail: image().optional(),
+      summary: z.string().optional(),
     }),
 });
 
@@ -102,11 +91,17 @@ const projects = defineCollection({
   schema: ({ image }) =>
     baseSchema.extend({
       summary: z.string().optional(),
+      description: z.string().optional(), // from projectcards
       role: z.string().optional(),
       technologies: z.array(z.string()).optional(),
       tools: z.array(z.string()).optional(),
       cover: image().optional(),
+      thumbnail: image().optional(), // from projectcards
       final: image().optional(),
+      startDate: z.union([z.string(), z.coerce.date()]).optional(), // from projectcards
+      endDate: z.union([z.string(), z.coerce.date()]).optional(), // from projectcards
+      programming_languages: z.array(z.string()).optional(), // from projectcards
+      domains: z.array(z.string()).optional(), // from projectcards
       background: z.string().optional(),
       solution: z.string().optional(),
       process: z.string().optional(),
@@ -121,21 +116,12 @@ const projects = defineCollection({
     }),
 });
 
-const projectcards = defineCollection({
-  type: "content",
-  schema: ({ image }) =>
-    baseCardSchema.extend({
-      description: z.string().optional(),
-      thumbnail: image().optional(),
-      programming_languages: z.array(z.string()).optional(),
-      domains: z.array(z.string()).optional(),
-    }),
-});
-
 export const collections = {
   posts,
   experiences,
-  experiencecards,
   projects,
-  projectcards,
 };
+
+export type ExperienceEntry = z.infer<typeof experiences.schema>;
+export type ProjectEntry = z.infer<typeof projects.schema>;
+export type PostEntry = z.infer<typeof posts.schema>;

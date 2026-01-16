@@ -36,4 +36,6 @@ work:
     - points: >-
         Improved code output quality by 20% through systematic evaluation and
         refinement
+thumbnail: ../../assets/images/experiences/outlier/thumbnail_outlier.min.jpg
+summary: Enhancing Code Quality and Output Accuracy
 ---

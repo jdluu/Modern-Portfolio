@@ -8,10 +8,13 @@ export function normalizeSlug(value: unknown): string {
 }
 
 export interface DateSortable {
-  startDate?: string | null;
-  endDate?: string | null;
-  date?: string | null;
+  startDate?: string | Date | null;
+  endDate?: string | Date | null;
+  date?: string | Date | null;
 }
+
+export type SortDirection = "asc" | "desc";
+export type SortMode = "start-first" | "end-first";
 
 /**
  * Comparison helper for sorting items by date (descending/ascending).
@@ -23,8 +26,8 @@ export interface DateSortable {
 export function dateSortComparator(
   a: DateSortable,
   b: DateSortable,
-  direction: "asc" | "desc",
-  mode: "start-first" | "end-first" = "end-first",
+  direction: SortDirection,
+  mode: SortMode = "end-first",
 ): number {
   const getTs = (item: DateSortable) => {
     if (mode === "start-first") {

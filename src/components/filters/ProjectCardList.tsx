@@ -8,7 +8,7 @@ import {
   dateSortComparator,
   type DateSortable,
 } from "@lib/sort-utils";
-import PaginationControls from "./PaginationControls";
+import PaginationControls from "@components/navigation/PaginationControls";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
 import FilterDropdown from "./FilterDropdown";
 
@@ -36,7 +36,7 @@ export default function ProjectCardList(props: Props) {
   );
 
   // Shared filter helper
-  const filterByYear = (items: ProjectCard[], yf: string) => {
+  const filterByYearHelper = (items: ProjectCard[], yf: string) => {
     if (!yf) return items;
     return items.filter((it) => {
       const cand = [it.startDate, it.endDate, it.date];
@@ -55,14 +55,17 @@ export default function ProjectCardList(props: Props) {
     });
   };
 
+  const filteredByYear = createMemo(() => {
+    return filterByYearHelper(props.initialItems, yearFilter());
+  });
+
   /**
    * Languages with dynamic counts.
    */
   const languageCounts = createMemo(() => {
-    const yf = yearFilter();
     const currentDomainFilters = domainFilters() ?? [];
 
-    let items = filterByYear(props.initialItems, yf);
+    let items = filteredByYear();
 
     if (currentDomainFilters.length > 0) {
       items = items.filter((it) => {
@@ -106,10 +109,9 @@ export default function ProjectCardList(props: Props) {
    * Domains with dynamic counts.
    */
   const domainCounts = createMemo(() => {
-    const yf = yearFilter();
     const currentLanguageFilters = languageFilters() ?? [];
 
-    let items = filterByYear(props.initialItems, yf);
+    let items = filteredByYear();
 
     if (currentLanguageFilters.length > 0) {
       items = items.filter((it) => {
@@ -135,7 +137,7 @@ export default function ProjectCardList(props: Props) {
 
   // Ensure pagination resets when filters change
   const processedItems = createMemo(() => {
-    let items = filterByYear(props.initialItems, yearFilter());
+    let items = filterByYearHelper(props.initialItems, yearFilter());
 
     const langFilters = languageFilters();
     if (langFilters.length > 0) {

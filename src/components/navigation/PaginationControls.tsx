@@ -1,6 +1,7 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import type { UsePaginationResult } from "@hooks/usePagination";
+import "./PaginationControls.css";
 
 interface PaginationControlsProps {
   pagination: UsePaginationResult<any>;
@@ -9,9 +10,10 @@ interface PaginationControlsProps {
 }
 
 export default function PaginationControls(props: PaginationControlsProps) {
-  const { page, totalPages, canPrev, canNext, prevPage, nextPage } = props.pagination;
+  const { page, totalPages, canPrev, canNext, prevPage, nextPage } =
+    props.pagination;
   const [mounted, setMounted] = createSignal(false);
-  
+
   onMount(() => {
     setMounted(true);
   });
@@ -27,11 +29,11 @@ export default function PaginationControls(props: PaginationControlsProps) {
       >
         Previous
       </button>
-      
+
       <div class="pagination-info">
         Page {page()} of {totalPages()}
       </div>
-      
+
       <button
         class="pagination-button"
         onClick={nextPage}
@@ -45,19 +47,16 @@ export default function PaginationControls(props: PaginationControlsProps) {
 
   /**
    * Hydration strategy:
-   * When using a Portal (`portalTargetId` exists), avoid rendering content during SSR/hydration 
+   * When using a Portal (`portalTargetId` exists), avoid rendering content during SSR/hydration
    * to prevent mismatches since the target container is empty.
    * Only mount the portal content after client-side mount.
    */
   return (
-    <Show
-      when={props.portalTargetId}
-      fallback={<Content />}
-    >
+    <Show when={props.portalTargetId} fallback={<Content />}>
       <Show when={mounted()}>
-         <Portal mount={document.getElementById(props.portalTargetId!)!}>
-           <Content />
-         </Portal>
+        <Portal mount={document.getElementById(props.portalTargetId!)!}>
+          <Content />
+        </Portal>
       </Show>
     </Show>
   );

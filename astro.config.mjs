@@ -6,10 +6,7 @@ import solidJs from "@astrojs/solid-js";
 export default defineConfig({
   site: "https://jluu.dev",
   base: "/",
-  integrations: [
-    sitemap(),
-    solidJs({ include: ["src/components/ui/**/*.tsx"] }),
-  ],
+  integrations: [sitemap(), solidJs({ include: ["src/components/**/*.tsx"] })],
   i18n: {
     defaultLocale: "en",
     locales: ["en"],

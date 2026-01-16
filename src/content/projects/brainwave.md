@@ -35,4 +35,16 @@ reflection: "This project highlighted the importance of architecture planning wh
 links:
   live: ""
   source: "https://github.com/jdluu/BrainWave"
+description: "An intelligent note-taking web application with AI integration."
+startDate: 2024-02-01
+endDate: 2024-03-31
+thumbnail: "../../assets/images/projects/brainwave/thumbnail_brainwave.min.png"
+programming_languages:
+  - "TypeScript"
+  - "Next.js"
+  - "React"
+  - "JavaScript"
+domains:
+  - "Web"
+  - "AI/ML"
 ---

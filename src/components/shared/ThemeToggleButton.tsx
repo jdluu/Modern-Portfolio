@@ -1,4 +1,5 @@
 import { createSignal, onMount, Show } from "solid-js";
+import "./ThemeToggleButton.css";
 
 const STORAGE_KEY = "darkmode";
 

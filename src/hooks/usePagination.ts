@@ -1,4 +1,9 @@
-import { createSignal, createMemo, type Accessor } from "solid-js";
+import {
+  createSignal,
+  createMemo,
+  createEffect,
+  type Accessor,
+} from "solid-js";
 
 export interface PaginationOptions {
   defaultPage?: number;
@@ -20,26 +25,30 @@ export interface UsePaginationResult<T> {
 
 export function usePagination<T>(
   items: Accessor<T[]>,
-  options: PaginationOptions = {}
+  options: PaginationOptions = {},
 ): UsePaginationResult<T> {
   const [page, setPage] = createSignal(options.defaultPage ?? 1);
   const [pageSize, setPageSize] = createSignal(options.defaultPageSize ?? 6);
 
   const totalCount = createMemo(() => items().length);
-  
+
   const totalPages = createMemo(() =>
-    Math.max(1, Math.ceil(totalCount() / pageSize()))
+    Math.max(1, Math.ceil(totalCount() / pageSize())),
   );
 
-  const paginatedItems = createMemo(() => {
-    // Ensure current page is valid for current data
-    const safePage = Math.min(Math.max(1, page()), totalPages());
-    if (safePage !== page()) {
-      setPage(safePage);
+  // Sync page when totalPages changes (e.g. after filtering)
+  createEffect(() => {
+    const max = totalPages();
+    if (page() > max) {
+      setPage(max);
+    } else if (page() < 1) {
+      setPage(1);
     }
-    
+  });
+
+  const paginatedItems = createMemo(() => {
     const size = pageSize();
-    const start = (safePage - 1) * size;
+    const start = (Math.max(1, page()) - 1) * size;
     return items().slice(start, start + size);
   });
 

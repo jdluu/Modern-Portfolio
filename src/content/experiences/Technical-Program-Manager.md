@@ -31,4 +31,6 @@ work:
     - points: >-
         Mentored a student group that became a top 10 finalist in android apps
         for Codepath nationally
+thumbnail: ../../assets/images/experiences/codepath/thumbnail_codepath.min.png
+summary: Driving the Education and Empowerment of Future Tech Innovators
 ---

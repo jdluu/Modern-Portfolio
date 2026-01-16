@@ -25,4 +25,12 @@ reflection: "This project provided practical experience with asynchronous networ
 links:
   live: ""
   source: "https://github.com/jdluu/Flixster"
+description: "An android app that displays the newest movie trailers and their reviews."
+startDate: 2021-09-18
+endDate: 2022-04-16
+thumbnail: "../../assets/images/projects/flixster/thumbnail_flixster.min.png"
+programming_languages:
+  - "Java"
+domains:
+  - "Mobile"
 ---

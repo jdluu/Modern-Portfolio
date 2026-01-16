@@ -1,0 +1,49 @@
+---
+/**
+ * TableOfContents.astro
+ * 
+ * A reusable TOC component that scans the page for sections with IDs
+ * and generates a sticky navigation.
+ * 
+ * Logic is encapsulated in `src/scripts/toc-controller.ts`.
+ */
+
+ interface Props {
+  // Optional: Allows overriding the default aria-label
+  ariaLabel?: string;
+}
+
+const { ariaLabel = "Table of contents" } = Astro.props;
+---
+
+<aside class="project-toc" aria-label={ariaLabel}>
+  <div class="toc-card" role="navigation" aria-labelledby="toc-label">
+    <div class="toc-header" aria-hidden="false">
+      <h4 id="toc-label">Table of Contents</h4>
+      <button id="toc-toggle" class="toc-toggle" aria-expanded="true" aria-label="Collapse Table of Contents">−</button>
+    </div>
+    <ul class="toc-list">
+      <!-- 
+           Note: The links here are currently hardcoded for the project page structure.
+           Ideally, these could be passed as props or generated, but for this refactor
+           we are matching the existing functionality. 
+      -->
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#background">Background</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#results">Final Product</a></li>
+      <li><a href="#reflection">Reflection</a></li>
+    </ul>
+  </div>
+</aside>
+
+<script>
+  import { TableOfContentsController } from "@scripts/toc-controller";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const tocElement = document.querySelector('.project-toc') as HTMLElement;
+    if (tocElement) {
+      new TableOfContentsController(tocElement);
+    }
+  });
+</script>

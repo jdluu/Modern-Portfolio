@@ -8,7 +8,7 @@ import {
   dateSortComparator,
   type DateSortable,
 } from "@lib/sort-utils";
-import PaginationControls from "./PaginationControls";
+import PaginationControls from "@components/navigation/PaginationControls";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
 
 /**

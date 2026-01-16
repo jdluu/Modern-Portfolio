@@ -1,34 +1,18 @@
 ---
-import ExperienceCardList from "@components/ui/ExperienceCardList";
-import ExperienceCard from "@components/ui/ExperienceCard.astro";
-import ImagePriorityLoader from "@components/utils/ImagePriorityLoader.astro";
+import ExperienceCardList from "@components/filters/ExperienceCardList";
+import ExperienceCard from "@components/cards/ExperienceCard.astro";
+import ImagePriorityLoader from "@components/shared/ImagePriorityLoader.astro";
 import { getCollection } from "astro:content";
+import { mapExperienceToCard } from "@lib/content-mappers";
+import "./ExperienceSection.css";
   
-const rawCollection = (await getCollection("experiencecards")) ?? [];
-function mapEntryToExperience(item: any) {
-  const entrySlug =
-    typeof item?.slug === "string"
-      ? item.slug
-      : String(item?.id ?? "").replace(/\.(md|mdx)$/i, "");
-  const d = item?.data ?? {};
-  return {
-    title: d?.title ?? "Untitled",
-    slug: entrySlug,
-    // Flatten frontmatter fields
-    company: d.company ?? null,
-    date: d.date ?? null,
-    startDate: d.startDate ?? null,
-    endDate: d.endDate ?? null,
-    thumbnail: d.thumbnail ?? null,
-    summary: d.summary ?? null,
-  };
-}
-const experiences = (rawCollection ?? []).map(mapEntryToExperience);
+const rawCollection = await getCollection("experiences");
+const experiences = rawCollection.map(mapExperienceToCard);
 ---
 <section class="experience-section content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
 	<!-- Client island -->
-	<ExperienceCardList client:load initialItems={experiences} />
+	<ExperienceCardList client:visible initialItems={experiences} />
 
 	<!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
 	<div class="experience-grid">

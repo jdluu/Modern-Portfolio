@@ -35,4 +35,12 @@ reflection: "This project provided valuable experience in Agile software develop
 links:
   live: ""
   source: "https://github.com/jdluu/ZooSeeker"
+description: "An Android app to enhance the San Diego Zoo visitor experience by creating custom exhibit plans and optimizing routes for minimal walking distance."
+startDate: 2022-03-17
+endDate: 2022-05-31
+thumbnail: "../../assets/images/projects/zooseeker/thumbnail_zooseeker.min.png"
+programming_languages:
+  - "Java"
+domains:
+  - "Mobile"
 ---

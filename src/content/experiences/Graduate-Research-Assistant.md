@@ -38,4 +38,6 @@ work:
         Demonstrated coordinated behavior among multiple agents in Unity
         simulations, validating reinforcement learning strategies for complex
         tasks
+thumbnail: ../../assets/images/experiences/csulb/thumbnail_csulb.min.png
+summary: Pushing the boundaries of AI collaboration
 ---

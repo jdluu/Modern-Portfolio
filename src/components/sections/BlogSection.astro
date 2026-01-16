@@ -1,7 +1,8 @@
 ---
-import PostsList from "@components/ui/PostsList";
-import Post from "@components/ui/Post.astro";
+import PostsList from "@components/blog/PostsList";
+import Post from "@components/blog/Post.astro";
 import type { PostIndexItem } from "@app-types/post";
+import "./BlogSection.css";
  
 // Accept posts from the parent page (server-side fetched in /pages/blog.astro)
 const { posts } = Astro.props as { posts: PostIndexItem[] };
@@ -12,7 +13,7 @@ const { posts } = Astro.props as { posts: PostIndexItem[] };
  
   <div class="posts-container">
     <!-- Client island: controls, filtering, and pagination -->
-    <PostsList client:load initialItems={posts} />
+    <PostsList client:visible initialItems={posts} />
     
     <!-- Server-rendered list for SEO & initial markup. Client island controls visibility. -->
     <ul class="post-list" role="list">

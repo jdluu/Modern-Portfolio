@@ -25,4 +25,12 @@ reflection: "This project improved my skills in data preprocessing and feature e
 links:
   live: ""
   source: "https://drive.google.com/file/d/1YPhcZLn9Wu29WMI-riQDS6K4GBD4cwmQ/view?usp=sharing"
+description: "A data science project that leverages data to develop predictive models for income, based on health statistics."
+startDate: 2022-01-01
+endDate: 2022-03-31
+thumbnail: "../../assets/images/projects/learning_from_health/thumbnail_learning_from_health.min.png"
+programming_languages:
+  - "Python"
+domains:
+  - "AI/ML"
 ---

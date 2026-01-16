@@ -25,4 +25,12 @@ reflection: "This project improved my skills in database design for time-series 
 links:
   live: ""
   source: "https://jluu.dev/contact/"
+description: "A web application with a custom, secured web analytics dashboard and reporting system."
+startDate: 2023-05-01
+endDate: 2023-06-14
+thumbnail: "../../assets/images/projects/web_analytics_dashboard/thumbnail_web_analytics_dashboard.min.png"
+programming_languages:
+  - "JavaScript"
+domains:
+  - "Web"
 ---

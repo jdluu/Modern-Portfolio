@@ -25,4 +25,12 @@ reflection: "This project provided foundational experience with Android Activity
 links:
   live: ""
   source: "https://github.com/jdluu/SimpleTodo"
+description: "A simple android app for a todo list."
+startDate: 2021-07-27
+endDate: 2021-09-28
+thumbnail: "../../assets/images/projects/simpletodo/thumbnail_simpletodo.min.png"
+programming_languages:
+  - "Java"
+domains:
+  - "Mobile"
 ---

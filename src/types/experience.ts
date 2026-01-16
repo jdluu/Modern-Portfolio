@@ -30,9 +30,9 @@ export interface Experience {
     link?: string | null;
     description?: string | null;
   } | null;
-  card?: {
-    date?: string;
-    thumbnail?: string;
-    summary?: string;
-  } | null;
+  // Flattened fields
+  startDate?: string;
+  endDate?: string;
+  thumbnail?: ImageMetadata | null;
+  summary?: string;
 }

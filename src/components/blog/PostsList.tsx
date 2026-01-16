@@ -9,7 +9,7 @@ import {
 import type { PostIndexItem } from "@app-types/post";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
-import PaginationControls from "./PaginationControls";
+import PaginationControls from "@components/navigation/PaginationControls";
 
 /**
  * PostsList
@@ -26,7 +26,7 @@ export default function PostsList(props: Props) {
   // UI state
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
   const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
-  
+
   // Tag panel UI helpers
   const [showTagPanel, setShowTagPanel] = createSignal<boolean>(false);
   const [tagFilterTerm, setTagFilterTerm] = createSignal<string>("");
@@ -83,7 +83,7 @@ export default function PostsList(props: Props) {
     let items = all.slice();
     // Exclude drafts
     items = items.filter((i) => !i.draft);
-    
+
     // Tag filter
     const sel = selectedTags();
     if (sel.length > 0) {
@@ -92,7 +92,7 @@ export default function PostsList(props: Props) {
         (i) => Array.isArray(i.tags) && i.tags.some((t) => s.has(t)),
       );
     }
-    
+
     // Sort
     items.slice().sort((a, b) => {
       const ta = a?.date ? Date.parse(a.date as string) : 0;
@@ -118,12 +118,17 @@ export default function PostsList(props: Props) {
 
   // DOM Sync
   useDomSync({
-    visibleSlugs: createMemo(() => pagination.paginatedItems().map(it => {
-         return String(it.slug ?? "").replace(/\.(md|mdx)$/, "");
-    })),
+    visibleSlugs: createMemo(() =>
+      pagination.paginatedItems().map((it) => {
+        return String(it.slug ?? "").replace(/\.(md|mdx)$/, "");
+      }),
+    ),
     containerSelector: ".post-list",
     itemSelector: ".post-item",
-    normalizeSlug: (s) => String(s ?? "").replace(/\.(md|mdx)$/, "").replace(/^\/posts\//, "") 
+    normalizeSlug: (s) =>
+      String(s ?? "")
+        .replace(/\.(md|mdx)$/, "")
+        .replace(/^\/posts\//, ""),
   });
 
   return (
@@ -131,8 +136,10 @@ export default function PostsList(props: Props) {
       <div class="posts-controls experience-controls">
         <div class="controls-left">
           <div class="control-pair">
-             <label for="sort" class="control-label">Sort</label>
-             <select
+            <label for="sort" class="control-label">
+              Sort
+            </label>
+            <select
               id="sort"
               class="control-select"
               value={sortOrder()}
@@ -147,13 +154,17 @@ export default function PostsList(props: Props) {
           </div>
 
           <div class="control-pair">
-            <label for="pageSize" class="control-label">Per page</label>
-             <select
+            <label for="pageSize" class="control-label">
+              Per page
+            </label>
+            <select
               id="pageSize"
               class="control-select compact"
               value={String(pagination.pageSize())}
               onChange={(e) => {
-                pagination.setPageSize(Number((e.target as HTMLSelectElement).value));
+                pagination.setPageSize(
+                  Number((e.target as HTMLSelectElement).value),
+                );
                 pagination.setPage(1);
               }}
             >
@@ -167,7 +178,9 @@ export default function PostsList(props: Props) {
         <div class="controls-right">
           <Show when={tags().length > 0}>
             <div class="control-pair">
-              <label for="tagFilter" class="control-label">Filter by Tag</label>
+              <label for="tagFilter" class="control-label">
+                Filter by Tag
+              </label>
               <div class="dropdown" style={{ position: "relative" } as any}>
                 <button
                   type="button"
@@ -300,8 +313,8 @@ export default function PostsList(props: Props) {
         </div>
       </div>
 
-      <PaginationControls 
-        pagination={pagination} 
+      <PaginationControls
+        pagination={pagination}
         portalTargetId="posts-pagination-portal"
         class="posts-pagination-controls" // Preserve class for styling if any
       />

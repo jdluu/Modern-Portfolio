@@ -1,12 +1,14 @@
 import {
-  For,
   createSignal,
+  createMemo,
   createEffect,
-  onCleanup,
+  For,
   Show,
+  onCleanup,
   type Accessor,
   type Setter,
 } from "solid-js";
+import "./FilterDropdown.css";
 
 interface DropdownItem {
   name: string;

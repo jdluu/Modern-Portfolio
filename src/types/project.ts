@@ -15,12 +15,17 @@ export interface Project {
   slug?: string;
   description?: string;
   date?: string | Date;
+  startDate?: string | Date;
+  endDate?: string | Date;
   summary?: string;
   role?: string;
-  technologies?: string[] | string; // Handle both array (schema) and string (legacy/UI sanitization)
+  technologies?: string[] | string;
   tools?: string[] | string;
   cover?: ImageMetadata | string | null;
+  thumbnail?: ImageMetadata | string | null;
   final?: ImageMetadata | string | null;
+  programming_languages?: string[];
+  domains?: string[];
   background?: string;
   solution?: string;
   process?: string;
@@ -30,6 +35,4 @@ export interface Project {
     live?: string;
     source?: string;
   };
-  // Allow for loose typing from the content collection if needed, but stricter above is better
-  [x: string]: any;
 }

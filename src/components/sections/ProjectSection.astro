@@ -1,44 +1,24 @@
 ---
-import ProjectCardList from "@components/ui/ProjectCardList";
-import ProjectCard from "@components/ui/ProjectCard.astro";
-import ImagePriorityLoader from "@components/utils/ImagePriorityLoader.astro";
+import ProjectCardList from "@components/filters/ProjectCardList";
+import ProjectCard from "@components/cards/ProjectCard.astro";
+import ImagePriorityLoader from "@components/shared/ImagePriorityLoader.astro";
 import { getCollection } from "astro:content";
+import { mapProjectToCard } from "@lib/content-mappers";
+import "./ProjectSection.css";
 
 
 /**
- * Load projectcards collection at build time and normalize fields so the
- * template below remains small and self-documenting.
+ * Load projects collection at build time and normalize fields.
  */
-const rawCollection = (await getCollection("projectcards")) ?? [];
-
-function mapEntryToProject(item: any) {
-  const entrySlug =
-    typeof item?.slug === "string"
-      ? item.slug
-      : String(item?.id ?? "").replace(/\.(md|mdx)$/i, "");
-  const d = item?.data ?? {};
-  return {
-    title: d?.title ?? "Untitled",
-    slug: entrySlug,
-    description: d?.description ?? "",
-// Read flattened date fields
-    date: d?.date ?? null,
-    startDate: d?.startDate ?? null,
-    endDate: d?.endDate ?? null,
-    thumbnail: d?.thumbnail ?? null,
-    programming_languages: d?.programming_languages ?? [],
-    domains: d?.domains ?? [],
-  };
-}
-
-const projects = (rawCollection ?? []).map(mapEntryToProject);
+const rawCollection = await getCollection("projects");
+const projects = rawCollection.map(mapProjectToCard);
 ---
 
 <section class="project-section content-section">
   <h2 id="projects" class="page-h2">Projects</h2>
 
   <!-- Client island -->
-  <ProjectCardList client:load initialItems={projects} />
+  <ProjectCardList client:visible initialItems={projects} />
 
   <!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
   <div class="project-grid card-grid">

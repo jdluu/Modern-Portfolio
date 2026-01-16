@@ -25,4 +25,12 @@ reflection: "This project provided hands-on experience connecting Android applic
 links:
   live: ""
   source: "https://github.com/jdluu/Parsegram"
+description: "An photo sharing android app similar to Instagram."
+startDate: 2021-10-22
+endDate: 2021-10-27
+thumbnail: "../../assets/images/projects/parsegram/thumbnail_parsegram.min.png"
+programming_languages:
+  - "Java"
+domains:
+  - "Mobile"
 ---

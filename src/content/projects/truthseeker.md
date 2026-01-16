@@ -26,4 +26,13 @@ reflection: "This project improved my understanding of clean architecture princi
 links:
   live: "https://journeytotruth.streamlit.app"
   source: "https://github.com/jdluu/TruthSeeker"
+description: "An AI-powered fact-checking application that verifies statements using real-time web searches and language models."
+startDate: 2024-12-01
+endDate: 2024-12-13
+thumbnail: "../../assets/images/projects/truthseeker/thumbnail_truthseeker.min.png"
+programming_languages:
+  - "Python"
+domains:
+  - "Web"
+  - "AI/ML"
 ---

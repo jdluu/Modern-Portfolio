@@ -25,4 +25,14 @@ reflection: "This project gave me hands-on experience with modern web developmen
 links:
   live: ""
   source: "https://github.com/CECS-544-Spring-2025/bughound"
+description: "A web-based bug tracker with secure authentication, file attachments, and full reporting features."
+startDate: 2025-01-15
+endDate: 2025-05-31
+thumbnail: "../../assets/images/projects/bughound/thumbnail_bughound.min.png"
+programming_languages:
+  - "TypeScript"
+  - "React"
+  - "JavaScript"
+domains:
+  - "Web"
 ---

@@ -25,4 +25,12 @@ reflection: "This project provided practical experience with OAuth authenticatio
 links:
   live: ""
   source: "https://github.com/jdluu/SimpleTweet"
+description: "An android app that allows a user to view their Twitter timeline and post a new tweet."
+startDate: 2021-10-08
+endDate: 2022-03-22
+thumbnail: "../../assets/images/projects/simpletweet/thumbnail_simpletweet.min.png"
+programming_languages:
+  - "Java"
+domains:
+  - "Mobile"
 ---
