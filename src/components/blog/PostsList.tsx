@@ -10,6 +10,7 @@ import type { PostIndexItem } from "@app-types/post";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
 import PaginationControls from "@components/navigation/PaginationControls";
+import FilterDropdown from "@components/filters/FilterDropdown";
 
 /**
  * PostsList
@@ -27,11 +28,6 @@ export default function PostsList(props: Props) {
   const [sortOrder, setSortOrder] = createSignal<"newest" | "oldest">("newest");
   const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
 
-  // Tag panel UI helpers
-  const [showTagPanel, setShowTagPanel] = createSignal<boolean>(false);
-  const [tagFilterTerm, setTagFilterTerm] = createSignal<string>("");
-  let tagPanelRef: HTMLElement | undefined;
-
   // Derive tags
   const tags = createMemo(() => {
     const s = new Set<string>();
@@ -42,17 +38,6 @@ export default function PostsList(props: Props) {
         }
       }
     }
-    return Array.from(s).sort((a, b) => a.localeCompare(b));
-  });
-
-  const visibleTags = createMemo(() => {
-    const term = tagFilterTerm().trim().toLowerCase();
-    if (!term) return tags();
-    return tags().filter((t) => t.toLowerCase().includes(term));
-  });
-
-  // Tag counts
-  const tagCounts = createMemo(() => {
     const counts = new Map<string, number>();
     for (const p of all) {
       if (!Array.isArray(p.tags)) continue;
@@ -61,21 +46,10 @@ export default function PostsList(props: Props) {
         counts.set(t, (counts.get(t) ?? 0) + 1);
       }
     }
-    return counts;
-  });
 
-  // Close tag panel
-  createEffect(() => {
-    if (typeof document === "undefined") return;
-    if (!showTagPanel()) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node | null;
-      if (!tagPanelRef) return;
-      if (target && tagPanelRef.contains(target)) return;
-      setShowTagPanel(false);
-    };
-    document.addEventListener("click", handler);
-    onCleanup(() => document.removeEventListener("click", handler));
+    return Array.from(s)
+      .sort((a, b) => a.localeCompare(b))
+      .map((t) => ({ name: t, count: counts.get(t) ?? 0 }));
   });
 
   // Filter + Sort
@@ -94,7 +68,7 @@ export default function PostsList(props: Props) {
     }
 
     // Sort
-    items.slice().sort((a, b) => {
+    items.sort((a, b) => {
       const ta = a?.date ? Date.parse(a.date as string) : 0;
       const tb = b?.date ? Date.parse(b.date as string) : 0;
       return sortOrder() === "newest" ? tb - ta : ta - tb;
@@ -104,17 +78,6 @@ export default function PostsList(props: Props) {
 
   // Pagination
   const pagination = usePagination(filteredAndSorted, { defaultPageSize: 5 });
-
-  // Helpers
-  function toggleTag(tag: string) {
-    setSelectedTags((prev) => {
-      const set = new Set(prev);
-      if (set.has(tag)) set.delete(tag);
-      else set.add(tag);
-      return Array.from(set);
-    });
-    pagination.setPage(1);
-  }
 
   // DOM Sync
   useDomSync({
@@ -177,126 +140,15 @@ export default function PostsList(props: Props) {
 
         <div class="controls-right">
           <Show when={tags().length > 0}>
-            <div class="control-pair">
-              <label for="tagFilter" class="control-label">
-                Filter by Tag
-              </label>
-              <div class="dropdown" style={{ position: "relative" } as any}>
-                <button
-                  type="button"
-                  onClick={() => setShowTagPanel((s) => !s)}
-                  aria-expanded={showTagPanel()}
-                  aria-haspopup="true"
-                  aria-controls="tag-panel"
-                  class="control-select dropdown-toggle"
-                >
-                  <span class="sr-only">Toggle tag selector</span>
-                  <span
-                    style={
-                      {
-                        "border-radius": "999px",
-                        padding: "0 0.4rem",
-                        "font-weight": "600",
-                      } as any
-                    }
-                  >
-                    {selectedTags().length === 0
-                      ? "All"
-                      : selectedTags().length}
-                  </span>
-                </button>
-
-                <div
-                  ref={(el) => (tagPanelRef = el!)}
-                  id="tag-panel"
-                  role="menu"
-                  aria-label="Tag selector"
-                  class={`dropdown-panel ${showTagPanel() ? "open" : ""}`}
-                >
-                  <input
-                    placeholder="Search tags"
-                    value={tagFilterTerm()}
-                    onInput={(e) =>
-                      setTagFilterTerm((e.target as HTMLInputElement).value)
-                    }
-                    class="control-select"
-                    style={{ width: "100%", "margin-bottom": "0.5rem" } as any}
-                  />
-
-                  <div
-                    style={
-                      {
-                        display: "flex",
-                        "flex-direction": "column",
-                        gap: "0.25rem",
-                      } as any
-                    }
-                  >
-                    <button
-                      type="button"
-                      role="menuitemcheckbox"
-                      aria-checked={selectedTags().length === 0}
-                      onClick={() => {
-                        setSelectedTags([]);
-                        pagination.setPage(1);
-                      }}
-                      class="dropdown-item"
-                      style={{ "justify-content": "space-between" } as any}
-                    >
-                      <span>
-                        <span style={{ "margin-right": "0.5rem" } as any}>
-                          {selectedTags().length === 0 ? "✓" : "○"}
-                        </span>
-                        All
-                      </span>
-                    </button>
-
-                    <For each={visibleTags()}>
-                      {(t) => {
-                        const isSel = () => selectedTags().includes(t);
-                        const count = tagCounts().get(t) ?? 0;
-                        return (
-                          <label
-                            class="dropdown-item"
-                            role="menuitemcheckbox"
-                            aria-checked={isSel()}
-                            style={
-                              {
-                                display: "flex",
-                                "align-items": "center",
-                                "justify-content": "space-between",
-                                gap: "0.75rem",
-                              } as any
-                            }
-                          >
-                            <span
-                              style={
-                                {
-                                  display: "flex",
-                                  "align-items": "center",
-                                  gap: "0.5rem",
-                                } as any
-                              }
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSel()}
-                                onChange={() => toggleTag(t)}
-                                aria-checked={isSel()}
-                              />
-                              <span>{t}</span>
-                            </span>
-                            <span style={{ opacity: isSel() ? 1 : 0.75 }}>
-                              {count}
-                            </span>
-                          </label>
-                        );
-                      }}
-                    </For>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <FilterDropdown
+              id="tagFilter"
+              label="Tags"
+              items={tags}
+              selectedItems={selectedTags}
+              setSelectedItems={setSelectedTags}
+              placeholder="Search tags..."
+              onPageReset={() => pagination.setPage(1)}
+            />
           </Show>
 
           <button

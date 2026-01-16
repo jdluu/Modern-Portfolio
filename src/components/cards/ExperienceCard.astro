@@ -61,11 +61,20 @@ if (!dateDisplay) {
 const titleCompany = company ? `${title} @ ${company}` : title;
 const imgAlt = company ? `${title} @ ${company}` : title;
 
+const baseId = (slug || title)
+  .toString()
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-");
+const titleId = `experience-${baseId}`;
+const ctaExtraId = `${titleId}-cta`;
+
 const safeSummary = sanitizeStringForUI(summaryRaw);
 const safeDateDisplay = dateDisplay ?? "";
 ---
 <section 
   class="experience-card background"
+  role="group"
+  aria-labelledby={titleId}
   style={thumbnailPlaceholder ? {
     'background-image': `url(${thumbnailPlaceholder.src})`,
     'background-size': 'cover',
@@ -77,15 +86,15 @@ const safeDateDisplay = dateDisplay ?? "";
       src={thumbnail}
       alt={imgAlt}
       class="experience-image"
-      width={600}
-      height={400}
+      width={800}
+      height={500}
     />
   ) : (
     <div class="experience-image placeholder" aria-hidden="true"></div>
   )}
   <div class="project-container">
-    <section class="more-info" aria-hidden={false}>
-      <span class="project-title">{titleCompany}</span>
+    <section class="more-info">
+      <h3 class="project-title" id={titleId}>{titleCompany}</h3>
 
       {safeDateDisplay ? (
         <span class="project-date">{safeDateDisplay}</span>
@@ -97,7 +106,14 @@ const safeDateDisplay = dateDisplay ?? "";
         <p class="project-description" aria-hidden="true"></p>
       )}
     </section>
-    <a class="learn-more" href={`/experiences/${safeSlug}`}>Learn More</a>
+    <a
+      class="learn-more"
+      href={`/experiences/${safeSlug}`}
+      aria-labelledby={`${titleId} ${ctaExtraId}`}
+    >
+      Learn More
+    </a>
+    <span id={ctaExtraId} class="visually-hidden">Open experience</span>
   </div>
 </section>
 

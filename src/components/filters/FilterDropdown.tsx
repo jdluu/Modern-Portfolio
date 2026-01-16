@@ -113,8 +113,9 @@ export default function FilterDropdown(props: FilterDropdownProps) {
                     checked={props.selectedItems().includes(it.name)}
                     onChange={() => toggleItem(it.name)}
                   />
-                  <span>
-                    {it.name} ({it.count})
+                  <span class="dropdown-item-content">
+                    <span class="dropdown-item-name">{it.name}</span>
+                    <span class="dropdown-item-count">({it.count})</span>
                   </span>
                 </label>
               )}
