@@ -1,18 +1,18 @@
 /* Purple accent color for both themes */
 :root {
   --purple-accent: var(--m3-color-secondary); /* Dark purple for light theme */
-  --content-max-width: 880px; /* unify content width so header and info-row align (narrower column) */
+  --content-max-width: 55rem; /* unify content width so header and info-row align (narrower column) */
 }
 [data-theme="dark"] {
   --purple-accent: var(--m3-color-primary); /* Light violet for dark theme */
 }
 /* Layout & Container Styles */
 .experience-page-container {
-  max-width: 1200px;
+  max-width: 75rem;
   margin: 0 auto;
-  padding: var(--spacing-md); /* overall page padding */
-  padding-top: calc(
-    var(--spacing-sm) * 0.6
+  padding: var(--space-m); /* overall page padding */
+  padding-top: var(
+    --space-xs
   ); /* tighten top padding to reduce white space under nav/title */
 }
 
@@ -26,7 +26,7 @@
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
-  gap: var(--spacing-xl);
+  gap: var(--space-xl);
   align-items: stretch;
 }
 
@@ -43,7 +43,7 @@
 /* Header Styles */
 .experience-header {
   /* Increase header spacing to create consistent vertical rhythm between sections */
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--space-m);
   padding-bottom: 0;
   border-bottom: none;
 }
@@ -62,19 +62,19 @@
 .company-info {
   display: flex;
   align-items: flex-start;
-  gap: clamp(1rem, 2.4vw, var(--spacing-md));
-  margin-bottom: calc(
-    var(--spacing-sm) * 0.6
+  gap: var(--space-s-m);
+  margin-bottom: var(
+    --space-xs
   ); /* reduce space between header and following content */
 }
 
 .company-logo {
-  width: 80px;
-  height: 80px;
+  width: var(--space-3xl);
+  height: var(--space-3xl);
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: var(--space-xs);
   background: white;
-  padding: 8px;
+  padding: var(--space-xs);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
 }
@@ -85,7 +85,7 @@
 }
 
 .experience-title {
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-size: var(--step-4);
   margin: 0;
   color: var(--text-color);
   line-height: 1.2;
@@ -95,9 +95,9 @@
 }
 
 .company-name {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: var(--step-2);
   color: var(--text-color);
-  margin: 0.5rem 0;
+  margin: var(--space-2xs) 0;
   word-wrap: break-word;
 }
 /* Info row and card styles (mirroring projects mobile layout)
@@ -106,35 +106,32 @@
    Mobile media queries below still stack these columns into one full-width column. */
 .info-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(17.5rem, 22.5rem);
   gap: var(--grid-gap-md);
-  margin: var(--spacing-lg) 0;
+  margin: var(--space-l) 0;
   align-items: start;
   grid-column: 1 / -1; /* span full width so the row sits directly under the header on desktop */
   /* On desktop we will align the info-row with the main content using the desktop media rules below. */
 }
+
 .card {
-  padding: var(--spacing-md);
+  padding: var(--space-m);
   background: var(--color-card);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px color-mix(in oklab, black 6%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
-  margin-bottom: var(--spacing-md);
-}
-.card {
-  padding: var(--spacing-md);
-  background: var(--color-card);
-  border-radius: var(--radius-md, 12px);
-  box-shadow: 0 6px 18px color-mix(in oklab, black 6%, transparent);
+  border-radius: var(--space-s);
+  box-shadow: 0 var(--space-xs) var(--space-xl)
+    color-mix(in oklab, black 6%, transparent);
   border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  margin-bottom: var(--space-m);
 }
+
 .role-heading {
-  margin: 0 0 var(--spacing-sm);
+  margin: 0 0 var(--space-xs);
   font-weight: 700;
+  font-size: var(--step-1);
 }
 .role-body {
   color: var(--color-text-secondary);
-  font-size: clamp(1.4rem, 1.2vw, 1.55rem);
+  font-size: var(--step-1);
   line-height: 1.65;
 }
 
@@ -142,17 +139,17 @@
 .tt-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: calc(var(--spacing-sm) * 0.6);
+  gap: var(--space-xs);
   align-items: start;
-  margin-top: calc(var(--spacing-sm) * 0.25);
+  margin-top: var(--space-3xs);
 }
 .tt-column {
   min-width: 0;
   padding: 0;
 }
 .tt-subheading {
-  margin: 0 0 calc(var(--spacing-sm) * 0.5);
-  font-size: 1.35rem;
+  margin: 0 0 var(--space-2xs);
+  font-size: var(--step--1);
   font-weight: 600;
   color: var(--text-color);
 }
@@ -164,12 +161,12 @@
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--spacing-sm) * 0.6);
+  gap: var(--space-xs);
 }
 .tech-list li {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-xs);
   color: var(--color-text-secondary);
   margin: 0;
   padding: 0;
@@ -182,10 +179,10 @@
 }
 .tech-pill {
   display: inline-block;
-  padding: calc(var(--spacing-xs, 4px) * 1.25) calc(var(--spacing-sm) * 0.8);
+  padding: var(--space-3xs) var(--space-xs);
   background: color-mix(in oklab, var(--color-accent) 9%, transparent);
   border-radius: 999px;
-  font-size: 1.25rem; /* slightly smaller to improve density */
+  font-size: var(--step--1); /* slightly smaller to improve density */
   color: var(--text-color);
   line-height: 1;
 }
@@ -193,7 +190,7 @@
 /* Desktop: show a subtle vertical divider between the two columns and add breathing room */
 @media (min-width: 981px) {
   .tt-column + .tt-column {
-    padding-left: calc(var(--spacing-md));
+    padding-left: var(--space-m);
     border-left: 1px solid
       color-mix(in oklab, var(--color-border) 12%, transparent);
     margin-left: 0;
@@ -208,7 +205,7 @@
 @media (max-width: 560px) {
   .tt-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
+    gap: var(--space-s);
   }
 
   .tt-column + .tt-column {
@@ -217,34 +214,34 @@
   }
 
   .tech-pill {
-    font-size: 1.2rem;
-    padding: calc(var(--spacing-xs, 4px) * 1) calc(var(--spacing-sm) * 0.75);
+    font-size: var(--step--1);
+    padding: var(--space-3xs) var(--space-xs);
   }
 }
 
 /* Sidebar Styles */
 .sidebar-card {
   background: var(--m3-color-surface-variant);
-  padding: var(--spacing-lg);
-  border-radius: 12px;
-  margin-bottom: var(--spacing-lg);
+  padding: var(--space-l);
+  border-radius: var(--space-s);
+  margin-bottom: var(--space-l);
 }
 
 .experience-meta {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--spacing-md);
+  gap: var(--space-m);
   align-items: flex-start;
 }
 
 .meta-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
 }
 
 .meta-label {
-  font-size: clamp(1.05rem, 0.8vw, 1.2rem);
+  font-size: var(--step--1);
   color: var(--text-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -254,26 +251,26 @@
 .meta-value {
   color: var(--text-color);
   line-height: 1.5;
-  font-size: clamp(1.15rem, 0.9vw, 1.4rem);
+  font-size: var(--step-1);
 }
 
 /* Section Content */
 .section-content {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: var(--step-1);
   line-height: 1.6;
   color: var(--text-color);
-  margin: var(--spacing-lg) 0;
+  margin: var(--space-l) 0;
 }
 
 .tech-section {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
+  gap: var(--space-l);
 }
 
 .tech-item h4 {
-  font-size: clamp(1.25rem, 1.1vw, 1.6rem);
-  margin-bottom: var(--spacing-sm);
+  font-size: var(--step-1);
+  margin-bottom: var(--space-s);
   color: var(--text-color);
   font-family: var(--font-heading);
 }
@@ -282,7 +279,7 @@
   color: var(--text-color);
   line-height: 1.6;
   word-wrap: break-word;
-  font-size: clamp(1.15rem, 0.9vw, 1.35rem);
+  font-size: var(--step-1);
 }
 
 /* Text-based styles for tools and skills lists */
@@ -290,7 +287,7 @@
   color: var(--text-color);
   line-height: 1.7;
   word-wrap: break-word;
-  font-size: clamp(1.15rem, 0.9vw, 1.35rem);
+  font-size: var(--step-1);
 }
 
 /* Lists Styles */
@@ -298,15 +295,15 @@
 .achievements-list {
   list-style: none;
   padding: 0;
-  margin: var(--spacing-md) 0;
+  margin: var(--space-m) 0;
 }
 
 .responsibilities-list li,
 .achievements-list li {
   position: relative;
-  padding-left: 1.5em;
-  margin-bottom: var(--spacing-md);
-  font-size: var(--m3-font-body-large); /* 1.6rem */
+  padding-left: var(--space-m);
+  margin-bottom: var(--space-m);
+  font-size: var(--step-1);
   line-height: 1.7;
   color: var(--text-color);
 }
@@ -327,19 +324,19 @@
 
 /* Section Titles */
 .main-content h2 {
-  padding-top: var(--spacing-lg);
+  padding-top: var(--space-l);
   border-top: 1px dashed
     color-mix(in oklab, var(--m3-color-outline) 40%, transparent);
-  font-size: var(--m3-font-headline-small); /* 2.4rem */
+  font-size: var(--step-4);
   color: var(--text-color);
-  margin: var(--spacing-xl) 0 var(--spacing-md);
+  margin: var(--space-xl) 0 var(--space-m);
   font-family: var(--font-heading);
   font-weight: 600;
 }
 
 .sidebar-card h3 {
-  font-size: clamp(1.6rem, 1.4vw, 2.1rem);
-  margin-bottom: var(--spacing-md);
+  font-size: var(--step-2);
+  margin-bottom: var(--space-m);
 }
 
 /* Responsive Styles */
@@ -375,8 +372,8 @@
   .info-row {
     grid-row: 2;
     grid-column: 1 / -1;
-    margin-bottom: calc(
-      var(--spacing-xs, 6px) * 0.8
+    margin-bottom: var(
+      --space-xs
     ); /* much smaller gap below info-row on mobile */
   }
 
@@ -387,13 +384,13 @@
 
   /* Reduce the default top spacing of section headings on mobile so responsibilities sit closer */
   .main-content h2 {
-    padding-top: calc(var(--spacing-xs, 6px) * 0.6);
-    margin-top: calc(var(--spacing-xs, 6px) * 0.6);
+    padding-top: var(--space-xs);
+    margin-top: var(--space-xs);
   }
 
   /* Also reduce card bottom margins within the info-row on mobile */
   .info-row .card {
-    margin-bottom: calc(var(--spacing-xs, 6px) * 0.6);
+    margin-bottom: var(--space-xs);
   }
 
   .sidebar-content {
@@ -404,11 +401,11 @@
 
 @media (max-width: 768px) {
   .experience-page-container {
-    padding: var(--spacing-md);
+    padding: var(--space-m);
   }
 
   .company-info {
-    gap: var(--spacing-md);
+    gap: var(--space-m);
   }
 }
 
@@ -431,30 +428,30 @@
 
   /* Use a 2fr / sidebar layout inside the info-row on desktop */
   .info-row {
-    grid-template-columns: 2fr minmax(280px, 360px);
+    grid-template-columns: 2fr minmax(17.5rem, 22.5rem);
   }
 
   /* Slightly tighten internal card padding for desktop density */
   .info-row .card {
-    padding: calc(var(--spacing-md) * 0.9);
+    padding: var(--space-m);
   }
 }
 
 @media (max-width: 480px) {
   /* Reduce overall vertical rhythm on phones to match project page density */
   .experience-page-container {
-    padding: calc(var(--spacing-sm) * 0.6);
+    padding: var(--space-xs);
   }
 
   /* Tighten header spacing so the title sits closer to the info-row */
   .experience-header {
-    margin-bottom: calc(var(--spacing-sm) * 0.3);
+    margin-bottom: var(--space-3xs);
     padding-bottom: 0;
   }
 
   .company-info {
-    gap: calc(var(--spacing-xs, 6px) * 0.8);
-    margin-bottom: calc(var(--spacing-xs, 6px) * 0.6);
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -466,26 +463,26 @@
 
   /* Info-row: reduce vertical spacing and card padding for compact cards like projects page */
   .info-row {
-    margin: calc(var(--spacing-xs, 6px) * 0.8) 0;
-    gap: calc(var(--spacing-xs, 6px) * 0.6);
+    margin: var(--space-xs) 0;
+    gap: var(--space-xs);
   }
 
   .card {
-    padding: calc(var(--spacing-sm) * 0.9);
-    margin-bottom: calc(var(--spacing-sm) * 0.6);
+    padding: var(--space-s);
+    margin-bottom: var(--space-xs);
     border-radius: 10px;
   }
 
   /* Tighten technology pill layout on phones to reduce large whitespace */
   .tt-grid {
-    gap: calc(var(--spacing-xs, 6px) * 0.6);
+    gap: var(--space-xs);
   }
   .tech-list {
-    gap: calc(var(--spacing-xs, 6px) * 0.5);
+    gap: var(--space-xs);
   }
   .tech-pill {
-    font-size: 1.2rem;
-    padding: calc(var(--spacing-xs, 4px) * 1) calc(var(--spacing-sm) * 0.75);
+    font-size: var(--step--1);
+    padding: var(--space-3xs) var(--space-xs);
   }
 
   /* Sidebar remains non-sticky on mobile */
@@ -529,8 +526,8 @@
   font-weight: 500;
 }
 .lead {
-  font-size: var(--m3-font-body-large);
-  margin-bottom: var(--spacing-lg);
+  font-size: var(--step-1);
+  margin-bottom: var(--space-l);
 }
 strong {
   color: var(--m3-color-on-surface);
@@ -541,16 +538,16 @@ strong {
 .kv {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs, 6px);
+  gap: var(--space-xs);
 }
 
 .kv dt {
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: var(--step--1);
 }
 
 .kv dd {
   margin: 0;
   color: var(--color-text-secondary);
-  font-size: 1.4rem;
+  font-size: var(--step-1);
 }

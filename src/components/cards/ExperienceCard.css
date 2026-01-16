@@ -1,49 +1,21 @@
-/* ExperienceCard component styles (extracted from src/components/ui/ExperienceCard.astro)
+/* ExperienceCard component styles (aligned with ProjectCard for consistency)
    Scoped under .experience-card so we don't collide with other card styles. */
 
-/* Container (card) */
+/* container
+   - Uses aspect-ratio (16:10) to match ProjectCard.
+   - Keeps border-radius and overflow to preserve visual style. */
 .experience-card.background {
-  display: block;
   position: relative;
   border: 1px solid var(--color-border);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
-  height: 30rem;
-  border-radius: 24px;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--space-m);
   overflow: hidden;
-  box-sizing: border-box;
 }
 
-/* Image area */
-.experience-card .experience-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  background-color: var(--color-card);
-  padding: 0.5rem;
-  box-sizing: border-box;
-}
-.experience-card .experience-image.placeholder {
-  background-color: var(--color-card);
-}
-
-/* Hover / interaction */
-.experience-card.background:hover {
-  border-color: var(--m3-color-primary);
-  transform: scale(1.02);
-}
-.experience-card.background:hover .project-container {
-  opacity: 1;
-}
-
-/* Overlay */
+/* overlay / content */
 .experience-card .project-container {
-  background: var(--color-card);
-  opacity: 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -53,56 +25,84 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: var(--color-card);
+  opacity: 0;
   transition: opacity 0.4s ease-in-out;
 }
 
-/* Text */
-.experience-card .more-info {
-  text-align: center;
-  padding: 1.6rem;
-  max-width: 46rem;
-}
-.experience-card .project-title {
-  font-size: var(--m3-font-title-large);
-  font-family: var(--m3-font-family-display);
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  color: var(--m3-color-on-surface-variant);
-}
-.experience-card .project-date {
-  font-size: var(--m3-font-label-medium);
-  font-family: var(--m3-font-family-body);
-  color: var(--m3-color-on-surface-variant);
-  margin-bottom: 1.2rem;
-  display: block;
-}
-.experience-card .project-date.empty {
-  margin-bottom: 1.2rem;
-  height: 0;
-}
-.experience-card .project-description {
-  font-size: var(--m3-font-body-large);
-  font-family: var(--m3-font-family-body);
-  margin-bottom: 1.6rem;
-  color: var(--m3-color-on-surface-variant);
+/* image */
+.experience-card .experience-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Experiences use logos, so contain is usually better than cover */
+  object-position: center;
+  background-color: var(--color-card);
+  padding: var(--space-2xs);
+  box-sizing: border-box;
+  z-index: 0;
 }
 
-/* Link */
+/* hover */
+.experience-card.background:hover {
+  border-color: var(--color-accent);
+  transform: scale(1.02);
+}
+.experience-card.background:hover .project-container {
+  opacity: 1;
+}
+
+/* overlay / content area */
+.experience-card .more-info {
+  text-align: center;
+  padding: var(--space-s-m);
+}
+
+/* text */
+.experience-card .project-title {
+  font-size: var(--step-2);
+  font-family: var(--m3-font-family-display);
+  font-weight: 600;
+  margin-bottom: var(--space-2xs-xs);
+  color: var(--color-text-tertiary);
+}
+
+.experience-card .project-date {
+  font-size: var(--step-0);
+  font-family: var(--m3-font-family-body);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.experience-card .project-description {
+  font-size: var(--step-1);
+  font-family: var(--m3-font-family-body);
+  margin-bottom: var(--space-s-m);
+  color: var(--color-text-tertiary);
+}
+
+/* link (Button design unified with ProjectCard) */
 .experience-card .learn-more {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  min-height: 4.4rem;
-  padding: 0 1.8rem;
+  gap: var(--space-2xs-xs);
+  /* Ensure minimum touch target size */
+  min-height: var(--space-xl);
+  min-width: var(--space-xl);
+  padding: var(--space-2xs) var(--space-xs);
+  inline-size: max-content;
   font-size: var(--m3-font-label-large);
   font-family: var(--m3-font-family-body);
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--m3-color-on-primary);
-  background-color: var(--m3-color-primary);
-  border: 1px solid color-mix(in oklab, var(--m3-color-primary) 75%, black 25%);
-  border-radius: 999px;
+  background-color: var(--color-accent);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 75%, black 25%);
+  border-radius: var(--space-3xl);
   text-decoration: none;
   transition:
     background-color 0.2s ease,
@@ -110,50 +110,78 @@
     border-color 0.2s ease,
     transform 0.2s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 6px 14px
-    color-mix(in oklab, var(--m3-color-primary) 35%, black 65%);
+  box-shadow: 0 var(--space-3xs) var(--space-xs)
+    color-mix(in oklab, var(--color-accent) 35%, black 65%);
 }
+
 .experience-card .learn-more:visited {
   color: var(--m3-color-on-primary);
 }
+
 .experience-card .learn-more:hover,
 .experience-card .learn-more:focus-visible {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 85%, black 15%);
-  border-color: color-mix(in oklab, var(--m3-color-primary) 65%, black 35%);
-  box-shadow: 0 8px 20px
-    color-mix(in oklab, var(--m3-color-primary) 45%, black 55%);
-  transform: translateY(-1px);
+  background-color: color-mix(in oklab, var(--color-accent) 85%, black 15%);
+  border-color: color-mix(in oklab, var(--color-accent) 65%, black 35%);
+  box-shadow: 0 var(--space-xs) var(--space-s)
+    color-mix(in oklab, var(--color-accent) 45%, black 55%);
+  transform: translateY(calc(var(--space-3xs) * -1));
 }
+
 .experience-card .learn-more:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--m3-color-primary) 45%, white 55%);
-  outline-offset: 3px;
+  outline: 3px solid color-mix(in oklab, var(--color-accent) 45%, white 55%);
+  outline-offset: var(--space-3xs);
+  /* make sure focus indication sits above overlay backgrounds */
+  z-index: 3;
+  position: relative;
 }
+
 .experience-card .learn-more:active {
-  background-color: color-mix(in oklab, var(--m3-color-primary) 70%, black 30%);
+  background-color: color-mix(in oklab, var(--color-accent) 70%, black 30%);
   transform: translateY(0);
 }
 
-/* Accessibility: reveal overlay for keyboard users (focus-within) */
+/* Ensure keyboard users can reveal overlay */
 .experience-card.background:focus-within .project-container {
   opacity: 1;
 }
-/* Keep outline behavior consistent; allow focus outlines if needed */
-.experience-card.background:focus {
-  outline: none;
-}
 
-/* Touch / no-hover devices: show overlay by default so users don't need to hover */
+/* Avoid unexpected transforms on touch devices */
 @media (hover: none), (pointer: coarse) {
+  /* Keep overlay visible on touch devices but allow taps to reach interactive elements */
   .experience-card .project-container {
     opacity: 1;
+    transform: none;
+    /* Allow pointer events to pass through overlay background */
+    pointer-events: none;
+    z-index: 1;
   }
-  /* Avoid unexpected scale/transform on tap on touch devices */
+
+  /* Ensure interactive elements are tappable and above the overlay background */
+  .experience-card .project-container a,
+  .experience-card .project-container button,
+  .experience-card .project-container .learn-more {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+    /* reinforce minimum touch target for any inline links */
+    min-height: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xs) var(--space-xs);
+  }
+
   .experience-card.background:hover {
     transform: none;
   }
+
+  /* If any decorative background/image has a z-index, keep it below interactive layer */
+  .experience-card .experience-image {
+    z-index: 0;
+  }
 }
 
-/* Respect users who prefer reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .experience-card {
     transition: none;

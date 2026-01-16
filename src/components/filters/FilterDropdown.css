@@ -10,15 +10,17 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
-  min-width: 200px;
+  width: max-content;
+  max-width: 90vw;
+  min-width: 12rem;
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  margin-top: 0.5rem;
-  padding: 1rem;
+  margin-top: var(--space-3xs);
+  padding: var(--space-s);
   z-index: 100;
+  white-space: nowrap;
 
   /* Transition for smooth opening */
   opacity: 0;
@@ -38,9 +40,9 @@
 
 .dropdown-search {
   width: 100% !important;
-  margin-bottom: 0.75rem !important;
-  font-size: 1.4rem !important;
-  padding: 0.6rem 1rem !important;
+  margin-bottom: var(--space-xs) !important;
+  font-size: var(--step--1) !important;
+  padding: var(--space-2xs) var(--space-s) !important;
 }
 
 .dropdown-items-scroll {
@@ -62,15 +64,15 @@
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.6rem 0.8rem;
+  gap: var(--space-s);
+  padding: var(--space-2xs) var(--space-xs);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: var(--step-1);
   transition: background-color 0.15s ease;
   user-select: none;
   color: var(--color-text-primary);
-  margin-bottom: 0.1rem;
+  margin-bottom: var(--space-3xs);
 }
 
 .dropdown-item:hover {
@@ -79,16 +81,30 @@
 
 .dropdown-item input[type="checkbox"] {
   cursor: pointer;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: var(--space-s);
+  height: var(--space-s);
   accent-color: var(--color-accent);
 }
 
+.dropdown-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-m);
+  width: 100%;
+}
+
+.dropdown-item-count {
+  color: var(--color-text-tertiary);
+  font-size: var(--step--1);
+  font-weight: 500;
+}
+
 .dropdown-no-results {
-  padding: 1rem;
+  padding: var(--space-s);
   text-align: center;
   color: var(--color-text-secondary);
-  font-size: 1.4rem;
+  font-size: var(--step--1);
   font-style: italic;
 }
 
@@ -102,17 +118,17 @@
 .dropdown-toggle::after {
   content: "";
   display: inline-block;
-  width: 0.8rem;
-  height: 0.8rem;
+  width: var(--space-xs);
+  height: var(--space-xs);
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   transform: rotate(45deg);
-  margin-top: -0.4rem;
-  margin-left: 1rem;
+  margin-top: calc(var(--space-xs) * -0.5);
+  margin-left: var(--space-s);
   transition: transform 0.2s ease;
 }
 
 .dropdown-panel.open ~ .dropdown-toggle::after {
   transform: rotate(-135deg);
-  margin-top: 0.4rem;
+  margin-top: calc(var(--space-xs) * 0.5);
 }

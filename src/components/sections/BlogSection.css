@@ -6,7 +6,7 @@
   font-size: var(--m3-font-headline-large);
   color: var(--color-text-primary);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-s);
 }
 
 /* Layout for the blog content area */
@@ -14,8 +14,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2.5rem 1rem;
-  max-width: 64rem;
+  padding: var(--space-xl-2xl) var(--space-s-m);
+  max-width: min(100%, var(--container-blog));
   margin: 0 auto;
 }
 
@@ -24,19 +24,19 @@
 }
 
 .posts-pagination-placeholder {
-  margin-top: 1.5rem;
+  margin-top: var(--space-m);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Post list and card styles (server-rendered markup relies on these selectors) */
+/* Post list and card styles */
 .post-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  row-gap: 1.25rem;
+  row-gap: var(--space-s-m);
 }
 
 .post-item {
@@ -50,9 +50,9 @@
   color: var(--color-text-primary);
   text-decoration: none;
   border: 2px solid var(--color-border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  border-radius: var(--space-m);
+  padding: var(--space-m);
+  box-shadow: 0 var(--space-3xs) var(--space-2xs) rgba(0, 0, 0, 0.06);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -65,22 +65,22 @@
 @media (hover: hover) {
   .post-card:hover {
     border-color: var(--color-accent);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+    box-shadow: 0 var(--space-s) var(--space-xl) rgba(0, 0, 0, 0.12);
+    transform: translateY(calc(var(--space-3xs) * -1));
   }
 }
 
 .post-card:focus-visible {
   outline: 3px solid color-mix(in oklab, var(--color-accent) 20%, transparent);
-  outline-offset: 4px;
+  outline-offset: var(--space-3xs);
   box-shadow:
-    0 0 0 4px var(--color-accent) inset,
-    0 6px 18px rgba(0, 0, 0, 0.14);
+    0 0 0 var(--space-3xs) var(--color-accent) inset,
+    0 var(--space-2xs) var(--space-m) rgba(0, 0, 0, 0.14);
 }
 
 .post-card-title {
   margin: 0;
-  font-size: clamp(1.6rem, 2vw, 2.25rem);
+  font-size: var(--step-3);
   font-weight: 600;
   color: var(--color-text-primary);
   transition: color 0.2s ease;
@@ -93,8 +93,8 @@
 
 .post-card-date {
   display: block;
-  margin-top: 0.25rem;
-  font-size: clamp(1rem, 0.9vw, 1.125rem);
+  margin-top: var(--space-3xs);
+  font-size: var(--step--1);
   color: var(--color-text-tertiary);
 }
 
@@ -102,32 +102,31 @@
 .post-card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: var(--space-2xs);
+  margin-top: var(--space-xs);
 }
 
 .tag-chip {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
+  border-radius: var(--space-3xl);
   background-color: var(--color-card);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
-  padding: 0.25rem 0.75rem;
-  font-size: clamp(0.9rem, 0.8vw, 1rem);
+  padding: var(--space-3xs) var(--space-xs);
+  font-size: var(--step--1);
   font-weight: 500;
-  margin-right: 0.5rem;
 }
 
 /* Post description / excerpt */
 .post-card-desc {
-  margin-top: 0.75rem;
+  margin-top: var(--space-xs);
   color: var(--color-text-tertiary);
-  font-size: clamp(1.1rem, 1vw, 1.25rem);
+  font-size: var(--step-0);
   line-height: 1.7;
 }
 
-/* Clamp utility used by server-rendered excerpts */
+/* Clamp utility */
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -136,126 +135,55 @@
   overflow: hidden;
 }
 
-/* Controls (posts) now rely on the shared .experience-controls, .control-pair, .control-select,
-   .dropdown, and pagination styles provided by /styles/components/pagination.css.
-   Local .posts-controls rules removed so PostsList can inherit the shared styles used
-   by Experience/Project controls and keep a consistent UI across pages. */
-
-/* Controls (posts) - enforce Experience/Work spacing tokens and stronger specificity
-   - Use higher-specificity selectors and !important to beat competing rules (pagination.css,
-     component-level inline styles, or legacy rules) so the blog controls get identical layout.
-   - Mirror exact values from /src/styles/components/pagination.css:
-     * gap: var(--spacing-md)
-     * control-pair gap: 0.6rem
-     * control-select min-width: 8rem
-     * dropdown-toggle min-width: 12rem
-*/
+/* Unified Controls Styling (Posts)
+   High specificity to ensure consistent layout across Work/Blog pages. */
 .posts-controls,
-.experience-controls.posts-controls,
 .posts-container .posts-controls {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: var(--spacing-md) !important;
-  row-gap: var(--spacing-md) !important;
-  column-gap: var(--spacing-md) !important;
-  margin-bottom: var(--spacing-md) !important;
-  padding: 0 var(--spacing-md) !important;
+  gap: var(--space-m) !important;
+  margin-bottom: var(--space-xl) !important;
+  padding: 0 var(--space-m) !important;
+  width: 100% !important;
 }
 
 /* Ensure label+control group spacing matches Work */
-.posts-controls .control-pair,
-.posts-controls .control-group {
+.posts-controls .control-pair {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.6rem !important; /* same as .experience-controls .control-pair */
+  gap: var(--space-2xs) !important;
+  margin: 0 !important;
 }
 
-/* Normalize children margins so legacy margins can't cause overlap */
+.posts-controls .controls-left,
+.posts-controls .controls-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-m) !important;
+  flex-wrap: wrap !important;
+}
+
+/* Normalize children */
 .posts-controls > * {
   margin: 0 !important;
 }
 
-/* Tag/filter/actions areas: allow wrapping and small gaps (mirror Work tokens) */
-.posts-controls .tag-filters,
-.posts-controls .actions,
-.posts-controls .controls-right,
-.posts-controls .controls-left {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: var(--spacing-sm) !important;
-  align-items: center !important;
-}
-
-/* Dropdown and select sizing to match Work controls (exact tokens from pagination.css) */
+/* Dropdown and select sizing parity */
 .posts-controls .dropdown-toggle {
-  min-width: 12rem !important; /* mirrors .dropdown-toggle in pagination.css */
+  min-width: 12rem !important;
 }
 
 .posts-controls .control-select,
 .posts-controls select {
-  min-width: 8rem !important; /* mirrors .experience-controls .control-select */
-}
-
-.posts-controls .control-select.compact {
-  min-width: 6.4rem !important; /* mirrors compact variant */
-}
-
-/* Ensure dropdown panels in posts inherit sensible constraints (same as component) */
-.posts-controls .dropdown-panel {
   min-width: 10rem !important;
-  max-width: 22rem !important;
 }
 
-/* Responsive: keep same breakpoint behaviour as Work/Experience */
+/* Responsive: mobile padding/gap */
 @media (max-width: 640px) {
   .posts-controls {
-    padding: 0 var(--spacing-sm) !important;
-    gap: var(--spacing-sm) !important;
-  }
-  .posts-controls .dropdown-toggle {
-    min-width: 10rem !important;
-  }
-}
-
-/* Controls (posts) - ensure blog filter controls mirror Work spacing tokens
-   We intentionally mirror the structural approach used by .experience-controls in
-   /src/styles/components/pagination.css so spacing is identical across pages.
-   This block provides a local hook (.posts-controls) that uses the same variables
-   and gap values and adds a couple of small helper rules to align dropdowns/control-pair spacing. */
-.posts-controls,
-.posts-container .posts-controls {
-  display: flex;
-  gap: var(--spacing-md); /* matches .experience-controls gap */
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--spacing-md);
-  padding: 0 var(--spacing-md);
-}
-
-.posts-controls .control-pair {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem; /* same spacing used in Work controls */
-}
-
-/* Ensure dropdown toggles and selects in the blog get the same min-width behavior */
-.posts-controls .dropdown-toggle,
-.posts-controls .control-select {
-  min-width: 8rem;
-}
-
-/* Compact variant */
-.posts-controls .control-select.compact {
-  min-width: 6.4rem;
-}
-
-/* Keep responsive behaviour consistent with Work controls */
-@media (max-width: 640px) {
-  .posts-controls {
-    padding: 0 var(--spacing-sm);
-    gap: var(--spacing-sm);
+    padding: 0 var(--space-s) !important;
+    gap: var(--space-s) !important;
   }
 }

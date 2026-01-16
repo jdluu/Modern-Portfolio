@@ -38,6 +38,62 @@
 }
 
 :root {
+  /* Utopia Typography Scale (320px -> 1240px)
+     Base: 16px, Scale: 1.2 (Minor Third) -> 1.25 (Major Third) */
+  --step--2: clamp(0.6944rem, 0.671rem + 0.1171vw, 0.7619rem);
+  --step--1: clamp(0.8333rem, 0.7913rem + 0.2101vw, 0.9542rem);
+  --step-0: clamp(1rem, 0.9326rem + 0.337vw, 1.1944rem);
+  --step-1: clamp(1.2rem, 1.0978rem + 0.5109vw, 1.494rem);
+  --step-2: clamp(1.44rem, 1.2909rem + 0.7457vw, 1.8681rem);
+  --step-3: clamp(1.728rem, 1.5159rem + 1.0604vw, 2.337rem);
+  --step-4: clamp(2.0736rem, 1.7779rem + 1.4787vw, 2.923rem);
+  --step-5: clamp(2.4883rem, 2.0819rem + 2.032vw, 3.656rem);
+  --step-6: clamp(2.986rem, 2.434rem + 2.76vw, 4.57rem);
+  --step-7: clamp(3.5832rem, 2.84rem + 3.7161vw, 5.7125rem);
+
+  /* Utopia Spacing Scale (320px -> 1240px) */
+  --space-3xs: clamp(0.25rem, 0.2275rem + 0.1124vw, 0.3146rem);
+  --space-2xs: clamp(0.5rem, 0.4551rem + 0.2247vw, 0.6292rem);
+  --space-xs: clamp(0.75rem, 0.6826rem + 0.3371vw, 0.9438rem);
+  --space-s: clamp(1rem, 0.9101rem + 0.4494vw, 1.2584rem);
+  --space-m: clamp(1.5rem, 1.3652rem + 0.6742vw, 1.8876rem);
+  --space-l: clamp(2rem, 1.8202rem + 0.8989vw, 2.5169rem);
+  --space-xl: clamp(3rem, 2.7303rem + 1.3483vw, 3.7753rem);
+  --space-2xl: clamp(4rem, 3.6404rem + 1.7978vw, 5.0337rem);
+  --space-3xl: clamp(6rem, 5.4607rem + 2.6966vw, 7.5506rem);
+
+  /* Container Widths */
+  --container-blog: 72rem;
+  --container-narrow: 46rem;
+  --container-standard: 128rem;
+
+  /* One-up pairs */
+  --space-3xs-2xs: clamp(0.25rem, 0.1152rem + 0.6742vw, 0.6292rem);
+  --space-2xs-xs: clamp(0.5rem, 0.3427rem + 0.7865vw, 0.9438rem);
+  --space-xs-s: clamp(0.75rem, 0.5697rem + 0.9003vw, 1.2584rem);
+  --space-s-m: clamp(1rem, 0.6843rem + 1.5787vw, 1.8876rem);
+  --space-m-l: clamp(1.5rem, 1.1376rem + 1.8118vw, 2.5169rem);
+  --space-l-xl: clamp(2rem, 1.3685rem + 3.1573vw, 3.7753rem);
+  --space-xl-2xl: clamp(3rem, 2.2753rem + 3.6236vw, 5.0337rem);
+  --space-2xl-3xl: clamp(4rem, 2.7371rem + 6.3146vw, 7.5506rem);
+
+  /* Material 3 Mapping */
+  --m3-font-display-large: var(--step-7);
+  --m3-font-display-medium: var(--step-6);
+  --m3-font-display-small: var(--step-5);
+  --m3-font-headline-large: var(--step-4);
+  --m3-font-headline-medium: var(--step-3);
+  --m3-font-headline-small: var(--step-2);
+  --m3-font-title-large: var(--step-2);
+  --m3-font-title-medium: var(--step-1);
+  --m3-font-title-small: var(--step-0);
+  --m3-font-label-large: var(--step--1);
+  --m3-font-label-medium: var(--step--1);
+  --m3-font-label-small: var(--step--2);
+  --m3-font-body-large: var(--step-0);
+  --m3-font-body-medium: var(--step-0);
+  --m3-font-body-small: var(--step--1);
+
   /* COLORS */
   --color: var(--color-accent);
   --dark-color: #2b2b2b;
@@ -89,63 +145,16 @@
   --m3-font-family-display: "Roboto Flex", sans-serif;
   --m3-font-family-body: "Roboto Flex", sans-serif;
 
-  /* Type Scale */
-  --m3-font-display-large: 5.7rem;
-  --m3-font-display-medium: 4.5rem;
-  --m3-font-display-small: 3.6rem;
-  --m3-font-headline-large: 3.2rem;
-  --m3-font-headline-medium: 2.8rem;
-  --m3-font-headline-small: 2.4rem;
-  --m3-font-title-large: 2.4rem;
-  --m3-font-title-medium: 1.8rem;
-  --m3-font-title-small: 1.6rem;
-  --m3-font-label-large: 1.4rem;
-  --m3-font-label-medium: 1.3rem;
-  --m3-font-label-small: 1.2rem;
-  --m3-font-body-large: 1.8rem;
-  --m3-font-body-medium: 1.6rem;
-  --m3-font-body-small: 1.45rem;
-
-  /* Spacing scale (4px baseline) */
-  --space-1: 0.4rem;
-  --space-2: 0.8rem;
-  --space-3: 1.2rem;
-  --space-4: 1.6rem;
-  --space-5: 2rem;
-  --space-6: 2.4rem;
-  --space-8: 3.2rem;
-  --space-10: 4rem;
-  --space-12: 4.8rem;
-
   /* Grid gap aliases */
-  --grid-gap-xs: var(--space-3);
-  --grid-gap-sm: var(--space-4);
-  --grid-gap-md: var(--space-5);
-  --grid-gap-lg: var(--space-6);
+  --grid-gap-xs: var(--space-xs);
+  --grid-gap-sm: var(--space-s);
+  --grid-gap-md: var(--space-m);
+  --grid-gap-lg: var(--space-l);
 
-  /* Back-compat spacing tokens */
-  --spacing-sm: var(--space-2);
-  --spacing-md: var(--space-4);
-  --spacing-lg: var(--space-6);
-  --spacing-xl: var(--space-8);
-
-  --nav-height: 64px;
+  --nav-height: 4rem;
   --text-color: var(--color-text-primary);
   --accent-color: var(--color-accent);
   --font-heading: var(--m3-font-family-display);
-
-  /* Fluid typography tokens */
-  --font-size-h1-min: 3.2rem;
-  --font-size-h1-max: 5.6rem;
-  --font-size-h2-min: 2.4rem;
-  --font-size-h2-max: 4rem;
-  --font-size-h3-min: 2rem;
-  --font-size-h3-max: 3rem;
-  --font-size-h4: 1.8rem;
-  --font-size-h5: 1.6rem;
-  --font-size-h6: 1.45rem;
-  --font-size-body-min: 1.6rem;
-  --font-size-body-max: 1.8rem;
 
   --font-weight-h1: 560;
   --font-weight-h2: 520;

@@ -2,35 +2,35 @@
 
 /* Container & heading */
 .content-section {
-  padding: 4.8rem 2.4rem;
-  max-width: 720px;
+  padding: var(--space-xl-2xl) var(--space-m-l);
+  max-width: 45rem;
   margin: 0 auto;
 }
 .page-h2 {
-  font-size: var(--m3-font-display-small);
+  font-size: var(--step-6);
   font-family: var(--m3-font-family-display);
   color: var(--color-text-primary);
   text-align: center;
-  margin-bottom: 3.2rem;
+  margin-bottom: var(--space-xl);
 }
 
 /* Toast: off-flow, visible via .visible; variants via .success/.error */
 .toast {
   position: fixed;
-  top: 1.6rem;
-  right: 1.6rem;
-  min-width: 260px;
-  max-width: calc(100% - 3.2rem);
-  padding: 1rem 1.2rem;
-  border-radius: 10px;
+  top: var(--space-s);
+  right: var(--space-s);
+  min-width: 16.25rem;
+  max-width: calc(100% - var(--space-xl));
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--space-s);
   background-color: var(--m3-color-surface);
   color: var(--m3-color-on-surface);
-  font-size: var(--m3-font-body-medium);
+  font-size: var(--step-1);
   text-align: left;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 var(--space-xs) var(--space-xl) rgba(0, 0, 0, 0.12);
   border: 2px solid transparent;
   opacity: 0;
-  transform: translateY(-8px) scale(0.99);
+  transform: translateY(calc(var(--space-xs) * -1)) scale(0.99);
   pointer-events: none;
   transition:
     opacity 220ms ease,
@@ -50,7 +50,7 @@
 }
 .toast:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 0 var(--space-xs) rgba(0, 0, 0, 0.04);
   cursor: pointer;
 }
 
@@ -58,7 +58,7 @@
 .form-group input[aria-invalid="true"],
 .form-group textarea[aria-invalid="true"] {
   border-color: var(--m3-color-error, #b00020);
-  box-shadow: 0 4px 12px rgba(184, 14, 14, 0.12);
+  box-shadow: 0 var(--space-3xs) var(--space-s) rgba(184, 14, 14, 0.12);
 }
 .form-group label[aria-invalid="true"] {
   color: var(--m3-color-error, #b00020);
@@ -67,38 +67,38 @@
 /* Form layout & controls */
 #contact-form {
   background-color: var(--m3-color-surface);
-  padding: 2.4rem;
-  border-radius: 12px;
+  padding: var(--space-m-l);
+  border-radius: var(--space-s);
   border: 1px solid var(--m3-color-outline);
 }
 .form-main-title {
-  font-size: var(--m3-font-headline-medium);
+  font-size: var(--step-4);
   font-family: var(--m3-font-family-display);
   text-align: center;
-  margin-bottom: 2.4rem;
+  margin-bottom: var(--space-m-l);
   color: var(--m3-color-on-surface);
 }
 .form-group {
-  margin-bottom: 1.6rem;
+  margin-bottom: var(--space-s-m);
 }
 .form-group label {
   display: block;
-  margin-bottom: 0.8rem;
-  font-size: var(--m3-font-label-large);
+  margin-bottom: var(--space-2xs);
+  font-size: var(--step-0);
   color: var(--m3-color-on-surface-variant);
 }
 .required::after {
   content: "*";
   color: var(--m3-color-error);
-  margin-left: 0.4rem;
+  margin-left: var(--space-3xs);
 }
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 1.2rem 1.6rem;
+  padding: var(--space-xs) var(--space-s);
   border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
-  font-size: var(--m3-font-body-large);
+  border-radius: var(--space-xs);
+  font-size: var(--step-1);
   background-color: var(--m3-color-surface-variant);
   color: var(--m3-color-on-surface-variant);
   transition: all 0.2s ease;
@@ -116,18 +116,18 @@
 .error-message {
   display: block;
   color: var(--m3-color-error);
-  font-size: var(--m3-font-body-small);
-  margin-top: 0.4rem;
+  font-size: var(--step-0);
+  margin-top: var(--space-3xs);
 }
 
 button[type="submit"] {
   width: 100%;
-  padding: 1.2rem 2.4rem;
+  padding: var(--space-xs) var(--space-m-l);
   border: none;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   background-color: var(--m3-color-primary);
   color: var(--m3-color-on-primary);
-  font-size: var(--m3-font-label-large);
+  font-size: var(--step-0);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;

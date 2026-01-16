@@ -4,17 +4,17 @@
 .experience-pagination-portal {
   display: flex;
   justify-content: center;
-  margin-top: 1.6rem; /* ~16px (root font-size: 62.5% -> 1rem = 10px) */
+  margin-top: var(--space-m);
   width: 100%;
   box-sizing: border-box;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--space-m);
 }
 
 /* Container for pagination controls */
 .experience-pagination-portal .pagination-controls,
 .pagination-controls {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-s);
   align-items: center;
   justify-content: center;
   max-width: 1200px;
@@ -24,8 +24,8 @@
 /* Pagination buttons and info pill */
 .experience-pagination-portal .pagination-controls button,
 .pagination-button {
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--space-xs);
   border: 1px solid var(--m3-color-outline);
   background: transparent;
   color: var(--m3-color-on-surface);
@@ -42,7 +42,7 @@
   .pagination-button:hover:not(:disabled) {
     background: var(--color-accent);
     color: var(--m3-color-on-primary);
-    transform: translateY(-1px);
+    transform: translateY(calc(var(--space-3xs) * -1));
   }
 }
 .experience-pagination-portal .pagination-controls button:disabled,
@@ -58,23 +58,23 @@
 /* Info pill */
 .experience-pagination-portal .pagination-controls > div,
 .pagination-info {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
+  padding: var(--space-3xs) var(--space-xs);
+  border-radius: var(--space-3xl);
   background: var(--m3-color-surface-variant);
   color: var(--m3-color-on-surface-variant);
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 var(--space-3xs) var(--space-2xs) rgba(0, 0, 0, 0.04);
 }
 
 /* Shared control layout used across Posts & Experience islands */
 .experience-controls {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--space-m);
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-md);
-  padding: 0 var(--spacing-md);
+  margin-bottom: var(--space-m);
+  padding: 0 var(--space-m);
 }
 
 /* Individual label+control grouping */
@@ -82,14 +82,14 @@
   display: flex !important;
   display: inline-flex !important;
   align-items: center;
-  gap: 0.8rem;
+  gap: var(--space-2xs);
   flex-wrap: nowrap;
 }
 
 /* Visual label styling */
 .experience-controls .control-label {
   color: var(--m3-color-on-surface-variant);
-  font-size: var(--m3-font-label-medium);
+  font-size: var(--step-1);
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -97,14 +97,14 @@
 
 /* Shared select styling used across the site (blog-like) */
 .experience-controls .control-select {
-  padding: 0.5rem 0.75rem;
-  font-size: var(--m3-font-body-medium);
+  padding: var(--space-3xs) var(--space-xs);
+  font-size: var(--step-1);
   border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
+  border-radius: var(--space-xs);
   background: var(--m3-color-surface);
   color: var(--m3-color-on-surface);
-  min-width: 8rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  min-width: var(--space-xl);
+  box-shadow: 0 var(--space-3xs) var(--space-2xs) rgba(0, 0, 0, 0.04);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease,
@@ -113,20 +113,20 @@
 .experience-controls .control-select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 var(--space-2xs) var(--space-m) rgba(0, 0, 0, 0.06);
 }
 
 /* Smaller variant for compact selects */
 .experience-controls .control-select.compact {
-  padding: 0.35rem 0.6rem;
-  min-width: 6.4rem;
+  padding: var(--space-3xs) var(--space-2xs);
+  min-width: var(--space-l);
 }
 
 /* Reset button base (kept minimal here; emphasized styles are defined later) */
 .experience-controls .btn-reset {
-  padding: 0.5rem 0.85rem;
+  padding: var(--space-3xs) var(--space-xs);
   border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
+  border-radius: var(--space-xs);
   background: transparent; /* emphasized appearance provided by project-specific rule later */
   color: var(--m3-color-on-surface);
   cursor: pointer;
@@ -140,16 +140,16 @@
 /* Hover: minor elevation only — do not change background here to avoid flashing */
 @media (hover: hover) {
   .experience-controls .btn-reset:hover {
-    transform: translateY(-1px);
+    transform: translateY(calc(var(--space-3xs) * -1));
   }
 }
 
 /* Focus: show an accessible ring but do not change button fill color (prevents persistent flashing) */
 .experience-controls .btn-reset:focus {
   outline: none;
-  box-shadow: 0 0 0 4px
+  box-shadow: 0 0 0 var(--space-s)
     color-mix(in oklab, var(--color-accent) 20%, transparent);
-  transform: translateY(-1px);
+  transform: translateY(calc(var(--space-3xs) * -1));
 }
 
 /* Accessibility helper used in a few places */
@@ -176,39 +176,42 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: var(--space-2xs);
   min-width: 12rem;
-  padding: 0.5rem 0.75rem;
+  padding: var(--space-3xs) var(--space-xs);
   border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
+  border-radius: var(--space-xs);
   background: var(--m3-color-surface);
   color: var(--m3-color-on-surface);
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 var(--space-3xs) var(--space-2xs) rgba(0, 0, 0, 0.04);
   text-align: left;
+  font-size: var(--step-1);
 }
 
 .dropdown-toggle:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 var(--space-2xs) var(--space-m) rgba(0, 0, 0, 0.06);
 }
 
 .dropdown-panel {
   position: absolute;
   z-index: 30;
-  top: calc(100% + 0.6rem);
+  top: calc(100% + var(--space-2xs));
   left: 0;
+  width: max-content;
   min-width: 12rem;
-  max-width: 22rem;
+  max-width: min(90vw, var(--space-3xl));
   max-height: 220px;
   overflow: auto;
   background: var(--m3-color-surface);
   border: 1px solid var(--m3-color-outline);
-  border-radius: 8px;
-  padding: 0.35rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-radius: var(--space-xs);
+  padding: var(--space-3xs);
+  box-shadow: 0 var(--space-xs) var(--space-xl) rgba(0, 0, 0, 0.08);
   display: none;
+  white-space: nowrap;
 }
 
 .dropdown-panel.open {
@@ -217,13 +220,13 @@
 
 .dropdown-item {
   display: flex;
-  gap: 0.6rem;
+  gap: var(--space-2xs);
   align-items: center;
-  padding: 0.45rem 0.6rem;
-  border-radius: 6px;
+  padding: var(--space-3xs) var(--space-2xs);
+  border-radius: var(--space-3xs);
   cursor: pointer;
   color: var(--m3-color-on-surface);
-  font-size: var(--m3-font-body-medium);
+  font-size: var(--step-1);
 }
 
 .dropdown-item:hover {
@@ -231,8 +234,8 @@
 }
 
 .dropdown-item input[type="checkbox"] {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: var(--space-s);
+  height: var(--space-s);
   margin: 0;
   accent-color: var(--color-accent);
 }
@@ -240,11 +243,10 @@
 /* Ensure dropdown in control-pair aligns nicely on small screens */
 @media (max-width: 640px) {
   .dropdown-toggle {
-    min-width: 10rem;
+    min-width: var(--space-xl);
   }
   .dropdown-panel {
-    min-width: 10rem;
-    max-width: 100vw;
+    min-width: var(--space-xl);
     left: 0;
     right: 0;
   }

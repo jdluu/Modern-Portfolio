@@ -1,7 +1,7 @@
 /* Footer component styles (extracted from src/components/ui/Footer.astro) */
 #footer {
   background-color: transparent;
-  padding: 2.4rem 0;
+  padding: var(--space-m-l) 0;
 }
 
 #footer-ul {
@@ -11,7 +11,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 2.4rem;
+  gap: var(--space-m-l);
 }
 
 .footer-link {
@@ -29,7 +29,7 @@
 }
 
 .svg-icon {
-  width: 3.2rem;
-  height: 3.2rem;
+  width: var(--space-xl);
+  height: var(--space-xl);
   fill: currentColor;
 }

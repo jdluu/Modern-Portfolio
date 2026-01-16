@@ -3,43 +3,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: var(--space-3);
-  padding-right: var(--space-5);
-  padding-bottom: var(--space-6);
-  padding-left: var(--space-5);
+  padding-top: var(--space-xl-2xl);
+  padding-right: var(--space-m-l);
+  padding-bottom: var(--space-xl-2xl);
+  padding-left: var(--space-m-l);
 }
 
 .page-h2 {
   font-family: var(--m3-font-family-display);
-  font-size: clamp(2.8rem, 2.4rem + 1.2vw, 4rem);
+  font-size: var(--step-6);
   font-weight: var(--font-weight-h2);
   line-height: var(--font-line-height-heading-tight);
   letter-spacing: -0.014em;
   color: var(--color-text-primary);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-m-l);
   text-align: center;
 }
 
 .card-grid {
   display: grid;
-  gap: var(--grid-gap-sm);
+  gap: var(--space-l-xl);
   width: 100%;
   max-width: 1200px;
-}
-
-/* Responsive layout */
-/* Tablet: Two columns */
-@media (min-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--grid-gap-md);
-  }
-}
-
-/* Desktop: Three columns */
-@media (min-width: 1024px) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--grid-gap-lg);
-  }
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
 }

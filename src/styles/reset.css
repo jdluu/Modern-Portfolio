@@ -25,7 +25,7 @@ html {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;  /* Better parity with macOS Safari */
+  -moz-osx-font-smoothing: grayscale; /* Better parity with macOS Safari */
   text-rendering: optimizeLegibility;
 }
 
@@ -65,13 +65,14 @@ button,
 
 /* Restore checkbox appearance (reset.css hides it) */
 input[type="checkbox"] {
-  appearance: auto;
-  -webkit-appearance: auto;
-  accent-color: var(--color-accent);
-  width: 1.6rem;
-  height: 1.6rem;
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  appearance: checkbox;
+  width: var(--space-s);
+  height: var(--space-s);
   margin-right: 0.5em;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 /* Typography and Links */

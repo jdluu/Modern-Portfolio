@@ -10,7 +10,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
   aspect-ratio: 16 / 10;
-  border-radius: 24px;
+  border-radius: var(--space-m);
   overflow: hidden;
 }
 
@@ -54,22 +54,22 @@
 /* overlay / content */
 .project-card .more-info {
   text-align: center;
-  padding: var(--space-4);
+  padding: var(--space-s-m);
 }
 
 /* text */
 .project-card .project-title {
-  font-size: var(--m3-font-title-large);
+  font-size: var(--step-2);
   font-family: var(--m3-font-family-display);
   font-weight: 600;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-2xs-xs);
   color: var(--color-text-tertiary);
 }
 
 .project-card .project-description {
-  font-size: var(--m3-font-body-large);
+  font-size: var(--step-1);
   font-family: var(--m3-font-family-body);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-s-m);
   color: var(--color-text-tertiary);
 }
 
@@ -78,11 +78,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--space-2xs-xs);
   /* Ensure minimum touch target size */
-  min-height: 44px;
-  min-width: 44px;
-  padding: 0.5rem 0.75rem;
+  min-height: var(--space-xl);
+  min-width: var(--space-xl);
+  padding: var(--space-2xs) var(--space-xs);
   inline-size: max-content;
   font-size: var(--m3-font-label-large);
   font-family: var(--m3-font-family-body);
@@ -152,11 +152,11 @@
     position: relative;
     z-index: 2;
     /* reinforce minimum touch target for any inline links */
-    min-height: 44px;
+    min-height: var(--space-xl);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 0.75rem;
+    padding: var(--space-2xs) var(--space-xs);
   }
 
   .project-card.background:hover {

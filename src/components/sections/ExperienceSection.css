@@ -3,10 +3,10 @@
 /* Section header */
 .page-h2 {
   font-family: var(--m3-font-family-display);
-  font-size: var(--m3-font-headline-large);
+  font-size: var(--step-6);
   color: var(--color-text-primary);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-m-l);
 }
 
 /* Section layout */
@@ -14,10 +14,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: var(--space-8);
-  padding-right: var(--space-5);
-  padding-bottom: var(--space-6);
-  padding-left: var(--space-5);
+  padding-top: var(--space-xl-2xl);
+  padding-right: var(--space-m-l);
+  padding-bottom: var(--space-xl-2xl);
+  padding-left: var(--space-m-l);
 }
 
 /* Experience grid (server-rendered items rely on these selectors) */
@@ -26,8 +26,8 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  gap: 2rem;
-  grid-template-columns: 1fr;
+  gap: var(--space-l-xl);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   justify-items: stretch;
   align-items: stretch;
   grid-auto-flow: row dense;
@@ -37,18 +37,6 @@
 .experience-grid > .experience-item {
   grid-column: auto !important;
   min-width: 0;
-}
-
-/* Responsive columns */
-@media (min-width: 768px) {
-  .experience-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-@media (min-width: 1024px) {
-  .experience-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
 }
 
 /* Note: controls/pagination visuals are in /src/styles/components/pagination.css

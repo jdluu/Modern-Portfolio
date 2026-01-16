@@ -2,9 +2,9 @@
    This ensures the aside (hero) sits beside the main text row and aligns to the
    top of the text area (not the title/date). Links occupy a full-width row below. */
 article.post-grid {
-  max-width: 1200px;
+  max-width: var(--container-standard);
   margin: 0 auto;
-  padding: 5rem 2rem;
+  padding: var(--space-2xl-3xl) var(--space-m);
   background-color: var(--m3-color-surface);
   color: var(--m3-color-on-surface);
   display: grid;
@@ -14,7 +14,7 @@ article.post-grid {
     "header header"
     "main   aside"
     "links  links";
-  gap: 3.2rem;
+  gap: var(--space-xl);
   align-items: start;
   box-sizing: border-box;
 }
@@ -23,13 +23,13 @@ article.post-grid {
   /* Place header in its own full-width row above columns so aside cannot affect its height.
      Visually it's left-aligned to match the main content column. */
   grid-area: header;
-  margin: 0 0 3.2rem 0;
+  margin: 0 0 var(--space-xl) 0;
   text-align: left;
   align-self: start;
   max-width: min(80ch, 100%);
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: var(--space-m);
 }
 
 /* Center header when there's no hero image - make it wider than content */
@@ -62,14 +62,14 @@ article.post-grid:not(.no-hero) .post-header {
 .post-header-actions {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: var(--space-s);
 }
 
 .post-title {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
   color: var(--m3-color-primary);
-  margin-bottom: 1.6rem;
+  margin-bottom: var(--space-m);
   line-height: 1.2;
 }
 
@@ -94,8 +94,8 @@ article.post-grid.no-hero .publish-date {
 .copy-markdown-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.8rem 1.2rem;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-s);
   background-color: var(--m3-color-surface-variant);
   color: var(--m3-color-on-surface);
   border: 1px solid
@@ -126,8 +126,8 @@ article.post-grid.no-hero .publish-date {
 }
 
 .copy-markdown-btn svg {
-  width: 18px;
-  height: 18px;
+  width: var(--space-m);
+  height: var(--space-m);
   flex-shrink: 0;
 }
 
@@ -150,7 +150,7 @@ article.post-grid.no-hero .publish-date {
 /* Hide text on mobile, show only icon */
 @media (max-width: 600px) {
   .copy-markdown-btn {
-    padding: 0.8rem;
+    padding: var(--space-2xs);
   }
 
   .copy-markdown-text {
@@ -169,7 +169,7 @@ article.post-grid.no-hero .publish-date {
 
 article.post-grid:not(.no-hero) .post-header-actions {
   flex-shrink: 0;
-  margin-top: 0.4rem;
+  margin-top: var(--space-3xs);
 }
 
 .main-content {
@@ -201,7 +201,7 @@ article.post-grid.no-hero .prose {
   grid-area: aside;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: var(--space-m);
   align-self: start; /* keep aside aligned to the top of the main column */
   width: 100%; /* fill the aside column */
 }
@@ -210,10 +210,10 @@ article.post-grid.no-hero .prose {
   width: 100%;
   max-height: min(
     60vh,
-    480px
+    30rem
   ); /* allow the hero to be visually prominent while staying constrained */
   background-color: var(--m3-color-surface-variant);
-  border-radius: 12px;
+  border-radius: var(--space-s);
   overflow: hidden;
   margin: 0;
   border: 1px solid
@@ -251,8 +251,8 @@ article.post-grid.no-hero .prose {
 
 .project-links {
   grid-area: links;
-  margin-top: 1.2rem;
-  padding-top: 1rem;
+  margin-top: var(--space-s);
+  padding-top: var(--space-s);
   border-top: 1px solid var(--m3-color-outline);
   display: flex;
   justify-content: center;
@@ -262,12 +262,12 @@ article.post-grid.no-hero .prose {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 1.2rem;
+  gap: var(--space-s);
   flex-wrap: wrap;
   align-items: center;
-  max-width: min(80ch, 900px);
+  max-width: min(80ch, 56.25rem);
   width: 100%;
-  padding-inline: 0.8rem;
+  padding-inline: var(--space-2xs);
   box-sizing: border-box;
 }
 
@@ -278,16 +278,16 @@ article.post-grid.no-hero .prose {
 .links-container {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: var(--space-2xs);
   align-items: stretch;
 }
 
 .project-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.9rem 1rem;
-  border-radius: 12px;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-s);
+  border-radius: var(--space-s);
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-label-large);
   font-weight: 500;
@@ -305,8 +305,8 @@ article.post-grid.no-hero .prose {
 }
 
 .project-link .external-icon {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: var(--space-xs);
+  height: var(--space-xs);
   color: currentColor;
   flex: 0 0 auto;
 }
@@ -327,7 +327,7 @@ article.post-grid.no-hero .prose {
 
 .prose {
   font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-body-large);
+  font-size: var(--step-0);
   line-height: 1.75;
   color: var(--m3-color-on-surface);
   min-width: 0;
@@ -345,8 +345,8 @@ article.post-grid.no-hero .prose {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
   color: var(--m3-color-on-surface);
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-l);
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.01em;
@@ -357,8 +357,8 @@ article.post-grid.no-hero .prose {
 .prose h4 {
   font-family: var(--m3-font-family-display);
   color: var(--m3-color-on-surface);
-  margin-top: 3.2rem;
-  margin-bottom: 1.4rem;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-s);
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: -0.008em;
@@ -370,18 +370,18 @@ article.post-grid.no-hero .prose {
 
 .prose h3 {
   font-size: var(--m3-font-title-large);
-  margin-top: 2.8rem;
-  margin-bottom: 1.2rem;
+  margin-top: var(--space-l);
+  margin-bottom: var(--space-s);
 }
 
 .prose h4 {
   font-size: var(--m3-font-title-medium);
-  margin-top: 2.4rem;
-  margin-bottom: 1rem;
+  margin-top: var(--space-m);
+  margin-bottom: var(--space-xs);
 }
 
 .prose p {
-  margin-bottom: 1.8rem;
+  margin-bottom: var(--space-m);
   color: var(--m3-color-on-surface);
 }
 
@@ -415,13 +415,13 @@ article.post-grid.no-hero .prose {
 /* Lists */
 .prose ul,
 .prose ol {
-  margin: 2rem 0;
-  padding-left: 2.4rem;
+  margin: var(--space-l) 0;
+  padding-left: var(--space-m);
   color: var(--m3-color-on-surface);
 }
 
 .prose li {
-  margin: 0.6rem 0;
+  margin: var(--space-2xs) 0;
   line-height: 1.75;
 }
 
@@ -445,7 +445,7 @@ article.post-grid.no-hero .prose {
 .prose ol ol,
 .prose ul ol,
 .prose ol ul {
-  margin: 0.8rem 0;
+  margin: var(--space-xs) 0;
 }
 
 /* Code blocks */
@@ -454,12 +454,12 @@ article.post-grid.no-hero .prose {
   border: 1px solid
     color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
   border-radius: 8px;
-  padding: 1.8rem;
-  margin: 2.4rem 0;
+  padding: var(--space-m);
+  margin: var(--space-l) 0;
   overflow-x: auto;
   font-family:
     "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
-  font-size: 1.4rem;
+  font-size: var(--step--1);
   line-height: 1.7;
   color: var(--m3-color-on-surface);
 }
@@ -482,8 +482,8 @@ article.post-grid.no-hero .prose {
 .prose :not(pre) > code {
   background-color: var(--m3-color-surface-variant);
   color: var(--m3-color-primary);
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
+  padding: var(--space-3xs) var(--space-2xs);
+  border-radius: var(--space-xs);
   font-size: 0.9em;
   border: 1px solid
     color-mix(in oklab, var(--m3-color-outline) 20%, transparent);
@@ -492,22 +492,22 @@ article.post-grid.no-hero .prose {
 /* Blockquotes */
 .prose blockquote {
   border-left: 4px solid var(--m3-color-primary);
-  padding-left: 2rem;
-  margin: 2.4rem 0;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-left: var(--space-l);
+  margin: var(--space-l) 0;
+  padding-top: var(--space-s);
+  padding-bottom: var(--space-s);
   background-color: color-mix(
     in oklab,
     var(--m3-color-primary) 5%,
     transparent
   );
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--space-xs) var(--space-xs) 0;
   font-style: italic;
   color: var(--m3-color-on-surface);
 }
 
 .prose blockquote p {
-  margin-bottom: 0.8rem;
+  margin-bottom: var(--space-2xs);
 }
 
 .prose blockquote p:last-child {
@@ -519,7 +519,7 @@ article.post-grid.no-hero .prose {
   border: none;
   border-top: 1px solid
     color-mix(in oklab, var(--m3-color-outline) 25%, transparent);
-  margin: 4rem 0;
+  margin: var(--space-2xl) 0;
   background: none;
   height: 0;
 }
@@ -527,7 +527,7 @@ article.post-grid.no-hero .prose {
 /* Add extra spacing after hr when followed by h1 or h2 */
 .prose hr + h1,
 .prose hr + h2 {
-  margin-top: 2.4rem;
+  margin-top: var(--space-l);
 }
 
 /* Lightbox */
@@ -538,7 +538,7 @@ article.post-grid.no-hero .prose {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: var(--space-m);
   z-index: 1000;
 }
 .lightbox.is-hidden {
@@ -547,7 +547,7 @@ article.post-grid.no-hero .prose {
 .lightbox-content {
   position: relative;
   outline: none;
-  max-width: min(95vw, 1400px);
+  max-width: min(95vw, 87.5rem);
   max-height: 90vh;
 }
 .lightbox-content img {
@@ -563,10 +563,10 @@ article.post-grid.no-hero .prose {
 }
 .lightbox-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
+  top: var(--space-s);
+  right: var(--space-s);
+  width: var(--space-xl);
+  height: var(--space-xl);
   border-radius: 999px;
   border: 1px solid var(--m3-color-outline);
   background-color: var(--m3-color-surface-variant);
@@ -585,8 +585,8 @@ article.post-grid.no-hero .prose {
 @media (max-width: 900px) {
   article.post-grid {
     grid-template-columns: 1fr;
-    padding: 3.2rem 1.6rem;
-    gap: 2.4rem;
+    padding: var(--space-xl) var(--space-s);
+    gap: var(--space-m);
     /* Mobile stacking order: Header → Image (aside) → Links → Text (main) */
     grid-template-areas:
       "header"
@@ -600,12 +600,12 @@ article.post-grid.no-hero .prose {
   }
 
   .prose h1 {
-    margin-top: 3.2rem;
+    margin-top: var(--space-xl);
   }
 
   .prose h2,
   .prose h3 {
-    margin-top: 2.4rem;
+    margin-top: var(--space-l);
   }
 
   .post-header {
@@ -634,7 +634,7 @@ article.post-grid.no-hero .prose {
     position: static;
     width: auto;
     grid-area: aside;
-    margin: 0 0 1.6rem 0;
+    margin: 0 0 var(--space-s) 0;
     align-self: stretch;
   }
 
@@ -645,18 +645,18 @@ article.post-grid.no-hero .prose {
 
   .project-links {
     grid-area: links;
-    margin-top: 1.6rem;
+    margin-top: var(--space-m);
   }
 
   .links-container {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.8rem;
+    gap: var(--space-2xs);
   }
 
   .project-link {
-    padding: 0.8rem 1.2rem;
+    padding: var(--space-2xs) var(--space-s);
     border-radius: 999px;
   }
 

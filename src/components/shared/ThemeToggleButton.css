@@ -4,7 +4,7 @@
   position: relative;
   inline-size: 7rem;
   block-size: 3.6rem;
-  padding: 0.4rem;
+  padding: var(--space-3xs);
   border: 1px solid transparent;
   border-radius: 9999px;
   background: transparent; /* Transparent track */
