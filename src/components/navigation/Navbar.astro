@@ -6,6 +6,7 @@ import "./Navbar.css";
 <header class="header">
   <nav class="nav-container" aria-label="Main navigation">
     <div class="nav-content">
+      <!-- Mobile Toggle -->
       <div class="menu-icon-wrapper">
         <button
           id="menu-toggle-btn"
@@ -29,10 +30,11 @@ import "./Navbar.css";
         </button>
       </div>
 
-      <a href="/" class="home-link desktop-home-link" aria-label="Home">
+      <!-- Left: Home Link -->
+      <a href="/" class="home-link desktop-home-link" aria-label="Jeffrey Luu Home">
         <svg
           viewBox="0 0 32 32"
-          xmlns="http://www.w.org/2000/svg"
+          xmlns="http://www.w3.org/2000/svg"
           class="home-icon"
           aria-hidden="true"
         >
@@ -43,8 +45,7 @@ import "./Navbar.css";
         </svg>
       </a>
 
-      <div class="nav-spacer"></div>
-
+      <!-- Center: Navigation Menu -->
       <div
         id="main-menu"
         class="nav-menu-styles"
@@ -108,15 +109,17 @@ import "./Navbar.css";
         </div>
       </div>
 
+      <!-- Right: Theme Toggle -->
       <div class="theme-toggle-container">
         <ThemeToggleButton client:media="(min-width: 768px)" transition:persist />
       </div>
-      <div class="mobile-theme-toggle md-hidden" style="margin-left: auto;">
+      <div class="mobile-theme-toggle">
         <ThemeToggleButton client:media="(max-width: 767px)" transition:persist />
       </div>
     </div>
   </nav>
 
+  <!-- Backdrop -->
   <div id="menu-backdrop" class="menu-backdrop" hidden aria-hidden="true"></div>
 </header>
 
