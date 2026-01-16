@@ -151,13 +151,4 @@ function initNavbar() {
 }
 
 // Initialize on page load and VT navigation
-
 document.addEventListener("astro:page-load", initNavbar);
-
-// Fallback for environments without View Transitions
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initNavbar);
-} else {
-  initNavbar();
-}

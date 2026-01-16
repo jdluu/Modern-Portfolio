@@ -1,5 +1,5 @@
 // Scroll-to-top button functionality
-document.addEventListener("DOMContentLoaded", function () {
+function initScrollToTop() {
   if (document.getElementById("scroll-top")) return;
 
   function throttle(fn: (...args: any[]) => void, wait: number) {
@@ -60,4 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   updateScrollTopVisibility();
-});
+}
+
+document.addEventListener("astro:page-load", initScrollToTop);
+
+// Fallback for non-VT environments
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initScrollToTop);
+} else {
+  initScrollToTop();
+}
