@@ -12,7 +12,6 @@ function initNavbar() {
 
   if (!mainMenu || !menuToggleBtn || !backdrop || !menuCloseBtn) return;
 
-  // Prevent duplicate initialization on the same elements
   if (menuToggleBtn.dataset.navInit === "true") return;
   menuToggleBtn.dataset.navInit = "true";
 
@@ -20,6 +19,15 @@ function initNavbar() {
   const menu = mainMenu;
   const back = backdrop;
   const closeBtn = menuCloseBtn;
+
+  menu.setAttribute("hidden", "");
+  menu.setAttribute("data-open", "false");
+  menu.setAttribute("inert", "");
+  menu.classList.remove("is-closing", "is-open");
+  back.classList.remove("visible");
+  back.setAttribute("hidden", "");
+  btn.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("menu-open");
 
   let isAnimating = false;
 
@@ -30,7 +38,7 @@ function initNavbar() {
     menu.classList.remove("is-closing", "is-open");
     back.classList.remove("visible");
     back.setAttribute("hidden", "");
-    document.body.style.overflow = "";
+    document.body.classList.remove("menu-open");
     isAnimating = false;
   }
 
@@ -58,7 +66,7 @@ function initNavbar() {
 
     menu.classList.add("is-open");
     back.classList.add("visible");
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("menu-open");
 
     // Wait for transition
     const onEnd = (e: TransitionEvent) => {
@@ -122,11 +130,16 @@ function initNavbar() {
   closeBtn.addEventListener("click", () => closeMenu());
   back.addEventListener("click", () => closeMenu());
 
-  // Close when clicking any link inside the menu
   menu.addEventListener("click", (e) => {
     if (!(e.target instanceof HTMLElement)) return;
-    if (e.target.closest("a")) {
-      closeMenu(false);
+    const link = e.target.closest("a");
+    if (link) {
+      const isNavLink = link.getAttribute("href")?.startsWith("/");
+      if (isNavLink && menu.getAttribute("data-open") === "true") {
+        closeMenu(false);
+      } else {
+        closeMenu(false);
+      }
     }
   });
 
@@ -150,5 +163,6 @@ function initNavbar() {
   handleResize(); // Initial check
 }
 
-// Initialize on page load and VT navigation
-document.addEventListener("astro:page-load", initNavbar);
+document.addEventListener("DOMContentLoaded", () => {
+  initNavbar();
+});

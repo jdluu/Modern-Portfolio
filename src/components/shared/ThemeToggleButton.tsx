@@ -69,54 +69,14 @@ const ThemeToggleButton = () => {
     );
   });
 
-  const getThumbX = (dark: boolean) => (dark ? 3.8 : 0); // rem units align with CSS
-
   const toggle = () => {
     const next = !isDarkMode();
-    const root = document.documentElement;
-
-    // Use standard transition if View Transitions API is unsupported
-    if (!document.startViewTransition) {
-      setDarkMode(next);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      root.setAttribute("data-theme", next ? "dark" : "light");
-      return;
-    }
-
-    const curDark = Boolean(isDarkMode());
-    const curX = getThumbX(curDark);
-    const targetX = getThumbX(next);
-
-    // Flag that VT-driven transforms are in effect so CSS can adapt.
-    root.setAttribute("data-theme-vt", "driving");
-
-    if (thumbRef) {
-      // Seed inline transform to the current position, force reflow, then set target.
-      thumbRef.style.transform = `translateX(${curX}rem)`;
-      // Force reflow so starting transform is committed
-      void thumbRef.offsetWidth;
-      thumbRef.style.transform = `translateX(${targetX}rem)`;
-    }
-
-    const vt = document.startViewTransition(() => {
-      setDarkMode(next);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      root.setAttribute("data-theme", next ? "dark" : "light");
-    });
-
-    // Cleanup after VT completes
-    vt.finished.finally(() => {
-      const cleanup = () => {
-        thumbRef?.removeEventListener("transitionend", cleanup);
-        thumbRef?.style.removeProperty("transform");
-        root.removeAttribute("data-theme-vt");
-      };
-      if (thumbRef) {
-        thumbRef.addEventListener("transitionend", cleanup, { once: true });
-      } else {
-        root.removeAttribute("data-theme-vt");
-      }
-    });
+    setDarkMode(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    document.documentElement.setAttribute(
+      "data-theme",
+      next ? "dark" : "light",
+    );
   };
 
   return (

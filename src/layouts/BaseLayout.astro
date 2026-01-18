@@ -1,7 +1,6 @@
 ---
 import Navbar from "@components/navigation/Navbar.astro";
 import Footer from "@components/navigation/Footer.astro";
-import { ClientRouter } from "astro:transitions";
 import "@styles/reset.css";
 import "@styles/tokens.css";
 import "@styles/typography.css";
@@ -120,16 +119,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			crossorigin
 		/>
 		
-		<ClientRouter />
-		<slot name="head" />
 	</head>
 	<body class:list={["no-transitions", { "homepage-gradient-bg": isHomepage }]}>
 		<a href="#main-content" class="skip-link">Skip to main content</a>
-		<Navbar role="banner" transition:persist />
-		<main id="main-content" aria-label="Main content" transition:animate="fade">
+		<Navbar role="banner" />
+		<main id="main-content" aria-label="Main content">
 			<slot />
 		</main>
-		<Footer transition:persist />
+		<Footer />
 		<script is:inline>
 			// Immediately set theme from localStorage to prevent flash
 			const saved = localStorage.getItem("darkmode");

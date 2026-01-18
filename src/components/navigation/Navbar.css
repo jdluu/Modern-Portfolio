@@ -7,6 +7,7 @@
   backdrop-filter: blur(var(--space-s));
   -webkit-backdrop-filter: blur(var(--space-s));
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  scrollbar-gutter: stable;
 }
 .nav-container {
   display: flex;
@@ -16,12 +17,18 @@
   margin: 0 auto;
   padding: 0 var(--space-m);
   height: var(--space-2xl);
+  scrollbar-gutter: stable;
+  contain: layout size style;
+  isolation: isolate;
+  width: 100%;
+  box-sizing: border-box;
 }
 .nav-content {
   display: flex;
   align-items: center;
   width: 100%;
   gap: var(--space-s);
+  scrollbar-gutter: stable;
 }
 
 /* === MOBILE-FIRST STYLES (< 768px) === */
@@ -173,50 +180,67 @@
     display: none !important;
   }
 
+  .nav-content {
+    display: grid;
+    grid-template-columns: 6rem 1fr 6rem;
+    align-items: center;
+    width: 100%;
+    gap: var(--space-m);
+  }
+
   .desktop-home-link {
+    grid-column: 1;
     display: flex;
     align-items: center;
     color: var(--color-text-primary);
     padding: var(--space-2xs);
-    width: 6rem; /* Match theme toggle width for visual balance */
+    width: 6rem;
+    flex-shrink: 0;
   }
+
   .desktop-home-link .home-icon {
     width: var(--space-xl);
     height: var(--space-xl);
   }
 
   .theme-toggle-container {
+    grid-column: 3;
+    justify-self: end;
     display: flex;
-    width: 6rem; /* Match home link width for visual balance */
+    width: 6rem;
     justify-content: flex-end;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 
-  /* Use grid for perfect centering: 3 columns */
-  .nav-content {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    width: 100%;
-    gap: var(--space-m);
-  }
-
-  /* Push theme toggle to the right end of its grid cell */
-  .theme-toggle-container {
-    justify-content: flex-end;
-  }
-
-  /* Reset nav menu for desktop horizontal flow */
   .nav-menu-styles {
-    position: static;
+    grid-column: 2;
+    justify-self: center;
     width: auto;
     height: auto;
-    transform: none;
     background-color: transparent;
     box-shadow: none;
     overflow: visible;
     display: flex !important;
-    align-items: center; /* Vertical centering */
+    align-items: center;
     z-index: 1;
+    position: static;
+  }
+
+  .nav-menu-styles {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    box-shadow: none;
+    overflow: visible;
+    display: flex !important;
+    align-items: center;
+    z-index: 1;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   .nav-menu-styles[hidden] {

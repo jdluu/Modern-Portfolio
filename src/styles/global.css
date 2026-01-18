@@ -17,6 +17,16 @@ body {
   font-weight: 400;
   letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
+body.menu-open {
+  scrollbar-width: none;
+}
+
+body.menu-open::-webkit-scrollbar {
+  display: none;
 }
 
 p,
@@ -80,43 +90,6 @@ a:focus-visible {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-@keyframes clip-in {
-  from {
-    clip-path: circle(0% at 50% 50%);
-  }
-  to {
-    clip-path: circle(100% at 50% 50%);
-  }
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.75s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-}
-
-::view-transition-old(root) {
-  animation-name: clip-in;
-  animation-direction: reverse;
-}
-
-::view-transition-new(root) {
-  animation-name: clip-in;
-}
-
-html[data-theme-vt="driving"] ::view-transition-old(root),
-html[data-theme-vt="driving"] ::view-transition-new(root) {
-  animation: none !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
 }
 
 /* Accessibility utility: visually-hidden */

@@ -3,7 +3,7 @@ import ThemeToggleButton from "@components/shared/ThemeToggleButton.tsx";
 import "./Navbar.css";
 ---
 
-<header class="header">
+<header id="main-navbar" class="header">
   <nav class="nav-container" aria-label="Main navigation">
     <div class="nav-content">
       <!-- Mobile Toggle -->
@@ -56,7 +56,6 @@ import "./Navbar.css";
         role="dialog"
         aria-modal="true"
         aria-label="Main menu panel"
-        transition:name="main-nav"
       >
         <div class="offcanvas-inner">
           <div class="panel-header">
@@ -111,10 +110,10 @@ import "./Navbar.css";
 
       <!-- Right: Theme Toggle -->
       <div class="theme-toggle-container">
-        <ThemeToggleButton client:media="(min-width: 768px)" transition:persist />
+        <ThemeToggleButton client:media="(min-width: 768px)" />
       </div>
       <div class="mobile-theme-toggle">
-        <ThemeToggleButton client:media="(max-width: 767px)" transition:persist />
+        <ThemeToggleButton client:media="(max-width: 767px)" />
       </div>
     </div>
   </nav>
