@@ -119,6 +119,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			crossorigin
 		/>
 		
+		<!-- Theme Initialization Script (FOUC Prevention) -->
+		<script is:inline>
+			(function() {
+				const saved = localStorage.getItem("theme");
+				const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+				
+				let theme = "system";
+				if (saved === "light" || saved === "dark") {
+					theme = saved;
+				}
+				
+				const isDark = theme === "dark" || (theme === "system" && sysDark);
+				document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+			})();
+		</script>
 	</head>
 	<body class:list={["no-transitions", { "homepage-gradient-bg": isHomepage }]}>
 		<a href="#main-content" class="skip-link">Skip to main content</a>
@@ -127,13 +142,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			<slot />
 		</main>
 		<Footer />
-		<script is:inline>
-			// Immediately set theme from localStorage to prevent flash
-			const saved = localStorage.getItem("darkmode");
-			const isDark = saved !== null
-				? JSON.parse(saved)
-				: window.matchMedia("(prefers-color-scheme: dark)").matches;
-			document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+		<script>
+			import "@scripts/scroll-to-top.ts";
 		</script>
 		<script>
 			import "@scripts/scroll-to-top.ts";

@@ -1,111 +1,144 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show, createEffect } from "solid-js";
 import "./ThemeToggleButton.css";
 
-const STORAGE_KEY = "darkmode";
-
-const SunIcon = (props: { class?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    class={props.class}
-  >
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
-
-const MoonIcon = (props: { class?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="1em"
-    height="1em"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    class={props.class}
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
+type Theme = "light" | "dark";
+const STORAGE_KEY = "theme";
 
 /**
  * ThemeToggleButton
  *
- * Toggles dark/light mode and synchronizes with localStorage and system preferences.
- * Uses View Transitions API if available.
+ * Toggles between Light and Dark mode using a Day/Night toggle animation.
+ *
+ * Visual Logic (based on CSS):
+ * - Checked = Day (Light Mode)
+ * - Unchecked = Night (Dark Mode)
  */
 const ThemeToggleButton = () => {
-  const [isDarkMode, setDarkMode] = createSignal<boolean | null>(null);
-  let thumbRef: HTMLDivElement | undefined;
+  const [theme, setTheme] = createSignal<Theme | null>(null);
+
+  const updateDocument = (t: Theme) => {
+    document.documentElement.setAttribute("data-theme", t);
+  };
 
   onMount(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    const initial =
-      saved === null
-        ? window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        : JSON.parse(saved);
-    setDarkMode(initial);
-    document.documentElement.setAttribute(
-      "data-theme",
-      initial ? "dark" : "light",
-    );
+
+    // Determine initial state
+    let initial: Theme;
+    if (saved === "light" || saved === "dark") {
+      initial = saved;
+    } else {
+      // Logic: Respect system preference by default
+      const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      initial = sysDark ? "dark" : "light";
+    }
+
+    setTheme(initial);
+    updateDocument(initial);
   });
 
-  const toggle = () => {
-    const next = !isDarkMode();
-    setDarkMode(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    document.documentElement.setAttribute(
-      "data-theme",
-      next ? "dark" : "light",
+  // Effect to sync with localStorage whenever theme signal changes
+  createEffect(() => {
+    const t = theme();
+    if (t) {
+      localStorage.setItem(STORAGE_KEY, t);
+    }
+  });
+
+  const toggle = (e: MouseEvent) => {
+    // Checkbox checked state
+    // In our new visual logic: Checked = Light, Unchecked = Dark
+    const checked = (e.target as HTMLInputElement).checked;
+    const next = checked ? "light" : "dark";
+
+    // View Transition Logic
+    if (!document.startViewTransition) {
+      setTheme(next);
+      updateDocument(next);
+      return;
+    }
+
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const endRadius = Math.hypot(
+      Math.max(x, innerWidth - x),
+      Math.max(y, innerHeight - y),
     );
+
+    const transition = document.startViewTransition(() => {
+      setTheme(next);
+      updateDocument(next);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      // If going to Dark (next === "dark"), we want the darkness to expand.
+      // If going to Light (next === "light"), we want the light to expand.
+      // In both cases, the "View" we are transitioning TO is the one expanding.
+      // So we animate the NEW view from 0 to radius.
+
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 750,
+          easing: "ease-out",
+          pseudoElement: "::view-transition-new(root)",
+        },
+      );
+    });
   };
 
   return (
     <Show
-      when={isDarkMode() !== null}
-      fallback={<div class="btn-placeholder" />}
-    >
-      <button
-        type="button"
-        class="btn"
-        aria-pressed={isDarkMode() ? "true" : "false"}
-        aria-label={
-          isDarkMode() ? "Switch to light mode" : "Switch to dark mode"
-        }
-        title={isDarkMode() ? "Switch to light mode" : "Switch to dark mode"}
-        onClick={toggle}
-      >
+      when={theme() !== null}
+      fallback={
         <div
-          class="btn__indicator"
-          ref={(el) => {
-            thumbRef = el!;
-          }}
-        >
-          <div class="btn__icon-container">
-            <SunIcon class="btn__icon btn__icon--sun" />
-            <MoonIcon class="btn__icon btn__icon--moon" />
-          </div>
-        </div>
-      </button>
+          class="toggle-wrapper"
+          style={{ "min-width": "80px", "min-height": "40px" }}
+        />
+      }
+    >
+      <div class="toggle-wrapper">
+        {/* 
+            Note: checked={theme() === "light"} 
+            because in this specific CSS implementation, "Checked" is the Day state (Light mode) 
+        */}
+        <input
+          id="theme-toggle"
+          type="checkbox"
+          checked={theme() === "light"}
+          /* @ts-ignore: Event type compatibility */
+          onClick={toggle}
+          aria-label="Toggle Theme"
+        />
+        <label for="theme-toggle" class="toggle">
+          <span class="sr-only">Toggle theme</span>
+          <span class="toggle-button">
+            <span class="crater crater-1"></span>
+            <span class="crater crater-2"></span>
+            <span class="crater crater-3"></span>
+            <span class="crater crater-4"></span>
+            <span class="crater crater-5"></span>
+            <span class="crater crater-6"></span>
+            <span class="crater crater-7"></span>
+          </span>
+          <span class="star star-1"></span>
+          <span class="star star-2"></span>
+          <span class="star star-3"></span>
+          <span class="star star-4"></span>
+          <span class="star star-5"></span>
+          <span class="star star-6"></span>
+          <span class="star star-7"></span>
+          <span class="star star-8"></span>
+        </label>
+      </div>
     </Show>
   );
 };

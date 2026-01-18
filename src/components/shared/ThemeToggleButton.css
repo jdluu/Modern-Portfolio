@@ -1,147 +1,376 @@
-/* Theme Toggle Button (extracted) */
-/* Toggle root as an accessible button */
-.btn {
+/* Theme Toggle Button - Star/Crater Style */
+/* Adapted from https://codepen.io/alvarotrigo/pen/PoOXJpM */
+
+/* Wrapper to establish the actual layout footprint (80px x 40px) */
+.toggle-wrapper {
   position: relative;
-  inline-size: 7rem;
-  block-size: 3.6rem;
-  padding: var(--space-3xs);
-  border: 1px solid transparent;
-  border-radius: 9999px;
-  background: transparent; /* Transparent track */
-  cursor: pointer;
-  display: inline-flex;
+  width: 80px;
+  height: 40px;
+  flex-shrink: 0; /* Prevent squashing in flex containers */
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
-  transition:
-    background-color 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  justify-content: center;
 }
 
-/* Container color shifts slightly per theme for contrast */
-[data-theme="light"] .btn {
-  background: rgba(0, 0, 0, 0.03); /* Very subtle fill */
-  border-color: rgba(0, 0, 0, 0.08); /* Minimal border */
-  box-shadow: none; /* Removed heavy shadow */
-}
-[data-theme="dark"] .btn {
-  background: rgba(255, 255, 255, 0.05); /* Very subtle fill */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: none; /* Removed heavy shadow */
-}
-
-/* Hover/active */
-@media (hover: hover) {
-  .btn:hover {
-    box-shadow:
-      0 6px 18px rgba(16, 24, 40, 0.08),
-      0 0 0 1px rgba(0, 0, 0, 0.04) inset;
-  }
-}
-.btn:active .btn__indicator {
-  transform: translateX(0) scale(0.97);
-}
-[data-theme="dark"] .btn:active .btn__indicator {
-  transform: translateX(3.5rem) scale(0.97);
-}
-
-/* Focus-visible ring (M3 style) */
-.btn:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px color-mix(in oklab, var(--color-accent) 35%, transparent),
-    0 0 0 8px color-mix(in oklab, var(--color-accent) 14%, transparent); /* slightly larger outer ring for visibility */
-}
-
-/* Thumb */
-.btn__indicator {
-  position: absolute;
-  inset-block-start: 0.4rem;
-  inset-inline-start: 0.4rem;
-  inline-size: 2.8rem;
-  block-size: 2.8rem;
-  border-radius: 50%;
-  background: var(--m3-color-surface-variant);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 45%, transparent 55%); /* subtle definition */
-  box-shadow:
-    0 4px 10px rgba(16, 24, 40, 0.12),
-    0 1px 1px rgba(0, 0, 0, 0.06);
-  transform: translateX(0);
-  transition:
-    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    background-color 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
-  view-transition-name: theme-thumb;
-  will-change: transform;
-}
-
-/* Ensure base non-VT positioning still works */
-html:not([data-theme-vt="driving"]) .btn__indicator {
-  transform: translateX(0);
-}
-html:not([data-theme-vt="driving"])[data-theme="dark"] .btn__indicator {
-  transform: translateX(3.8rem);
-}
-
-/* Dark-mode thumb position and color */
-[data-theme="dark"] .btn__indicator {
-  background: #0f1116; /* slightly darker to contrast with dark track */
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transform: translateX(3.8rem);
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.45),
-    0 1px 0 rgba(0, 0, 0, 0.3);
-}
-
-/* Icon container cross-fade */
-.btn__icon-container {
-  inline-size: 100%;
-  block-size: 100%;
-  display: grid;
-  place-items: center;
-  position: relative;
-}
-
-.btn__icon {
-  font-size: 1.55rem; /* increased for visibility */
-  position: absolute;
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease,
-    color 180ms ease;
+/* Hide the checkbox input */
+#theme-toggle {
   opacity: 0;
-  transform: scale(0.8);
+  height: 0;
+  width: 0;
+  position: absolute;
 }
 
-/* Icon colors and sizes adjusted for contrast */
-[data-theme="light"] .btn__icon--sun {
-  opacity: 1;
-  transform: scale(1);
-  /* darken the light icon a bit to improve contrast on white thumb */
-  color: color-mix(in oklab, var(--light-icon-color) 60%, black 40%);
+/* 
+   The Container for the large graphics.
+   Scaled down to fit into the .toggle-wrapper footprint.
+   200px * 0.4 = 80px.
+   100px * 0.4 = 40px.
+*/
+.toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scale(0.4);
+  transform-origin: top left;
+  cursor: pointer;
+  display: inline-block;
+  width: 200px;
+  height: 100px;
+  background: #211042;
+  border-radius: 50px;
+  transition: 500ms;
+  overflow: hidden;
 }
 
-[data-theme="dark"] .btn__icon--moon {
-  opacity: 1;
-  transform: scale(1);
-  color: var(--dark-icon-color);
+/* The moving circle (Sun/Moon button) */
+.toggle-button {
+  position: absolute;
+  display: inline-block;
+  top: 7px;
+  left: 6px;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: #faeaf1;
+  overflow: hidden;
+  box-shadow: 0 0 35px 4px rgba(255, 255, 255);
+  transition: all 500ms ease-out;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .btn,
-  .btn__indicator,
-  .btn__icon {
-    transition: none !important;
+/* Craters on the Moon */
+.crater {
+  position: absolute;
+  display: inline-block;
+  background: #faeaf1;
+  border-radius: 50%;
+  transition: 500ms;
+}
+
+.crater-1 {
+  background: #fffff9;
+  width: 86px;
+  height: 86px;
+  left: 10px;
+  bottom: 10px;
+}
+
+.crater-2 {
+  width: 20px;
+  height: 20px;
+  top: -7px;
+  left: 44px;
+}
+
+.crater-3 {
+  width: 16px;
+  height: 16px;
+  top: 20px;
+  right: -4px;
+}
+
+.crater-4 {
+  width: 10px;
+  height: 10px;
+  top: 24px;
+  left: 30px;
+}
+
+.crater-5 {
+  width: 15px;
+  height: 15px;
+  top: 40px;
+  left: 48px;
+}
+
+.crater-6 {
+  width: 10px;
+  height: 10px;
+  top: 48px;
+  left: 20px;
+}
+
+.crater-7 {
+  width: 12px;
+  height: 12px;
+  bottom: 5px;
+  left: 35px;
+}
+
+/* Stars in the background */
+.star {
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 1px 0 2px 2px rgba(255, 255, 255);
+}
+
+.star-1 {
+  width: 6px;
+  height: 6px;
+  right: 90px;
+  bottom: 40px;
+}
+
+.star-2 {
+  width: 8px;
+  height: 8px;
+  right: 70px;
+  top: 10px;
+}
+
+.star-3 {
+  width: 5px;
+  height: 5px;
+  right: 60px;
+  bottom: 15px;
+}
+
+.star-4 {
+  width: 3px;
+  height: 3px;
+  right: 40px;
+  bottom: 50px;
+}
+
+.star-5 {
+  width: 4px;
+  height: 4px;
+  right: 10px;
+  bottom: 35px;
+}
+
+.star-6,
+.star-7,
+.star-8 {
+  width: 10px;
+  height: 2px;
+  border-radius: 2px;
+  transform: rotate(-45deg);
+  box-shadow: 5px 0px 4px 1px #fff;
+  animation-name: travel;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+.star-6 {
+  right: 30px;
+  bottom: 30px;
+  animation-delay: -2s;
+}
+
+.star-7 {
+  right: 50px;
+  bottom: 60px;
+}
+
+.star-8 {
+  right: 90px;
+  top: 10px;
+  animation-delay: -4s;
+}
+
+@keyframes travel {
+  0% {
+    transform: rotate(-45deg) translateX(70px);
+  }
+
+  50% {
+    transform: rotate(-45deg) translateX(-20px);
+    box-shadow: 5px 0px 6px 1px #fff;
+  }
+
+  100% {
+    transform: rotate(-45deg) translateX(-30px);
+    width: 2px;
+    height: 2px;
+    opacity: 0;
+    box-shadow: none;
   }
 }
 
-/* Placeholder can match new size */
-.btn-placeholder {
-  inline-size: 7rem;
-  block-size: 3.6rem;
+/* Checked State (Light Mode / Day) 
+   NOTE: In the CodePen, Checked = Day/Blue. 
+   In our app, Checked usually means "enabled", often Dark mode.
+   Let's check logic:
+   CodePen: Checked -> background #24D7F7 (Blue/Day).
+   So Checked = Day. Unchecked = Night.
+   
+   Our App Logic (SolidJS):
+   init: saved or system.
+   const next = checked ? "dark" : "light";
+   
+   If we want Checked to be Day (Blue), then Unchecked is Night (Dark).
+   So we need to make sure our JS `checked` prop aligns with this visual.
+   
+   If Visual Checked = Day
+   Then JS Checked should be "light" (or strict logic).
+   
+   Let's invert this in CSS if needed or adjust JS.
+   CodePen:
+   Unchecked (Default): Dark Purple (#211042) -> Night.
+   Checked: Blue (#24D7F7) -> Day.
+   
+   So: Unchecked = Dark Mode. Checked = Light Mode.
+   
+   Our current JS: `checked={theme() === "dark"}`.
+   This means if Dark, it is Checked.
+   But structurally, if Checked, the CSS makes it Day (Blue).
+   
+   So we have a mismatch. 
+   Option A: Change JS `checked={theme() === "light"}`.
+   Option B: Invert CSS logic so Checked = Dark.
+   
+   The animation (stars moving, craters hiding) is built for Night -> Day transition on Check.
+   So Checked is structurally "Day".
+   
+   I will set JS `checked={theme() === "light"}` so that:
+   - Theme=Light -> Checked=True -> CSS Blue/Day.
+   - Theme=Dark -> Checked=False -> CSS Purple/Night.
+*/
+
+#theme-toggle:checked + .toggle {
+  background: #24d7f7;
+}
+
+#theme-toggle:checked + .toggle .toggle-button {
+  background: #f7ffff;
+  transform: translateX(102px);
+  box-shadow: 0 0 35px 5px rgba(255, 255, 255);
+}
+
+#theme-toggle:checked + .toggle .toggle-button .crater {
+  transform: rotate(-45deg) translateX(70px);
+}
+
+#theme-toggle:checked + .toggle .star {
+  animation: move 2s infinite;
+  transform: none;
+  box-shadow: none;
+}
+
+#theme-toggle:checked + .toggle .star-1 {
+  width: 40px;
+  height: 10px;
+  border-radius: 10px;
+  background: #fff;
+  left: 20px;
+  top: 25px;
+  box-shadow: none;
+}
+
+#theme-toggle:checked + .toggle .star-2 {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  left: 26px;
+  top: 23px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:checked + .toggle .star-3 {
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  left: 35px;
+  top: 19px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:checked + .toggle .star-4 {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  left: 46px;
+  top: 21px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:checked + .toggle .star-5 {
+  width: 60px;
+  height: 15px;
+  border-radius: 15px;
+  background: #fff;
+  left: 30px;
+  bottom: 20px;
+  box-shadow: none;
+}
+
+#theme-toggle:checked + .toggle .star-6 {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  left: 38px;
+  bottom: 20px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:checked + .toggle .star-7 {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  left: 52px;
+  bottom: 20px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+#theme-toggle:checked + .toggle .star-8 {
+  width: 21px;
+  height: 21px;
+  background: #fff;
+  border-radius: 50%;
+  left: 70px;
+  top: 59px;
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+@keyframes move {
+  0% {
+    transform: none;
+  }
+
+  25% {
+    transform: translateX(2px);
+  }
+
+  100% {
+    transform: translateX(-2px);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .toggle-button,
+  .crater,
+  .star,
+  .star-6,
+  .star-7,
+  .star-8 {
+    transition: none !important;
+    animation: none !important;
+  }
 }
