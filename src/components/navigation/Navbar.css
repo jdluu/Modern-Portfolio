@@ -3,11 +3,17 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: color-mix(in srgb, var(--color-surface), transparent 20%);
-  backdrop-filter: blur(var(--space-s));
-  -webkit-backdrop-filter: blur(var(--space-s));
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  scrollbar-gutter: stable;
+  background-color: color-mix(
+    in srgb,
+    var(--m3-color-surface),
+    transparent 15%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 10%, transparent);
+  transition: all var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
 }
 .nav-container {
   display: flex;
@@ -147,7 +153,9 @@
   text-decoration: none;
   color: var(--color-text-primary);
   font-size: var(--step-1);
-  font-weight: 500;
+  font-weight: 560;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
 }
 .nav-link[aria-current="page"] {
   background-color: var(--m3-color-primary-container);

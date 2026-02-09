@@ -97,19 +97,20 @@
   box-shadow: 0 var(--space-s) var(--space-xl)
     color-mix(in oklab, var(--color-accent) 30%, black 70%);
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background-color var(--m3-motion-duration-short)
+      var(--m3-motion-easing-standard),
+    color var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    border-color var(--m3-motion-duration-short)
+      var(--m3-motion-easing-standard),
+    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
 }
 @media (hover: hover) {
   .resume-link:hover {
     background-color: color-mix(in oklab, var(--color-accent) 85%, black 15%);
-    border-color: color-mix(in oklab, var(--color-accent) 60%, black 40%);
-    box-shadow: 0 var(--space-m) var(--space-2xl)
-      color-mix(in oklab, var(--color-accent) 45%, black 55%);
-    transform: translateY(calc(var(--space-3xs) * -1));
+    border-color: var(--color-accent);
+    box-shadow: var(--m3-elevation-3);
+    transform: translateY(-4px);
   }
 }
 .resume-link:focus-visible {
