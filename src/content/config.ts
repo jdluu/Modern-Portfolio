@@ -70,6 +70,7 @@ const experiences = defineCollection({
         .object({
           link: z.string().optional(),
           description: z.string().optional(),
+          insight: z.string().optional(),
         })
         .optional(),
       // Flattened fields for easier card access

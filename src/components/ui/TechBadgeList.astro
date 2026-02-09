@@ -3,16 +3,18 @@ interface Props {
   title: string;
   items: string[];
   id: string;
+  class?: string;
+  variant?: "default" | "subtle";
 }
 
-const { title, items, id } = Astro.props;
+const { title, items, id, class: className, variant = "default" } = Astro.props;
 ---
 
-<div class="tt-column" aria-labelledby={id}>
+<div class:list={["tt-column", className, { "variant-subtle": variant === "subtle" }]} aria-labelledby={id}>
   <h4 id={id} class="tt-subheading">{title}</h4>
   {items.length > 0 ? (
     <ul class="tech-list" aria-label={title}>
-      {items.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
+      {items.map((t) => (<li><span class:list={["tech-pill", { "pill-subtle": variant === "subtle" }]}>{t}</span></li>))}
     </ul>
   ) : (
     <p class="section-content">No {title.toLowerCase()} listed.</p>

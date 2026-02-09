@@ -71,10 +71,11 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
  
 <BaseLayout title={title}>
     <main class="experience-page-container">
-        <article class="experience-page-div">
-            <section id="overview" aria-labelledby="experience-title">
-                <div class="experience-header">
-                    <div class="company-info" role="banner">
+        <article class="experience-page-layout">
+            <!-- Sidebar: Meta Information -->
+            <aside class="experience-sidebar">
+                <div class="sidebar-block company-card">
+                    <div class="company-brand">
                         {companyLogo && typeof companyLogo !== "string" ? (
                             <Image
                                 src={companyLogo}
@@ -97,90 +98,89 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                                 aria-hidden="true"
                             />
                         )}
-                        <div class="title-container">
-                            <h1 id="experience-title" class="experience-title" >{title}</h1>
-                            <p class="company-name"><strong>{companyName}</strong></p>
+                        <div class="title-stack">
+                            <h1 id="experience-title" class="experience-title">{title}</h1>
+                            <p class="company-name">{companyName}</p>
                         </div>
                     </div>
 
-                    {showcase.length > 0 && (
-                      <div class="showcase-top">
-                        <div class="showcase-grid mini">
-                          {showcase.map((item) => (
-                            <a href={item.link}
-                               class="showcase-item-mini"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               aria-label={`View project: ${item.description}`}>
-                              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                              </svg>
-                              <span>{item.description}</span>
-                            </a>
-                          ))}
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-label">Timeline</h3>
+                        <div class="timeline-box">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span class="duration-text">{duration}</span>
                         </div>
-                      </div>
-                    )}
+                    </div>
+
+                    <div class="sidebar-section">
+                        <TechBadgeList 
+                            title="Tech Stack" 
+                            items={toolsArray} 
+                            id="tool-label" 
+                            class="compact-pills"
+                        />
+                    </div>
+
+                    <div class="sidebar-section">
+                        <TechBadgeList 
+                            title="Core Concepts" 
+                            items={techArray} 
+                            id="concept-label" 
+                            variant="subtle"
+                        />
+                    </div>
                 </div>
-            </section>
 
+            </aside>
 
-            <div class="main-content">
-            <div class="info-row">
-              <div class="card" aria-hidden="false">
-                <h3 class="role-heading">Role</h3>
-                <p class="role-body">{role}</p>
-                <dl class="kv">
-                  <dt>Timeline</dt>
-                  <dd>{duration}</dd>
-                </dl>
-              </div>
- 
-              <div class="card">
-                <div class="tt-grid" role="group" aria-label="Topics and technologies">
-                  <TechBadgeList 
-                    title="Concepts" 
-                    items={techArray} 
-                    id="concept-label" 
-                  />
-
-                  <TechBadgeList 
-                    title="Technologies" 
-                    items={toolsArray} 
-                    id="tool-label" 
-                  />
-                </div>
-              </div>
-            </div>
-
-
-                <section id="responsibilities" aria-labelledby="responsibilities-title">
-                    <h2 id="responsibilities-title" >Key Responsibilities</h2>
-                    {responsibilities.length > 0 ? (
-                        <ul class="responsibilities-list" role="list">
-                            {responsibilities.map((item, index) => (
-                                <li aria-label={`Responsibility ${index + 1}`}><span class="highlight">{item.duties}</span></li>
+            <!-- Main Content Area -->
+            <div class="experience-main">
+                <div class="narrative-grid">
+                    <section class="narrative-section" id="responsibilities">
+                        <header class="section-header">
+                            <span class="header-icon blue">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 11l3 3L22 4m-2 12v6H4V4h12"></path>
+                                </svg>
+                            </span>
+                            <h2 class="section-title">Key Responsibilities</h2>
+                        </header>
+                        <ul class="duties-list">
+                            {responsibilities.map((item) => (
+                                <li>
+                                    <span class="dot"></span>
+                                    <p>{item.duties}</p>
+                                </li>
                             ))}
                         </ul>
-                    ) : (
-                        <p class="empty-state">No responsibilities available.</p>
-                    )}
-                </section>
+                    </section>
 
-                <section id="achievements" aria-labelledby="achievements-title">
-                    <h2 id="achievements-title" >Notable Achievements</h2>
-                    {achievements.length > 0 ? (
-                        <ul class="achievements-list" role="list">
-                            {achievements.map((item, index) => (
-                                <li aria-label={`Achievement ${index + 1}`}><strong>{item.points}</strong></li>
+                    <section class="narrative-section" id="achievements">
+                        <header class="section-header">
+                            <span class="header-icon amber">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="8" r="7"></circle>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                </svg>
+                            </span>
+                            <h2 class="section-title">Notable Achievements</h2>
+                        </header>
+                        <div class="achievements-stack">
+                            {achievements.map((item) => (
+                                <blockquote class="achievement-quote">
+                                    <p>{item.points}</p>
+                                </blockquote>
                             ))}
-                        </ul>
-                    ) : (
-                        <p class="empty-state">No achievements available.</p>
-                    )}
-                </section>
+                        </div>
+                    </section>
+                </div>
+
+                {/* Research Insight Block removed as per user request */}
             </div>
         </article>
     </main>
