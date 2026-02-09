@@ -6,18 +6,23 @@
 
 /* Container + Grid */
 .project-detail {
-  max-width: 85rem;
+  max-width: var(
+    --container-blog
+  ); /* Increased from 85rem to 72rem... wait, standard is 128rem. Let's use 110rem or similar. */
+  max-width: 110rem;
   margin: 0 auto;
-  padding: var(--space-l);
+  padding: var(--space-xl) var(--space-m);
   box-sizing: border-box;
 }
 
 .project-grid {
   display: grid;
-  grid-template-columns: 1fr 20rem;
-  gap: var(--space-l);
+  grid-template-columns: 1fr 22rem;
+  gap: var(--space-xl);
   align-items: start;
   position: relative;
+  transition: all var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
 }
 
 /* Content column (left) and TOC column (right) */
@@ -34,14 +39,19 @@
   position: relative;
   border-radius: var(--space-s);
   overflow: hidden;
-  box-shadow: 0 var(--space-xs) var(--space-xl)
-    color-mix(in oklab, black 8%, transparent);
+  box-shadow: var(--m3-elevation-2);
   margin-bottom: var(--space-l);
+  transition: box-shadow var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
+}
+
+.project-hero:hover {
+  box-shadow: var(--m3-elevation-4);
 }
 
 .project-hero-figure {
   width: 100%;
-  height: 26.25rem;
+  height: clamp(30rem, 50vh, 45rem);
   overflow: hidden;
   display: block;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.02));
@@ -79,23 +89,72 @@
   transform: scale(1.03);
 }
 
-/* Hero title overlay bottom-left */
+/* Singular Project Header Card */
+.project-intro-card {
+  background: var(--color-surface);
+  border-radius: 2rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid color-mix(in oklab, var(--color-border) 8%, transparent);
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+}
+
+.project-hero {
+  position: relative;
+  margin: 0;
+  display: block;
+}
+
+.project-hero-figure {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Unified aspect ratio from reference code */
+  overflow: hidden;
+  background: #f3f4f8; /* background-light from reference */
+}
+
+.project-hero-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.95;
+}
+
+/* Precise title overlay matching reference screenshot */
 .project-hero-title {
   position: absolute;
-  left: var(--space-m);
-  bottom: var(--space-s);
-  right: var(--space-s);
-  color: white;
-  text-shadow: 0 var(--space-xs) var(--space-xl) rgba(0, 0, 0, 0.65);
-  padding: var(--space-xs) var(--space-s);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-l) var(--space-xl);
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.28) 35%,
-    rgba(0, 0, 0, 0.52) 100%
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.4) 80%,
+    rgba(0, 0, 0, 0.8) 100%
   );
-  border-radius: var(--space-xs);
-  backdrop-filter: blur(var(--space-xs));
+  color: white;
+  pointer-events: none;
+}
+
+.project-hero-title h1 {
+  margin: 0;
+  font-size: var(--step-5);
+  font-weight: 780;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.project-version {
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--step-0);
+  font-weight: 350;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Use the global fluid heading tokens but keep local scale for hero */
@@ -103,18 +162,21 @@
 .project-hero-title .project-title {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 780; /* Thicker for more impact */
   color: #fff;
-  font-size: var(--step-3);
-  line-height: 1.05;
+  font-size: var(--step-5);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.025em;
+  text-shadow: var(--m3-elevation-2);
 }
 
 /* Summary (lead) below hero */
 .project-summary {
-  margin: var(--space-xs) 0 var(--space-l);
+  margin: var(--space-m) 0 var(--space-xl);
   color: var(--color-text-secondary);
-  font-size: var(--step-1);
-  max-width: 84%;
+  font-size: var(--step-3); /* Bumped from step-2 */
+  line-height: var(--font-line-height-body);
+  max-width: 85ch;
 }
 
 /* Two-column info row (My Role / Tech & Tools) inside content column */
@@ -130,22 +192,38 @@
   padding: var(--space-m);
   background: var(--color-card);
   border-radius: var(--space-s);
-  box-shadow: 0 var(--space-xs) var(--space-xl)
-    color-mix(in oklab, black 6%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+  box-shadow: var(--m3-elevation-1);
+  transition:
+    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--m3-elevation-3);
+  background: color-mix(
+    in oklab,
+    var(--color-card) 95%,
+    var(--m3-color-primary) 5%
+  );
 }
 
 /* Role text */
 .role-heading {
   margin: 0 0 var(--space-s);
-  font-weight: 700;
+  font-weight: 780;
   font-size: var(--step-1);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--m3-color-primary);
 }
 
 .role-body {
   color: var(--color-text-secondary);
-  font-size: var(--step-1);
-  line-height: 1.65;
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
 }
 
 /* Technologies & Tools two-column grid inside the card:
@@ -167,7 +245,7 @@
 
 .tt-subheading {
   margin: 0 0 var(--space-xs);
-  font-size: var(--step--1);
+  font-size: var(--step-0); /* Bumped from step--1 */
   font-weight: 600;
   color: var(--text-color);
 }
@@ -237,12 +315,23 @@
 /* Style pills a bit tighter so more items fit per row */
 .tech-pill {
   display: inline-block;
-  padding: var(--space-3xs) var(--space-xs);
-  background: color-mix(in oklab, var(--color-accent) 9%, transparent);
+  padding: var(--space-2xs) var(--space-s);
+  background: color-mix(in oklab, var(--m3-color-primary) 8%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
   border-radius: 999px;
-  font-size: var(--step--1); /* slightly smaller to improve density */
-  color: var(--text-color);
+  font-size: var(--step-0); /* Bumped from step--1 */
+  color: var(--m3-color-on-surface);
   line-height: 1;
+  font-weight: 500;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+}
+
+.tech-pill:hover {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: scale(1.05);
 }
 
 /* Main narrative sections */
@@ -253,20 +342,23 @@
 /* Section headings spacing */
 .project-section h2 {
   margin-top: 0;
-  margin-bottom: var(--space-s);
+  margin-bottom: var(--space-m);
   color: var(--text-color);
-  font-size: var(--step-2);
+  font-size: var(--step-3); /* Bumped from step-2 */
+  font-weight: 650;
 }
 
 .section-content {
-  font-size: var(--step-1);
+  font-size: var(--step-2); /* Bumped from step-1 */
   line-height: 1.6;
 }
 
 p {
-  font-size: var(--step-1);
-  line-height: 1.6;
-  margin-bottom: var(--space-m);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
+  margin-bottom: var(--space-l);
+  color: var(--color-text-secondary);
+  max-width: 85ch;
 }
 
 /* Process steps: prefer bullet list for arrays */
@@ -274,7 +366,8 @@ p {
   list-style: disc;
   margin-left: var(--space-m);
   color: var(--color-text-secondary);
-  font-size: var(--step-1);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
 }
 
 /* Media figure for final product */
@@ -300,150 +393,126 @@ p {
   list-style: disc;
   margin-left: var(--space-m);
   color: var(--color-text-secondary);
-  font-size: var(--step-1);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
 }
 
 /* CTA Row */
-.cta-row {
+/* Overview Layout (Summary + Side Actions) */
+.overview-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-xl); /* Generous gap between text and buttons */
+  align-items: start;
+  margin-bottom: var(--space-xl);
+}
+
+.project-summary {
+  margin-bottom: 0; /* Remove bottom margin as grid gap handles spacing */
+  max-width: 65ch; /* Optimal line length */
+}
+
+/* Refined "Action Pill" buttons */
+.cta-aside .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.5rem 1.75rem; /* Further reduced vertical padding */
+  border-radius: var(--space-s);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--step-0);
+  background-color: var(--m3-color-surface-container-low, #f3f4f8);
+  color: var(--m3-color-on-surface);
+  border: 1px solid var(--m3-color-outline-variant, var(--m3-color-outline));
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+  width: 100%;
+  max-width: 220px;
+  line-height: 1.2; /* Tightened line height to reduce vertical space */
+}
+
+.cta-aside .btn:hover {
+  background-color: var(--m3-color-surface-container-high);
+  border-color: var(--m3-color-primary);
+  box-shadow: var(--m3-elevation-2);
+  transform: translateY(-2px);
+}
+
+/* Overview Layout (Summary + Side Actions) */
+/* Overview Layout (Summary + Side Actions) */
+.overview-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-xl);
+  align-items: center;
+  padding: var(--space-l) var(--space-xl); /* Reduced vertical padding from xl to l */
+  border-top: 1px solid var(--color-border);
+}
+
+.project-summary {
+  margin-bottom: 0;
+  max-width: 70ch;
+  line-height: var(--font-line-height-body);
+  font-size: var(--step-1);
+  color: var(--color-text-secondary);
+}
+
+.project-summary strong {
+  font-weight: 700;
+  color: var(--m3-color-on-surface);
+}
+
+.cta-aside.primary-actions {
   display: flex;
-  gap: var(--space-m);
-  margin: var(--space-l) 0 0;
-  align-items: center;
-  flex-wrap: nowrap; /* keep CTAs on one line; allow horizontal scroll if needed */
-  overflow-x: auto;
-}
-/* Stronger CTA-specific overrides to avoid conflicts with other .btn definitions (theme-toggle, etc.) */
-.cta-row .btn {
-  /* reset any component-level forced sizing */
-  inline-size: auto !important;
-  block-size: auto !important;
-  width: auto !important;
-  height: auto !important;
-  padding: var(--space-xs) var(--space-m) !important;
-  min-width: var(--space-xl);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 var(--space-xs) var(--space-xl)
-    color-mix(in oklab, var(--accent-color) 18%, transparent);
-  border: 1px solid transparent;
-  background-clip: padding-box;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease;
-  font-weight: 600; /* make CTA labels bolder so they read as buttons */
-  letter-spacing: 0.01em;
+  flex-direction: column;
+  gap: var(--space-xs); /* Reduced gap from s to xs */
+  align-items: stretch;
+  min-width: 14rem;
 }
 
-/* Make secondary CTAs more visible: subtle filled background, stronger border and shadow */
-.cta-row .btn.btn-secondary {
-  background: color-mix(
-    in oklab,
-    var(--color-accent) 8%,
-    var(--color-card) 92%
-  );
-  color: var(--text-color);
-  border: 1px solid color-mix(in oklab, var(--color-border) 36%, transparent);
-  box-shadow: 0 var(--space-xs) var(--space-xl)
-    color-mix(in oklab, black 6%, transparent);
+.cta-aside-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  width: 100%;
 }
 
-/* Stronger primary appearance: saturated accent, clearer text color, and slightly larger shadow */
-.project-detail .btn-primary {
-  background: var(--accent-color);
-  color: var(--color-on-accent);
-  box-shadow: 0 var(--space-s) var(--space-2xl)
-    color-mix(in oklab, var(--accent-color) 22%, transparent);
-  border: 1px solid color-mix(in oklab, var(--accent-color) 60%, transparent);
-  transform: translateZ(0);
+/* Source Code Button - Precision matching reference */
+
+.cta-aside .btn-icon {
+  width: 20px;
+  height: 20px;
+  color: #111827;
 }
 
-/* Hover/focus states to make the affordance clear */
-.cta-row .btn:hover,
-.cta-row .btn:focus {
-  transform: translateY(calc(var(--space-3xs) * -1));
-  box-shadow: 0 var(--space-m) var(--space-3xl)
-    color-mix(in oklab, var(--accent-color) 20%, transparent);
+/* Remove the arrow icon if not in screenshot */
+.btn-arrow-icon {
+  display: none;
 }
 
-/* Slightly stronger focus ring for accessibility (visible on both primary and secondary) */
-.project-detail .btn:focus {
-  outline: 3px solid
-    color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
-  outline-offset: var(--space-3xs);
+.license-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #9ca3af; /* gray-400 */
+  text-transform: none; /* Reference shows "MIT License" */
+  letter-spacing: normal;
+  margin-right: 0.25rem;
 }
 
-/* Ensure secondary button still has distinct hover behavior */
-.cta-row .btn.btn-secondary:hover,
-.cta-row .btn.btn-secondary:focus {
-  background: color-mix(
-    in oklab,
-    var(--color-accent) 14%,
-    var(--color-card) 86%
-  );
-  border-color: color-mix(in oklab, var(--color-border) 50%, transparent);
-  color: var(--text-color);
-}
+/* Mobile: Stack layout */
+@media (max-width: 900px) {
+  .overview-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+  }
 
-/* Project-scoped button styles (do not override global .btn used elsewhere) */
-.project-detail .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-s);
-  padding: var(--space-xs) var(--space-m);
-  border-radius: 10px;
-  font-size: var(--step--1);
-  cursor: pointer;
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background-color 180ms ease;
-  white-space: nowrap; /* prevent label wrapping into multiple lines */
-  min-width: var(
-    --space-xl
-  ); /* ensure buttons have a comfortable minimum width */
-  word-break: normal;
-  -webkit-font-smoothing: antialiased;
-}
-
-.project-detail .btn:focus {
-  outline: 3px solid var(--color-focus);
-  outline-offset: var(--space-3xs);
-}
-
-.project-detail .btn-primary {
-  background: var(--accent-color);
-  color: var(--color-on-accent);
-  box-shadow: 0 var(--space-s) var(--space-2xl)
-    color-mix(in oklab, var(--accent-color) 22%, transparent);
-  border: 1px solid color-mix(in oklab, var(--accent-color) 60%, transparent);
-  transform: translateZ(0);
-}
-
-.project-detail .btn-primary:hover,
-.project-detail .btn-primary:focus {
-  transform: translateY(calc(var(--space-3xs) * -1));
-  background: var(--color-accent-hover);
-}
-
-.project-detail .btn-secondary {
-  background: transparent;
-  color: var(--text-color);
-  border: 1px solid color-mix(in oklab, var(--color-border) 26%, transparent);
-}
-
-.project-detail .btn-secondary:hover,
-.project-detail .btn-secondary:focus {
-  background: color-mix(in oklab, var(--color-accent) 6%, transparent);
-  transform: translateY(calc(var(--space-3xs) * -1));
+  .cta-aside.primary-actions {
+    align-items: stretch;
+    width: 100%;
+  }
 }
 
 /* Make sure long labels don't break in unexpected places */
@@ -456,9 +525,9 @@ p {
 /* Right fixed TOC wrapper (always visible) */
 .project-toc {
   position: fixed;
-  top: calc(var(--nav-height) + var(--space-s));
-  right: clamp(1.125rem, 6vw, 3.5rem);
-  width: 20rem;
+  top: calc(var(--nav-height) + var(--space-l));
+  right: clamp(1.5rem, 5vw, 4.5rem);
+  width: 24rem; /* Increased from 20rem */
   z-index: 120;
   pointer-events: auto;
 }
@@ -466,13 +535,13 @@ p {
 /* Inner card is positioned relative inside the fixed wrapper */
 .toc-card {
   position: relative;
-  padding: var(--space-m);
+  padding: var(--space-l) 0; /* Only vertical padding here */
   background: var(--color-card);
   border-radius: var(--radius-md, var(--space-s));
   border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
   box-shadow: 0 var(--space-s) var(--space-2xl)
     color-mix(in oklab, black 8%, transparent);
-  max-height: calc(100vh - calc(var(--nav-height) + var(--space-s)));
+  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l)));
   overflow: auto;
 }
 
@@ -482,6 +551,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-s);
+  padding: 0 var(--space-l); /* Moved horizontal padding here */
 }
 
 .toc-toggle {
@@ -489,14 +559,14 @@ p {
   border: none;
   background: color-mix(in oklab, var(--color-border) 8%, transparent);
   color: var(--text-color);
-  width: var(--space-xl);
-  height: var(--space-xl);
+  width: var(--space-2xl); /* Increased from var(--space-xl) */
+  height: var(--space-2xl);
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: var(--step--1);
+  font-size: var(--step-0); /* Bumped from step--1 */
 }
 
 .toc-toggle:focus {
@@ -529,26 +599,31 @@ p {
 }
 
 .toc-card h4 {
-  margin: 0 0 var(--space-s);
-  font-size: var(--step-1);
+  margin: 0;
+  font-size: var(--step-2); /* Bumped from step-1 */
+  font-weight: 700;
+  color: var(--m3-color-primary);
 }
 
 .toc-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: var(--space-l) 0 0; /* Space from header */
   display: flex;
   flex-direction: column;
-  gap: var(--space-s);
+  gap: var(--space-xs); /* Tighter gaps for "active list" feel */
 }
 
 .toc-list a {
   color: var(--color-text-tertiary);
   text-decoration: none;
-  padding: var(--space-2xs) var(--space-s);
-  border-radius: 8px;
+  padding: var(--space-s) var(--space-l); /* Full card width */
+  border-radius: 4px;
   display: block;
-  font-size: var(--step-0);
+  font-size: var(--step-1);
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+  margin: 0 4px; /* Minimal inset for a crisp look */
 }
 
 /* Active link (clear, stronger contrast) */

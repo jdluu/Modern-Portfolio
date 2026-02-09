@@ -14,12 +14,6 @@ const baseSchema = z.object({
   draft: z.boolean().optional(),
 });
 
-const baseCardSchema = baseSchema.extend({
-  summary: z.string().optional(),
-  startDate: z.union([z.string(), z.coerce.date()]).optional(),
-  endDate: z.union([z.string(), z.coerce.date()]).optional(),
-});
-
 const posts = defineCollection({
   type: "content",
   schema: baseSchema.extend({
@@ -122,6 +116,8 @@ export const collections = {
   projects,
 };
 
-export type ExperienceEntry = z.infer<typeof experiences.schema>;
-export type ProjectEntry = z.infer<typeof projects.schema>;
-export type PostEntry = z.infer<typeof posts.schema>;
+import type { CollectionEntry } from "astro:content";
+
+export type ExperienceEntry = CollectionEntry<"experiences">["data"];
+export type ProjectEntry = CollectionEntry<"projects">["data"];
+export type PostEntry = CollectionEntry<"posts">["data"];

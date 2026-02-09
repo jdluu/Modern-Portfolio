@@ -14,8 +14,8 @@ import { Image, getImage } from "astro:assets";
 export async function getStaticPaths() {
   const entries = await getCollection("projects");
   const paths = (entries ?? [])
-    .filter((e: any) => e.data?.draft !== true)
-    .map((e: any) => {
+    .filter((e) => e.data?.draft !== true)
+    .map((e) => {
       const canonicalSlug =
         typeof e.slug === "string" && e.slug.length > 0
           ? e.slug
@@ -29,7 +29,7 @@ const slugParam = (Astro.params as any)?.slug as string;
 
 const projectEntries = await getCollection("projects");
 const entry =
-  (projectEntries ?? []).find((e: any) => {
+  (projectEntries ?? []).find((e) => {
     const canonicalSlug =
       typeof e.slug === "string" && e.slug.length > 0
         ? e.slug
@@ -45,7 +45,7 @@ const entry =
 if (!entry) {
   throw new Error(`Project not found for slug: ${slugParam}`);
 }
-const data = entry.data as any as Project;
+const data = entry.data as Project;
 
 const title = data?.title ?? "Untitled";
 const summary = data?.summary ?? data?.description ?? "";
@@ -90,6 +90,7 @@ const sourceLink = data?.links?.source ?? "";
           <div class="project-content">
             <article class="project-page-div">
                 <section id="overview" aria-labelledby="project-title" class="project-section">
+                <div class="project-intro-card">
                   {coverUrl ? (
                     <figure class="project-hero" role="img" aria-label={`${title} hero`}>
                       <div 
@@ -122,7 +123,46 @@ const sourceLink = data?.links?.source ?? "";
                     <h1 id="project-title" class="project-title">{title}</h1>
                   )}
 
-                  <p class="section-content lead project-summary">{summary}</p>
+                  <div class="overview-layout">
+                    <p class="section-content lead project-summary" set:html={summary?.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}></p>
+
+                    {(liveLink || sourceLink) && (
+                      <div class="cta-aside primary-actions">
+                        {liveLink && (
+                          <a
+                            href={liveLink}
+                            class="btn btn-primary"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`View live project: ${title}`}
+                          >
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                              <polyline points="15 3 21 3 21 9"></polyline>
+                              <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                            View Live Demo
+                          </a>
+                        )}
+
+                        {sourceLink && (
+                          <a
+                            href={sourceLink}
+                            class="btn"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`View source: ${title}`}
+                          >
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="btn-icon">
+                              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02a9.68 9.68 0 0 1 2.5-.34c.84.01 1.69.11 2.5.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path>
+                            </svg>
+                            Source Code
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
 
                   <div class="info-row">
                     <div class="card" aria-hidden="false">
@@ -228,33 +268,7 @@ const sourceLink = data?.links?.source ?? "";
                       <p class="section-content">No reflections available.</p>
                     )}
 
-                    {(liveLink || sourceLink) && (
-                      <div class="cta-row" role="group" aria-label="Project links">
-                        {liveLink && (
-                          <a
-                            href={liveLink}
-                            class="btn btn-primary"
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={`View live project: ${title}`}
-                          >
-                            View Live Project
-                          </a>
-                        )}
 
-                        {sourceLink && (
-                          <a
-                            href={sourceLink}
-                            class="btn btn-secondary"
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label={`View source: ${title}`}
-                          >
-                            View Source Code
-                          </a>
-                        )}
-                      </div>
-                    )}
                 </section>
             </article>
           </div>
@@ -280,211 +294,8 @@ const sourceLink = data?.links?.source ?? "";
 </BaseLayout>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Scope the TOC to a single instance on the page
-    const projectToc = (document.querySelector('.project-toc') || document.querySelector('aside[aria-label="Table of contents"]')) as HTMLElement | null;
-    if (!projectToc) return;
-
-    // Prevent duplicate initialization (HMR/dev reload)
-    if (projectToc.dataset.tocInit === '1') return;
-    projectToc.dataset.tocInit = '1';
-    console.debug('[TOC] init: scoped controller attached');
-
-    const tocCard = projectToc.querySelector('.toc-card') as HTMLElement | null;
-    const tocList = tocCard?.querySelector('.toc-list') as HTMLElement | null;
-    const tocLinks = Array.from((tocList?.querySelectorAll('a') || [])) as HTMLAnchorElement[];
-    const tocToggle = ((tocCard && tocCard.querySelector('#toc-toggle')) || document.getElementById('toc-toggle')) as HTMLElement | null;
-    const sections = Array.from(document.querySelectorAll('section[id]')) as HTMLElement[];
-
-    // Defensive: nothing to do without sections or links
-    if (!sections.length || !tocLinks.length) {
-      // still wire up toggle so user can open/close
-      if (tocToggle) {
-        tocToggle.addEventListener('click', () => {
-          projectToc.classList.toggle('toc-collapsed');
-          tocCard?.classList.toggle('toc-collapsed');
-        });
-      }
-      return;
-    }
-
-    // Maintain latest IntersectionObserverEntry for each section
-    const entryMap = new Map<string, IntersectionObserverEntry>();
-
-    const observer = new IntersectionObserver((entries) => {
-      try {
-        // update map with latest entries
-        for (const e of entries) {
-          const el = e.target as HTMLElement;
-          if (el && el.id) entryMap.set(el.id, e);
-        }
-
-        // gather candidates from entryMap in the order of DOM sections
-        const candidates = sections
-          .map((s) => entryMap.get(s.id))
-          .filter((v): v is IntersectionObserverEntry => !!v);
-
-        // pick the best visible candidate, or nearest-to-top fallback
-        const visible = candidates.filter((c) => c.isIntersecting);
-        let active: IntersectionObserverEntry | null = null;
-        if (visible.length > 0) {
-          visible.sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0));
-          active = visible[0];
-        } else if (candidates.length > 0) {
-          candidates.sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
-          active = candidates[0];
-        }
-
-        // Clear only within this tocCard
-        tocLinks.forEach((link) => {
-          link.classList.remove('link-active');
-          link.setAttribute('aria-current', 'false');
-        });
-
-        if (active?.target && (active.target as HTMLElement).id) {
-          const id = (active.target as HTMLElement).id;
-          const matching = tocLinks.find((a) => a.getAttribute('href') === '#' + id);
-          if (matching) {
-            matching.classList.add('link-active');
-            matching.setAttribute('aria-current', 'true');
-            console.debug('[TOC] active:', id);
-          }
-        }
-      } catch (err) {
-        // no-op on failure
-      }
-    }, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
-
-    sections.forEach((s) => observer.observe(s));
-
-    // Smooth scroll for local anchors inside this TOC only
-    tocLinks.forEach((anchor) => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = anchor.getAttribute('href');
-        if (!href) return;
-        const target = document.querySelector(href);
-        if (!target) return;
-        const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64;
-        const targetPosition = (target as HTMLElement).getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = targetPosition - navHeight - 24;
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-        history.pushState(null, '', href);
-      });
-    });
-
-    // Responsive TOC positioning: desktop (top-right), mobile (bottom-left at ≤980px)
-    const mql = window.matchMedia('(max-width: 980px)');
-    function applyTocPosition() {
-      if (!projectToc) return;
-      const isMobile = mql.matches;
-      projectToc.style.position = 'fixed';
-      if (isMobile) {
-        projectToc.style.top = '';
-        projectToc.style.left = '';
-        projectToc.style.right = 'clamp(12px, 6vw, 24px)';
-        projectToc.style.bottom = `calc(env(safe-area-inset-bottom, 0px) + var(--space-6))`;
-        projectToc.style.zIndex = '200';
-      } else {
-        projectToc.style.bottom = '';
-        projectToc.style.left = '';
-        projectToc.style.top = `calc(var(--nav-height) + var(--space-6))`;
-        projectToc.style.right = `clamp(18px, 6vw, 56px)`;
-        projectToc.style.zIndex = '120';
-      }
-    }
-
-    // Use explicit per-mode storage keys so mobile collapsed preference does not force desktop closed
-    function getTocStorageKey(isMobileMode: boolean) {
-      return isMobileMode ? 'toc-collapsed-mobile' : 'toc-collapsed-desktop';
-    }
-
-    applyTocPosition();
-    const handleModeChange = () => {
-      applyTocPosition();
-      // Re-apply persisted state for the current mode (mobile vs desktop)
-      try {
-        const isMobile = mql.matches;
-        const key = getTocStorageKey(isMobile);
-        const saved = localStorage.getItem(key);
-        if (saved === null) {
-          setTocCollapsed(isMobile); // default collapsed on mobile, expanded on desktop
-        } else {
-          setTocCollapsed(saved === '1');
-        }
-      } catch (e) {}
-    };
-    if (mql.addEventListener) {
-      mql.addEventListener('change', handleModeChange);
-    } else if (mql.addListener) {
-      // Safari < 14 fallback
-      mql.addListener(handleModeChange);
-    }
-
-    // TOC collapse/expand behavior (persisted). This also applies inline fallbacks to ensure it visually collapses.
-    function setTocCollapsed(collapsed: boolean) {
-      if (!projectToc || !tocCard || !tocToggle) return;
-      projectToc.classList.toggle('toc-collapsed', collapsed);
-      tocCard.classList.toggle('toc-collapsed', collapsed);
-      tocToggle.setAttribute('aria-expanded', String(!collapsed));
-      tocToggle.textContent = collapsed ? '☰' : '−';
-      tocToggle.setAttribute('aria-label', collapsed ? 'Expand Table of Contents' : 'Collapse Table of Contents');
-      // Inline fallbacks in case CSS selectors are overridden by other rules:
-      const list = tocCard.querySelector('.toc-list');
-      const title = tocCard.querySelector('h4');
-      if (collapsed) {
-        if (tocCard instanceof HTMLElement) tocCard.style.width = '56px';
-        if (list instanceof HTMLElement) list.style.display = 'none';
-        if (title instanceof HTMLElement) title.style.display = 'none';
-      } else {
-        if (tocCard instanceof HTMLElement) tocCard.style.width = '';
-        if (list instanceof HTMLElement) list.style.removeProperty('display');
-        if (title instanceof HTMLElement) title.style.removeProperty('display');
-      }
-      try {
-        const desktopKey = 'toc-collapsed-desktop';
-        const mobileKey = 'toc-collapsed-mobile';
-        // Initialize/read saved state with migration:
-        const isMobile = mql.matches;
-        const savedCurrent = localStorage.getItem(isMobile ? mobileKey : desktopKey);
-        const legacy = localStorage.getItem('toc-collapsed');
-        if (savedCurrent !== null) {
-          localStorage.setItem(isMobile ? mobileKey : desktopKey, collapsed ? '1' : '0');
-        } else if (legacy !== null) {
-          localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? (legacy === '1' ? '1' : '0') : '0');
-        } else {
-          localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? '1' : '0');
-        }
-      } catch (e) {}
-    }
-
-    // Initialize from localStorage with explicit per-mode keys and safe migration
-    try {
-      const isMobile = mql.matches;
-      const desktopKey = 'toc-collapsed-desktop';
-      const mobileKey = 'toc-collapsed-mobile';
-      const savedCurrent = localStorage.getItem(isMobile ? mobileKey : desktopKey);
-      const legacy = localStorage.getItem('toc-collapsed'); // migrate from old shared key if present
-      if (savedCurrent !== null) {
-        setTocCollapsed(savedCurrent === '1');
-      } else if (legacy !== null) {
-        // Only apply legacy to mobile; desktop defaults to expanded
-        setTocCollapsed(isMobile ? (legacy === '1') : false);
-        try { localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? (legacy === '1' ? '1' : '0') : '0'); } catch (e) {}
-      } else {
-        // Defaults: collapsed on mobile, expanded on desktop. Persist defaults to avoid legacy interference.
-        setTocCollapsed(isMobile);
-        try { localStorage.setItem(isMobile ? mobileKey : desktopKey, isMobile ? '1' : '0'); } catch (e) {}
-      }
-    } catch (e) {}
-
-    tocToggle?.addEventListener('click', () => {
-      const isCollapsed = projectToc?.classList.contains('toc-collapsed') || tocCard?.classList.contains('toc-collapsed');
-      setTocCollapsed(!isCollapsed);
-    });
-
-    // Scroll-to-top button is now handled globally in BaseLayout.astro
-  });
+  import { initToc } from "@scripts/toc";
+  document.addEventListener("DOMContentLoaded", initToc);
 </script>
 
 <!-- Styles moved to /src/styles/projects.css -->

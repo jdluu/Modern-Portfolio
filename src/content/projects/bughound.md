@@ -4,7 +4,6 @@ slug: "bughound"
 date: "2025-01-15"
 
 summary: "A comprehensive web-based bug tracking software system built with React, Bun, and PostgreSQL, featuring secure session-based authentication, file attachment management, and advanced bug report tracking with full CRUD operations."
-
 role: "Full Stack Developer"
 technologies: ["React", "TypeScript", "Bun", "Hono"]
 tools: ["GitHub", "GitHub Actions", "Docker", "Supabase"]
