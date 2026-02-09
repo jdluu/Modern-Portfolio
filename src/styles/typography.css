@@ -92,6 +92,9 @@ b {
   h1,
   h2,
   h3 {
-    letter-spacing: -0.005em; /* looser than default to prevent clipping */
+    letter-spacing: -0.015em;
+    font-variation-settings:
+      "wght" var(--font-weight-h1),
+      "wdth" 100;
   }
 }

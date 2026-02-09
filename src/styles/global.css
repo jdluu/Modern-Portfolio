@@ -57,9 +57,13 @@ a {
   );
   text-decoration-thickness: 0.12em;
   text-underline-offset: 0.25em;
+  text-underline-offset: 0.25em;
   transition:
-    color 0.2s ease,
-    text-decoration-color 0.2s ease;
+    color var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    text-decoration-color var(--m3-motion-duration-short)
+      var(--m3-motion-easing-standard),
+    background-color var(--m3-motion-duration-short)
+      var(--m3-motion-easing-standard);
 }
 
 a:hover,
@@ -139,8 +143,10 @@ a:focus-visible {
   transform: translateY(12px);
   pointer-events: none;
   transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+    opacity var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    background-color var(--m3-motion-duration-short)
+      var(--m3-motion-easing-standard);
   z-index: 220;
   font-size: var(--step-1);
   line-height: 1;
