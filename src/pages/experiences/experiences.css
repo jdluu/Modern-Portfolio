@@ -1,369 +1,433 @@
-/* Redesigned Experience Page Styles */
-:root {
-  --content-max-width: 100rem; /* Increased from 85rem for true horizontal usage */
-  --color-blue-accent: #3b82f6;
-  --color-amber-accent: #f59e0b;
+/* Mockup 3: Hero + Sidebar + Main Redesign */
+.experience-redesign-v3 {
+  background: var(--color-background);
+  font-family: var(--m3-font-family-body);
 }
 
-/* Base Container */
-.experience-page-container {
-  max-width: 110rem;
+/* 1. Hero Header Section */
+.experience-hero {
+  background: #0f172a;
+  padding: var(--space-m) 0; /* Further reduced from space-l */
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-s); /* Further reduced from space-m */
+}
+
+[data-theme="dark"] .experience-hero {
+  background: var(
+    --m3-color-surface
+  ); /* Slightly lighter in dark theme or keep black */
+}
+
+.hero-content {
+  max-width: var(--container-standard);
   margin: 0 auto;
-  padding: var(--space-xl) var(--space-m);
+  padding: 0 var(--space-m);
+  display: flex;
+  align-items: center;
+  gap: var(--space-l); /* Tightened gap */
+  position: relative;
+  z-index: 2;
 }
 
-.experience-page-layout {
+.hero-logo {
+  flex-shrink: 0;
+  background: white;
+  padding: var(--space-2xs); /* Tighter padding */
+  border-radius: 16px; /* Smaller radius for smaller logo */
+  box-shadow: var(--m3-elevation-2); /* Subtler shadow */
+  width: 90px; /* Shrinking from 130px */
+  height: 90px;
+  object-fit: contain;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-text-area {
+  flex: 1;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs); /* Tightened */
+  margin-bottom: var(--space-xs); /* Compressed */
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: var(--step--1); /* Increased for better presence */
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge.academic {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.badge.date {
+  background: rgba(71, 85, 105, 0.4);
+  color: #94a3b8;
+}
+
+.hero-title {
+  font-size: var(--step-4);
+  font-weight: 900;
+  margin: 0; /* Removed bottom margin */
+  line-height: 1.1;
+  color: #f1f5f9;
+  font-family: var(--m3-font-family-display);
+}
+
+.hero-subtitle {
+  font-size: var(--step-1);
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 500;
+}
+
+.hero-illustration {
+  position: absolute;
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.blob {
+  width: 250px; /* Smaller decorative blob */
+  height: 250px;
+  background: #1e293b;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  filter: blur(40px);
+  opacity: 0.3;
+}
+
+/* 2. Page Content Layout */
+.page-content-wrapper {
+  max-width: var(--container-standard);
+  margin: 0 auto;
+  padding: 0 var(--space-m) var(--space-xs); /* Further reduced from space-s */
+}
+
+/* 2. Dashboard Grid Layout */
+.main-grid-layout {
   display: grid;
-  grid-template-columns: 320px 1fr 1fr; /* Reduced sidebar width slightly for better balance */
-  gap: var(--space-m); /* Reduced gap between columns */
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  align-items: start; /* Fit to content instead of stretching */
-}
-
-/* Sidebar Styles */
-.experience-sidebar {
+  grid-template-columns: 340px 1fr;
   gap: var(--space-l);
-  position: sticky;
-  top: 6rem;
-  height: 100%; /* Ensure aside container fills height */
+  align-items: stretch; /* Make columns same height */
+  margin-bottom: var(--space-xs);
 }
 
-.sidebar-block {
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+/* 3. Global Card Styles */
+.info-card,
+.content-card,
+.side-item {
   background: var(--color-card);
-  padding: var(--space-m); /* Reduced padding for tighter look */
   border-radius: 12px;
   border: 1px solid var(--color-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
+  padding: var(--space-s) var(--space-m);
+  box-shadow: var(--shadow-sm);
 }
 
-.company-brand {
+.primary-focus {
+  border-left: 4px solid var(--m3-color-primary);
+}
+/* Main Column Stack */
+.primary-column {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: var(--space-m);
-  margin-bottom: var(--space-l); /* Reduced from space-xl */
 }
 
-.company-logo {
-  width: var(--space-3xl);
-  height: var(--space-3xl);
-  object-fit: contain;
-  border-radius: var(--space-xs);
-  background: white;
-  padding: var(--space-2xs);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  flex-shrink: 0;
+/* Make last cards in each column stretch to be flush */
+.sidebar-column > *:last-child,
+.primary-column > *:last-child {
+  flex: 1;
 }
 
-.title-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3xs);
-}
-
-.experience-title {
-  font-size: var(--step-2);
-  margin: 0;
-  line-height: 1.1;
-  font-weight: 800;
-  color: var(--text-color);
-}
-
-.company-name {
-  font-size: var(--step-1); /* Increased from step-0 */
-  color: var(--color-text-secondary);
-  font-weight: 500;
-}
-
-.sidebar-section {
-  margin-bottom: var(--space-s); /* Tightened section spacing */
-}
-
-.tech-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar-label {
-  font-size: var(--step--1);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  color: #94a3b8;
-  margin-bottom: var(--space-3xs); /* Ultra-tight gap to its content */
-}
-
-.role-text {
-  font-size: var(--step-1); /* Increased from step-0 */
-  font-weight: 600;
-  color: var(--text-color);
-  margin: 0;
-}
-
-.timeline-box {
+.overview-ribbon .detail-group {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  color: var(--text-color);
-  font-weight: 500;
+  gap: var(--space-s);
 }
 
-.duration-text {
-  font-size: var(--step-1); /* Increased from step-0 */
-}
-
-.tech-list {
+/* 4. Sidebar Styles */
+.overview-details {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-  list-style: none;
-  padding: 0;
+  flex-direction: column;
+  gap: var(--space-s);
 }
 
-.compact-pills .tech-pill {
-  padding: 0.4rem 0.8rem;
-  font-size: var(--step-0); /* Increased as requested */
+.detail-group .detail-label {
+  display: block;
+  font-size: var(--step--1); /* Increased from step--2 */
+  font-weight: 800;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.06em; /* Slightly increased tracking */
+  text-transform: uppercase;
+  margin-bottom: var(--space-3xs); /* Tiny breathing room */
+}
+
+.detail-group p {
+  font-size: var(--step-1);
   font-weight: 700;
-  background: #eff6ff;
-  color: #2563eb;
-  border-radius: 9999px;
-  border: 1px solid #dbeafe;
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
-.variant-subtle .tech-pill {
-  background: #f1f5f9;
-  color: #475569;
-  border-radius: 8px;
-  border: none;
-  font-size: var(--step-0); /* Increased as requested */
-  font-weight: 600;
-  padding: 0.4rem 0.6rem;
+.card-title {
+  font-size: var(--step-2);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--m3-font-family-display);
 }
 
-/* Call to Action Block */
-.cta-block {
-  padding: var(--space-l);
-  background: color-mix(in oklab, var(--color-blue-accent) 5%, transparent);
-  border-radius: var(--space-l);
-  border: 1px solid
-    color-mix(in oklab, var(--color-blue-accent) 10%, transparent);
+.side-title {
+  font-size: var(--step-1); /* Smaller per request */
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--m3-font-family-display);
 }
 
-.cta-message {
-  font-size: var(--step--2);
-  font-weight: 500;
-  color: var(--color-text-secondary);
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  margin-bottom: var(--space-m);
+}
+
+.card-header.tiny {
   margin-bottom: var(--space-s);
 }
 
-.cta-btn {
-  display: block;
-  width: 100%;
-  padding: var(--space-s);
-  background: var(--color-blue-accent);
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 700;
-  border-radius: var(--space-s);
-  box-shadow: 0 4px 12px
-    color-mix(in oklab, var(--color-blue-accent) 30%, transparent);
-  transition: all var(--m3-motion-duration-short)
-    var(--m3-motion-easing-standard);
-}
-
-.cta-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-  box-shadow: 0 6px 16px
-    color-mix(in oklab, var(--color-blue-accent) 40%, transparent);
-}
-
-/* Main Content Styles */
-.experience-main {
-  display: contents; /* Let children join the parent grid */
-}
-
-.narrative-grid {
-  display: contents; /* Let children join the parent grid */
-}
-
-.narrative-section {
-  background: var(--color-card);
-  padding: 1.25rem; /* Further reduced from space-m for density */
-  border-radius: 12px;
-  border: 1px solid var(--color-border);
-  transition: all var(--m3-motion-duration-medium)
-    var(--m3-motion-easing-standard);
-  display: flex;
-  flex-direction: column;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-s);
-  margin-bottom: var(--space-s); /* Tightened header spacing */
-}
-
-.header-icon {
-  width: 36px;
-  height: 36px;
+/* 4. Sidebar Styles */
+.icon-box {
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px; /* Rounded squares from mock */
+  border-radius: 12px;
 }
 
-.header-icon.blue {
-  background: color-mix(in oklab, var(--color-blue-accent) 15%, transparent);
-  color: var(--color-blue-accent);
+.icon-box.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.icon-box.purple {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
 }
 
-.header-icon.amber {
-  background: color-mix(in oklab, var(--color-amber-accent) 15%, transparent);
-  color: var(--color-amber-accent);
-}
-
-.section-title {
-  font-size: var(--step-1); /* Slightly smaller to prevent break */
-  font-weight: 800;
-  margin: 0;
-  color: var(--text-color);
-}
-
-/* List & Achievement Styles */
-.duties-list {
-  list-style: none;
-  padding: 0;
+.overview-details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* Minimal gap between bullets */
+  gap: var(--space-m);
 }
 
-.duties-list li {
+.detail-group label {
+  display: block;
+  font-size: var(--step--1); /* Increased from step--2 */
+  font-weight: 800;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.detail-group p {
+  font-size: var(--step-1); /* Increased from step-0 */
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* 5. Main Content Styles */
+.icon-box-outline {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.icon-box-outline.yellow {
+  background: rgba(245, 158, 11, 0.05);
+  color: #f59e0b;
+}
+
+.responsibilities-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs); /* Tighter gap */
+}
+
+.resp-item-simple p {
+  font-size: var(--step-1); /* Increased from step-0 */
+  color: var(--color-text-secondary);
+  line-height: var(--font-line-height-body);
+  margin: 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.resp-item-simple p::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-text-tertiary);
+  font-weight: 900;
+}
+
+/* 6. Tech & Concepts Section */
+.tech-section {
+  padding: var(--space-s) var(--space-m); /* Reduced padding */
+  background: var(--color-card);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Tighter grid */
+  gap: var(--space-m);
+}
+
+/* 7. Achievements Section (Now in Primary Column) */
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.achievement-item {
   display: flex;
   gap: var(--space-s);
-  font-size: var(
-    --step-0
-  ); /* Reverted to step-0 for better density if needed, or keep for legibility */
-  line-height: 1.4; /* Tighter line height */
+  align-items: flex-start;
+}
+
+.achievement-item .bullet {
+  color: var(--m3-color-primary);
+  font-weight: 900;
+  margin-top: -2px;
+}
+
+.achievement-item p {
+  font-size: var(--step-1); /* Increased to match responsibilities */
+  font-weight: 500;
+  line-height: var(--font-line-height-body);
+  margin: 0;
   color: var(--color-text-secondary);
 }
 
-.dot {
-  width: 5px;
-  height: 5px;
-  background: var(--color-blue-accent);
-  border-radius: 50%;
-  margin-top: 0.5rem;
+.achievement-point {
+  background: var(--color-surface);
+  padding: var(--space-xs) var(--space-m); /* Tightened vertical */
+  border-radius: 12px; /* Slightly smaller radius for tighter content */
+  display: flex;
+  gap: var(--space-s);
+  border: 1px solid var(--color-border);
+}
+
+.sparkle {
+  margin-top: 0.25rem;
+  color: #fbbf24;
   flex-shrink: 0;
 }
 
-.achievement-quote {
-  padding: 0.75rem 1rem; /* Slightly more padding for balance */
-  background: transparent;
-  border-left: 3px solid var(--color-amber-accent);
-  border-radius: 0;
-  margin-bottom: 2rem; /* Increased spacing to balance card height */
-}
-
-.achievement-quote:last-child {
-  margin-bottom: 0;
-}
-
-.achievement-quote p {
-  font-size: var(--step-1); /* Increased from step-0 */
-  font-style: italic;
-  font-weight: 500;
-  color: var(--text-color);
-  margin: 0;
-}
-
-/* Research Insight Block */
-.insight-card {
-  position: relative;
-  overflow: hidden;
-  padding: var(--space-xl);
-  background: var(--color-card);
-  border-radius: var(--space-l);
-  border: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-}
-
-.insight-bg-icon {
-  position: absolute;
-  top: 50%;
-  right: -2rem;
-  transform: translateY(-50%);
-  opacity: 0.05;
-  color: var(--text-color);
-}
-
-.insight-content {
-  position: relative;
-  z-index: 10;
-  max-width: 80%;
-}
-
-.insight-title {
+.achievement-point p {
   font-size: var(--step-1);
-  font-weight: 800;
-  margin-bottom: var(--space-2xs);
-  color: var(--text-color);
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+  color: var(--color-text-secondary);
 }
 
-.insight-body {
-  font-size: var(--step-0);
-  line-height: 1.6;
-  color: var(--color-text-secondary);
+.trophy-watermark {
+  position: absolute;
+  bottom: -30px;
+  right: -20px;
+  pointer-events: none;
+}
+
+/* Fix for TechBadgeList layout in any container */
+.tech-section .tech-list,
+.mini-pills .tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tech-section .tech-pill,
+.mini-pills .tech-pill {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-size: var(--step-0); /* Increased from step--1 */
+  font-weight: 700;
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+}
+
+.tech-section .pill-subtle .tech-pill,
+.mini-pills .pill-subtle .tech-pill {
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-muted);
+}
+
+.tech-section .tt-subheading,
+.mini-pills .tt-subheading {
+  font-size: var(--step--2);
+  font-weight: 800;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
 }
 
 /* Responsive Overrides */
-@media (max-width: 1200px) {
-  .narrative-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 1024px) {
-  .experience-page-layout {
+  .secondary-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-l);
-  }
-
-  .experience-sidebar {
-    position: static;
-  }
-
-  .insight-content {
-    max-width: 100%;
   }
 }
 
 @media (max-width: 640px) {
-  .experience-page-container {
-    padding: var(--space-m) var(--space-s);
-  }
-
-  .company-brand {
+  .hero-content {
     flex-direction: column;
     text-align: center;
+    gap: var(--space-s);
+    padding-top: var(--space-s);
   }
-
-  .section-title {
-    font-size: var(--step-1);
+  .hero-badges {
+    justify-content: center;
   }
-
-  .narrative-section {
-    padding: var(--space-l);
+  .primary-content {
+    gap: var(--space-s);
+  }
+  .secondary-grid {
+    gap: var(--space-s);
   }
 }
