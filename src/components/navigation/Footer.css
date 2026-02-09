@@ -1,35 +1,60 @@
-/* Footer component styles (extracted from src/components/ui/Footer.astro) */
+/* Minimalist Footer Styles for Experience Redesign */
 #footer {
-  background-color: transparent;
-  padding: var(--space-m-l) 0;
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-xl) 0;
+  margin-top: var(--space-3xl);
 }
 
-#footer-ul {
+.footer-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-m);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  list-style: none;
+}
+
+.copyright {
+  font-size: var(--step--1);
+  color: var(--color-text-tertiary);
   margin: 0;
-  padding: 0;
-  gap: var(--space-m-l);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-m);
 }
 
 .footer-link {
-  color: var(--color-text-tertiary);
-  transition: all 0.3s ease;
-  display: inline-block;
-  user-select: none;
-}
-
-@media (hover: hover) {
-  .footer-link:hover {
-    color: var(--color-accent);
-    transform: scale(1.1) rotate(-5deg);
-  }
-}
-
-.svg-icon {
   width: var(--space-xl);
   height: var(--space-xl);
-  fill: currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-container-low);
+  color: var(--color-text-tertiary);
+  border-radius: 50%;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  transform: translateY(-2px);
+}
+
+.footer-link svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+@media (max-width: 640px) {
+  .footer-container {
+    flex-direction: column;
+    gap: var(--space-m);
+    text-align: center;
+  }
 }
