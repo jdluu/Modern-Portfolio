@@ -2,7 +2,7 @@
 title: AI Trainer
 company:
   name: Outlier
-  image: ../../assets/images/experiences/outlier/thumbnail_outlier.min.jpg
+  image: ../../assets/images/experiences/outlier/thumbnail_outlier.min.png
   imagealt: >-
     Outlier logo featuring an abstract overlapping circular design with a
     gradient of teal, blue, and purple, alongside the word 'Outlier' in bold
@@ -38,6 +38,6 @@ work:
     - points: >-
         Improved code output quality by 20% through systematic evaluation and
         refinement
-thumbnail: ../../assets/images/experiences/outlier/thumbnail_outlier.min.jpg
+thumbnail: ../../assets/images/experiences/outlier/thumbnail_outlier.min.png
 summary: Enhancing Code Quality and Output Accuracy
 ---

@@ -45,11 +45,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Experiences use logos, so contain is usually better than cover */
+  object-fit: cover;
   object-position: center;
-  background-color: var(--color-card);
-  padding: var(--space-2xs);
-  box-sizing: border-box;
   z-index: 0;
 }
 
