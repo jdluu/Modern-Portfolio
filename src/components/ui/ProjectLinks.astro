@@ -1,0 +1,35 @@
+---
+interface Link {
+  url?: string;
+  label?: string;
+}
+
+interface Props {
+  links?: Link[] | null;
+}
+
+const { links } = Astro.props;
+---
+
+{links && links.length > 0 && (
+  <div class="project-links" aria-label="Project links">
+    <div class="links-container">
+      {links
+        .filter((link) => !!link.url)
+        .map((link) => (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-link"
+          >
+            <span class="link-label">{link.label}</span>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="14" height="14" class="external-icon">
+              <path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"></path>
+              <path fill="currentColor" d="M5 5h5V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-5h-2v5H5V5z"></path>
+            </svg>
+          </a>
+        ))}
+    </div>
+  </div>
+)}

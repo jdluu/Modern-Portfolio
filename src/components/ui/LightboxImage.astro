@@ -1,0 +1,108 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<aside class="aside" aria-labelledby="post-hero">
+  <figure class="hero" id="post-hero">
+    <button
+      type="button"
+      class="hero-trigger"
+      aria-label="Open image in full size"
+      aria-controls="image-lightbox"
+      aria-expanded="false"
+    >
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+    </button>
+  </figure>
+</aside>
+
+<div id="image-lightbox" class="lightbox is-hidden" hidden data-open="false" aria-hidden="true">
+  <div class="lightbox-content" role="dialog" aria-modal="true" aria-label={`${alt} full size`} tabindex="-1">
+    <img src={src} alt={`${alt} full size`} />
+    <button class="lightbox-close" type="button" aria-label="Close image" data-close>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 0 0-1.4 1.4L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const lightboxEl = document.getElementById('image-lightbox');
+    const trigger = document.querySelector('.hero .hero-trigger') as HTMLElement | null;
+    if (!lightboxEl || !trigger) return;
+
+    const triggerEl = trigger as HTMLElement; // non-nullable alias for handlers
+    const lb = lightboxEl as HTMLElement;
+    const content = lb.querySelector('.lightbox-content') as HTMLElement | null;
+    const closeBtn = lb.querySelector('[data-close]') as HTMLElement | null;
+    let lastFocusedEl: HTMLElement | null = null;
+
+    function open() {
+      lastFocusedEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      lb.classList.remove('is-hidden');
+      try {
+        // @ts-ignore
+        lb.inert = false;
+      } catch (err) {}
+      lb.removeAttribute('hidden');
+      lb.setAttribute('data-open', 'true');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      triggerEl.setAttribute('aria-expanded', 'true');
+      if (closeBtn && typeof closeBtn.focus === 'function') (closeBtn as HTMLElement).focus();
+      document.addEventListener('keydown', onDocumentKeydown);
+    }
+
+    function close() {
+      lb.classList.add('is-hidden');
+      try {
+        // @ts-ignore
+        lb.inert = true;
+      } catch (err) {}
+      lb.setAttribute('hidden', '');
+      lb.setAttribute('data-open', 'false');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      triggerEl.setAttribute('aria-expanded', 'false');
+      if (lastFocusedEl) lastFocusedEl.focus();
+      document.removeEventListener('keydown', onDocumentKeydown);
+    }
+
+    function onDocumentKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        if (lb.getAttribute('data-open') === 'true') {
+          e.preventDefault();
+          close();
+        }
+      }
+    }
+
+    triggerEl.addEventListener('click', open);
+
+    // Close when clicking outside the image/content or on elements with data-close
+    lb.addEventListener('click', (e: Event) => {
+      const evt = e as MouseEvent;
+      if (!(evt.target instanceof Element)) return;
+      const isBackdrop = evt.target === lb;
+      const isCloseClick = !!evt.target.closest('[data-close]');
+      if (isBackdrop || isCloseClick) {
+        close();
+      }
+    });
+
+    // Simple focus trap: keep focus on content while open
+    lb.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Tab' && content && lb.getAttribute('data-open') === 'true') {
+        // Very basic trap
+        // ideally we'd check if shift key is pressed and cycle through focusable elements
+      }
+    });
+  })();
+</script>

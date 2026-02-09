@@ -38,7 +38,7 @@
   height: 100px;
   background: #211042;
   border-radius: 50px;
-  transition: 500ms;
+  transition: var(--m3-motion-duration-long) var(--m3-motion-easing-standard);
   overflow: hidden;
 }
 

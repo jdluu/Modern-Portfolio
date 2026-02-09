@@ -1,0 +1,168 @@
+---
+interface Props {
+  targetSelector?: string;
+}
+
+const { targetSelector = '.prose' } = Astro.props;
+---
+
+<button 
+  type="button" 
+  class="copy-markdown-btn" 
+  aria-label="Copy post as markdown"
+  title="Copy post content as markdown"
+  data-target={targetSelector}
+>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </svg>
+  <span class="copy-markdown-text">Copy as Markdown</span>
+</button>
+
+<script>
+  // Copy as Markdown functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const copyBtn = document.querySelector('.copy-markdown-btn') as HTMLButtonElement;
+    if (!copyBtn) return;
+
+    copyBtn.addEventListener('click', async function() {
+      try {
+        const targetSelector = copyBtn.dataset.target || '.prose';
+        const prose = document.querySelector(targetSelector) as HTMLElement;
+        if (!prose) return;
+
+        // Convert HTML to markdown
+        const markdown = htmlToMarkdown(prose);
+        
+        const title = document.querySelector('.post-title')?.textContent || '';
+        const date = document.querySelector('.publish-date')?.textContent || '';
+        
+        let fullMarkdown = '';
+        if (title) {
+          fullMarkdown += `# ${title}\n\n`;
+        }
+        if (date) {
+          fullMarkdown += `*${date}*\n\n`;
+        }
+        fullMarkdown += markdown;
+
+        await navigator.clipboard.writeText(fullMarkdown);
+        
+        // Show feedback
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        // Fallback: show error
+        const originalText = copyBtn.querySelector('.copy-markdown-text')?.textContent;
+        const textSpan = copyBtn.querySelector('.copy-markdown-text') as HTMLElement | null;
+        if (textSpan) {
+          textSpan.textContent = 'Failed';
+          setTimeout(() => {
+            textSpan.textContent = originalText || 'Copy as Markdown';
+          }, 2000);
+        }
+      }
+    });
+
+    /**
+     * Convert HTML element to markdown.
+     * Recursively processes child nodes.
+     */
+    function htmlToMarkdown(element: HTMLElement): string {
+      let markdown = '';
+      const nodes = Array.from(element.childNodes);
+      
+      for (const node of nodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent?.trim() || '';
+          if (text) markdown += text + '\n\n';
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node as HTMLElement;
+          const tagName = el.tagName.toLowerCase();
+          
+          switch (tagName) {
+            case 'h1':
+              markdown += `# ${el.textContent?.trim() || ''}\n\n`;
+              break;
+            case 'h2':
+              markdown += `## ${el.textContent?.trim() || ''}\n\n`;
+              break;
+            case 'h3':
+              markdown += `### ${el.textContent?.trim() || ''}\n\n`;
+              break;
+            case 'h4':
+              markdown += `#### ${el.textContent?.trim() || ''}\n\n`;
+              break;
+            case 'p':
+              const pText = el.textContent?.trim() || '';
+              if (pText) markdown += `${pText}\n\n`;
+              break;
+            case 'ul':
+            case 'ol':
+              const items = Array.from(el.querySelectorAll('li'));
+              items.forEach((li, index) => {
+                const prefix = tagName === 'ol' ? `${index + 1}. ` : '- ';
+                const text = li.textContent?.trim() || '';
+                if (text) markdown += `${prefix}${text}\n`;
+              });
+              markdown += '\n';
+              break;
+            case 'pre':
+              const code = el.querySelector('code');
+              if (code) {
+                const lang = code.className.match(/language-(\w+)/)?.[1] || '';
+                const codeText = code.textContent || '';
+                markdown += `\`\`\`${lang}\n${codeText}\n\`\`\`\n\n`;
+              }
+              break;
+            case 'code':
+              if (!el.closest('pre')) {
+                markdown += `\`${el.textContent || ''}\``;
+              }
+              break;
+            case 'blockquote':
+              const quoteText = el.textContent?.trim() || '';
+              if (quoteText) {
+                quoteText.split('\n').forEach(line => {
+                  markdown += `> ${line}\n`;
+                });
+                markdown += '\n';
+              }
+              break;
+            case 'hr':
+              // Check if it's a section separator (multiple dashes)
+              const hrText = el.textContent || '';
+              if (hrText.includes('-----')) {
+                markdown += '-----\n\n';
+              } else {
+                markdown += '---\n\n';
+              }
+              break;
+            case 'strong':
+            case 'b':
+              markdown += `**${el.textContent || ''}**`;
+              break;
+            case 'em':
+            case 'i':
+              markdown += `*${el.textContent || ''}*`;
+              break;
+            case 'a':
+              const href = el.getAttribute('href') || '';
+              const linkText = el.textContent || '';
+              markdown += `[${linkText}](${href})`;
+              break;
+            default:
+              // Recursively process unknown elements
+              markdown += htmlToMarkdown(el);
+          }
+        }
+      }
+      
+      return markdown.trim();
+    }
+  });
+</script>
