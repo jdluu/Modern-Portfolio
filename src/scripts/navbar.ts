@@ -9,6 +9,9 @@ function initNavbar() {
   const menuToggleBtn = document.getElementById("menu-toggle-btn");
   const backdrop = document.getElementById("menu-backdrop");
   const menuCloseBtn = document.getElementById("menu-close-btn");
+  const panelHomeLink = mainMenu?.querySelector(
+    ".panel-header .home-link",
+  ) as HTMLAnchorElement | null;
 
   if (!mainMenu || !menuToggleBtn || !backdrop || !menuCloseBtn) return;
 
@@ -130,16 +133,29 @@ function initNavbar() {
   closeBtn.addEventListener("click", () => closeMenu());
   back.addEventListener("click", () => closeMenu());
 
+  // Explicit handler for panel home link (mobile)
+  if (panelHomeLink) {
+    panelHomeLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const href = panelHomeLink.getAttribute("href");
+      closeMenu(false);
+      // Navigate after a brief delay to allow menu to close
+      if (href) {
+        setTimeout(() => {
+          window.location.href = href;
+        }, 100);
+      }
+    });
+  }
+
   menu.addEventListener("click", (e) => {
     if (!(e.target instanceof HTMLElement)) return;
     const link = e.target.closest("a");
-    if (link) {
-      const isNavLink = link.getAttribute("href")?.startsWith("/");
-      if (isNavLink && menu.getAttribute("data-open") === "true") {
-        closeMenu(false);
-      } else {
-        closeMenu(false);
-      }
+    // Skip if it's the home link (handled separately)
+    if (link === panelHomeLink) return;
+    if (link && menu.getAttribute("data-open") === "true") {
+      // Let the link navigate naturally - just close the menu
+      setTimeout(() => closeMenu(false), 50);
     }
   });
 

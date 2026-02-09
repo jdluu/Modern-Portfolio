@@ -408,26 +408,146 @@
 }
 
 /* Responsive Overrides */
+
+/* Tablet breakpoint - collapse secondary grid */
 @media (max-width: 1024px) {
   .secondary-grid {
     grid-template-columns: 1fr;
   }
 }
 
+/* Medium screens - collapse main grid to single column */
+@media (max-width: 768px) {
+  .main-grid-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+  }
+
+  .sidebar-column {
+    order: 1; /* Position overview cards first on mobile */
+  }
+
+  .primary-column {
+    order: 2;
+  }
+
+  /* Tighter page padding on tablets */
+  .page-content-wrapper {
+    padding: 0 var(--space-s) var(--space-xs);
+  }
+
+  /* Hero adjustments for tablet */
+  .hero-section {
+    padding: var(--space-l) var(--space-m);
+  }
+
+  .hero-title {
+    font-size: var(--step-4);
+  }
+}
+
+/* Small screens - mobile-first optimizations */
 @media (max-width: 640px) {
+  /* Hero section mobile */
+  .hero-section {
+    padding: var(--space-m) var(--space-s);
+  }
+
   .hero-content {
     flex-direction: column;
     text-align: center;
     gap: var(--space-s);
     padding-top: var(--space-s);
   }
+
   .hero-badges {
     justify-content: center;
   }
+
+  .hero-title {
+    font-size: var(--step-3);
+  }
+
+  .hero-subtitle {
+    font-size: var(--step-0);
+  }
+
+  /* Logo smaller on mobile */
+  .company-logo {
+    width: 72px;
+    height: 72px;
+  }
+
+  /* Page content tighter */
+  .page-content-wrapper {
+    padding: 0 var(--space-xs) var(--space-xs);
+  }
+
+  /* Cards more compact on mobile */
+  .info-card,
+  .content-card,
+  .side-item {
+    padding: var(--space-xs) var(--space-s);
+    border-radius: 8px;
+  }
+
+  /* Remove the primary focus left border on mobile (takes up space) */
+  .primary-focus {
+    border-left-width: 3px;
+  }
+
+  /* Typography scaling */
+  .card-heading {
+    font-size: var(--step-1);
+  }
+
+  .detail-value {
+    font-size: var(--step-0);
+  }
+
+  .detail-label {
+    font-size: var(--step--2);
+  }
+
+  /* Tech pills more compact */
+  .tech-pill {
+    font-size: var(--step--2);
+    padding: var(--space-3xs) var(--space-xs);
+  }
+
+  /* Reduce grid gaps */
   .primary-content {
     gap: var(--space-s);
   }
+
   .secondary-grid {
     gap: var(--space-s);
+  }
+
+  .sidebar-column,
+  .primary-column {
+    gap: var(--space-s);
+  }
+
+  /* Don't stretch last cards on mobile - let them size naturally */
+  .sidebar-column > *:last-child,
+  .primary-column > *:last-child {
+    flex: none;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+  .hero-title {
+    font-size: var(--step-2);
+  }
+
+  .badge {
+    font-size: var(--step--2);
+    padding: 0.2rem 0.5rem;
+  }
+
+  .page-content-wrapper {
+    padding: 0 var(--space-2xs) var(--space-2xs);
   }
 }

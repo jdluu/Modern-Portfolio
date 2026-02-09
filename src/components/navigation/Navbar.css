@@ -14,6 +14,8 @@
     color-mix(in oklab, var(--m3-color-outline) 10%, transparent);
   transition: all var(--m3-motion-duration-medium)
     var(--m3-motion-easing-standard);
+  /* Ensure header is always above page content */
+  isolation: isolate;
 }
 .nav-container {
   display: flex;
@@ -28,6 +30,8 @@
   isolation: isolate;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 201; /* Above backdrop (199) and menu panel (200) */
 }
 .nav-content {
   display: flex;
@@ -41,6 +45,8 @@
 
 .menu-icon-wrapper {
   display: block;
+  position: relative;
+  z-index: 10;
 }
 .menu-icon-button {
   display: flex;
@@ -53,6 +59,8 @@
   cursor: pointer;
   color: var(--color-text-primary);
   border-radius: 50%;
+  position: relative;
+  z-index: 10;
 }
 .open-icon {
   width: var(--space-m-l);
@@ -116,10 +124,26 @@
   margin-bottom: var(--space-s);
   border-bottom: 1px solid rgba(128, 128, 128, 0.2);
   flex-shrink: 0;
+  position: relative;
+  z-index: 10;
 }
-.panel-header .home-icon {
+
+.panel-header .home-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: var(--space-xl);
   height: var(--space-xl);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.panel-header .home-icon {
+  width: 100%;
+  height: 100%;
 }
 
 .menu-close-btn {
@@ -162,11 +186,11 @@
   color: var(--m3-color-on-primary-container);
 }
 
-/* Backdrop */
+/* Backdrop - provides click-to-close functionality */
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: transparent; /* No dark overlay - keeps UI clean on mobile */
   opacity: 0;
   visibility: hidden;
   transition:
