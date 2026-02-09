@@ -1,12 +1,13 @@
 /* Minimalist Footer Styles for Experience Redesign */
 #footer {
   border-top: 1px solid var(--color-border);
-  padding: var(--space-xl) 0;
-  margin-top: var(--space-3xl);
+  padding: var(--space-m) 0; /* Tightened from space-l */
+  margin-top: var(--space-xl);
+  font-family: var(--m3-font-family-body);
 }
 
 .footer-container {
-  max-width: var(--content-max-width);
+  max-width: var(--container-standard); /* Match navbar/branding */
   margin: 0 auto;
   padding: 0 var(--space-m);
   display: flex;
@@ -15,7 +16,9 @@
 }
 
 .copyright {
-  font-size: var(--step--1);
+  font-size: var(--step-2); /* Increased from step--1 */
+  font-family: var(--m3-font-family-body);
+  font-weight: 500;
   color: var(--color-text-tertiary);
   margin: 0;
 }
@@ -26,8 +29,8 @@
 }
 
 .footer-link {
-  width: var(--space-xl);
-  height: var(--space-xl);
+  width: var(--space-2xl); /* Increased from space-xl */
+  height: var(--space-2xl);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,8 +49,8 @@
 }
 
 .footer-link svg {
-  width: 20px;
-  height: 20px;
+  width: 28px; /* Increased from 20px */
+  height: 28px;
   stroke: currentColor;
 }
 
