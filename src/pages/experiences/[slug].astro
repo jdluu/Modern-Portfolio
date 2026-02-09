@@ -70,119 +70,122 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
 ---
  
 <BaseLayout title={title}>
-    <main class="experience-page-container">
-        <article class="experience-page-layout">
-            <!-- Sidebar: Meta Information -->
-            <aside class="experience-sidebar">
-                <div class="sidebar-block company-card">
-                    <div class="company-brand">
-                        {companyLogo && typeof companyLogo !== "string" ? (
-                            <Image
-                                src={companyLogo}
-                                alt={`${companyName} logo`}
-                                class="company-logo"
-                                width={80}
-                                height={80}
-                                loading="eager"
-                                decoding="async"
-                            />
-                        ) : (
-                            <img
-                                src={companyLogo as string}
-                                alt={`${companyName} logo`}
-                                class="company-logo"
-                                width="80"
-                                height="80"
-                                loading="eager"
-                                decoding="async"
-                                aria-hidden="true"
-                            />
-                        )}
-                        <div class="title-stack">
-                            <h1 id="experience-title" class="experience-title">{title}</h1>
-                            <p class="company-name">{companyName}</p>
-                        </div>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-label">Timeline</h3>
-                        <div class="timeline-box">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            <span class="duration-text">{duration}</span>
-                        </div>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <TechBadgeList 
-                            title="Tech Stack" 
-                            items={toolsArray} 
-                            id="tool-label" 
-                            class="compact-pills"
+    <div class="experience-redesign-v3">
+        <!-- Full-Width Hero Header -->
+        <header class="experience-hero">
+            <div class="hero-content">
+                <div class="hero-brand">
+                    {companyLogo && typeof companyLogo !== "string" ? (
+                        <Image
+                            src={companyLogo}
+                            alt={`${companyName} logo`}
+                            class="hero-logo"
+                            width={140}
+                            height={140}
+                            loading="eager"
+                            decoding="async"
                         />
-                    </div>
-
-                    <div class="sidebar-section">
-                        <TechBadgeList 
-                            title="Core Concepts" 
-                            items={techArray} 
-                            id="concept-label" 
-                            variant="subtle"
+                    ) : (
+                        <img
+                            src={companyLogo as string}
+                            alt={`${companyName} logo`}
+                            class="hero-logo"
+                            width="140"
+                            height="140"
+                            loading="eager"
+                            decoding="async"
+                            aria-hidden="true"
                         />
+                    )}
+                </div>
+                
+                <div class="hero-text-area">
+                    <div class="hero-badges">
+                        <span class="badge academic">{experience.logistics?.type || "Professional Experience"}</span>
+                        <span class="badge date">{duration}</span>
                     </div>
+                    <h1 class="hero-title">{title}</h1>
+                    <p class="hero-subtitle">{companyName}</p>
                 </div>
-
-            </aside>
-
-            <!-- Main Content Area -->
-            <div class="experience-main">
-                <div class="narrative-grid">
-                    <section class="narrative-section" id="responsibilities">
-                        <header class="section-header">
-                            <span class="header-icon blue">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 11l3 3L22 4m-2 12v6H4V4h12"></path>
-                                </svg>
-                            </span>
-                            <h2 class="section-title">Key Responsibilities</h2>
-                        </header>
-                        <ul class="duties-list">
-                            {responsibilities.map((item) => (
-                                <li>
-                                    <span class="dot"></span>
-                                    <p>{item.duties}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-
-                    <section class="narrative-section" id="achievements">
-                        <header class="section-header">
-                            <span class="header-icon amber">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="8" r="7"></circle>
-                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                                </svg>
-                            </span>
-                            <h2 class="section-title">Notable Achievements</h2>
-                        </header>
-                        <div class="achievements-stack">
-                            {achievements.map((item) => (
-                                <blockquote class="achievement-quote">
-                                    <p>{item.points}</p>
-                                </blockquote>
-                            ))}
-                        </div>
-                    </section>
+                
+                <!-- Abstract background shape -->
+                <div class="hero-illustration">
+                    <div class="blob"></div>
                 </div>
-
-                {/* Research Insight Block removed as per user request */}
             </div>
-        </article>
-    </main>
+        </header>
+
+            <!-- 2. Page Content: Dashboard Grid -->
+            <div class="page-content-wrapper">
+                <div class="main-grid-layout">
+                    <!-- Sidebar: Overview + Tech -->
+                    <aside class="sidebar-column">
+                        <section class="side-item" id="position-overview">
+                            <div class="card-header tiny">
+                                <h2 class="side-title">Position Overview</h2>
+                            </div>
+                            <div class="overview-details">
+                                <div class="detail-group">
+                                    <span class="detail-label">FOCUS AREA</span>
+                                    <p>{experience.logistics?.focusArea || "General Technical Focus"}</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="side-item" id="tech-concepts">
+                            <div class="card-header tiny">
+                                <h2 class="side-title">Tech & Concepts</h2>
+                            </div>
+                            <div class="mini-pills">
+                                <TechBadgeList 
+                                    title="Core Stack" 
+                                    id="tech-tools"
+                                    items={experience.technologies?.tools?.split(',').map(s => s.trim()) || []} 
+                                    className="pill-primary" 
+                                />
+                                <TechBadgeList 
+                                    title="Methodology & Skills" 
+                                    id="tech-skills"
+                                    items={experience.technologies?.skills?.split(',').map(s => s.trim()) || []} 
+                                    className="pill-subtle" 
+                                    variant="subtle"
+                                />
+                            </div>
+                        </section>
+                    </aside>
+
+                    <!-- Main: Key Responsibilities + Achievements -->
+                    <main class="primary-column">
+                        <section class="content-card primary-focus" id="key-responsibilities">
+                            <div class="card-header">
+                                <h2 class="card-title">Key Responsibilities</h2>
+                            </div>
+                            
+                            <div class="responsibilities-list">
+                                {experience.work?.responsibilities?.map((item) => (
+                                    <div class="resp-item-simple">
+                                        <p>{item.duties}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        <section class="content-card achievements-card" id="notable-achievements">
+                            <div class="card-header">
+                                <h2 class="card-title">Notable Achievements</h2>
+                            </div>
+                            
+                            <div class="achievements-list">
+                                {experience.work?.achievements?.map(item => (
+                                    <div class="achievement-item">
+                                        <span class="bullet">•</span>
+                                        <p>{item.points}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            </div>
+    </div>
 </BaseLayout>
- 

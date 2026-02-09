@@ -11,6 +11,8 @@ logistics:
   duration: Jan 2022 – June 2022
   startDate: 2022-01-01T08:00:00.000Z
   endDate: 2022-06-10T07:00:00.000Z
+  focusArea: Mobile Development
+  type: EDUCATION & OUTREACH
 technologies:
   tools: "Kotlin, Java"
   skills: "Curriculum Development, Program Management, Student Support"

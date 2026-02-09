@@ -48,6 +48,10 @@ const experiences = defineCollection({
           duration: z.string().optional(),
           startDate: z.union([z.string(), z.coerce.date()]).optional(),
           endDate: z.union([z.string(), z.coerce.date()]).optional(),
+          focusArea: z.string().optional(), // New for Redesign 3
+          status: z.string().optional(), // New for Redesign 3
+          department: z.string().optional(), // New for Redesign 3
+          type: z.string().optional(), // Job nature category
         })
         .optional(),
       technologies: z
