@@ -8,26 +8,22 @@
 }
 /* Layout & Container Styles */
 .experience-page-container {
-  max-width: 75rem;
+  max-width: 110rem;
   margin: 0 auto;
-  padding: var(--space-m); /* overall page padding */
-  padding-top: var(
-    --space-xs
-  ); /* tighten top padding to reduce white space under nav/title */
+  padding: var(--space-xl) var(--space-m);
+  padding-top: var(--space-m);
 }
 
 .experience-page-div {
-  /* Convert page wrapper to a single centered vertical column:
-       - stacked layout on all viewports
-       - constrained by --content-max-width and centered
-       - use gap token for consistent section spacing */
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: var(--content-max-width);
+  max-width: 110rem;
   margin: 0 auto;
   gap: var(--space-xl);
   align-items: stretch;
+  transition: all var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
 }
 
 .main-content {
@@ -46,6 +42,9 @@
   margin-bottom: var(--space-m);
   padding-bottom: 0;
   border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
 }
 
 /* Constrain the header inner content to the same content width as the info-row so
@@ -95,7 +94,7 @@
 }
 
 .company-name {
-  font-size: var(--step-2);
+  font-size: var(--step-3); /* Bumped from step-2 */
   color: var(--text-color);
   margin: var(--space-2xs) 0;
   word-wrap: break-word;
@@ -106,33 +105,44 @@
    Mobile media queries below still stack these columns into one full-width column. */
 .info-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(17.5rem, 22.5rem);
-  gap: var(--grid-gap-md);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+  gap: var(--space-xl);
   margin: var(--space-l) 0;
-  align-items: start;
   grid-column: 1 / -1; /* span full width so the row sits directly under the header on desktop */
-  /* On desktop we will align the info-row with the main content using the desktop media rules below. */
 }
 
 .card {
   padding: var(--space-m);
   background: var(--color-card);
   border-radius: var(--space-s);
-  box-shadow: 0 var(--space-xs) var(--space-xl)
-    color-mix(in oklab, black 6%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+  box-shadow: var(--m3-elevation-1);
   margin-bottom: var(--space-m);
+  transition:
+    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--m3-elevation-3);
+  background: color-mix(
+    in oklab,
+    var(--color-card) 95%,
+    var(--m3-color-primary) 5%
+  );
 }
 
 .role-heading {
   margin: 0 0 var(--space-xs);
   font-weight: 700;
-  font-size: var(--step-1);
+  font-size: var(--step-2); /* Bumped from step-1 */
 }
 .role-body {
   color: var(--color-text-secondary);
-  font-size: var(--step-1);
-  line-height: 1.65;
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
 }
 
 /* Technologies & Tools grid inside card */
@@ -149,7 +159,7 @@
 }
 .tt-subheading {
   margin: 0 0 var(--space-2xs);
-  font-size: var(--step--1);
+  font-size: var(--step-0); /* Bumped from step--1 */
   font-weight: 600;
   color: var(--text-color);
 }
@@ -179,12 +189,23 @@
 }
 .tech-pill {
   display: inline-block;
-  padding: var(--space-3xs) var(--space-xs);
-  background: color-mix(in oklab, var(--color-accent) 9%, transparent);
+  padding: var(--space-2xs) var(--space-s);
+  background: color-mix(in oklab, var(--m3-color-primary) 8%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
   border-radius: 999px;
-  font-size: var(--step--1); /* slightly smaller to improve density */
-  color: var(--text-color);
+  font-size: var(--step-0); /* Bumped from step--1 */
+  color: var(--m3-color-on-surface);
   line-height: 1;
+  font-weight: 500;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+}
+
+.tech-pill:hover {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: scale(1.05);
 }
 
 /* Desktop: show a subtle vertical divider between the two columns and add breathing room */
@@ -550,4 +571,49 @@ strong {
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--step-1);
+}
+
+/* Showcase mini styles for top positioning (Capsule look) */
+.showcase-top {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-m);
+  padding: var(--space-xs) var(--space-m);
+  background: color-mix(
+    in oklab,
+    var(--m3-color-secondary-container) 12%,
+    transparent
+  );
+  backdrop-filter: blur(12px);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 10%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 4px 10px color-mix(in oklab, black 5%, transparent);
+}
+
+.showcase-grid.mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
+.showcase-item-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-l);
+  background: color-mix(in oklab, var(--m3-color-primary) 8%, transparent);
+  color: var(--m3-color-primary);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--step-0);
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+}
+
+.showcase-item-mini:hover {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: translateY(-2px);
 }

@@ -99,7 +99,9 @@ export default function ExperienceCardList(props: Props) {
             class="control-select"
             aria-label="Filter by year"
             value={yearFilter()}
-            onChange={(e: any) => setYearFilter(e.target.value)}
+            onChange={(e: Event & { currentTarget: HTMLSelectElement }) =>
+              setYearFilter(e.currentTarget.value)
+            }
           >
             <option value="">All years</option>
             <For each={years()}>
@@ -117,7 +119,9 @@ export default function ExperienceCardList(props: Props) {
             class="control-select"
             aria-label="Sort experiences"
             value={sortOption()}
-            onChange={(e: any) => setSortOption(e.target.value)}
+            onChange={(e: Event & { currentTarget: HTMLSelectElement }) =>
+              setSortOption(e.currentTarget.value as "date-desc" | "date-asc")
+            }
           >
             <option value="date-desc">Newest first</option>
             <option value="date-asc">Oldest first</option>
@@ -133,8 +137,8 @@ export default function ExperienceCardList(props: Props) {
             class="control-select compact"
             aria-label="Items per page"
             value={pagination.pageSize()}
-            onChange={(e: any) => {
-              pagination.setPageSize(Number(e.target.value) || 6);
+            onChange={(e: Event & { currentTarget: HTMLSelectElement }) => {
+              pagination.setPageSize(Number(e.currentTarget.value) || 6);
               pagination.setPage(1);
             }}
           >

@@ -26,8 +26,8 @@ const projects = rawCollection.map(mapProjectToCard);
       <div class="project-item" data-slug={p.slug ?? ""}>
         <ProjectCard
           title={p.title}
-          intro={p.description}
-          thumbnail={p.thumbnail}
+          intro={p.description ?? ""}
+          thumbnail={p.thumbnail ?? null}
           url={p.slug}
         />
       </div>

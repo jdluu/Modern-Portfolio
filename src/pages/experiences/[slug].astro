@@ -5,17 +5,18 @@ import { getCollection } from "astro:content";
 import { sanitizeStringForUI } from "@lib/utils";
 import "./experiences.css";
 import { Image } from "astro:assets";
+import TechBadgeList from "@components/ui/TechBadgeList.astro";
   
 // Generate static paths
 export async function getStaticPaths() {
   const entries = await getCollection("experiences");
   const paths = (entries ?? [])
-    .filter((e: any) => e.data?.draft !== true)
-    .map((e: any) => {
+    .filter((e: CollectionEntry<"experiences">) => e.data.draft !== true)
+    .map((e: CollectionEntry<"experiences">) => {
       const canonicalSlug =
         typeof e.slug === "string" && e.slug.length > 0
           ? e.slug
-          : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
+          : String(e.id).replace(/\.(md|mdx)$/i, "");
       return { params: { slug: canonicalSlug } };
     });
   return paths;
@@ -23,9 +24,11 @@ export async function getStaticPaths() {
  
 const slugParam = (Astro.params as any)?.slug as string;
 
+import type { CollectionEntry } from "astro:content";
+
 const experiencesEntries = await getCollection("experiences");
 const entry =
-  (experiencesEntries ?? []).find((e: any) => {
+  (experiencesEntries ?? []).find((e: CollectionEntry<"experiences">) => {
     const canonicalSlug =
       typeof e.slug === "string" && e.slug.length > 0
         ? e.slug
@@ -41,7 +44,7 @@ const entry =
 if (!entry) {
   throw new Error(`Experience not found for slug: ${slugParam}`);
 }
-const experience = entry.data as any as Experience;
+const experience = entry.data;
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
 const companyLogo = experience?.company?.image ?? "/placeholder-logo.png";
@@ -99,6 +102,27 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                             <p class="company-name"><strong>{companyName}</strong></p>
                         </div>
                     </div>
+
+                    {showcase.length > 0 && (
+                      <div class="showcase-top">
+                        <div class="showcase-grid mini">
+                          {showcase.map((item) => (
+                            <a href={item.link}
+                               class="showcase-item-mini"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label={`View project: ${item.description}`}>
+                              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                              </svg>
+                              <span>{item.description}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                 </div>
             </section>
 
@@ -116,49 +140,21 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
  
               <div class="card">
                 <div class="tt-grid" role="group" aria-label="Topics and technologies">
-                  <div class="tt-column" aria-labelledby="concept-label">
-                    <h4 id="concept-label" class="tt-subheading">Concepts</h4>
-                    {techArray.length > 0 ? (
-                      <ul class="tech-list" aria-label="Concepts">
-                        {techArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
-                      </ul>
-                    ) : (
-                      <p class="section-content">No concepts listed.</p>
-                    )}
-                  </div>
- 
-                  <div class="tt-column" aria-labelledby="tool-label">
-                    <h4 id="tool-label" class="tt-subheading">Technologies</h4>
-                    {toolsArray.length > 0 ? (
-                      <ul class="tech-list" aria-label="Technologies">
-                        {toolsArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
-                      </ul>
-                    ) : (
-                      <p class="section-content">No technologies listed.</p>
-                    )}
-                  </div>
+                  <TechBadgeList 
+                    title="Concepts" 
+                    items={techArray} 
+                    id="concept-label" 
+                  />
+
+                  <TechBadgeList 
+                    title="Technologies" 
+                    items={toolsArray} 
+                    id="tool-label" 
+                  />
                 </div>
               </div>
             </div>
-            {showcase.length > 0 && (
-              <div class="showcase-inline sidebar-card">
-                <section id="showcase" aria-labelledby="showcase-title">
-                  <h3 id="showcase-title" tabindex="-1">Project Showcase</h3>
-                  <div class="showcase-grid">
-                    {showcase.map((item) => (
-                      <a href={item.link}
-                         class="showcase-item"
-                         target="_blank"
-                         rel="noopener noreferrer"
-                         aria-label={`View project: ${item.description}`}>
-                        <p><strong>{item.description}</strong></p>
-                        <span class="showcase-link">View Project <span class="sr-only">opens in new tab</span>→</span>
-                      </a>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            )}
+
 
                 <section id="responsibilities" aria-labelledby="responsibilities-title">
                     <h2 id="responsibilities-title" >Key Responsibilities</h2>

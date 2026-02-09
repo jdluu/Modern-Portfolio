@@ -6,12 +6,20 @@
    - Keeps border-radius and overflow to preserve visual style. */
 .experience-card.background {
   position: relative;
-  border: 1px solid var(--color-border);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+  transition:
+    transform var(--m3-motion-duration-medium)
+      var(--m3-motion-easing-emphasized),
+    box-shadow var(--m3-motion-duration-medium)
+      var(--m3-motion-easing-emphasized),
+    border-color var(--m3-motion-duration-medium)
+      var(--m3-motion-easing-emphasized);
   width: 100%;
   aspect-ratio: 16 / 10;
   border-radius: var(--space-m);
   overflow: hidden;
+  box-shadow: var(--m3-elevation-1);
 }
 
 /* overlay / content */
@@ -47,8 +55,9 @@
 
 /* hover */
 .experience-card.background:hover {
-  border-color: var(--color-accent);
-  transform: scale(1.02);
+  border-color: var(--m3-color-primary);
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: var(--m3-elevation-3);
 }
 .experience-card.background:hover .project-container {
   opacity: 1;
