@@ -206,11 +206,7 @@ export function initToc(): void {
     } catch (e) {}
   };
 
-  if (mql.addEventListener) {
-    mql.addEventListener("change", handleModeChange);
-  } else if ((mql as any).addListener) {
-    (mql as any).addListener(handleModeChange);
-  }
+  mql.addEventListener("change", handleModeChange);
 
   try {
     const isMobile = mql.matches;

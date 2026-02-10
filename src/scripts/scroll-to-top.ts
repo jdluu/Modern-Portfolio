@@ -2,10 +2,10 @@
 function initScrollToTop() {
   if (document.getElementById("scroll-top")) return;
 
-  function throttle(fn: (...args: any[]) => void, wait: number) {
+  function throttle<T extends (...args: any[]) => void>(fn: T, wait: number) {
     let last = 0;
     let timer: number | null = null;
-    return (...args: any[]) => {
+    return (...args: Parameters<T>) => {
       const now = Date.now();
       if (last && now < last + wait) {
         if (timer !== null) window.clearTimeout(timer);
