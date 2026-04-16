@@ -1,5 +1,15 @@
 ---
+/**
+ * CopyToClipboard component.
+ * 
+ * Provides a button that converts HTML content from a target selector
+ * into Markdown and copies it to the user's clipboard.
+ * Primarily used for sharing blog posts.
+ */
+import { Icon } from "astro-icon/components";
+
 interface Props {
+  /** CSS selector for the element containing the content to copy. Defaults to '.prose'. */
   targetSelector?: string;
 }
 
@@ -13,15 +23,14 @@ const { targetSelector = '.prose' } = Astro.props;
   title="Copy post content as markdown"
   data-target={targetSelector}
 >
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-  </svg>
+  <Icon name="lucide:copy" class="copy-icon" />
   <span class="copy-markdown-text">Copy as Markdown</span>
 </button>
 
 <script>
-  // Copy as Markdown functionality
+  /**
+   * Client-side controller for Markdown conversion and copying.
+   */
   document.addEventListener('DOMContentLoaded', function() {
     const copyBtn = document.querySelector('.copy-markdown-btn') as HTMLButtonElement;
     if (!copyBtn) return;
@@ -49,14 +58,14 @@ const { targetSelector = '.prose' } = Astro.props;
 
         await navigator.clipboard.writeText(fullMarkdown);
         
-        // Show feedback
+        // Show success feedback
         copyBtn.classList.add('copied');
         setTimeout(() => {
           copyBtn.classList.remove('copied');
         }, 2000);
       } catch (err) {
         console.error('Failed to copy:', err);
-        // Fallback: show error
+        // Show error feedback
         const originalText = copyBtn.querySelector('.copy-markdown-text')?.textContent;
         const textSpan = copyBtn.querySelector('.copy-markdown-text') as HTMLElement | null;
         if (textSpan) {
@@ -69,8 +78,10 @@ const { targetSelector = '.prose' } = Astro.props;
     });
 
     /**
-     * Convert HTML element to markdown.
-     * Recursively processes child nodes.
+     * Recursively converts an HTML element and its children into a Markdown string.
+     * 
+     * @param element - The root HTMLElement to convert.
+     * @returns A Markdown formatted string.
      */
     function htmlToMarkdown(element: HTMLElement): string {
       let markdown = '';
@@ -97,12 +108,13 @@ const { targetSelector = '.prose' } = Astro.props;
             case 'h4':
               markdown += `#### ${el.textContent?.trim() || ''}\n\n`;
               break;
-            case 'p':
+            case 'p': {
               const pText = el.textContent?.trim() || '';
               if (pText) markdown += `${pText}\n\n`;
               break;
+            }
             case 'ul':
-            case 'ol':
+            case 'ol': {
               const items = Array.from(el.querySelectorAll('li'));
               items.forEach((li, index) => {
                 const prefix = tagName === 'ol' ? `${index + 1}. ` : '- ';
@@ -111,7 +123,8 @@ const { targetSelector = '.prose' } = Astro.props;
               });
               markdown += '\n';
               break;
-            case 'pre':
+            }
+            case 'pre': {
               const code = el.querySelector('code');
               if (code) {
                 const lang = code.className.match(/language-(\w+)/)?.[1] || '';
@@ -119,12 +132,13 @@ const { targetSelector = '.prose' } = Astro.props;
                 markdown += `\`\`\`${lang}\n${codeText}\n\`\`\`\n\n`;
               }
               break;
+            }
             case 'code':
               if (!el.closest('pre')) {
                 markdown += `\`${el.textContent || ''}\``;
               }
               break;
-            case 'blockquote':
+            case 'blockquote': {
               const quoteText = el.textContent?.trim() || '';
               if (quoteText) {
                 quoteText.split('\n').forEach(line => {
@@ -133,8 +147,8 @@ const { targetSelector = '.prose' } = Astro.props;
                 markdown += '\n';
               }
               break;
-            case 'hr':
-              // Check if it's a section separator (multiple dashes)
+            }
+            case 'hr': {
               const hrText = el.textContent || '';
               if (hrText.includes('-----')) {
                 markdown += '-----\n\n';
@@ -142,6 +156,7 @@ const { targetSelector = '.prose' } = Astro.props;
                 markdown += '---\n\n';
               }
               break;
+            }
             case 'strong':
             case 'b':
               markdown += `**${el.textContent || ''}**`;
@@ -150,13 +165,13 @@ const { targetSelector = '.prose' } = Astro.props;
             case 'i':
               markdown += `*${el.textContent || ''}*`;
               break;
-            case 'a':
+            case 'a': {
               const href = el.getAttribute('href') || '';
               const linkText = el.textContent || '';
               markdown += `[${linkText}](${href})`;
               break;
+            }
             default:
-              // Recursively process unknown elements
               markdown += htmlToMarkdown(el);
           }
         }

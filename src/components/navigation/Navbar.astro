@@ -1,5 +1,6 @@
 ---
 import ThemeToggleButton from "@components/shared/ThemeToggleButton.tsx";
+import { Icon } from "astro-icon/components";
 import "./Navbar.css";
 ---
 
@@ -15,34 +16,13 @@ import "./Navbar.css";
           aria-expanded="false"
           aria-controls="main-menu"
         >
-          <svg
-            class="open-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 50 50"
-            aria-hidden="true"
-            fill="currentColor"
-          >
-            <title>Open menu icon</title>
-            <path
-              d="M 3 8 A 2.0002 2.0002 0 1 0 3 12 L 47 12 A 2.0002 2.0002 0 1 0 47 8 L 3 8 z M 3 23 A 2.0002 2.0002 0 1 0 3 27 L 47 27 A 2.0002 2.0002 0 1 0 47 23 L 3 23 z M 3 38 A 2.0002 2.0002 0 1 0 3 42 L 47 42 A 2.0002 2.0002 0 1 0 47 38 L 3 38 z"
-            ></path>
-          </svg>
+          <Icon name="lucide:menu" class="open-icon" title="Open menu icon" />
         </button>
       </div>
 
       <!-- Left: Home Link -->
       <a href="/" class="home-link desktop-home-link" aria-label="Jeffrey Luu Home">
-        <svg
-          viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg"
-          class="home-icon"
-          aria-hidden="true"
-        >
-          <path
-            fill="currentColor"
-            d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
-          ></path>
-        </svg>
+        <Icon name="lucide:house" class="home-icon" />
       </a>
 
       <!-- Center: Navigation Menu -->
@@ -60,17 +40,7 @@ import "./Navbar.css";
         <div class="offcanvas-inner">
           <div class="panel-header">
             <a href="/" class="home-link" aria-label="Home">
-              <svg
-                viewBox="0 0 32 32"
-                xmlns="http://www.w3.org/2000/svg"
-                class="home-icon"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M27 18.039L16 9.501 5 18.039V14.56l11-8.54 11 8.538v3.481zm-2.75-.31v8.251h-5.5v-5.5h-5.5v5.5h-5.5v-8.25L16 11.543l8.25 6.186z"
-                ></path>
-              </svg>
+              <Icon name="lucide:house" class="home-icon" />
             </a>
             <button
               id="menu-close-btn"
@@ -79,28 +49,28 @@ import "./Navbar.css";
               aria-label="Close menu"
               title="Close menu"
             >
-              <span class="menu-close-label" aria-hidden="true">×</span>
+              <Icon name="lucide:x" class="menu-close-icon" />
             </button>
           </div>
 
           <ul class="nav-list">
             <li class="nav-item">
-              <a href="/about" class="nav-link" aria-current={Astro.url.pathname === "/about" ? "page" : undefined}>
+              <a href="/about" class="nav-link" data-astro-prefetch aria-current={Astro.url.pathname === "/about" ? "page" : undefined}>
                 About
               </a>
             </li>
             <li class="nav-item">
-              <a href="/work" class="nav-link" aria-current={Astro.url.pathname === "/work" ? "page" : undefined}>
+              <a href="/work" class="nav-link" data-astro-prefetch aria-current={Astro.url.pathname === "/work" ? "page" : undefined}>
                 Work
               </a>
             </li>
             <li class="nav-item">
-              <a href="/blog" class="nav-link" aria-current={Astro.url.pathname.startsWith("/blog") ? "page" : undefined}>
+              <a href="/blog" class="nav-link" data-astro-prefetch aria-current={Astro.url.pathname.startsWith("/blog") ? "page" : undefined}>
                 Blog
               </a>
             </li>
             <li class="nav-item">
-              <a href="/contact" class="nav-link" aria-current={Astro.url.pathname === "/contact" ? "page" : undefined}>
+              <a href="/contact" class="nav-link" data-astro-prefetch aria-current={Astro.url.pathname === "/contact" ? "page" : undefined}>
                 Contact
               </a>
             </li>

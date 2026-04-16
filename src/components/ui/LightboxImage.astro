@@ -1,10 +1,25 @@
 ---
+/**
+ * LightboxImage component.
+ * 
+ * Renders an image that opens in a full-screen lightbox modal when clicked.
+ * Supports both standard string URLs and Astro's optimized ImageMetadata.
+ */
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { Icon } from "astro-icon/components";
+
 interface Props {
-  src: string;
+  /** The source of the image (string URL or ImageMetadata). */
+  src: string | ImageMetadata;
+  /** Accessible alt text for the image. */
   alt: string;
 }
 
 const { src, alt } = Astro.props;
+
+// Determine if the source is an optimized Astro image object or a plain string
+const isAstroImage = typeof src !== "string";
 ---
 
 <aside class="aside" aria-labelledby="post-hero">
@@ -16,61 +31,78 @@ const { src, alt } = Astro.props;
       aria-controls="image-lightbox"
       aria-expanded="false"
     >
-      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      {isAstroImage ? (
+        <Image src={src as ImageMetadata} alt={alt} loading="lazy" decoding="async" />
+      ) : (
+        <img src={src as string} alt={alt} loading="lazy" decoding="async" />
+      )}
     </button>
   </figure>
 </aside>
 
+<!-- Lightbox Modal -->
 <div id="image-lightbox" class="lightbox is-hidden" hidden data-open="false" aria-hidden="true">
   <div class="lightbox-content" role="dialog" aria-modal="true" aria-label={`${alt} full size`} tabindex="-1">
-    <img src={src} alt={`${alt} full size`} />
+    {isAstroImage ? (
+      <Image src={src as ImageMetadata} alt={`${alt} full size`} />
+    ) : (
+      <img src={src as string} alt={`${alt} full size`} />
+    )}
     <button class="lightbox-close" type="button" aria-label="Close image" data-close>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 0 0-1.4 1.4L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z"/>
-      </svg>
+      <Icon name="lucide:x" width="20" height="20" aria-hidden="true" />
     </button>
   </div>
 </div>
 
 <script>
+  /**
+   * Client-side lightbox controller.
+   * Handles opening/closing, focus management, and keyboard accessibility.
+   */
   (() => {
     const lightboxEl = document.getElementById('image-lightbox');
     const trigger = document.querySelector('.hero .hero-trigger') as HTMLElement | null;
     if (!lightboxEl || !trigger) return;
 
-    const triggerEl = trigger as HTMLElement; // non-nullable alias for handlers
-    const lb = lightboxEl as HTMLElement;
-    const content = lb.querySelector('.lightbox-content') as HTMLElement | null;
+    const triggerEl = trigger;
+    const lb = lightboxEl;
     const closeBtn = lb.querySelector('[data-close]') as HTMLElement | null;
     let lastFocusedEl: HTMLElement | null = null;
 
+    /** Opens the lightbox and locks body scroll. */
     function open() {
       lastFocusedEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       lb.classList.remove('is-hidden');
-      try {
-        // @ts-ignore
-        lb.inert = false;
-      } catch (err) {}
+      
+      // Toggle inert property for accessibility if supported
+      if ('inert' in lb) {
+        (lb as any).inert = false;
+      }
+      
       lb.removeAttribute('hidden');
       lb.setAttribute('data-open', 'true');
       lb.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
       triggerEl.setAttribute('aria-expanded', 'true');
-      if (closeBtn && typeof closeBtn.focus === 'function') (closeBtn as HTMLElement).focus();
+      
+      if (closeBtn) closeBtn.focus();
       document.addEventListener('keydown', onDocumentKeydown);
     }
 
+    /** Closes the lightbox and restores scroll. */
     function close() {
       lb.classList.add('is-hidden');
-      try {
-        // @ts-ignore
-        lb.inert = true;
-      } catch (err) {}
+      
+      if ('inert' in lb) {
+        (lb as any).inert = true;
+      }
+      
       lb.setAttribute('hidden', '');
       lb.setAttribute('data-open', 'false');
       lb.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       triggerEl.setAttribute('aria-expanded', 'false');
+      
       if (lastFocusedEl) lastFocusedEl.focus();
       document.removeEventListener('keydown', onDocumentKeydown);
     }
@@ -86,22 +118,12 @@ const { src, alt } = Astro.props;
 
     triggerEl.addEventListener('click', open);
 
-    // Close when clicking outside the image/content or on elements with data-close
+    // Close when clicking backdrop or close button
     lb.addEventListener('click', (e: Event) => {
       const evt = e as MouseEvent;
       if (!(evt.target instanceof Element)) return;
-      const isBackdrop = evt.target === lb;
-      const isCloseClick = !!evt.target.closest('[data-close]');
-      if (isBackdrop || isCloseClick) {
+      if (evt.target === lb || !!evt.target.closest('[data-close]')) {
         close();
-      }
-    });
-
-    // Simple focus trap: keep focus on content while open
-    lb.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Tab' && content && lb.getAttribute('data-open') === 'true') {
-        // Very basic trap
-        // ideally we'd check if shift key is pressed and cycle through focusable elements
       }
     });
   })();

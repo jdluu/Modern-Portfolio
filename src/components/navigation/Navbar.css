@@ -156,8 +156,12 @@
   color: var(--color-text-primary);
   border: none;
   cursor: pointer;
-  font-size: var(--step-5);
-  line-height: 1;
+  border-radius: 50%;
+}
+
+.menu-close-icon {
+  width: var(--space-l);
+  height: var(--space-l);
 }
 
 /* Nav List (Mobile) */
