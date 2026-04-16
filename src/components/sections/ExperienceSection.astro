@@ -7,7 +7,8 @@ import { mapExperienceToCard } from "@lib/content-mappers";
 import "./ExperienceSection.css";
   
 const rawCollection = await getCollection("experiences");
-const experiences = rawCollection.map(mapExperienceToCard);
+const filteredCollection = rawCollection.filter((e: any) => e.data.draft !== true);
+const experiences = filteredCollection.map(mapExperienceToCard);
 ---
 <section class="experience-section content-section">
 	<h2 id="experience" class="page-h2">Experience</h2>
@@ -16,7 +17,7 @@ const experiences = rawCollection.map(mapExperienceToCard);
 
 	<!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
 	<div class="experience-grid">
-		{experiences.map((e) => (
+		{experiences.map((e: any) => (
 			<div class="experience-item" data-slug={e.slug ?? ""}>
 				<ExperienceCard item={e} />
 			</div>

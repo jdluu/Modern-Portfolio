@@ -11,7 +11,8 @@ import "./ProjectSection.css";
  * Load projects collection at build time and normalize fields.
  */
 const rawCollection = await getCollection("projects");
-const projects = rawCollection.map(mapProjectToCard);
+const filteredCollection = rawCollection.filter((p: any) => p.data?.draft !== true);
+const projects = filteredCollection.map(mapProjectToCard);
 ---
 
 <section class="project-section content-section">
@@ -22,7 +23,7 @@ const projects = rawCollection.map(mapProjectToCard);
 
   <!-- Server-rendered grid for SEO. Island controls visibility via data-slug. -->
   <div class="project-grid card-grid">
-    {projects.map((p) => (
+    {projects.map((p: any) => (
       <div class="project-item" data-slug={p.slug ?? ""}>
         <ProjectCard
           title={p.title}
