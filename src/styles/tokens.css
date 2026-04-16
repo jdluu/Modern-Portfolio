@@ -1,6 +1,6 @@
 /* Material 3 Design System Tokens */
 
-/* 1. Color System */
+/* 1. Color System (Material 3 Palette) */
 [data-theme="light"] {
   --m3-color-primary: #2959aa;
   --m3-color-on-primary: #e6e7ed;
@@ -38,8 +38,7 @@
 }
 
 :root {
-  /* Utopia Typography Scale (320px -> 1240px)
-     Base: 16px, Scale: 1.2 (Minor Third) -> 1.25 (Major Third) */
+  /* 2. Typography Scale (Utopia 320px -> 1240px) */
   --step--2: clamp(0.6944rem, 0.671rem + 0.1171vw, 0.7619rem);
   --step--1: clamp(0.8333rem, 0.7913rem + 0.2101vw, 0.9542rem);
   --step-0: clamp(1rem, 0.9326rem + 0.337vw, 1.1944rem);
@@ -51,7 +50,7 @@
   --step-6: clamp(2.986rem, 2.434rem + 2.76vw, 4.57rem);
   --step-7: clamp(3.5832rem, 2.84rem + 3.7161vw, 5.7125rem);
 
-  /* Utopia Spacing Scale (320px -> 1240px) */
+  /* 3. Spacing Scale (Utopia 320px -> 1240px) */
   --space-3xs: clamp(0.25rem, 0.2275rem + 0.1124vw, 0.3146rem);
   --space-2xs: clamp(0.5rem, 0.4551rem + 0.2247vw, 0.6292rem);
   --space-xs: clamp(0.75rem, 0.6826rem + 0.3371vw, 0.9438rem);
@@ -61,11 +60,6 @@
   --space-xl: clamp(3rem, 2.7303rem + 1.3483vw, 3.7753rem);
   --space-2xl: clamp(4rem, 3.6404rem + 1.7978vw, 5.0337rem);
   --space-3xl: clamp(6rem, 5.4607rem + 2.6966vw, 7.5506rem);
-
-  /* Container Widths */
-  --container-blog: 72rem;
-  --container-narrow: 46rem;
-  --container-standard: 128rem;
 
   /* One-up pairs */
   --space-3xs-2xs: clamp(0.25rem, 0.1152rem + 0.6742vw, 0.6292rem);
@@ -77,7 +71,20 @@
   --space-xl-2xl: clamp(3rem, 2.2753rem + 3.6236vw, 5.0337rem);
   --space-2xl-3xl: clamp(4rem, 2.7371rem + 6.3146vw, 7.5506rem);
 
-  /* Material 3 Mapping */
+  /* 4. Layout & Containers */
+  --container-blog: 72rem;
+  --container-narrow: 46rem;
+  --container-standard: 128rem;
+  --nav-height: 4rem;
+
+  /* 5. Semantic Mapping (Component Agnostic) */
+
+  /* Fonts */
+  --m3-font-family-display: "Roboto Flex", sans-serif;
+  --m3-font-family-body: "Roboto Flex", sans-serif;
+  --font-heading: var(--m3-font-family-display);
+  --font-body: var(--m3-font-family-body);
+
   --m3-font-display-large: var(--step-7);
   --m3-font-display-medium: var(--step-6);
   --m3-font-display-small: var(--step-5);
@@ -94,68 +101,6 @@
   --m3-font-body-medium: var(--step-0);
   --m3-font-body-small: var(--step--1);
 
-  /* COLORS */
-  --color: var(--color-accent);
-  --dark-color: #2b2b2b;
-  --dark-icon-color: #ffffff;
-  --light-color: #f7f7f7;
-  --light-icon-color: #ffcc00;
-  --color-background: var(--m3-color-background);
-  --color-surface: var(--m3-color-surface);
-  --color-card: var(--m3-color-surface-variant);
-  --color-text-primary: var(--m3-color-on-surface);
-
-  /* Fallback first, then color-mix for Safari <16.4 */
-  --color-text-secondary: var(--m3-color-on-surface-variant);
-  --color-text-secondary: color-mix(
-    in oklab,
-    var(--m3-color-on-surface) 78%,
-    var(--m3-color-on-surface-variant) 22%
-  );
-
-  --color-text-tertiary: var(--m3-color-on-surface-variant);
-  --color-link: var(--m3-color-primary);
-  --color-accent: var(--m3-color-primary);
-
-  /* Fallbacks for Safari <16.4 */
-  --color-accent-hover: var(--color-accent);
-  --color-accent-hover: color-mix(
-    in oklab,
-    var(--color-accent) 82%,
-    var(--m3-color-on-surface) 18%
-  );
-  --color-accent-muted: transparent;
-  --color-accent-muted: color-mix(
-    in oklab,
-    var(--color-accent) 18%,
-    transparent 82%
-  );
-  --color-on-accent: var(--m3-color-on-primary);
-  --color-focus: rgba(41, 89, 170, 0.45);
-  --color-focus: color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
-  --color-border: var(--m3-color-outline);
-  --color-border: color-mix(
-    in oklab,
-    var(--m3-color-outline) 65%,
-    transparent 35%
-  );
-  --color-border-strong: var(--m3-color-outline);
-
-  /* Font Families */
-  --m3-font-family-display: "Roboto Flex", sans-serif;
-  --m3-font-family-body: "Roboto Flex", sans-serif;
-
-  /* Grid gap aliases */
-  --grid-gap-xs: var(--space-xs);
-  --grid-gap-sm: var(--space-s);
-  --grid-gap-md: var(--space-m);
-  --grid-gap-lg: var(--space-l);
-
-  --nav-height: 4rem;
-  --text-color: var(--color-text-primary);
-  --accent-color: var(--color-accent);
-  --font-heading: var(--m3-font-family-display);
-
   --font-weight-h1: 560;
   --font-weight-h2: 520;
   --font-weight-h3: 500;
@@ -167,16 +112,46 @@
   --font-line-height-heading: 1.24;
   --font-line-height-body: 1.6;
 
-  /* Motion Tokens (Material 3 Easing) */
+  /* Semantic Colors */
+  --color-background: var(--m3-color-background);
+  --color-surface: var(--m3-color-surface);
+  --color-card: var(--m3-color-surface-variant);
+
+  --color-text-primary: var(--m3-color-on-surface);
+  --color-text-secondary: var(--m3-color-on-surface-variant);
+  --color-text-secondary: color-mix(
+    in oklab,
+    var(--m3-color-on-surface) 78%,
+    var(--m3-color-on-surface-variant) 22%
+  );
+  --color-text-tertiary: var(--m3-color-on-surface-variant);
+
+  --color-accent: var(--m3-color-primary);
+  --color-on-accent: var(--m3-color-on-primary);
+  --color-accent-hover: color-mix(
+    in oklab,
+    var(--color-accent) 82%,
+    var(--m3-color-on-surface) 18%
+  );
+  --color-link: var(--m3-color-primary);
+
+  --color-focus: color-mix(in oklab, var(--color-accent) 55%, transparent 45%);
+  --color-border: color-mix(
+    in oklab,
+    var(--m3-color-outline) 65%,
+    transparent 35%
+  );
+
+  /* 6. Motion (Material 3 Easing) */
   --m3-motion-duration-short: 150ms;
   --m3-motion-duration-medium: 300ms;
   --m3-motion-duration-long: 500ms;
   --m3-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --m3-motion-easing-emphasized: cubic-bezier(0.3, 0, 0, 1);
   --m3-motion-easing-decelerate: cubic-bezier(0, 0, 0, 1);
-  --m3-motion-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --m3-motion-easing-accelerate: cubic-bezier(0.3, 1, 1, 1);
 
-  /* Elevation/Shadow Tokens */
+  /* 7. Elevation (Material 3 Shadows) */
   --m3-elevation-1:
     0 1px 3px 1px rgba(0, 0, 0, 0.15), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --m3-elevation-2:
@@ -192,6 +167,6 @@
 /* Safari macOS 17+ heading clipping fixes for Roboto Flex */
 @supports (font: -apple-system-body) {
   :root {
-    --font-line-height-heading-tight: 1.28; /* was 1.22 */
+    --font-line-height-heading-tight: 1.28;
   }
 }

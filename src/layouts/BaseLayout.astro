@@ -152,18 +152,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <style>
 	.skip-link {
 		position: absolute;
-		top: -40px;
-		left: 0;
+		top: -100px;
+		left: var(--space-m);
 		background-color: var(--m3-color-primary);
 		color: var(--m3-color-on-primary);
-		padding: var(--space-2xs);
-		z-index: 100;
-		transition: top 0.3s ease;
+		padding: var(--space-2xs) var(--space-m);
+		z-index: 1000;
+		transition: top var(--m3-motion-duration-medium) var(--m3-motion-easing-emphasized);
+		border-radius: 0 0 var(--space-s) var(--space-s);
+		text-decoration: none;
+		font-weight: 600;
+		box-shadow: var(--m3-elevation-3);
 	}
 
 	.skip-link:focus {
 		top: 0;
-		outline: 2px solid var(--m3-color-primary);
-		outline-offset: 2px;
+		outline: none;
+		box-shadow: var(--m3-elevation-4), 0 0 0 3px var(--m3-color-primary-container);
 	}
 </style>
