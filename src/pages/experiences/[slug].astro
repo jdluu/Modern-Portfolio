@@ -1,8 +1,6 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { Experience } from "@app-types/experience";
 import { getCollection } from "astro:content";
-import { sanitizeStringForUI } from "@lib/utils";
 import "./experiences.css";
 import { Image } from "astro:assets";
 import TechBadgeList from "@components/ui/TechBadgeList.astro";
@@ -10,36 +8,17 @@ import TechBadgeList from "@components/ui/TechBadgeList.astro";
 // Generate static paths
 export async function getStaticPaths() {
   const entries = await getCollection("experiences");
-  const paths = (entries ?? [])
-    .filter((e: CollectionEntry<"experiences">) => e.data.draft !== true)
-    .map((e: CollectionEntry<"experiences">) => {
-      const canonicalSlug =
-        typeof e.slug === "string" && e.slug.length > 0
-          ? e.slug
-          : String(e.id).replace(/\.(md|mdx)$/i, "");
-      return { params: { slug: canonicalSlug } };
-    });
-  return paths;
+  return (entries ?? [])
+    .filter((e: any) => e.data.draft !== true)
+    .map((e: any) => ({
+      params: { slug: e.id }
+    }));
 }
  
-const slugParam = (Astro.params as any)?.slug as string;
-
-import type { CollectionEntry } from "astro:content";
+const { slug: slugParam } = Astro.params;
 
 const experiencesEntries = await getCollection("experiences");
-const entry =
-  (experiencesEntries ?? []).find((e: CollectionEntry<"experiences">) => {
-    const canonicalSlug =
-      typeof e.slug === "string" && e.slug.length > 0
-        ? e.slug
-        : String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
-    const canonicalId = String(e.id ?? "").replace(/\.(md|mdx)$/i, "");
-    return (
-      slugParam === canonicalSlug ||
-      slugParam === canonicalId ||
-      slugParam === String(e.id ?? "")
-    );
-  }) ?? null;
+const entry = (experiencesEntries ?? []).find((e: any) => e.id === slugParam) ?? null;
 
 if (!entry) {
   throw new Error(`Experience not found for slug: ${slugParam}`);
@@ -48,25 +27,14 @@ const experience = entry.data;
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
 const companyLogo = experience?.company?.image ?? "/placeholder-logo.png";
-const role = experience?.logistics?.role ?? "Role Not Specified";
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
-const tools = sanitizeStringForUI(experience?.technologies?.tools) || "";
-const skills = sanitizeStringForUI(experience?.technologies?.skills) || "";
 
-// Split comma-separated strings into arrays for list rendering
-const techArray = skills
-  ? (String(skills).split(",").map((s) => s.trim()).filter(Boolean))
-  : [];
-const toolsArray = tools
-  ? (String(tools).split(",").map((s) => s.trim()).filter(Boolean))
-  : [];
 const responsibilities = Array.isArray(experience?.work?.responsibilities)
-  ? (experience.work!.responsibilities!.filter((r) => r?.duties) as { duties?: string }[])
+  ? (experience.work!.responsibilities!.filter((r: any) => r?.duties) as { duties?: string }[])
   : [];
 const achievements = Array.isArray(experience?.work?.achievements)
-  ? (experience.work!.achievements!.filter((a) => a?.points) as { points?: string }[])
+  ? (experience.work!.achievements!.filter((a: any) => a?.points) as { points?: string }[])
   : [];
-const showcase = experience?.showcase && experience.showcase.link && experience.showcase.description ? [experience.showcase] : [];
 ---
  
 <BaseLayout title={title}>
@@ -140,13 +108,13 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                                 <TechBadgeList 
                                     title="Core Stack" 
                                     id="tech-tools"
-                                    items={experience.technologies?.tools?.split(',').map(s => s.trim()) || []} 
+                                    items={experience.technologies?.tools?.split(',').map((s: any) => s.trim()) || []} 
                                     className="pill-primary" 
                                 />
                                 <TechBadgeList 
                                     title="Methodology & Skills" 
                                     id="tech-skills"
-                                    items={experience.technologies?.skills?.split(',').map(s => s.trim()) || []} 
+                                    items={experience.technologies?.skills?.split(',').map((s: any) => s.trim()) || []} 
                                     className="pill-subtle" 
                                     variant="subtle"
                                 />
@@ -162,7 +130,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                             </div>
                             
                             <div class="responsibilities-list">
-                                {experience.work?.responsibilities?.map((item) => (
+                                {responsibilities.map((item) => (
                                     <div class="resp-item-simple">
                                         <p>{item.duties}</p>
                                     </div>
@@ -176,7 +144,7 @@ const showcase = experience?.showcase && experience.showcase.link && experience.
                             </div>
                             
                             <div class="achievements-list">
-                                {experience.work?.achievements?.map(item => (
+                                {achievements.map((item) => (
                                     <div class="achievement-item">
                                         <span class="bullet">•</span>
                                         <p>{item.points}</p>

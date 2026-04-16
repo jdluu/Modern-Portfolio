@@ -1,12 +1,18 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 /**
- * Content Collections configuration
+ * Content Collections configuration for Astro 6+
  *
- * Defines schemas for content collections (posts, experiences, projects, etc.).
- * Schemas mirror existing frontmatter found found in the content directory.
+ * This file defines the schemas and loaders for all content collections
+ * (posts, experiences, projects). These schemas are used for build-time validation
+ * and provide full type safety across the application.
  */
 
+/**
+ * Common fields shared across multiple collections.
+ */
 const baseSchema = z.object({
   title: z.string(),
   slug: z.string().optional(),
@@ -14,25 +20,37 @@ const baseSchema = z.object({
   draft: z.boolean().optional(),
 });
 
+/**
+ * Blog posts collection.
+ * Includes optional hero image and external links.
+ */
 const posts = defineCollection({
-  type: "content",
-  schema: baseSchema.extend({
-    description: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    hero: z.string().optional(),
-    links: z
-      .array(
-        z.object({
-          label: z.string(),
-          url: z.string(),
-        }),
-      )
-      .optional(),
-  }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/posts" }),
+  schema: ({ image }) =>
+    baseSchema.extend({
+      description: z.string().optional(),
+      tags: z.array(z.string()).optional(),
+      hero: image().optional(),
+      links: z
+        .array(
+          z.object({
+            label: z.string(),
+            url: z.string(),
+          }),
+        )
+        .optional(),
+    }),
 });
 
+/**
+ * Professional experiences collection.
+ * Detailed history including company branding, logistics, and work details.
+ */
 const experiences = defineCollection({
-  type: "content",
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/experiences",
+  }),
   schema: ({ image }) =>
     baseSchema.extend({
       company: z
@@ -48,10 +66,10 @@ const experiences = defineCollection({
           duration: z.string().optional(),
           startDate: z.union([z.string(), z.coerce.date()]).optional(),
           endDate: z.union([z.string(), z.coerce.date()]).optional(),
-          focusArea: z.string().optional(), // New for Redesign 3
-          status: z.string().optional(), // New for Redesign 3
-          department: z.string().optional(), // New for Redesign 3
-          type: z.string().optional(), // Job nature category
+          focusArea: z.string().optional(),
+          status: z.string().optional(),
+          department: z.string().optional(),
+          type: z.string().optional(),
         })
         .optional(),
       technologies: z
@@ -77,7 +95,6 @@ const experiences = defineCollection({
           insight: z.string().optional(),
         })
         .optional(),
-      // Flattened fields for easier card access
       startDate: z.union([z.string(), z.coerce.date()]).optional(),
       endDate: z.union([z.string(), z.coerce.date()]).optional(),
       thumbnail: image().optional(),
@@ -85,22 +102,29 @@ const experiences = defineCollection({
     }),
 });
 
+/**
+ * Project case studies collection.
+ * Comprehensive project details with tech stack, impact, and final results.
+ */
 const projects = defineCollection({
-  type: "content",
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/projects",
+  }),
   schema: ({ image }) =>
     baseSchema.extend({
       summary: z.string().optional(),
-      description: z.string().optional(), // from projectcards
+      description: z.string().optional(),
       role: z.string().optional(),
       technologies: z.array(z.string()).optional(),
       tools: z.array(z.string()).optional(),
       cover: image().optional(),
-      thumbnail: image().optional(), // from projectcards
+      thumbnail: image().optional(),
       final: image().optional(),
-      startDate: z.union([z.string(), z.coerce.date()]).optional(), // from projectcards
-      endDate: z.union([z.string(), z.coerce.date()]).optional(), // from projectcards
-      programming_languages: z.array(z.string()).optional(), // from projectcards
-      domains: z.array(z.string()).optional(), // from projectcards
+      startDate: z.union([z.string(), z.coerce.date()]).optional(),
+      endDate: z.union([z.string(), z.coerce.date()]).optional(),
+      programming_languages: z.array(z.string()).optional(),
+      domains: z.array(z.string()).optional(),
       background: z.string().optional(),
       solution: z.string().optional(),
       process: z.string().optional(),

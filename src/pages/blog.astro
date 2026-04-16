@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import BlogSection from "@components/sections/BlogSection.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import type { PostIndexItem } from "@app-types/post";
 
 // Page title
@@ -16,26 +16,24 @@ function normalizeDate(value: unknown): string | null {
   return isNaN(d.getTime()) ? null : d.toISOString();
 }
 
-type PostEntry = CollectionEntry<"posts">;
-
 // Fetch all entries for the "posts" collection at build-time.
-const entries: PostEntry[] = (await getCollection("posts")) ?? [];
+const entries = (await getCollection("posts")) ?? [];
 
 const postIndexItems: PostIndexItem[] = entries
-  .map((entry) => {
+  .map((entry: any) => {
     return {
       title: entry.data?.title ?? "Untitled",
-      slug: String(entry.slug ?? entry.id ?? "").toLowerCase(),
+      slug: entry.id,
       date: normalizeDate(entry.data?.date ?? null),
       description: entry.data?.description ?? "",
       tags: Array.isArray(entry.data?.tags)
-        ? entry.data.tags.filter((t) => typeof t === "string")
+        ? entry.data.tags.filter((t: any) => typeof t === "string")
         : [],
       draft: Boolean(entry.data?.draft),
     } as PostIndexItem;
   })
-  .filter((p) => !p.draft)
-  .sort((a, b) => {
+  .filter((p: PostIndexItem) => !p.draft)
+  .sort((a: PostIndexItem, b: PostIndexItem) => {
     const ta = a.date ? Date.parse(a.date) : 0;
     const tb = b.date ? Date.parse(b.date) : 0;
     return tb - ta;
