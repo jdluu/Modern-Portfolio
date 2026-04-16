@@ -1,17 +1,23 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
+import icon from "astro-icon";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://jluu.dev",
   base: "/",
-  integrations: [sitemap(), solidJs({ include: ["src/components/**/*.tsx"] })],
+  integrations: [
+    sitemap(),
+    solidJs({ include: ["src/components/**/*.tsx"] }),
+    icon(),
+  ],
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
   },
   output: "static",
+  prefetch: true,
   // Allow remote image optimization for CMS-hosted images.
   // This is permissive (all HTTPS). Tighten with specific hostnames if desired.
   image: {
