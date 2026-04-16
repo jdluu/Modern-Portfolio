@@ -7,8 +7,8 @@ export interface Props {
 
 const { item } = Astro.props as Props;
 const title = item?.title ?? "Untitled";
-const slug = String(item?.slug ?? "").replace(/\.(md|mdx)$/, "");
-const date = item?.date ? new Date(item.date as any) : null;
+const slug = item?.slug ?? "";
+const date = item?.date ? new Date(String(item.date)) : null;
 const dateDisplay = date && !isNaN(date.getTime()) ? date.toLocaleDateString() : "";
 const tags = Array.isArray(item?.tags) ? (item.tags as string[]) : [];
 const description = item?.description ?? "";

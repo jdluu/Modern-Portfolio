@@ -20,6 +20,15 @@ interface UseDomSyncOptions {
   normalizeSlug?: (slug: string) => string;
 }
 
+/**
+ * Custom hook that synchronizes the order and visibility of server-rendered DOM nodes
+ * with client-side reactive state from a SolidJS island.
+ *
+ * This ensures that filtering and pagination changes made in the client are reflected
+ * in the static HTML grid rendered by Astro, preserving SEO and performance benefits.
+ *
+ * @param options - Configuration options for targeting the DOM and providing visible slugs.
+ */
 export function useDomSync(options: UseDomSyncOptions) {
   const {
     visibleSlugs,
@@ -31,14 +40,15 @@ export function useDomSync(options: UseDomSyncOptions) {
   createEffect(() => {
     if (typeof document === "undefined") return;
 
-    const slugs = visibleSlugs().map(normalizeSlug);
+    // Use a Set for O(1) lookup
+    const slugsArray = visibleSlugs();
+    const slugsSet = new Set(slugsArray.map(normalizeSlug));
 
     // Attempt to find container with retries to handle hydration race conditions
     const attemptSync = (retries = 0) => {
       const container = document.querySelector<HTMLElement>(containerSelector);
 
       if (!container) {
-        // console.log(`useDomSync: Container ${containerSelector} not found. Retry ${retries}`);
         if (retries < 10) {
           requestAnimationFrame(() => attemptSync(retries + 1));
         }
@@ -50,31 +60,34 @@ export function useDomSync(options: UseDomSyncOptions) {
       );
 
       if (nodes.length === 0) {
-        // console.log(`useDomSync: No nodes found in ${containerSelector}. Retry ${retries}`);
         if (retries < 20) {
           requestAnimationFrame(() => attemptSync(retries + 1));
         }
         return;
       }
 
-      // 1. Toggle visibility
+      // Map nodes by normalized slug for O(1) retrieval during reorder
+      const nodesMap = new Map<string, HTMLElement>();
+
+      // 1. Toggle visibility and build nodesMap
       nodes.forEach((node) => {
         const rawSlug = node.dataset.slug ?? "";
-        const slug = normalizeSlug(rawSlug);
-        const shouldShow = slugs.includes(slug);
+        const normalized = normalizeSlug(rawSlug);
+        const shouldShow = slugsSet.has(normalized);
 
         node.style.display = shouldShow ? "" : "none";
         node.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+
+        nodesMap.set(normalized, node);
       });
 
       // 2. Reorder DOM to match the order of visibleSlugs using a fragment for batching
       const fragment = document.createDocumentFragment();
       let hasChange = false;
 
-      slugs.forEach((slug) => {
-        const node = nodes.find(
-          (n) => normalizeSlug(n.dataset.slug ?? "") === slug,
-        );
+      slugsArray.forEach((slug) => {
+        const normalized = normalizeSlug(slug);
+        const node = nodesMap.get(normalized);
         if (node) {
           fragment.appendChild(node);
           hasChange = true;

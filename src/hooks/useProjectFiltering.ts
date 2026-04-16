@@ -1,4 +1,10 @@
-import { createSignal, createMemo, type Accessor, type Setter } from "solid-js";
+import {
+  createSignal,
+  createMemo,
+  batch,
+  type Accessor,
+  type Setter,
+} from "solid-js";
 import type { ProjectCard } from "@app-types/project-card";
 import {
   getYearsFromItems,
@@ -7,10 +13,14 @@ import {
 } from "@lib/sort-utils";
 import { isSentinelEnd, parseDateToTs } from "@lib/utils";
 
+/**
+ * Sort options for project ordering.
+ */
 export type SortOption = "date-desc" | "date-asc";
 
 /**
  * Result interface for the useProjectFiltering hook.
+ * Provides access to reactive state, setters, and computed derivations.
  */
 export interface UseProjectFilteringResult {
   /** Current year filter value ("" for all). */
@@ -31,11 +41,11 @@ export interface UseProjectFilteringResult {
   setDomainFilters: Setter<string[]>;
   /** List of unique years available in the items. */
   years: Accessor<string[]>;
-  /** Dynamic counts of languages based on current filters. */
+  /** Dynamic counts of languages based on current year and domain filters. */
   languageCounts: Accessor<{ name: string; count: number }[]>;
-  /** Dynamic counts of domains based on current filters. */
+  /** Dynamic counts of domains based on current year and language filters. */
   domainCounts: Accessor<{ name: string; count: number }[]>;
-  /** The final list of items after filtering and sorting. */
+  /** The final list of items after applying all filters and sorting. */
   processedItems: Accessor<ProjectCard[]>;
   /** Resets all filters to default states. */
   resetFilters: () => void;
@@ -47,9 +57,11 @@ export interface UseProjectFilteringResult {
  * Custom hook to manage project filtering, sorting, and aggregation logic.
  *
  * Encapsulates state for year, sort, language, and domain filters, and computes
- * derived lists and counts based on the initial items.
+ * derived lists and counts based on the initial items. Designed for use in
+ * client-side SolidJS islands.
  *
  * @param initialItems - The initial list of project cards to filter.
+ * @returns A reactive object containing filters, counts, and the processed list.
  */
 export function useProjectFiltering(
   initialItems: ProjectCard[],
@@ -59,12 +71,17 @@ export function useProjectFiltering(
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
 
-  // Derive unique years
+  /**
+   * Derive unique years from the provided items for the year filter dropdown.
+   */
   const years = createMemo(() =>
     getYearsFromItems(initialItems as DateSortable[]),
   );
 
-  // Shared filter helper
+  /**
+   * Internal helper to filter items by year.
+   * Checks startDate, endDate, and date fields for matching years.
+   */
   const filterByYearHelper = (items: ProjectCard[], yf: string) => {
     if (!yf) return items;
     return items.filter((it) => {
@@ -84,17 +101,20 @@ export function useProjectFiltering(
     });
   };
 
+  /** Reactive memo of items filtered only by the current year selection. */
   const filteredByYear = createMemo(() => {
     return filterByYearHelper(initialItems, yearFilter());
   });
 
   /**
-   * Languages with dynamic counts.
+   * Computes dynamic counts for programming languages based on active year and domain filters.
+   * Excludes common generic technologies like HTML/CSS and normalizes JS/TS variants.
    */
   const languageCounts = createMemo(() => {
     const currentDomainFilters = domainFilters() ?? [];
     let items = filteredByYear();
 
+    // Cross-filter: languages should respect domain selection
     if (currentDomainFilters.length > 0) {
       items = items.filter((it) => {
         const itemDomains = it.domains ?? [];
@@ -112,10 +132,10 @@ export function useProjectFiltering(
         const name = String(l);
         const lower = name.toLowerCase();
 
-        // Exclude HTML and CSS
+        // Skip generic UI technologies
         if (lower === "html" || lower === "css") return;
 
-        // Normalize JS/TS variants
+        // Group related language ecosystems
         if (["javascript", "js", "typescript"].includes(lower)) {
           normalizedInProject.add("JavaScript / TypeScript");
         } else {
@@ -134,12 +154,13 @@ export function useProjectFiltering(
   });
 
   /**
-   * Domains with dynamic counts.
+   * Computes dynamic counts for domains based on active year and language filters.
    */
   const domainCounts = createMemo(() => {
     const currentLanguageFilters = languageFilters() ?? [];
     let items = filteredByYear();
 
+    // Cross-filter: domains should respect language selection
     if (currentLanguageFilters.length > 0) {
       items = items.filter((it) => {
         const itemLangs = it.programming_languages ?? [];
@@ -162,7 +183,10 @@ export function useProjectFiltering(
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   });
 
-  // Ensure pagination resets when filters change
+  /**
+   * The primary derived list of projects, fully filtered and sorted.
+   * This is the list ultimately consumed by the UI for rendering.
+   */
   const processedItems = createMemo(() => {
     let items = filterByYearHelper(initialItems, yearFilter());
 
@@ -200,14 +224,22 @@ export function useProjectFiltering(
     });
   });
 
+  /**
+   * Resets all signal-based state to default values.
+   * Utilizes batching to minimize reactive updates.
+   */
   const resetFilters = () => {
-    setYearFilter("");
-    setSortOption("date-desc");
-    setLanguageFilters([]);
-    setDomainFilters([]);
+    batch(() => {
+      setYearFilter("");
+      setSortOption("date-desc");
+      setLanguageFilters([]);
+      setDomainFilters([]);
+    });
   };
 
-  // Provide a compact summary of current filters.
+  /**
+   * Provides a compact human-readable summary of the active filter state.
+   */
   const filtersSummary = createMemo(() => {
     const parts: string[] = [];
     const yf = yearFilter();

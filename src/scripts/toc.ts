@@ -48,9 +48,9 @@ export function initToc(): void {
   const observer = new IntersectionObserver(
     (entries) => {
       try {
-        for (const e of entries) {
-          const el = e.target as HTMLElement;
-          if (el && el.id) entryMap.set(el.id, e);
+        for (const entry of entries) {
+          const el = entry.target as HTMLElement;
+          if (el && el.id) entryMap.set(el.id, entry);
         }
 
         const candidates = sections
@@ -88,7 +88,9 @@ export function initToc(): void {
             matching.setAttribute("aria-current", "true");
           }
         }
-      } catch (err) {}
+      } catch (_err) {
+        // Silently fail observer logic
+      }
     },
     { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] },
   );
@@ -109,8 +111,7 @@ export function initToc(): void {
           ),
         ) || 64;
       const targetPosition =
-        (target as HTMLElement).getBoundingClientRect().top +
-        window.pageYOffset;
+        (target as HTMLElement).getBoundingClientRect().top + window.scrollY;
       const offsetPosition = targetPosition - navHeight - 24;
       window.scrollTo({ top: offsetPosition, behavior: "smooth" });
       history.pushState(null, "", href);
@@ -188,7 +189,9 @@ export function initToc(): void {
           isMobile ? "1" : "0",
         );
       }
-    } catch (e) {}
+    } catch (_e) {
+      // Storage access blocked
+    }
   }
 
   applyTocPosition();
@@ -203,7 +206,9 @@ export function initToc(): void {
       } else {
         setTocCollapsed(saved === "1");
       }
-    } catch (e) {}
+    } catch (_e) {
+      // Storage access blocked
+    }
   };
 
   mql.addEventListener("change", handleModeChange);
@@ -225,7 +230,9 @@ export function initToc(): void {
           isMobile ? mobileKey : desktopKey,
           isMobile ? (legacy === "1" ? "1" : "0") : "0",
         );
-      } catch (e) {}
+      } catch (_e) {
+        // Storage access blocked
+      }
     } else {
       setTocCollapsed(isMobile);
       try {
@@ -233,9 +240,13 @@ export function initToc(): void {
           isMobile ? mobileKey : desktopKey,
           isMobile ? "1" : "0",
         );
-      } catch (e) {}
+      } catch (_e) {
+        // Storage access blocked
+      }
     }
-  } catch (e) {}
+  } catch (_e) {
+    // Storage access blocked
+  }
 
   tocToggle?.addEventListener("click", () => {
     const isCollapsed =

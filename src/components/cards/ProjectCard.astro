@@ -1,9 +1,6 @@
 ---
 import { Image, getImage } from 'astro:assets';
-import type { ProjectCardProps } from '@/src/types/project-card';
 import "./ProjectCard.css";
-
-export interface Props extends ProjectCardProps {}
 
 const { title, intro, url, thumbnail } = Astro.props;
 
@@ -12,7 +9,7 @@ const thumbnailPlaceholder = thumbnail
   ? await getImage({ src: thumbnail, width: 20, quality: 10, format: 'webp' }) 
   : null;
 
-const baseId = ((Astro.props as any)?.slug || url || title)
+const baseId = (url || title)
   .toString()
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, "-");
@@ -56,6 +53,7 @@ const ctaExtraId = `${titleId}-cta`;
 		<a
 			class="learn-more"
 			href={`/projects/${url}`}
+			data-astro-prefetch
 			aria-labelledby={`${titleId} ${ctaExtraId}`}
 		>
 			Learn More

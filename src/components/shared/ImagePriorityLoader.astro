@@ -28,7 +28,7 @@ const {
     const observerOptions = { root: null, rootMargin: "0px", threshold: 0.01 };
 
     let io = null;
-    let observedItems = new Set();
+    const observedItems = new Set();
 
     function setImageState(img, state, highestPriority = false) {
       if (!img || !(img instanceof HTMLImageElement)) return;
@@ -36,7 +36,7 @@ const {
         img.loading = state === "eager" ? "eager" : "lazy";
         if (highestPriority) img.setAttribute("fetchpriority", "high");
         else img.removeAttribute("fetchpriority");
-      } catch (e) {
+      } catch (_e) {
         /* ignore DOM exceptions on some environments */
       }
     }
@@ -129,7 +129,7 @@ const {
       const container = document.querySelector(containerSelector);
       if (!container) return;
       if (mo) mo.disconnect();
-      mo = new MutationObserver((mutations) => {
+      mo = new MutationObserver((_mutations) => {
         // Re-observe when children change
         observeAllItems();
       });

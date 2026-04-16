@@ -178,10 +178,10 @@ import "./ContactSection.css";
 			let formIsValid = true;
 			requiredFields.forEach((field) => {
 				clearFieldError(field);
-				const err = computeFieldError(field);
-				if (err) {
+				const _err = computeFieldError(field);
+				if (_err) {
 					formIsValid = false;
-					setFieldError(field, err);
+					setFieldError(field, _err);
 				}
 			});
 	
@@ -211,10 +211,10 @@ import "./ContactSection.css";
 						if (errorData && typeof errorData.message === "string" && errorData.message.trim()) {
 							errorMessage = errorData.message;
 						}
-					} catch (err) { /* ignore JSON parse errors */ }
+					} catch (_err) { /* ignore JSON parse errors */ }
 					showToast(errorMessage, "error");
 				}
-			} catch (err) {
+			} catch (_err) {
 				showToast("Network error. Please try again.", "error");
 			} finally {
 				submitBtn.disabled = false;

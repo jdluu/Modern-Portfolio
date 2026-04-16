@@ -1,4 +1,4 @@
-import { For, createSignal, createMemo, createEffect } from "solid-js";
+import { For, createSignal, createMemo, createEffect, batch } from "solid-js";
 import type { ExperienceCard } from "@app-types/experience-card";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
@@ -152,9 +152,12 @@ export default function ExperienceCardList(props: Props) {
         <button
           class="btn-reset"
           onClick={() => {
-            setYearFilter("");
-            setSortOption("date-desc");
-            pagination.setPage(1);
+            batch(() => {
+              setYearFilter("");
+              setSortOption("date-desc");
+              pagination.setPageSize(6);
+              pagination.setPage(1);
+            });
           }}
         >
           Reset
@@ -164,7 +167,14 @@ export default function ExperienceCardList(props: Props) {
       <div
         aria-live="polite"
         aria-atomic="true"
-        style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;"
+        style={{
+          position: "absolute",
+          left: "-10000px",
+          top: "auto",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+        }}
       >
         Page {pagination.page()} of {pagination.totalPages()}
       </div>

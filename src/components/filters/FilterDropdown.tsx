@@ -1,6 +1,5 @@
 import {
   createSignal,
-  createMemo,
   createEffect,
   For,
   Show,
@@ -33,8 +32,8 @@ export default function FilterDropdown(props: FilterDropdownProps) {
   // Close when clicking outside
   createEffect(() => {
     if (typeof document === "undefined") return;
-    function onDocClick(e: MouseEvent) {
-      if (dropdownRef && !dropdownRef.contains(e.target as Node)) {
+    function onDocClick(_e: MouseEvent) {
+      if (dropdownRef && !dropdownRef.contains(_e.target as Node)) {
         setIsOpen(false);
       }
     }

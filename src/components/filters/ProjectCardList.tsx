@@ -1,4 +1,4 @@
-import { For, createEffect } from "solid-js";
+import { For, createEffect, batch } from "solid-js";
 import type { ProjectCard } from "@app-types/project-card";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
@@ -164,9 +164,11 @@ export default function ProjectCardList(props: Props) {
         <button
           class="btn-reset"
           onClick={() => {
-            resetFilters();
-            pagination.setPage(1);
-            pagination.setPageSize(6);
+            batch(() => {
+              resetFilters();
+              pagination.setPage(1);
+              pagination.setPageSize(6);
+            });
           }}
           aria-label="Reset filters"
         >

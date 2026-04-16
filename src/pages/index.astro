@@ -9,8 +9,7 @@ const pageTitle = "Jeffrey Luu — Software Developer | Portfolio";
    Extracted into a named constant for readability while preserving
    identical output via JSON.stringify below.
 */
-// @ts-ignore
-const structuredData = [
+const _structuredData = [
   {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -33,6 +32,6 @@ const structuredData = [
 <BaseLayout title={pageTitle} isHomepage={true}>
  	<HomeSection />
  	<script type="application/ld+json" is:inline>
- 		{JSON.stringify(structuredData)}
+ 		{JSON.stringify(_structuredData)}
  	</script>
  </BaseLayout>

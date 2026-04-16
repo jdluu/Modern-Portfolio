@@ -32,7 +32,7 @@ function initScrollToTop() {
 
   function updateScrollTopVisibility() {
     try {
-      const scrollY = window.scrollY || window.pageYOffset;
+      const scrollY = window.scrollY;
       const docHeight =
         Math.max(
           document.documentElement.scrollHeight,
@@ -46,7 +46,7 @@ function initScrollToTop() {
         scrollTopBtn.classList.remove("visible");
         scrollTopBtn.setAttribute("aria-hidden", "true");
       }
-    } catch (e) {
+    } catch (_e) {
       // Fail silently
     }
   }

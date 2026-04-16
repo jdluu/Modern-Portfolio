@@ -1,11 +1,4 @@
-import {
-  createSignal,
-  createMemo,
-  createEffect,
-  For,
-  Show,
-  onCleanup,
-} from "solid-js";
+import { createSignal, createMemo, Show } from "solid-js";
 import type { PostIndexItem } from "@app-types/post";
 import { usePagination } from "@hooks/usePagination";
 import { useDomSync } from "@hooks/useDomSync";
@@ -82,16 +75,11 @@ export default function PostsList(props: Props) {
   // DOM Sync
   useDomSync({
     visibleSlugs: createMemo(() =>
-      pagination.paginatedItems().map((it) => {
-        return String(it.slug ?? "").replace(/\.(md|mdx)$/, "");
-      }),
+      pagination.paginatedItems().map((it) => it.slug),
     ),
     containerSelector: ".post-list",
     itemSelector: ".post-item",
-    normalizeSlug: (s) =>
-      String(s ?? "")
-        .replace(/\.(md|mdx)$/, "")
-        .replace(/^\/posts\//, ""),
+    normalizeSlug: (s) => String(s ?? "").replace(/^\/posts\//, ""),
   });
 
   return (
@@ -107,7 +95,10 @@ export default function PostsList(props: Props) {
               class="control-select"
               value={sortOrder()}
               onChange={(e) => {
-                setSortOrder((e.target as HTMLSelectElement).value as any);
+                const val = (e.target as HTMLSelectElement).value;
+                if (val === "newest" || val === "oldest") {
+                  setSortOrder(val);
+                }
                 pagination.setPage(1);
               }}
             >
