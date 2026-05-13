@@ -8,13 +8,6 @@ import type { ImageMetadata } from "astro";
  * Thumbnail is a flexible union to match CMS payloads:
  * string | { url?: string | null }
  */
-export interface ProjectCardProps {
-  title: string;
-  intro: string;
-  url: string;
-  thumbnail: ImageMetadata | null;
-}
-
 export interface ProjectCard {
   title: string;
   slug: string;
