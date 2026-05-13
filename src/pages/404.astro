@@ -1,0 +1,163 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import "@styles/global.css";
+
+const pageTitle = "404 - Page Not Found | Jeffrey Luu";
+---
+
+<BaseLayout title={pageTitle}>
+  <main class="error-page">
+    <div class="error-container">
+      <div class="error-content">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">
+          The page you are looking for might have been moved, removed, or is temporarily unavailable.
+        </p>
+        <div class="error-actions">
+          <a href="/" class="btn-home">Return Home</a>
+          <a href="/work" class="btn-work">View Projects</a>
+        </div>
+      </div>
+      
+      {/* Subtle background decoration */}
+      <div class="error-decoration" aria-hidden="true">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .error-page {
+    min-height: calc(100vh - var(--nav-height) - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-m);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .error-container {
+    max-width: var(--container-narrow);
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .error-content {
+    background-color: color-mix(in oklab, var(--m3-color-surface) 80%, transparent);
+    backdrop-filter: blur(12px);
+    padding: var(--space-xl-2xl);
+    border-radius: var(--space-l);
+    border: 1px solid color-mix(in oklab, var(--m3-color-outline) 20%, transparent);
+    box-shadow: var(--m3-elevation-3);
+  }
+
+  .error-code {
+    font-family: var(--m3-font-family-display);
+    font-size: clamp(5rem, 15vw, 10rem);
+    line-height: 1;
+    color: var(--color-accent);
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .error-title {
+    font-family: var(--m3-font-family-display);
+    font-size: var(--m3-font-headline-large);
+    color: var(--color-text-primary);
+    margin: var(--space-xs) 0 var(--space-m);
+  }
+
+  .error-message {
+    font-size: var(--step-1);
+    color: var(--color-text-secondary);
+    max-width: 45ch;
+    margin: 0 auto var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: var(--space-m);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-home, .btn-work {
+    text-decoration: none;
+    padding: var(--space-s) var(--space-xl);
+    border-radius: var(--space-3xl);
+    font-weight: 600;
+    font-size: var(--step-0);
+    transition: all 0.2s ease;
+  }
+
+  .btn-home {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    box-shadow: var(--m3-elevation-1);
+  }
+
+  .btn-home:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--m3-elevation-2);
+  }
+
+  .btn-work {
+    background-color: var(--m3-color-surface-variant);
+    color: var(--m3-color-on-surface-variant);
+    border: 1px solid color-mix(in oklab, var(--m3-color-outline) 40%, transparent);
+  }
+
+  .btn-work:hover {
+    background-color: color-mix(in oklab, var(--m3-color-primary) 8%, var(--m3-color-surface-variant));
+    transform: translateY(-2px);
+  }
+
+  /* Decorative shapes */
+  .error-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+  }
+
+  .shape-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--color-accent);
+    top: -100px;
+    right: -100px;
+  }
+
+  .shape-2 {
+    width: 250px;
+    height: 250px;
+    background: var(--m3-color-primary);
+    bottom: -50px;
+    left: -50px;
+  }
+
+  @media (max-width: 600px) {
+    .error-content {
+      padding: var(--space-l);
+    }
+    .btn-home, .btn-work {
+      width: 100%;
+    }
+  }
+</style>
