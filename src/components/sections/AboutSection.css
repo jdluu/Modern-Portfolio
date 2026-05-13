@@ -183,6 +183,31 @@
   margin-top: var(--space-s);
 }
 
+.coursework-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-2xs);
+}
+
+.coursework-link {
+  font-size: var(--step--1);
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+  padding: var(--space-3xs) var(--space-xs);
+  background-color: color-mix(in oklab, var(--color-accent) 8%, transparent);
+  border-radius: var(--space-3xl);
+  transition: all 0.2s;
+}
+
+.coursework-link:hover {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
 .coursework-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
