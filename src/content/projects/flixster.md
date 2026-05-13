@@ -3,29 +3,29 @@ title: "Flixster"
 slug: "flixster"
 date: "2021-09"
 
-summary: "A movie browsing application for Android that displays a list of movies currently playing in theaters using data from The Movie Database (TMDb) API. Users can view movie details and watch trailers."
+summary: "An Android app for browsing movies currently playing in theaters using data from a movie database. Users can see details and watch trailers."
 
-role: "Android Developer"
+role: "Developer"
 technologies: ["Java", "Android SDK", "Android Async HTTP"]
 tools: ["Android Studio", "Git", "GitHub", "Glide"]
 
 cover: "../../assets/images/projects/flixster/cover_flixster.png"
 final: "../../assets/images/projects/flixster/final_flixster.gif"
 
-background: "Flixster is a movie browsing Android application built with Java and the Android SDK. The project was designed to practice core mobile development skills, specifically working with REST APIs and displaying dynamic data in a user-friendly interface. I handled the Android development, focusing on integrating The Movie Database API and implementing a master-detail navigation pattern."
+background: "Flixster was a way for me to learn how to build Android applications. I wanted to create something that could pull live data from a movie database and show it in a simple, easy to use list. I focused on learning how to talk to a remote API and how to navigate between different screens in a mobile app."
 
-solution: "Flixster fetches currently playing movies from The Movie Database API and displays them in a scrollable list with poster images, titles, and brief descriptions. The application implements a master-detail interface where users can browse the movie list and tap items to view detailed information. I integrated the YouTube Android Player API to embed movie trailers directly within the detail screen. The app uses asynchronous HTTP requests to fetch data without blocking the UI thread, and implements custom data models to parse JSON responses into structured objects."
+solution: "The app gets a list of movies and shows them with their posters, titles, and descriptions. I set it up so that you can tap on any movie to see more details about it. I also included a way to watch movie trailers directly in the app. It uses background requests to get the movie data so the app stays responsive while it is loading information."
 
-process: "I started by setting up the Android project structure and configuring dependencies for network requests and image loading. I created a custom Movie data model class and implemented JSON parsing logic to convert API responses into Java objects. I built a RecyclerView adapter to efficiently display the movie list, then developed a separate activity for movie details with an embedded YouTube player. Throughout development, I tested network request handling and ensured proper error management for failed API calls."
+process: "I started by setting up the project and adding the tools I needed for network requests and image loading. I created a data model for the movies and wrote logic to parse the information coming from the API. I spent time building a list that can handle many items efficiently and then added a second screen for the movie details. I tested the app to make sure it handled errors correctly if the movie data could not be reached."
 
-impact: "The application successfully integrates The Movie Database API to fetch and display dynamic movie data, demonstrating practical REST API integration skills. The master-detail user interface provides seamless navigation between the movie list and detailed views, creating an intuitive browsing experience. By embedding the YouTube player directly within the app, users can watch movie trailers without leaving the application, which enhances engagement and user satisfaction."
+impact: "The app successfully pulls and displays movie data in a clean interface. It provides a simple way to browse through new releases and watch trailers without having to leave the application. It served its purpose as a functional prototype that helped me understand the basics of mobile development."
 
-reflection: "This project provided practical experience with asynchronous network programming in Android and JSON data parsing. I learned to structure data models effectively and gained familiarity with RecyclerView for efficient list rendering. Working with the YouTube API introduced me to integrating third-party media players. If I were to improve this project, I would add caching mechanisms to reduce API calls and implement pull-to-refresh functionality for better user experience."
+reflection: "Building this gave me my first look at how to handle data in a mobile app. I learned how to structure my code to handle information from an external source and how to build a list that scrolls smoothly. If I were to work on this again, I would add a way to save favorite movies so I could find them later even without an internet connection."
 
 links:
   live: ""
   source: "https://github.com/jdluu/Flixster"
-description: "An android app that displays the newest movie trailers and their reviews."
+description: "An Android app that shows movie trailers and info from a movie database."
 startDate: 2021-09-18
 endDate: 2022-04-16
 thumbnail: "../../assets/images/projects/flixster/thumbnail_flixster.min.png"

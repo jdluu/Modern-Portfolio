@@ -3,29 +3,29 @@ title: "Web Analytics Dashboard"
 slug: "web-analytics-dashboard"
 date: "2023-05"
 
-summary: "A full-stack web application featuring a custom, secured web analytics dashboard and reporting system to enable data-driven decision-making for web development."
+summary: "A web app with a private dashboard to track and see how people are using a website."
 
-role: "Software Developer"
+role: "Developer"
 technologies: ["JS", "Node.js", "Express.js", "MySQL", "ZingChart", "ZingGrid"]
 tools: ["DigitalOcean", "GitHub", "MySQL Workbench", "Postman"]
 
 cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"
 final: "../../assets/images/projects/web_analytics_dashboard/final_web_analytics_dashboard.min.png"
 
-background: "Web Analytics Dashboard is a full-stack web application built with Node.js, Express.js, and MySQL to provide custom analytics tracking and visualization. The project addresses the challenge of accurately interpreting web analytics data, where metrics like bounce rates can be misunderstood without proper context. I handled the full-stack development, focusing on data collection, storage, and visualization capabilities."
+background: "I built this dashboard because I wanted a way to see how people were interacting with my websites. Generic analytics tools can sometimes be hard to interpret or give you more info than you need, so I wanted to build my own system. I wanted to understand simple things like which pages were popular and how long people stayed, but in a way that I could control and keep private."
 
-solution: "The application provides a custom analytics dashboard that collects user behavior data and presents it through interactive visualizations. I developed a MySQL database schema to store analytics events and built REST API endpoints with Express.js for data ingestion and retrieval. The front-end dashboard uses ZingChart and ZingGrid libraries to create dynamic charts and data tables. I implemented user authentication and authorization to secure access to analytics data, ensuring only authorized users can view sensitive information. The system enables data-driven decision making by providing accurate, contextualized metrics."
+solution: "The app collects basic info about site visits and shows it on a private dashboard. I built a database to store all the visit data and created a dashboard with charts and tables so I could see the trends clearly. I also added a secure login so that I am the only one who can see the analytics data for my projects."
 
-process: "I began by defining project requirements and identifying key metrics to track, such as page views, user sessions, and interaction events. I designed the database schema to efficiently store time-series analytics data and created the MySQL database structure. I developed REST API endpoints with Express.js to handle data collection from client applications and retrieval for dashboard display. I built the front-end interface using HTML, CSS, and JavaScript, integrating ZingChart for visualizations and ZingGrid for tabular data. I implemented authentication middleware and tested the complete data flow from collection to visualization."
+process: "I started by deciding which info was actually useful to track, like page views and how long a session lasted. I then built the database to store that data efficiently and wrote the code to collect it from the websites. I spent time building the dashboard interface, adding charts so I could see the data at a glance. I tested the whole process by visiting my sites and making sure the data showed up correctly on the dashboard."
 
-impact: "The application successfully delivers a functional analytics dashboard that collects, stores, and visualizes web usage data, providing developers with accurate metrics for their applications. By implementing secure data handling and user authentication, the project demonstrates full-stack development capabilities while ensuring that sensitive analytics information remains protected. The interactive data visualizations enable evidence-based decision making, allowing developers to move beyond assumptions and make informed choices based on actual user behavior patterns."
+impact: "The project gave me a simple and private way to monitor my websites. It helped me move away from guessing how my projects were performing and let me see real data about what was working. It was a good way to see how full stack apps can be used to manage and visualize personal data."
 
-reflection: "This project improved my skills in database design for time-series data and REST API development with Node.js. I learned to balance technical decisions between modern frameworks and established technologies based on project requirements. Working with third-party visualization libraries expanded my understanding of integrating external tools effectively. If I continued this project, I would focus on optimizing database queries for better performance with large datasets and implementing more sophisticated data aggregation features."
+reflection: "Building this was a useful look into how to design a system that handles data over time. I learned how to structure a database for tracking events and how to build a secure interface to view that data. If I were to keep working on this, I would find ways to handle more data without slowing down and add more detailed charts for specific events."
 
 links:
   live: ""
   source: "https://jluu.dev/contact/"
-description: "A web application with a custom, secured web analytics dashboard and reporting system."
+description: "A web app with a private dashboard to track and see how people are using a website."
 startDate: 2023-05-01
 endDate: 2023-06-14
 thumbnail: "../../assets/images/projects/web_analytics_dashboard/thumbnail_web_analytics_dashboard.min.png"

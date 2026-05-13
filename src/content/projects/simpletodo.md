@@ -3,29 +3,29 @@ title: "SimpleTodo"
 slug: "simpletodo"
 date: "2021-09"
 
-summary: "A fundamental to-do list application for Android that allows users to add, edit, and remove tasks. This app was developed to practice core Android development concepts, including UI management and local data persistence."
+summary: "A simple to-do list app for Android that allows users to manage tasks with basic add, edit, and remove features."
 
-role: "Android Developer"
+role: "Developer"
 technologies: ["Java", "Android SDK"]
 tools: ["Android Studio", "Git", "GitHub"]
 
 cover: "../../assets/images/projects/simpletodo/cover_simpletodo.png"
 final: "../../assets/images/projects/simpletodo/final_simpletodo.gif"
 
-background: "SimpleTodo is a fundamental to-do list application for Android built with Java and the Android SDK. The project was designed to practice core Android development concepts including UI management, user input handling, and local data persistence. I handled the Android development, focusing on creating an interactive application that maintains task data across app sessions."
+background: "SimpleTodo was one of my first projects to learn the basics of building an app. I wanted to create a straightforward tool for managing tasks that would save my progress even if I closed the app. It was a simple way for me to practice handling user input and learning how apps store data locally on a phone."
 
-solution: "SimpleTodo provides a straightforward interface for managing a personal task list. Users can add new tasks through an input field, view all tasks in a scrollable list, and remove items through long-press interactions. I implemented local data persistence using Android's SharedPreferences to save and restore the task list when the app closes and reopens. The application includes a separate edit screen that allows users to modify existing tasks, with data passed between activities using intents."
+solution: "The app provides a clear list where you can see all your tasks. I added features to let you type in a new task and add it to the list, or remove a task by holding down on it. I also built a way to save the list so that your tasks are still there when you open the app later. I included a separate screen so you can tap on a task to change its text if you need to."
 
-process: "I began by designing the main activity layout with an EditText input field, an add button, and a RecyclerView for displaying tasks. I implemented the RecyclerView adapter to manage the dynamic list of items and handle user interactions. I added long-press detection to enable task deletion and created a separate activity for editing tasks. I integrated SharedPreferences to persist task data, implementing save and load methods that execute when the app lifecycle changes. I tested the application to ensure data persistence worked correctly across app restarts."
+process: "I started by designing the main screen with a simple input box and a button. I then wrote the code to manage the list of tasks and respond when a user interacts with them. Most of the effort went into making sure the data saving worked correctly across different app sessions. I tested it by adding multiple items, closing the app, and making sure everything was still there when I returned."
 
-impact: "The application successfully provides a functional to-do list with complete CRUD operations for task management, meeting the core requirements for a productivity tool. By implementing local data persistence using SharedPreferences, the app maintains user data across app sessions, ensuring that tasks are preserved when users close and reopen the application. This project effectively demonstrated practical application of fundamental Android development concepts, including Activity lifecycle management and efficient list rendering with RecyclerView."
+impact: "The app successfully provides a simple way to track tasks and ensures that information is preserved between uses. It met all the goals for a basic productivity tool and served as a practical introduction to the fundamental concepts of app development. It was a useful first step in learning how to build interactive mobile software."
 
-reflection: "This project provided foundational experience with Android Activity lifecycle and basic UI component management. I learned to structure user interactions effectively and gained understanding of data persistence mechanisms in Android. Working with RecyclerView introduced me to efficient list rendering patterns. If I were to improve this project, I would implement a more robust data storage solution like SQLite for better scalability and add features such as task prioritization or due dates."
+reflection: "Building this gave me my first look at how an app manages its own data and interface. I learned how to respond to user actions like taps and long-presses and how to move information between different parts of an app. If I were to improve it, I would add a way to set reminders for tasks or organize them into different categories."
 
 links:
   live: ""
   source: "https://github.com/jdluu/SimpleTodo"
-description: "A simple android app for a todo list."
+description: "A simple Android app for managing a to-do list."
 startDate: 2021-07-27
 endDate: 2021-09-28
 thumbnail: "../../assets/images/projects/simpletodo/thumbnail_simpletodo.min.png"

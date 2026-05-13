@@ -3,29 +3,29 @@ title: "Parsegram"
 slug: "parsegram"
 date: "2021-10"
 
-summary: "A photo-sharing Android application, similar to Instagram, built using Java and the Parse backend platform. It allows users to sign up, log in, capture and post photos with captions, and view a feed of posts."
+summary: "A photo-sharing Android app inspired by social media platforms, built to learn about user accounts, photo uploads, and feed management."
 
-role: "Android Developer"
+role: "Developer"
 technologies: ["Java", "Android", "Parse"]
 tools: ["Android Studio", "Git", "GitHub"]
 
 cover: "../../assets/images/projects/parsegram/cover_parsegram.png"
 final: "../../assets/images/projects/parsegram/final_parsegram.gif"
 
-background: "Parsegram is a photo-sharing Android application built with Java and the Parse backend platform. The project was designed to practice fundamental mobile development concepts including user authentication, backend integration, and media handling. I handled the Android development, focusing on implementing Instagram-like functionality with user accounts, photo posting, and a social feed."
+background: "I built Parsegram to learn the basics of building a social app. I wanted to see if I could create something that allows users to sign up, take photos with their camera, and share them with others in a common feed. It was a chance to practice working with a backend service and handling media on a mobile device."
 
-solution: "Parsegram implements user authentication through Parse's backend service, allowing users to sign up, log in, and maintain session state. The application enables users to capture photos using the device camera or select images from the gallery, then post them with captions to a shared timeline. I built an infinite-scrolling feed using RecyclerView that displays all user posts, with pull-to-refresh functionality for updating content. The app leverages Parse as a Backend-as-a-Service platform to handle user management, data storage, and API endpoints without custom server development."
+solution: "The app uses a backend service to manage user accounts and store the photos that people post. I built a simple feed where you can scroll through all the recent posts and added a pull to refresh feature to check for new content. I used the device camera to let users take pictures directly within the app and then add captions before posting them to the shared timeline."
 
-process: "I started by setting up the Android project and integrating Parse SDK dependencies for backend connectivity. I implemented user authentication flows for registration and login, handling session management and error cases. I developed the photo capture functionality using Android's implicit intents to access the camera and gallery. I created the post creation screen with image preview and caption input, then built the main feed activity with RecyclerView for efficient list rendering. I added pull-to-refresh and infinite scrolling features to enhance the user experience."
+process: "I started by setting up the connection to the backend and building the login and sign up screens. Then I focused on the photo capture logic, making sure the app could access the camera and display a preview of the image. I spent a lot of time on the main feed to make sure it loaded posts efficiently and showed the captions correctly. I tested the app by creating multiple accounts and posting different types of images to see how the feed handled them."
 
-impact: "The application successfully delivers a functional photo-sharing platform with complete user authentication and posting capabilities, demonstrating practical mobile development skills. By integrating Parse as a Backend-as-a-Service platform, the project handled all server-side operations without requiring custom backend development, which streamlined the development process. The final product demonstrates practical implementation of core social media features including user accounts, media uploads, and dynamic content feeds, providing a solid foundation for understanding modern mobile app architecture."
+impact: "The project resulted in a functional photo sharing app that handles the entire process from account creation to posting and viewing content. It served as a good way to understand how mobile apps communicate with servers to store and retrieve data. It provided a solid foundation for my understanding of how social features are built in a mobile environment."
 
-reflection: "This project provided hands-on experience connecting Android applications to cloud backend services. I learned to work with Parse's API structure and handle asynchronous operations for network requests. Working with RecyclerView improved my understanding of efficient list rendering in Android. If I were to enhance this project, I would implement better error handling for network failures and add image compression to optimize upload performance and storage usage."
+reflection: "Building this was a useful lesson in how to connect an app to a cloud service. I learned how to handle background tasks so that uploading a photo does not freeze the interface. If I were to work on this more, I would add a way to like or comment on photos and find a way to compress the images so they upload faster."
 
 links:
   live: ""
   source: "https://github.com/jdluu/Parsegram"
-description: "An photo sharing android app similar to Instagram."
+description: "A photo sharing app for Android that allows users to post pictures and view a feed."
 startDate: 2021-10-22
 endDate: 2021-10-27
 thumbnail: "../../assets/images/projects/parsegram/thumbnail_parsegram.min.png"

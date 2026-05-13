@@ -3,9 +3,9 @@ title: "BrainWave"
 slug: "brainwave"
 date: "2024-02"
 
-summary: "An intelligent note-taking app with AI integration, built with OpenAI, Pinecone, and Next.js to provide users with an AI chat assistant that can retrieve information from their notes."
+summary: "A note-taking app with a chat interface to find information in notes using AI and a specialized search index."
 
-role: "Full Stack Developer"
+role: "Developer"
 technologies:
   [
     "Next.js",
@@ -22,20 +22,20 @@ tools: ["GitHub", "Clerk", "Shadcn UI"]
 cover: "../../assets/images/projects/brainwave/cover_brainwave.min.png"
 final: "../../assets/images/projects/brainwave/final_brainwave.gif"
 
-background: "BrainWave is an intelligent note-taking application built with Next.js, TypeScript, and AI integration. The goal was to create a personalized note-taking experience where users could retrieve information using natural language queries rather than traditional keyword search. I handled the full-stack development, focusing on integrating OpenAI, Pinecone, and the Vercel AI SDK to enable semantic search capabilities."
+background: "BrainWave was built to explore a more natural way to retrieve information from personal notes. Since traditional keyword search requires remembering exact phrasing, the project aimed to create a note-taking experience where users could ask questions in plain language. The goal was to develop a tool that understands the context of written content rather than just performing character matching."
 
-solution: "BrainWave integrates an AI chatbot using the Vercel AI SDK, ChatGPT, and Pinecone for vector-based semantic search. The application allows users to ask questions in natural language and receive context-aware answers sourced directly from their notes. I implemented vector embeddings for each note entry, enabling the system to understand query intent beyond keyword matching. The full-stack application uses Next.js with TypeScript, secure authentication via Clerk, and a MongoDB database managed through Prisma. Response streaming provides real-time feedback during AI interactions, improving user experience."
+solution: "The application uses a chat interface that connects to a specialized search index. When notes are created, the system generates a digital representation of the content, allowing it to be searched by meaning. Built with Next.js and secure authentication, the app ensures that personal notes remain private. The chat interface provides real-time feedback, creating a conversational experience for finding specific information."
 
-process: "I began by setting up the Next.js project structure with Shadcn UI components, then configured MongoDB, Prisma, and Clerk for database and authentication. I developed the core application layout and note management features, including creation, editing, and display functionality. Next, I integrated OpenAI and Pinecone to generate vector embeddings for notes and implemented the AI chat interface using the Vercel AI SDK. I followed an iterative development approach, testing each feature incrementally and refining the user interface based on usability feedback."
+process: "Development began with implementing core note management features such as entry creation and editing. Most of the work involved integrating the note database with an AI-powered search tool. This required developing a method to accurately transform text into searchable data and building a reliable retrieval system for the chat assistant. The interface was iteratively tested to ensure the chat felt responsive and effective during information retrieval."
 
-impact: "The AI chat feature enables users to retrieve information from their notes using conversational queries, which significantly improves information accessibility compared to traditional keyword search. By implementing response streaming, the application provides a smooth, real-time interaction experience that makes AI-powered note retrieval feel natural and responsive. This project successfully demonstrated the practical application of semantic search technologies and modern AI integration patterns in a user-focused application."
+impact: "The project simplifies the process of retrieving information from large collections of notes. By allowing conversational queries, it reduces the time spent manually searching through old files. It serves as an exploration of how semantic search and AI patterns can improve the accessibility of personal data."
 
-reflection: "This project highlighted the importance of architecture planning when coordinating multiple external services. I learned to balance feature complexity with code maintainability and identified opportunities to improve performance through better embedding management and response optimization. If I revisited this project, I would focus on enhancing error handling for API failures and implementing caching strategies for frequently accessed notes. Overall, this work improved my understanding of building practical, user-focused AI applications."
+reflection: "Building BrainWave provided a lesson in coordinating multiple web services within a single application. The project required handling the data flow between a primary database and a search index without introducing unnecessary complexity. Future improvements could focus on increasing search accuracy and optimizing the system for even larger datasets."
 
 links:
   live: ""
   source: "https://github.com/jdluu/BrainWave"
-description: "An intelligent note-taking web application with AI integration."
+description: "A note-taking app that uses a chat interface to help you find information in your notes."
 startDate: 2024-02-01
 endDate: 2024-03-31
 thumbnail: "../../assets/images/projects/brainwave/thumbnail_brainwave.min.png"
@@ -46,5 +46,4 @@ programming_languages:
   - "JavaScript"
 domains:
   - "Web"
-  - "AI/ML"
 ---

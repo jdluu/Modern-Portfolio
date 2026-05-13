@@ -3,9 +3,9 @@ title: "TruthSeeker"
 slug: "truthseeker"
 date: "2024-12"
 
-summary: "An AI-powered fact-checking application that verifies statements in real-time using web searches and advanced language models, providing both a Streamlit web interface and CLI for fact-checking."
+summary: "A tool that uses AI and web searches to help check if statements are likely true or false, providing detailed answers with sources."
 
-role: "Full Stack Developer"
+role: "Developer"
 technologies:
   ["Python", "Streamlit", "Pydantic", "DeepSeek API", "Brave Search API"]
 tools: ["GitHub", "uv", "Rich", "httpx"]
@@ -13,20 +13,20 @@ tools: ["GitHub", "uv", "Rich", "httpx"]
 cover: "../../assets/images/projects/truthseeker/cover_truthseeker.min.png"
 final: "../../assets/images/projects/truthseeker/final_truthseeker.min.png"
 
-background: "TruthSeeker is an AI-powered fact-checking application built with Python and Streamlit. The project addresses the challenge of verifying information accuracy in an era of widespread misinformation. I developed this tool to help users quickly verify statements by combining real-time web searches with advanced language model analysis. I handled the full-stack development, focusing on integrating search APIs, LLM processing, and creating both web and CLI interfaces."
+background: "TruthSeeker was built to address the challenge of verifying the accuracy of information found online. The project aims to provide a reliable way to verify statements by combining real-time web searches with AI-powered analysis. The goal was to develop a tool that could quickly identify evidence to support or refute specific claims, reducing the difficulty of manual fact-checking."
 
-solution: "TruthSeeker uses Brave Search API for real-time web searches and DeepSeek API for intelligent analysis of search results. The application performs live web searches when users submit statements, then uses function calling to allow the language model to dynamically request additional searches as needed. I implemented a clean architecture with domain models using Pydantic for type safety and validation. The system provides structured verdicts with explanations, context, and references. I built both a Streamlit web interface with a unified dark theme and a CLI interface with rich terminal formatting for automation and testing. The application includes HTML sanitization to reduce XSS risks and supports exporting fact-check history to JSON, PDF, or TXT formats."
+solution: "The tool integrates a search engine API with an AI model to analyze live results. When a statement is submitted, the system performs a web search and uses the retrieved information to provide a verdict. Built with Streamlit for the web and featuring a terminal-based version, the system offers clear explanations and direct links to sources. It supports exporting history to various formats and uses structured data models to ensure information remains organized."
 
-process: "I began by designing the clean architecture structure, separating domain models, application services, infrastructure components, and interface adapters. I implemented the BraveSearchClient with retry logic, backoff strategies, and TTL caching for efficient API usage. I integrated the DeepSeek API with function calling capabilities to enable dynamic web search requests during analysis. I developed the Streamlit UI with a modern dark theme and intuitive user experience, then built the CLI interface using Rich for formatted terminal output. I implemented input sanitization, export functionality, and streaming support for real-time feedback. Throughout development, I focused on type safety using Pydantic models and configured CI linting and type-checking."
+process: "Development focused on separating the search and analysis components to maintain a clean project structure. This involved building a search client with caching and retry logic, followed by implementing the AI's ability to request additional searches dynamically. Significant effort was spent on the web interface to ensure results were easy to read and that the overall user experience was intuitive."
 
-impact: "TruthSeeker successfully provides users with an accessible tool for fact-checking statements through both web and CLI interfaces, making information verification more convenient and reliable. By combining real-time web searches with AI-powered analysis, the application delivers structured, evidence-based verdicts that help users make informed decisions. The clean architecture and type-safe implementation demonstrate modern Python development practices, while the dual interface approach (web and CLI) makes the tool versatile for both interactive use and automation scenarios."
+impact: "The project offers a detailed method for checking facts by combining live data with AI analysis. It provides a more comprehensive look at a topic than a standard search engine and serves as a practical exploration of how modern tools can assist in information verification. The dual-interface approach makes the tool versatile for both interactive sessions and automated checks."
 
-reflection: "This project improved my understanding of clean architecture principles and the importance of separating concerns in application design. I learned to effectively integrate multiple external APIs while maintaining code maintainability and type safety. Working with function calling in LLM APIs expanded my knowledge of dynamic AI interactions. The project highlighted the value of building multiple interfaces (web and CLI) to serve different use cases. If I continued this work, I would focus on enhancing the caching strategy, implementing more sophisticated search result ranking, and adding support for batch fact-checking operations."
+reflection: "Building TruthSeeker provided a lesson in combining multiple external APIs to solve a specific problem. It required handling real-time data flow and ensuring that the AI model could accurately interpret and summarize search results. Future development could focus on improving search performance and refining the criteria used to filter reliable sources."
 
 links:
   live: "https://journeytotruth.streamlit.app"
   source: "https://github.com/jdluu/TruthSeeker"
-description: "An AI-powered fact-checking application that verifies statements using real-time web searches and language models."
+description: "A tool for checking facts by using real-time web searches and AI analysis."
 startDate: 2024-12-01
 endDate: 2024-12-13
 thumbnail: "../../assets/images/projects/truthseeker/thumbnail_truthseeker.min.png"

@@ -3,9 +3,9 @@ title: "Zooseeker"
 slug: "zooseeker"
 date: "2022-03"
 
-summary: "An Android app to enhance the San Diego Zoo visitor experience by creating custom exhibit plans and optimizing routes for minimal walking distance."
+summary: "An Android app to help people find their way around the San Diego Zoo by creating custom plans and finding the shortest paths between exhibits."
 
-role: "Software Developer"
+role: "Developer"
 technologies: ["Java", "Android"]
 tools:
   [
@@ -22,20 +22,20 @@ tools:
 cover: "../../assets/images/projects/zooseeker/cover_zooseeker.min.png"
 final: "../../assets/images/projects/zooseeker/final_zooseeker.gif"
 
-background: "Zooseeker is an Android application designed to improve the San Diego Zoo visitor experience through enhanced navigation and exhibit planning. The project addressed usability issues with the official zoo app, where visitors found navigation difficult and relied on paper maps. I worked as part of a development team, focusing on route optimization algorithms, user interface design, and comprehensive testing implementation."
+background: "I worked on Zooseeker to solve a common problem for zoo visitors: finding the best way to see all the animals without walking more than necessary. The goal was to build a tool that was easier to use than the official zoo app and more practical than a paper map. I worked with a team to create a navigation tool that actually helps you plan your day at the zoo."
 
-solution: "Zooseeker enables users to create custom exhibit plans and calculates optimal routes to minimize walking distance between selected attractions. The application automatically recalculates paths when users modify their plans, providing real-time route updates. I implemented pathfinding algorithms to determine shortest routes and developed an intuitive interface for exhibit selection and plan management. The app provides turn-by-turn navigation guidance to help visitors efficiently explore the zoo based on their preferences."
+solution: "The app lets you pick which animals you want to see and then calculates the shortest path between all of them. If you change your mind and add a new exhibit, the app updates the route automatically. I worked on the pathfinding code to make sure it always found a good route and helped build the interface so it was simple to select exhibits and follow the directions."
 
-process: "I followed an Agile development methodology, creating user stories and Behavior-Driven Development scenarios to define feature requirements. I applied object-oriented design principles and the MVC architectural pattern to structure the codebase for maintainability. I developed a comprehensive testing suite using JUnit for unit tests, Robolectric for integration tests, and Espresso for UI automation. I configured GitHub Actions for continuous integration to automatically run tests on code commits. Throughout development, I used ZenHub and GitHub Issues to manage the project backlog and track progress."
+process: "We worked as a team to decide which features were most important, starting with basic navigation. I applied general programming patterns to keep the code organized and wrote a lot of tests to make sure the app was reliable. We used automated tools to run those tests every time we made a change. I spent time on the pathfinding logic and making sure the interface was easy to understand while you are walking around the zoo."
 
-impact: "The application successfully improves the zoo visitor experience through optimized route planning, helping users efficiently navigate exhibits while minimizing walking distance. By implementing a comprehensive automated testing pipeline covering unit, integration, and UI test scenarios, the project ensures high code quality and reliability through continuous integration practices. This work effectively demonstrates the application of Agile methodologies and modern Android development practices, showcasing how structured development processes contribute to successful project outcomes."
+impact: "The project resulted in a functional tool that makes it much easier to explore the zoo. It successfully handles route planning and helps users save time and effort during their visit. It was a great way to see how structured development and testing can lead to a more reliable mobile app."
 
-reflection: "This project provided valuable experience in Agile software development practices and collaborative team workflows. I improved my skills in Android testing frameworks and learned to structure applications using established design patterns. Working with pathfinding algorithms expanded my understanding of algorithm implementation in mobile applications. If I continued this work, I would focus on optimizing route calculation performance for larger datasets and enhancing the user interface based on visitor feedback."
+reflection: "Building this was a good lesson in how to work with others on a larger project. I improved my testing skills and learned how to use algorithms to solve a practical navigation problem. If I were to keep working on this, I would look for ways to make the route calculation even faster and add more details about the exhibits to the map."
 
 links:
   live: ""
   source: "https://github.com/jdluu/ZooSeeker"
-description: "An Android app to enhance the San Diego Zoo visitor experience by creating custom exhibit plans and optimizing routes for minimal walking distance."
+description: "An Android app that finds the shortest path between exhibits at the San Diego Zoo."
 startDate: 2022-03-17
 endDate: 2022-05-31
 thumbnail: "../../assets/images/projects/zooseeker/thumbnail_zooseeker.min.png"
