@@ -21,7 +21,7 @@ const {
 } = Astro.props;
 ---
 
-<script define:vars={{ containerSelector, itemSelector, imgSelector }}>
+<script is:inline define:vars={{ containerSelector, itemSelector, imgSelector }}>
   (function () {
     if (typeof window === "undefined") return;
 

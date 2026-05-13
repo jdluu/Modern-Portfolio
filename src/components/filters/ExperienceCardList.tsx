@@ -68,13 +68,17 @@ export default function ExperienceCardList(props: Props) {
   });
 
   // Pagination
-  const pagination = usePagination(processedItems, { defaultPageSize: 6 });
+  const pagination = usePagination(() => processedItems(), {
+    defaultPageSize: 6,
+  });
 
   // DOM Sync
+  const visibleSlugs = createMemo(() =>
+    pagination.paginatedItems().map((it) => it.slug),
+  );
+
   useDomSync({
-    visibleSlugs: createMemo(() =>
-      pagination.paginatedItems().map((it) => it.slug),
-    ),
+    visibleSlugs: () => visibleSlugs(),
     containerSelector: ".experience-grid",
     itemSelector: ".experience-item",
     normalizeSlug: normalizeSlug,

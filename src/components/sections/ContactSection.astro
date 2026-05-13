@@ -105,8 +105,7 @@ import "./ContactSection.css";
 			toast.classList.add(variant);
 			void toast.offsetWidth; // force reflow to restart animations
 			toast.classList.add("visible");
-			try { toast.focus(); } catch (err) { /* ignore focus errors */ }
-			if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+			try { toast.focus(); } catch (_err) { /* ignore focus errors */ }			if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
 			toastTimer = setTimeout(hideToast, duration);
 		}
 		function hideToast() {

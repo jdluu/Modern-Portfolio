@@ -61,22 +61,27 @@ export default function PostsList(props: Props) {
     }
 
     // Sort
+    const order = sortOrder();
     items.sort((a, b) => {
       const ta = a?.date ? Date.parse(a.date as string) : 0;
       const tb = b?.date ? Date.parse(b.date as string) : 0;
-      return sortOrder() === "newest" ? tb - ta : ta - tb;
+      return order === "newest" ? tb - ta : ta - tb;
     });
     return items;
   });
 
   // Pagination
-  const pagination = usePagination(filteredAndSorted, { defaultPageSize: 5 });
+  const pagination = usePagination(() => filteredAndSorted(), {
+    defaultPageSize: 5,
+  });
 
   // DOM Sync
+  const visibleSlugs = createMemo(() =>
+    pagination.paginatedItems().map((it) => it.slug),
+  );
+
   useDomSync({
-    visibleSlugs: createMemo(() =>
-      pagination.paginatedItems().map((it) => it.slug),
-    ),
+    visibleSlugs: () => visibleSlugs(),
     containerSelector: ".post-list",
     itemSelector: ".post-item",
     normalizeSlug: (s) => String(s ?? "").replace(/^\/posts\//, ""),
