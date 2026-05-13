@@ -15,22 +15,37 @@ function initNavbar() {
 
   if (!mainMenu || !menuToggleBtn || !backdrop || !menuCloseBtn) return;
 
-  if (menuToggleBtn.dataset.navInit === "true") return;
-  menuToggleBtn.dataset.navInit = "true";
-
   const btn = menuToggleBtn;
   const menu = mainMenu;
   const back = backdrop;
   const closeBtn = menuCloseBtn;
 
-  menu.setAttribute("hidden", "");
-  menu.setAttribute("data-open", "false");
-  menu.setAttribute("inert", "");
-  menu.classList.remove("is-closing", "is-open");
-  back.classList.remove("visible");
-  back.setAttribute("hidden", "");
-  btn.setAttribute("aria-expanded", "false");
-  document.body.classList.remove("menu-open");
+  // Handle Resize / Initial state: Close menu and update inert for desktop
+  const mql = window.matchMedia("(min-width: 768px)");
+  const resetDesktopState = () => {
+    if (mql.matches) {
+      // Desktop: Always ensure visible and interactive
+      menu.removeAttribute("inert");
+      menu.removeAttribute("hidden");
+      menu.setAttribute("data-open", "false");
+      menu.classList.remove("is-open", "is-closing");
+      back.classList.remove("visible");
+      back.setAttribute("hidden", "");
+      btn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("menu-open");
+    } else if (menu.getAttribute("data-open") === "false") {
+      // Mobile & Closed: Ensure hidden and inert
+      menu.setAttribute("inert", "");
+      menu.setAttribute("hidden", "");
+    }
+  };
+
+  // Perform initial reset for the current page load context
+  resetDesktopState();
+
+  // Prevent duplicate event listeners on subsequent astro:page-load events
+  if (btn.dataset.navInit === "true") return;
+  btn.dataset.navInit = "true";
 
   let isAnimating = false;
 
@@ -159,26 +174,9 @@ function initNavbar() {
     }
   });
 
-  // Handle Resize: Close menu if switching to desktop
-  const mql = window.matchMedia("(min-width: 768px)");
-  const handleResize = () => {
-    if (mql.matches && menu.getAttribute("data-open") === "true") {
-      closeMenu(false);
-    }
-    // Update inert state for desktop
-    if (mql.matches) {
-      menu.removeAttribute("inert");
-      menu.removeAttribute("hidden");
-    } else if (menu.getAttribute("data-open") === "false") {
-      menu.setAttribute("inert", "");
-      menu.setAttribute("hidden", "");
-    }
-  };
-
-  mql.addEventListener("change", handleResize);
-  handleResize(); // Initial check
+  mql.addEventListener("change", resetDesktopState);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("astro:page-load", () => {
   initNavbar();
 });

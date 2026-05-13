@@ -1,14 +1,15 @@
 ---
 import Navbar from "@components/navigation/Navbar.astro";
 import Footer from "@components/navigation/Footer.astro";
+import { ClientRouter } from "astro:transitions";
 import "@styles/reset.css";
 import "@styles/tokens.css";
 import "@styles/typography.css";
 import "@styles/global.css";
 
 interface Props {
-	title: string;
-	isHomepage?: boolean;
+  title: string;
+  isHomepage?: boolean;
 }
 
 const { title, isHomepage = false } = Astro.props; // Default to false
@@ -17,136 +18,139 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <!doctype html>
 <html lang="en" data-theme="light">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{title}</title>
-		<meta name="generator" content={Astro.generator} />
-		<meta
-			name="description"
-			content="Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences."
-		/>
-		<meta
-			name="keywords"
-			content="Jeffrey Luu, UCSD, web development, La Palma, software engineer, HTML, CSS, JS, React, Astro"
-		/>
-		<meta name="author" content="Jeffrey Luu" />
-		<meta name="robots" content="index, follow" />
-		<meta name="googlebot" content="index, follow" />
-		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0b" />
-	
-		<!-- Open Graph / Social Media -->
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Jeffrey Luu - Developer | Designer" />
-		<meta
-			property="og:description"
-			content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences. Explore projects and skills in HTML, CSS, JS, React, and Astro."
-		/>
-		<meta property="og:url" content={canonicalURL} />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <ClientRouter />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences."
+    />
+    <meta
+      name="keywords"
+      content="Jeffrey Luu, UCSD, web development, La Palma, software engineer, HTML, CSS, JS, React, Astro"
+    />
+    <meta name="author" content="Jeffrey Luu" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0b" />
 
-		<!-- Twitter Card -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Jeffrey Luu - Developer | Designer" />
-		<meta
-			name="twitter:description"
-			content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences."
-		/>
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jeffrey Luu - Developer | Designer" />
+    <meta
+      property="og:description"
+      content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences. Explore projects and skills in HTML, CSS, JS, React, and Astro."
+    />
+    <meta property="og:url" content={canonicalURL} />
 
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<link rel="canonical" href={canonicalURL} />
-		<link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jeffrey Luu - Developer | Designer" />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences."
+    />
 
-		<!-- Favicon -->
-		<link rel="icon" type="image/x-icon" href="/favicons/favicon.ico" />
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="150x150"
-			href="/favicons/ms-tile-150x150.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="310x310"
-			href="/favicons/ms-tile-310x310.png"
-		/>
-		<!-- Critical Fallback for LCP text to avoid FOIT on mobile -->
-		<style>
-			/* Use a fast system fallback for the LCP elements until webfont loads.
-			   Keep metric-compatible weights per element to reduce layout shift. */
-			.home-text {
-				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-				font-weight: 500;
-				/* match line-height/size to prevent layout shift */
-				line-height: 1;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-			}
-			/* Hero (LCP) - use a bold system fallback so the initial paint roughly matches weight 800 */
-			.intro-role {
-				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-				font-weight: 800;
-				line-height: 1;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-			}
-			/* Secondary hero text */
-			.intro-tagline {
-				font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-				font-weight: 400;
-				line-height: 1;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-			}
-		</style>
-	
-		<!-- Preload Critical Assets -->
-		<!-- Preload the LCP subset font unconditionally so it's available during audits and on all devices -->
-		<link
-			rel="preload"
-			href="/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin
-		/>
-		<!-- For desktop / larger viewports: preload the full variable font (kept conditional) -->
-		<link
-			rel="preload"
-			href="/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin
-		/>
-		
-		<!-- Theme Initialization Script (FOUC Prevention) -->
-		<script is:inline>
-			(function() {
-				const saved = localStorage.getItem("theme");
-				const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-				
-				let theme = "system";
-				if (saved === "light" || saved === "dark") {
-					theme = saved;
-				}
-				
-				const isDark = theme === "dark" || (theme === "system" && sysDark);
-				document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-			})();
-		</script>
-	</head>
-	<body class:list={["no-transitions", { "homepage-gradient-bg": isHomepage }]}>
-		<a href="#main-content" class="skip-link">Skip to main content</a>
-		<Navbar role="banner" />
-		<main id="main-content" aria-label="Main content">
-			<slot />
-		</main>
-		<Footer />
-		<script>
-			import "@scripts/scroll-to-top.ts";
-		</script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
-	</body>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicons/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="150x150"
+      href="/favicons/ms-tile-150x150.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="310x310"
+      href="/favicons/ms-tile-310x310.png"
+    />
+    <!-- Critical Fallback for LCP text to avoid FOIT on mobile -->
+    <style>
+      /* Use a fast system fallback for the LCP elements until webfont loads.
+         Keep metric-compatible weights per element to reduce layout shift. */
+      .home-text {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-weight: 500;
+        /* match line-height/size to prevent layout shift */
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      /* Hero (LCP) - use a bold system fallback so the initial paint roughly matches weight 800 */
+      .intro-role {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-weight: 800;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      /* Secondary hero text */
+      .intro-tagline {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+
+    <!-- Preload Critical Assets -->
+    <!-- Preload the LCP subset font unconditionally so it's available during audits and on all devices -->
+    <link
+      rel="preload"
+      href="/fonts/Roboto_Flex/RobotoFlex-subset-lcp.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- For desktop / larger viewports: preload the full variable font (kept conditional) -->
+    <link
+      rel="preload"
+      href="/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Theme Initialization Script (FOUC Prevention) -->
+    <script is:inline>
+      function applyTheme() {
+        const saved = localStorage.getItem("theme");
+        const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        let theme = "system";
+        if (saved === "light" || saved === "dark") {
+          theme = saved;
+        }
+
+        const isDark = theme === "dark" || (theme === "system" && sysDark);
+        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      }
+
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
+    </script>
+  </head>
+  <body class:list={[{ "homepage-gradient-bg": isHomepage }]}>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <Navbar role="banner" />
+    <main id="main-content" aria-label="Main content">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import "@scripts/scroll-to-top.ts";
+    </script>
+  </body>
 </html>
 
 <style>
