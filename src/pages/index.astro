@@ -27,11 +27,11 @@ const _structuredData = [
     inLanguage: "en",
   },
 ];
+
+const structuredDataString = JSON.stringify(_structuredData);
 ---
- 
+
 <BaseLayout title={pageTitle} isHomepage={true}>
- 	<HomeSection />
- 	<script type="application/ld+json" is:inline>
- 		{JSON.stringify(_structuredData)}
- 	</script>
- </BaseLayout>
+  <HomeSection />
+  <script type="application/ld+json" is:inline set:html={structuredDataString} />
+</BaseLayout>

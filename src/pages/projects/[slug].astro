@@ -61,10 +61,34 @@ const reflectionText = data?.reflection ?? "";
 
 const liveLink = data?.links?.live ?? "";
 const sourceLink = data?.links?.source ?? "";
+
+const domains = data?.domains || [];
+const isMobile = domains.includes("Mobile");
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": title,
+  "description": summary,
+  "applicationCategory": isMobile ? "MobileApplication" : "WebApplication",
+  "operatingSystem": isMobile ? "Android, iOS" : "Web",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Luu",
+    "url": "https://jluu.dev"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+};
+
+const structuredDataString = JSON.stringify(structuredData);
 ---
 
 <BaseLayout title={title}>
-    
+    <script type="application/ld+json" is:inline set:html={structuredDataString} />
     <main class="project-page-container">
       <div class="project-detail">
         <div class="project-grid">
