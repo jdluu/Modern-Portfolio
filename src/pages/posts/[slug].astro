@@ -42,39 +42,82 @@ const displayDate = date
   : "";
 
 const heroUrl = post?.data?.hero ?? null;
+
+const { headings } = await render(post);
+const hasHeadings = headings && headings.length > 0;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": post.data.description,
+  "datePublished": post.data.date ? new Date(post.data.date).toISOString() : undefined,
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Luu",
+    "url": "https://jluu.dev"
+  }
+};
+
+const structuredDataString = JSON.stringify(structuredData);
 ---
 
 <BaseLayout title={title}>
-  <article class={`post-grid ${!heroUrl ? 'no-hero' : ''}`}>
-    <header class="post-header">
-      <div class="post-header-content">
-        <h1 class="post-title">{title}</h1>
-        {date && <p class="publish-date">{displayDate}</p>}
-        {links && links.length > 0 && (
-          <div class="post-links-top">
-            <ProjectLinks links={links} />
-          </div>
+  <script type="application/ld+json" is:inline set:html={structuredDataString} />
+  <main class="post-page-container">
+    <div class="post-detail">
+      <div class="post-grid-layout">
+        <div class="post-content-column">
+          <article class={`post-main-article ${!heroUrl ? 'no-hero' : ''}`}>
+            <header class="post-header">
+              <div class="post-header-content">
+                <h1 class="post-title">{title}</h1>
+                {date && <p class="publish-date">{displayDate}</p>}
+                {links && links.length > 0 && (
+                  <div class="post-links-top">
+                    <ProjectLinks links={links} />
+                  </div>
+                )}
+              </div>
+              <div class="post-header-actions">
+                <CopyToClipboard targetSelector=".prose" />
+              </div>
+            </header>
+
+            {heroUrl && (
+              <LightboxImage src={heroUrl} alt={`${title} hero`} />
+            )}
+
+            <main class="main-content">
+              <div class="prose"><Content /></div>
+            </main>
+          </article>
+        </div>
+
+        {hasHeadings && (
+          <aside class="project-toc blog-toc" aria-label="Table of contents">
+            <div class="toc-card" role="navigation" aria-labelledby="toc-label">
+              <div class="toc-header">
+                <h4 id="toc-label">Table of Contents</h4>
+                <button id="toc-toggle" class="toc-toggle" aria-expanded="true" aria-label="Collapse Table of Contents">−</button>
+              </div>
+              <ul class="toc-list">
+                {headings.map((h: { depth: number; slug: string; text: string }) => (
+                  <li class={`toc-depth-${h.depth}`}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
         )}
       </div>
-      <div class="post-header-actions">
-        <CopyToClipboard targetSelector=".prose" />
-      </div>
-    </header>
-
-    {heroUrl && (
-      <LightboxImage src={heroUrl} alt={`${title} hero`} />
-    )}
-
-    <main class="main-content">
-      <div class="prose"><Content /></div>
-
-
-    </main>
- 
-
- 
-
-  </article>
-
-
+    </div>
+  </main>
 </BaseLayout>
+
+<script>
+  import { initToc } from "@scripts/toc";
+  document.addEventListener("astro:page-load", initToc);
+</script>
+

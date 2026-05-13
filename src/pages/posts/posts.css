@@ -1,60 +1,57 @@
-/* Two-column layout where the header spans the full width above the columns.
-   This ensures the aside (hero) sits beside the main text row and aligns to the
-   top of the text area (not the title/date). Links occupy a full-width row below. */
-article.post-grid {
+/* Blog Post Page Container */
+.post-page-container {
   max-width: var(--container-standard);
   margin: 0 auto;
-  padding: var(--space-2xl-3xl) var(--space-m);
-  background-color: var(--m3-color-surface);
-  color: var(--m3-color-on-surface);
+  padding: var(--space-xl) var(--space-m);
+  box-sizing: border-box;
+}
+
+/* Base Layout Structure (matches projects) */
+.post-grid-layout {
   display: grid;
-  /* two equal columns (left text, right hero) */
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "header header"
-    "main   aside"
-    "links  links";
+  grid-template-columns: 1fr 22rem;
   gap: var(--space-xl);
   align-items: start;
-  box-sizing: border-box;
+  position: relative;
   transition: all var(--m3-motion-duration-medium)
     var(--m3-motion-easing-standard);
 }
 
+.post-content-column {
+  min-width: 0;
+}
+
+/* Original article styles adapted for the column */
+.post-main-article {
+  background-color: var(--m3-color-surface);
+  color: var(--m3-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  box-sizing: border-box;
+}
+
 .post-header {
-  /* Place header in its own full-width row above columns so aside cannot affect its height.
-     Visually it's left-aligned to match the main content column. */
-  grid-area: header;
   margin: 0 0 var(--space-xl) 0;
   text-align: left;
   align-self: start;
-  max-width: min(80ch, 100%);
+  max-width: min(100ch, 100%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: var(--space-m);
 }
 
-/* Center header when there's no hero image - make it wider than content */
-article.post-grid.no-hero .post-header {
+/* Center header when there's no hero image */
+.post-main-article.no-hero .post-header {
   max-width: 110ch;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   align-items: center;
-}
-
-article.post-grid.no-hero .post-header-actions {
-  justify-content: center;
-  width: 100%;
-}
-
-/* Align header with main content when there is a hero image */
-article.post-grid:not(.no-hero) .post-header {
-  max-width: min(100ch, 100%);
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
 }
 
 .post-header-content {
@@ -95,21 +92,11 @@ article.post-grid:not(.no-hero) .post-header {
   line-height: 1.2;
 }
 
-/* Center title text when no hero */
-article.post-grid.no-hero .post-title {
-  text-align: center;
-}
-
 .publish-date {
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-label-large);
   color: var(--m3-color-on-surface-variant);
   margin-bottom: 0;
-}
-
-/* Center date text when no hero */
-article.post-grid.no-hero .publish-date {
-  text-align: center;
 }
 
 /* Copy as Markdown button */
@@ -125,16 +112,10 @@ article.post-grid.no-hero .publish-date {
   border-radius: 8px;
   font-family: var(--m3-font-family-body);
   font-size: var(--m3-font-label-medium);
-  font-size: var(--m3-font-label-medium);
-  font-weight: 560; /* Semi-bold */
+  font-weight: 560;
   cursor: pointer;
-  transition:
-    background-color var(--m3-motion-duration-short)
-      var(--m3-motion-easing-standard),
-    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
-    border-color var(--m3-motion-duration-short)
-      var(--m3-motion-easing-standard),
-    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
   white-space: nowrap;
   box-shadow: var(--m3-elevation-1);
 }
@@ -147,227 +128,14 @@ article.post-grid.no-hero .publish-date {
   box-shadow: var(--m3-elevation-2);
 }
 
-.copy-markdown-btn:active {
-  transform: translateY(0);
-}
-
-.copy-markdown-btn:focus-visible {
-  outline: 2px solid var(--m3-color-primary);
-  outline-offset: 2px;
-}
-
-.copy-markdown-btn svg {
-  width: var(--space-m);
-  height: var(--space-m);
-  flex-shrink: 0;
-}
-
-.copy-markdown-btn.copied {
-  background-color: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  border-color: var(--m3-color-primary);
-}
-
-.copy-markdown-btn.copied .copy-markdown-text::after {
-  content: "Copied!";
-}
-
-.copy-markdown-btn.copied .copy-markdown-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-}
-
-/* Hide text on mobile, show only icon */
-@media (max-width: 600px) {
-  .copy-markdown-btn {
-    padding: var(--space-2xs);
-  }
-
-  .copy-markdown-text {
-    display: none;
-  }
-
-  .copy-markdown-btn.copied .copy-markdown-text {
-    display: none;
-  }
-
-  .copy-markdown-btn.copied::after {
-    content: "Copied!";
-    font-size: var(--m3-font-label-small);
-  }
-}
-
-article.post-grid:not(.no-hero) .post-header-actions {
-  flex-shrink: 0;
-  margin-top: var(--space-3xs);
-}
-
 .main-content {
-  grid-area: main;
   min-width: 0;
   width: 100%;
 }
 
-/* When there's no hero image, center the content and use full width */
-article.post-grid.no-hero {
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "header"
-    "main"
-    "links";
-}
-
-article.post-grid.no-hero .main-content {
+.post-main-article.no-hero .main-content {
   max-width: 75ch;
   margin: 0 auto;
-}
-
-article.post-grid.no-hero .prose {
-  max-width: 100%;
-  text-align: left;
-}
-
-.aside {
-  grid-area: aside;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-m);
-  align-self: start; /* keep aside aligned to the top of the main column */
-  width: 100%; /* fill the aside column */
-}
-
-.hero {
-  width: 100%;
-  max-height: min(
-    60vh,
-    30rem
-  ); /* allow the hero to be visually prominent while staying constrained */
-  background-color: var(--m3-color-surface-variant);
-  border-radius: var(--space-s);
-  overflow: hidden;
-  margin: 0;
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 20%, transparent);
-  display: block;
-  box-shadow: var(--m3-elevation-2);
-  transition: box-shadow var(--m3-motion-duration-medium)
-    var(--m3-motion-easing-standard);
-}
-
-/* Ensure the image fills the hero box without stretching the layout */
-.hero-trigger img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero-trigger {
-  all: unset;
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: zoom-in;
-}
-
-.hero:hover {
-  box-shadow: var(--m3-elevation-4);
-}
-
-.hero-trigger img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--m3-motion-duration-long)
-    var(--m3-motion-easing-standard);
-  display: block;
-}
-
-.hero-trigger:hover img {
-  transform: scale(1.05);
-}
-
-.project-links {
-  grid-area: links;
-  margin-top: var(--space-s);
-  padding-top: var(--space-s);
-  border-top: 1px solid var(--m3-color-outline);
-  display: flex;
-  justify-content: center;
-}
-
-.project-links .links-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: var(--space-s);
-  flex-wrap: wrap;
-  align-items: center;
-  max-width: min(80ch, 56.25rem);
-  width: 100%;
-  padding-inline: var(--space-2xs);
-  box-sizing: border-box;
-}
-
-.aside-links {
-  margin-top: 0;
-}
-
-.links-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
-  align-items: stretch;
-}
-
-.project-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  padding: var(--space-2xs) var(--space-s);
-  border-radius: var(--space-s);
-  font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-label-large);
-  font-weight: 500;
-  text-decoration: none;
-  text-decoration: none;
-  background-color: var(--m3-color-primary-container);
-  color: var(--m3-color-on-primary-container);
-  backdrop-filter: blur(8px);
-  transition:
-    background-color var(--m3-motion-duration-short)
-      var(--m3-motion-easing-standard),
-    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
-    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-primary) 10%, transparent);
-  box-shadow: var(--m3-elevation-1);
-}
-
-.project-link .link-label {
-  display: inline-block;
-}
-
-.project-link .external-icon {
-  width: var(--space-xs);
-  height: var(--space-xs);
-  color: currentColor;
-  flex: 0 0 auto;
-}
-
-.project-link:hover {
-  background-color: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  transform: translateY(-2px);
-}
-
-.project-link:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 3px color-mix(in oklab, var(--m3-color-primary) 25%, transparent),
-    0 0 0 6px color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
-  border-color: color-mix(in oklab, var(--m3-color-primary) 40%, transparent);
 }
 
 .prose {
@@ -376,343 +144,167 @@ article.post-grid.no-hero .prose {
   line-height: 1.75;
   color: var(--m3-color-on-surface);
   min-width: 0;
-  max-width: 70ch; /* Optimal reading width */
+  max-width: 70ch;
   width: 100%;
-  margin: 0; /* ensure left alignment within the left column */
 }
 
-/* First h1 in prose should have less top margin */
-.prose > h1:first-child {
-  margin-top: 0;
+.prose h1,
+.prose h2,
+.prose h3 {
+  font-family: var(--m3-font-family-display);
+  color: var(--m3-color-on-surface);
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .prose h1 {
-  font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
-  color: var(--m3-color-on-surface);
   margin-top: var(--space-2xl);
-  margin-bottom: var(--space-l);
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
 }
-
-.prose h2,
-.prose h3,
-.prose h4 {
-  font-family: var(--m3-font-family-display);
-  color: var(--m3-color-on-surface);
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-s);
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: -0.008em;
-}
-
 .prose h2 {
   font-size: var(--m3-font-headline-medium);
+  margin-top: var(--space-xl);
 }
-
 .prose h3 {
   font-size: var(--m3-font-title-large);
   margin-top: var(--space-l);
-  margin-bottom: var(--space-s);
 }
 
-.prose h4 {
-  font-size: var(--m3-font-title-medium);
-  margin-top: var(--space-m);
-  margin-bottom: var(--space-xs);
-}
-
-.prose p {
-  margin-bottom: var(--space-m);
-  color: var(--m3-color-on-surface);
-}
-
-.prose strong,
-.prose b {
-  font-weight: 600;
-  color: var(--m3-color-on-surface);
-}
-
-.prose em,
-.prose i {
-  font-style: italic;
-}
-
-.prose a {
-  color: var(--m3-color-primary);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition:
-    background-color 0.18s,
-    color 0.18s,
-    border-color 0.18s;
-}
-
-.prose a:hover {
-  background-color: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  border-bottom-color: var(--m3-color-on-primary);
-}
-
-/* Lists */
-.prose ul,
-.prose ol {
+/* Table styling for coursework */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
   margin: var(--space-l) 0;
-  padding-left: var(--space-m);
-  color: var(--m3-color-on-surface);
-}
-
-.prose li {
-  margin: var(--space-2xs) 0;
-  line-height: 1.75;
-}
-
-.prose li:first-child {
-  margin-top: 0;
-}
-
-.prose li:last-child {
-  margin-bottom: 0;
-}
-
-.prose ul {
-  list-style-type: disc;
-}
-
-.prose ol {
-  list-style-type: decimal;
-}
-
-.prose ul ul,
-.prose ol ol,
-.prose ul ol,
-.prose ol ul {
-  margin: var(--space-xs) 0;
-}
-
-/* Code blocks */
-.prose pre {
-  background-color: var(--m3-color-surface-variant);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
-  border-radius: 8px;
-  padding: var(--space-m);
-  margin: var(--space-l) 0;
-  overflow-x: auto;
-  font-family:
-    "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
   font-size: var(--step--1);
-  line-height: 1.7;
-  color: var(--m3-color-on-surface);
 }
 
-.prose code {
-  font-family:
-    "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
-  font-size: 0.9em;
+.prose th,
+.prose td {
+  text-align: left;
+  padding: var(--space-xs) var(--space-s);
+  border-bottom: 1px solid var(--m3-color-outline-variant);
 }
 
-.prose pre code {
-  background: transparent;
-  padding: 0;
-  border: none;
-  font-size: inherit;
-  color: inherit;
-}
-
-/* Inline code */
-.prose :not(pre) > code {
-  background-color: var(--m3-color-surface-variant);
+.prose th {
+  font-weight: 700;
   color: var(--m3-color-primary);
-  padding: var(--space-3xs) var(--space-2xs);
-  border-radius: var(--space-xs);
-  font-size: 0.9em;
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 20%, transparent);
-}
-
-/* Blockquotes */
-.prose blockquote {
-  border-left: 4px solid var(--m3-color-primary);
-  padding-left: var(--space-l);
-  margin: var(--space-l) 0;
-  padding-top: var(--space-s);
-  padding-bottom: var(--space-s);
   background-color: color-mix(
     in oklab,
     var(--m3-color-primary) 5%,
     transparent
   );
-  border-radius: 0 var(--space-xs) var(--space-xs) 0;
-  font-style: italic;
-  color: var(--m3-color-on-surface);
 }
 
-.prose blockquote p {
-  margin-bottom: var(--space-2xs);
-}
-
-.prose blockquote p:last-child {
-  margin-bottom: 0;
-}
-
-/* Horizontal rules */
-.prose hr {
-  border: none;
-  border-top: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 25%, transparent);
-  margin: var(--space-2xl) 0;
-  background: none;
-  height: 0;
-}
-
-/* Add extra spacing after hr when followed by h1 or h2 */
-.prose hr + h1,
-.prose hr + h2 {
-  margin-top: var(--space-l);
-}
-
-/* Lightbox */
-.lightbox {
+/* TOC Integration (Ported from projects.css) */
+.blog-toc {
   position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  top: calc(var(--nav-height) + var(--space-l));
+  right: clamp(1.5rem, 5vw, 4.5rem);
+  width: 24rem;
+  z-index: 120;
+  pointer-events: auto;
+}
+
+.toc-card {
+  position: relative;
+  padding: var(--space-l) 0;
+  background: var(--color-card);
+  border-radius: var(--radius-md, var(--space-s));
+  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+  box-shadow: 0 var(--space-s) var(--space-2xl)
+    color-mix(in oklab, black 8%, transparent);
+  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l)));
+  overflow: auto;
+}
+
+.toc-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: var(--space-m);
-  z-index: 1000;
+  justify-content: space-between;
+  padding: 0 var(--space-l);
 }
-.lightbox.is-hidden {
-  display: none;
+
+.toc-card h4 {
+  margin: 0;
+  font-size: var(--step-2);
+  font-weight: 700;
+  color: var(--m3-color-primary);
 }
-.lightbox-content {
-  position: relative;
-  outline: none;
-  max-width: min(95vw, 87.5rem);
-  max-height: 90vh;
-}
-.lightbox-content img {
-  display: block;
-  max-width: 100%;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 12px;
-  background-color: var(--m3-color-surface);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-.lightbox-close {
-  position: absolute;
-  top: var(--space-s);
-  right: var(--space-s);
-  width: var(--space-xl);
-  height: var(--space-xl);
-  border-radius: 999px;
-  border: 1px solid var(--m3-color-outline);
-  background-color: var(--m3-color-surface-variant);
-  color: var(--m3-color-on-surface-variant);
+
+.toc-toggle {
+  appearance: none;
+  border: none;
+  background: color-mix(in oklab, var(--color-border) 8%, transparent);
+  color: var(--text-color);
+  width: var(--space-2xl);
+  height: var(--space-2xl);
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
-.lightbox-close:hover {
-  background-color: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
+  font-size: var(--step-0);
 }
 
-/* Mobile - single column, stacking order: Header → Image → Links → Text */
-@media (max-width: 900px) {
-  article.post-grid {
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-l) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.toc-list li {
+  padding: 0 var(--space-l);
+}
+
+.toc-list a {
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-size: var(--step-0);
+  transition: color 0.2s;
+  display: block;
+}
+
+.toc-list a:hover,
+.toc-list a.link-active {
+  color: var(--m3-color-primary);
+  font-weight: 600;
+}
+
+.toc-depth-3 {
+  padding-left: var(--space-xl) !important;
+}
+
+/* FAB for Mobile ToC */
+@media (max-width: 980px) {
+  .post-grid-layout {
     grid-template-columns: 1fr;
-    padding: var(--space-xl) var(--space-s);
-    gap: var(--space-m);
-    /* Mobile stacking order: Header → Image (aside) → Links → Text (main) */
-    grid-template-areas:
-      "header"
-      "aside"
-      "links"
-      "main";
   }
 
-  .prose {
-    max-width: 100%;
-  }
-
-  .prose h1 {
-    margin-top: var(--space-xl);
-  }
-
-  .prose h2,
-  .prose h3 {
-    margin-top: var(--space-l);
-  }
-
-  .post-header {
-    grid-area: header;
-    text-align: left;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .post-header {
-    flex-direction: column;
-  }
-
-  .post-header-actions {
-    width: 100%;
-  }
-
-  .copy-markdown-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Restore normal flow for mobile */
-  .aside {
-    position: static;
+  .blog-toc {
+    position: fixed;
+    top: auto;
+    right: var(--space-s-m);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m-l));
     width: auto;
-    grid-area: aside;
-    margin: 0 0 var(--space-s) 0;
-    align-self: stretch;
+    z-index: 200;
   }
 
-  .main-content {
-    grid-area: main;
-    margin-right: 0; /* remove desktop reserved space */
+  .blog-toc.toc-collapsed {
+    width: var(--space-2xl);
   }
 
-  .project-links {
-    grid-area: links;
-    margin-top: var(--space-m);
+  .blog-toc.toc-collapsed .toc-card {
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    border-radius: 50%;
+    background: var(--accent-color);
+    overflow: visible;
   }
 
-  .links-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-2xs);
-  }
-
-  .project-link {
-    padding: var(--space-2xs) var(--space-s);
-    border-radius: 999px;
-  }
-
-  .post-title {
-    font-size: var(--m3-font-headline-medium);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-trigger img,
-  .project-link {
-    transition: none !important;
+  .blog-toc.toc-collapsed .toc-toggle {
+    color: var(--color-on-accent);
   }
 }

@@ -2,11 +2,15 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
 import icon from "astro-icon";
+import rehypeSlug from "rehype-slug";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://jluu.dev",
   base: "/",
+  markdown: {
+    rehypePlugins: [rehypeSlug],
+  },
   integrations: [
     sitemap(),
     solidJs({ include: ["src/components/**/*.tsx"] }),
