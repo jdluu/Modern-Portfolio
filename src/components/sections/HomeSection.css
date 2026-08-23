@@ -1,155 +1,126 @@
-/* Home / Hero section styles (moved from HomeSection.astro) */
+/* Hero — editorial left-aligned design (taste-skill §4.3 anti-center bias) */
 
-/* Container / hero layout */
 .content-section.homepage-intro-section {
-  padding: var(--space-xl-2xl) var(--space-m-l);
-  min-height: 80vh;
+  min-height: 85dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
   position: relative;
   overflow: hidden;
+  padding: var(--space-xl-2xl) var(--space-l);
+  max-width: var(--container-blog, 72rem);
+  margin: 0 auto;
 }
+
+/* Visually hidden but available for screen readers */
 .page-h2 {
   position: absolute;
   left: -9999px;
-} /* visually hidden heading for semantics */
-
-.intro-content {
-  z-index: 1;
 }
 
-/* Hero text visible at initial paint; animate-hero applies decorative entrance */
+.intro-content {
+  position: relative;
+  z-index: 1;
+  max-width: 56rem;
+  padding-left: 0;
+}
+
 .intro-greeting {
-  font-size: var(--step-2);
-  font-weight: var(--font-weight-h5);
+  font-size: var(--step--1);
+  font-weight: 520;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-accent);
+  margin: 0 0 var(--space-xs);
   opacity: 1;
-  transform: none;
 }
+
 .animate-hero .intro-greeting {
-  animation: fadeInUp 0.6s ease-out 0.2s both;
-  will-change: transform;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
 }
 
 .intro-role {
-  font-size: var(--step-7);
+  font-size: var(--step-6);
   font-family: var(--m3-font-family-display);
-  font-weight: var(--font-weight-h1);
-  line-height: var(--font-line-height-heading-tight);
+  font-weight: 520;
+  line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
-  margin: var(--space-xs) 0 var(--space-s);
+  margin: 0 0 var(--space-m);
   opacity: 1;
-  transform: none;
 }
+
 .animate-hero .intro-role {
-  animation: fadeInUp 0.7s ease-out 0.4s both;
-  will-change: transform;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
 }
 
 .intro-tagline {
-  font-size: var(--step-3);
+  font-size: var(--step-1);
   font-weight: 420;
-  line-height: var(--font-line-height-body);
-  letter-spacing: -0.005em;
+  line-height: 1.5;
   color: var(--color-text-tertiary);
   max-width: 45ch;
-  margin: 0 auto var(--space-xl);
+  margin: 0 0 var(--space-xl);
   opacity: 1;
-  transform: none;
 }
+
 .animate-hero .intro-tagline {
-  animation: fadeInUp 0.8s ease-out 0.6s both;
-  will-change: transform;
+  animation: fadeInUp 0.7s ease-out 0.3s both;
 }
 
 .resume-button-wrapper {
   opacity: 1;
-  transform: none;
-}
-.animate-hero .resume-button-wrapper {
-  animation: fadeInUp 0.8s ease-out 0.8s both;
-  will-change: transform;
 }
 
-/* CTA styling */
+.animate-hero .resume-button-wrapper {
+  animation: fadeInUp 0.7s ease-out 0.4s both;
+}
+
 .resume-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
   min-height: var(--space-2xl);
-  padding: 0 var(--space-m-l);
-  font-size: var(--step-1);
-  font-family: var(--m3-font-family-body);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  padding: 0 var(--space-l);
+  font-size: var(--step-0);
+  font-weight: 560;
   color: var(--color-on-accent);
   background-color: var(--color-accent);
-  border: 1px solid color-mix(in oklab, var(--color-accent) 70%, black 30%);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 80%, black 20%);
   border-radius: var(--space-3xl);
   text-decoration: none;
   box-shadow: 0 var(--space-s) var(--space-xl)
-    color-mix(in oklab, var(--color-accent) 30%, black 70%);
-  transition:
-    background-color var(--m3-motion-duration-short)
-      var(--m3-motion-easing-standard),
-    color var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
-    border-color var(--m3-motion-duration-short)
-      var(--m3-motion-easing-standard),
-    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
-    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
+    color-mix(in oklab, var(--color-accent) 25%, transparent);
+  transition: all 0.2s ease;
 }
+
 @media (hover: hover) {
   .resume-link:hover {
     background-color: color-mix(in oklab, var(--color-accent) 85%, black 15%);
-    border-color: var(--color-accent);
     box-shadow: var(--m3-elevation-3);
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 }
+
 .resume-link:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--color-accent) 45%, white 55%);
-  outline-offset: var(--space-3xs);
-  box-shadow: 0 var(--space-m) var(--space-2xl)
-    color-mix(in oklab, var(--color-accent) 45%, black 55%);
-  transform: translateY(calc(var(--space-3xs) * -0.5));
+  outline: 2px solid var(--color-accent);
+  outline-offset: var(--space-2xs);
 }
-.resume-link:visited {
-  color: var(--color-on-accent);
-}
+
 .resume-link:active {
-  background-color: color-mix(in oklab, var(--color-accent) 70%, black 30%);
-  border-color: color-mix(in oklab, var(--color-accent) 60%, black 40%);
-  box-shadow: 0 6px 16px color-mix(in oklab, var(--color-accent) 35%, black 65%);
   transform: translateY(0);
 }
 
-@keyframes fadeInUp {
-  from {
-    transform: translateY(var(--space-s));
-    opacity: 1;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Decorative background organic blobs & ambient animation */
+/* Animated decorative shapes */
 .background-shapes {
-  position: fixed; /* Fixed to viewport to prevent scroll extension */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden; /* Clip shapes to the viewport */
-  z-index: -1; /* Behind all content */
+  overflow: hidden;
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -160,44 +131,46 @@
     var(--color-accent) 0%,
     transparent 70%
   );
-  opacity: 0.35; /* Base opacity for visibility */
-  filter: blur(var(--space-2xl-3xl));
+  filter: blur(5rem);
   will-change: transform, opacity;
   animation: ambientFloat 20s infinite ease-in-out alternate;
   pointer-events: none;
 }
 
-/* Organic blob variety via unique border-radius and dimensions */
 .shape1 {
   width: clamp(30rem, 45vw, 60rem);
   height: clamp(30rem, 45vw, 60rem);
   top: -10%;
-  left: -5%;
+  right: -5%;
   border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
   animation-duration: 25s;
-  opacity: 0.35;
+  opacity: 0.2;
 }
 
 .shape2 {
-  width: clamp(25rem, 40vw, 50rem);
-  height: clamp(20rem, 30vw, 45rem);
-  top: 50%;
-  left: 70%;
+  width: clamp(20rem, 30vw, 40rem);
+  height: clamp(15rem, 25vw, 35rem);
+  bottom: 10%;
+  left: 60%;
   border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
   animation-duration: 30s;
   animation-delay: -5s;
-  opacity: 0.3;
+  opacity: 0.15;
 }
 
 .shape3 {
-  width: clamp(20rem, 25vw, 40rem);
-  height: clamp(25rem, 30vw, 45rem);
-  top: 70%;
-  left: 10%;
-  border-radius: 30% 70% 60% 40% / 50% 40% 60% 50%;
-  animation-duration: 22s;
-  animation-delay: -2s;
-  opacity: 0.25;
+  display: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes ambientFloat {
@@ -205,10 +178,10 @@
     transform: translate(0, 0) scale(1) rotate(0deg);
   }
   33% {
-    transform: translate(3%, 5%) scale(1.08) rotate(5deg);
+    transform: translate(2%, 3%) scale(1.05) rotate(3deg);
   }
   66% {
-    transform: translate(-4%, 3%) scale(0.92) rotate(-3deg);
+    transform: translate(-3%, 2%) scale(0.95) rotate(-2deg);
   }
   100% {
     transform: translate(0, 0) scale(1) rotate(0deg);
@@ -218,6 +191,24 @@
 @media (prefers-reduced-motion: reduce) {
   .shape {
     animation: none;
-    opacity: 0.1; /* Slightly visible but static */
+    opacity: 0.08;
+  }
+  .intro-greeting,
+  .intro-role,
+  .intro-tagline,
+  .resume-button-wrapper {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-section.homepage-intro-section {
+    padding: var(--space-xl) var(--space-m);
+  }
+  .intro-role {
+    font-size: var(--step-4);
+  }
+  .intro-tagline {
+    font-size: var(--step-0);
   }
 }
