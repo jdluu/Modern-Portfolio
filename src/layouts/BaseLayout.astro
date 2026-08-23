@@ -40,22 +40,26 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Jeffrey Luu - Developer | Designer" />
+    <meta property="og:title" content={title} />
     <meta
       property="og:description"
-      content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences. Explore projects and skills in HTML, CSS, JS, React, and Astro."
+      content="Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences."
     />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Jeffrey Luu — Software Developer" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Jeffrey Luu - Developer | Designer" />
+    <meta name="twitter:title" content={title} />
     <meta
       name="twitter:description"
-      content="Portfolio of Jeffrey Luu, a web and mobile developer specializing in creating innovative and user-friendly experiences."
+      content="Portfolio of Jeffrey Luu, a software engineer focused on creating innovative and user-friendly experiences."
     />
+    <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
