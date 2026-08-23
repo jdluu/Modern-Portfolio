@@ -114,7 +114,8 @@ const structuredDataString = JSON.stringify(structuredData);
                               alt={`${title} cover`}
                               loading="eager"
                               fetchpriority="high"
-                              widths={[800, 1200, 1600]}
+                              widths={[800, 1200]}
+                              quality={75}
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                               class="project-hero-img"
                             />
@@ -238,6 +239,7 @@ const structuredDataString = JSON.stringify(structuredData);
                                   src={finalUrl}
                                   alt={`${title} final product`}
                                   widths={[800, 1200]}
+                                  quality={75}
                                   sizes="(max-width: 768px) 100vw, 800px"
                                   loading="lazy"
                                   decoding="async"

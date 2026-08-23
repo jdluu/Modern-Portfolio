@@ -25,25 +25,11 @@ export default defineConfig({
   },
   output: "static",
   prefetch: true,
-  // Allow remote image optimization for CMS-hosted images.
-  // This is permissive (all HTTPS). Tighten with specific hostnames if desired.
-  image: {
-    remotePatterns: [{ protocol: "https" }],
-  },
   vite: {
     build: {
       target: "es2024",
       sourcemap: false,
-      minify: "terser",
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-        format: {
-          comments: false,
-        },
-      },
+      // esbuild minification (Vite default): faster builds, comparable output.
       cssCodeSplit: true,
       rollupOptions: {
         output: {
