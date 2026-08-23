@@ -78,9 +78,21 @@
 
 /* ===== CONTENT COLUMN (centered, fixed-TOC sits outside) ===== */
 .project-content {
-  max-width: 68ch;
+  max-width: 72ch;
   margin: 0 auto;
   min-width: 0;
+}
+
+@media (min-width: 1800px) {
+  .project-content {
+    max-width: 90ch;
+  }
+}
+
+@media (min-width: 2200px) {
+  .project-content {
+    max-width: 100ch;
+  }
 }
 
 /* ===== HEADER INFO (role + summary) ===== */

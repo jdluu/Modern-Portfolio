@@ -11,9 +11,21 @@
 
 /* Article — centered, no grid fighting the fixed TOC */
 .post-main-article {
-  max-width: 68ch;
+  max-width: 72ch;
   margin: 0 auto;
   background: transparent;
+}
+
+@media (min-width: 1800px) {
+  .post-main-article {
+    max-width: 90ch;
+  }
+}
+
+@media (min-width: 2200px) {
+  .post-main-article {
+    max-width: 100ch;
+  }
 }
 
 /* ===== HEADER ===== */
@@ -234,6 +246,14 @@
   width: 18rem;
   z-index: 120;
   pointer-events: auto;
+}
+
+/* On very wide screens, bring the TOC closer to content */
+@media (min-width: 2000px) {
+  .blog-toc {
+    width: 16rem;
+    right: calc((100vw - min(100ch, 1200px)) / 2 + 1rem);
+  }
 }
 
 .toc-card {
