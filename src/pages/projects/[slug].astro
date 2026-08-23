@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import LightboxImage from "@components/ui/LightboxImage.astro";
 import "./projects.css";
 import {
   sanitizeStringForUI,
@@ -234,39 +235,9 @@ const structuredDataString = JSON.stringify(structuredData);
                     {data?.final ? (
                       <>
                         {finalUrl ? (
-                          <figure class="final-figure" aria-hidden="false">
-                            {typeof finalUrl === 'string' ? (
-                                <img src={finalUrl} alt={`${title} final product`} loading="lazy" decoding="async" />
-                            ) : finalUrl.format === 'gif' ? (() => {
-                                // GIFs ship alongside converted mp4/webm demos (same basename).
-                                const meta = finalUrl as unknown as { width?: number; height?: number };
-                                return (
-                                  <video
-                                    width={meta.width}
-                                    height={meta.height}
-                                    autoplay
-                                    loop
-                                    muted
-                                    playsinline
-                                    preload="none"
-                                    aria-label={`${title} final product demo`}
-                                  >
-                                    <source src={demoVideoUrl(entry.id, "webm")} type="video/webm" />
-                                    <source src={demoVideoUrl(entry.id, "mp4")} type="video/mp4" />
-                                  </video>
-                                );
-                            })() : (
-                                <Image
-                                  src={finalUrl}
-                                  alt={`${title} final product`}
-                                  widths={[800, 1200]}
-                                  quality={75}
-                                  sizes="(max-width: 768px) 100vw, 800px"
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                            )}
-                          </figure>
+                          <div class="final-figure-wrapper">
+                            <LightboxImage src={finalUrl} alt={`${title} final product`} />
+                          </div>
                         ) : (
                           <p class="section-content">{data.final}</p>
                         )}

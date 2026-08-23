@@ -27,3 +27,27 @@
   max-width: min(100%, 1920px);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
 }
+
+/* Pagination transition animation */
+.card-grid .project-item,
+.card-grid .experience-item {
+  animation: cardFadeIn 0.3s ease-out both;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-grid .project-item,
+  .card-grid .experience-item {
+    animation: none;
+  }
+}
