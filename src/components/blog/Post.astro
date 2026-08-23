@@ -15,26 +15,23 @@ const description = item?.description ?? "";
 ---
 <li class="post-item" data-slug={slug}>
   <a href={`/posts/${slug}`} class="post-card" aria-labelledby={`post-${slug}-title`}>
-    <h2 id={`post-${slug}-title`} class="post-card-title">{title}</h2>
-
-    {dateDisplay ? (
-      <time class="post-card-date" datetime={date ? date.toISOString() : undefined}>
-        {dateDisplay}
-      </time>
-    ) : null}
-
-    {tags && tags.length > 0 ? (
-      <div class="post-card-tags" aria-hidden="false">
-        {tags.slice(0, 6).map((tag) => (
-          <span class="tag-chip">#{tag}</span>
-        ))}
-      </div>
-    ) : null}
-
-    {description ? (
-      <p class="post-card-desc line-clamp-3">
-        {description}
-      </p>
-    ) : null}
+    <div class="post-card-date-column">
+      {dateDisplay ? (
+        <time class="post-card-date" datetime={date ? date.toISOString() : undefined}>{dateDisplay}</time>
+      ) : null}
+    </div>
+    <div class="post-card-content">
+      <h2 id={`post-${slug}-title`} class="post-card-title">{title}</h2>
+      {tags && tags.length > 0 ? (
+        <div class="post-card-tags" aria-hidden="false">
+          {tags.slice(0, 6).map((tag) => (
+            <span class="tag-chip">#{tag}</span>
+          ))}
+        </div>
+      ) : null}
+      {description ? (
+        <p class="post-card-desc line-clamp-3">{description}</p>
+      ) : null}
+    </div>
   </a>
 </li>

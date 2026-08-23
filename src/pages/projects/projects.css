@@ -286,11 +286,14 @@
   display: block;
 }
 
-/* ===== TOC (fixed sidebar, positioned by JS) ===== */
+/* ===== TOC (fixed right sidebar via CSS; JS fine-tunes) ===== */
 .project-toc {
+  position: fixed;
+  top: calc(var(--nav-height) + var(--space-l));
+  right: clamp(1rem, 3vw, 3rem);
+  width: 18rem;
   z-index: 120;
   pointer-events: auto;
-  width: 18rem;
 }
 
 .toc-card {
