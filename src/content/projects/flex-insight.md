@@ -4,8 +4,7 @@ slug: "flex-insight"
 date: "2026-03"
 draft: true
 
-summary: "An offline workout coach for the Pixel 9 that uses local AI and the Hevy API to provide private, free training insights."
-
+summary: "An offline workout coach for Android that analyzes Hevy data locally with Gemini Nano — nothing leaves the phone."
 role: "Developer"
 technologies:
   [
@@ -22,16 +21,11 @@ tools: ["Android Studio", "Material 3", "Local AI"]
 cover: "../../assets/images/projects/flex-insight/cover_flex-insight.min.png"
 final: "../../assets/images/projects/flex-insight/final_flex-insight.min.png"
 
-background: "FlexInsight was created to explore how local AI could function as a fitness coach using data from the Hevy app. Since health and fitness data is highly personal, the goal was to build a tool that could provide feedback and analysis without sending sensitive information to a cloud service. Using a Pixel 9 with Gemini Nano made it possible to keep this workflow private, offline, and entirely on-device."
-
-solution: "The application pulls workout history from the Hevy API and processes it locally via Android's AICore. By integrating Gemini Nano, the app analyzes volume and consistency to provide suggestions on weight adjustments or recovery needs. The interface was built with Jetpack Compose to ensure data is easy to read and accessible during active gym sessions."
-
-process: "Development focused on building a reliable bridge between the Hevy API and the local AI processing layer. This involved creating a sync process to store data in a local database, ensuring the app remained functional in environments without network reception. Significant effort was spent testing prompts for the local model to ensure the generated coaching advice was relevant and fast enough for real-time use."
-
-impact: "The project resulted in a functional prototype that serves as a private alternative to cloud-based fitness analytics. It demonstrates that on-device AI is capable of handling personalized data analysis for specific use cases like fitness tracking. The tool remains a practical solution for tracking training progress while maintaining complete data sovereignty."
-
-reflection: "Building FlexInsight provided insights into the capabilities and limitations of smaller, local AI models. The project showed that with correctly structured data, on-device hardware can solve complex problems without relying on massive cloud infrastructure. Future interests include exploring how to give local models more power through tool-calling or MCP servers, potentially allowing for exercise research within a private workflow."
-
+background: "My training data lives in Hevy, and I didn't want to hand it to another cloud service just to get basic coaching feedback. Fitness data is personal. A Pixel 9 with Gemini Nano meant I could build analysis that runs entirely on-device."
+solution: "The app syncs workout history from the Hevy API into local SQLite, then runs analysis through Android's AICore. Gemini Nano looks at volume and consistency trends and suggests weight adjustments or recovery days. Jetpack Compose UI designed to be readable mid-set at the gym."
+process: "The real work was the bridge between the Hevy sync layer and local inference — including keeping the app fully usable with no signal in a gym basement. I went through many prompt iterations against the local model to get advice that was actually relevant and fast enough to feel live."
+impact: "A working prototype that does what cloud fitness apps charge for, privately and offline. It's also proof to myself that small on-device models are good enough for narrow, well-structured problems."
+reflection: "Biggest takeaway: local models are capable but constrained — prompt design matters far more than with frontier models, and structured input data matters more than either. Next I'd like to experiment with tool-calling or MCP servers to give the model research ability without breaking privacy."
 links:
   live: ""
   source: "https://github.com/jdluu/FlexInsight"

@@ -3,8 +3,7 @@ title: "Parsegram"
 slug: "parsegram"
 date: "2021-10"
 
-summary: "A photo-sharing Android app inspired by social media platforms, built to learn about user accounts, photo uploads, and feed management."
-
+summary: "A photo-sharing Android app built in a week to learn accounts, camera capture, and feeds."
 role: "Developer"
 technologies: ["Java", "Android", "Parse"]
 tools: ["Android Studio", "Git", "GitHub"]
@@ -12,16 +11,11 @@ tools: ["Android Studio", "Git", "GitHub"]
 cover: "../../assets/images/projects/parsegram/cover_parsegram.png"
 final: "../../assets/images/projects/parsegram/final_parsegram.gif"
 
-background: "I built Parsegram to learn the basics of building a social app. I wanted to see if I could create something that allows users to sign up, take photos with their camera, and share them with others in a common feed. It was a chance to practice working with a backend service and handling media on a mobile device."
-
-solution: "The app uses a backend service to manage user accounts and store the photos that people post. I built a simple feed where you can scroll through all the recent posts and added a pull to refresh feature to check for new content. I used the device camera to let users take pictures directly within the app and then add captions before posting them to the shared timeline."
-
-process: "I started by setting up the connection to the backend and building the login and sign up screens. Then I focused on the photo capture logic, making sure the app could access the camera and display a preview of the image. I spent a lot of time on the main feed to make sure it loaded posts efficiently and showed the captions correctly. I tested the app by creating multiple accounts and posting different types of images to see how the feed handled them."
-
-impact: "The project resulted in a functional photo sharing app that handles the entire process from account creation to posting and viewing content. It served as a good way to understand how mobile apps communicate with servers to store and retrieve data. It provided a solid foundation for my understanding of how social features are built in a mobile environment."
-
-reflection: "Building this was a useful lesson in how to connect an app to a cloud service. I learned how to handle background tasks so that uploading a photo does not freeze the interface. If I were to work on this more, I would add a way to like or comment on photos and find a way to compress the images so they upload faster."
-
+background: "I wanted to understand how social apps work under the hood, so I built a minimal Instagram-style clone: sign up, take a photo, caption it, post to a shared feed."
+solution: "Parse handles accounts and image storage. The feed shows recent posts with pull-to-refresh, photos come straight from the device camera with captions added before posting."
+process: "Backend connection and auth screens first, then camera capture and preview — which took longer than expected to get right. Tested by creating several accounts and posting different images to make sure the feed held up."
+impact: "Built in about a week (Oct 22–27, 2021). Not fancy, but it covered the whole loop: account creation through posting to viewing, and demystified how mobile apps talk to servers."
+reflection: "Main practical lesson: move work off the main thread or uploads freeze your UI. With more time I'd add reactions and client-side image compression — raw photos upload painfully slowly."
 links:
   live: ""
   source: "https://github.com/jdluu/Parsegram"

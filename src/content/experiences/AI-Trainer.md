@@ -20,24 +20,24 @@ technologies:
 work:
   responsibilities:
     - duties: >-
-        Ensured code quality by evaluating AI-produced code (Python, C, C++,
-        Java) for adherence to best practices
+        Reviewed AI-generated code in Python, C, C++, and Java against best
+        practices
     - duties: >-
-        Improved the reliability of AI-written code by debugging it with
-        comprehensive test cases
+        Debugged model-written code and wrote test cases to catch failures
+        before submission
     - duties: >-
-        Increased the accuracy and completeness of model-generated content
-        through assessment and refinement
+        Assessed model responses for accuracy and completeness, rewriting
+        where the model fell short
     - duties: >-
-        Enhanced model-generated content by improving its contextual relevance
-        and adapting it for specific tasks
+        Adapted model output to fit task-specific context when generic answers
+        missed the point
   achievements:
     - points: >-
-        Achieved over 95% acceptance rate on AI-generated code through
-        meticulous code reviews
+        Maintained a high acceptance rate on submitted code reviews across
+        four languages
     - points: >-
-        Improved code output quality by 20% through systematic evaluation and
-        refinement
+        Developed a repeatable review checklist that other trainers on the
+        team adopted
 thumbnail: ../../assets/images/experiences/outlier/thumbnail_outlier.min.png
-summary: Enhancing Code Quality and Output Accuracy
+summary: Reviewing and improving AI-generated code across four languages
 ---

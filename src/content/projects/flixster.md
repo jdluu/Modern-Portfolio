@@ -3,8 +3,7 @@ title: "Flixster"
 slug: "flixster"
 date: "2021-09"
 
-summary: "An Android app for browsing movies currently playing in theaters using data from a movie database. Users can see details and watch trailers."
-
+summary: "The Android app I built to learn mobile development — browse movies, view details, watch trailers."
 role: "Developer"
 technologies: ["Java", "Android SDK", "Android Async HTTP"]
 tools: ["Android Studio", "Git", "GitHub", "Glide"]
@@ -12,16 +11,11 @@ tools: ["Android Studio", "Git", "GitHub", "Glide"]
 cover: "../../assets/images/projects/flixster/cover_flixster.png"
 final: "../../assets/images/projects/flixster/final_flixster.gif"
 
-background: "Flixster was a way for me to learn how to build Android applications. I wanted to create something that could pull live data from a movie database and show it in a simple, easy to use list. I focused on learning how to talk to a remote API and how to navigate between different screens in a mobile app."
-
-solution: "The app gets a list of movies and shows them with their posters, titles, and descriptions. I set it up so that you can tap on any movie to see more details about it. I also included a way to watch movie trailers directly in the app. It uses background requests to get the movie data so the app stays responsive while it is loading information."
-
-process: "I started by setting up the project and adding the tools I needed for network requests and image loading. I created a data model for the movies and wrote logic to parse the information coming from the API. I spent time building a list that can handle many items efficiently and then added a second screen for the movie details. I tested the app to make sure it handled errors correctly if the movie data could not be reached."
-
-impact: "The app successfully pulls and displays movie data in a clean interface. It provides a simple way to browse through new releases and watch trailers without having to leave the application. It served its purpose as a functional prototype that helped me understand the basics of mobile development."
-
-reflection: "Building this gave me my first look at how to handle data in a mobile app. I learned how to structure my code to handle information from an external source and how to build a list that scrolls smoothly. If I were to work on this again, I would add a way to save favorite movies so I could find them later even without an internet connection."
-
+background: "This was my introduction to Android development. The goal was simple: pull live data from a movie API and present it cleanly, while learning how network calls and screen navigation actually work on mobile."
+solution: "A movie list with posters, titles, and descriptions; tap through to a detail screen; play trailers inline. Network requests run in the background so the list stays responsive while data loads."
+process: "Set up the HTTP client and image loading first, modeled the movie data, wrote the parsing logic, then built the list and detail screens. I tested failure cases deliberately — what happens when the API is unreachable — because that's the part tutorials skip."
+impact: "It did exactly what I set out for: a working app that made the fundamentals of mobile development concrete instead of theoretical."
+reflection: "First time handling remote data in an app and building a scrollable list that doesn't stutter. If I revisited it, offline favorites would be the obvious addition."
 links:
   live: ""
   source: "https://github.com/jdluu/Flixster"

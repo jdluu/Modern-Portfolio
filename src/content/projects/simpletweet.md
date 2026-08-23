@@ -3,8 +3,7 @@ title: "SimpleTweet"
 slug: "simpletweet"
 date: "2021-10"
 
-summary: "A simple Twitter client for Android that allows users to view their timeline and post new tweets using the official service."
-
+summary: "A minimal Twitter client for Android — timeline with infinite scroll, compose with character limit, OAuth login."
 role: "Developer"
 technologies: ["Java", "Android"]
 tools: ["Git", "GitHub", "Android Studio"]
@@ -12,16 +11,11 @@ tools: ["Git", "GitHub", "Android Studio"]
 cover: "../../assets/images/projects/simpletweet/cover_simpletweet.min.png"
 final: "../../assets/images/projects/simpletweet/final_simpletweet.gif"
 
-background: "I built SimpleTweet to see if I could create a simpler version of a social media app. I wanted to focus on the core features like seeing a timeline of posts and being able to write my own. It was a way for me to learn how to securely connect to a real social media service and handle live data from the internet."
-
-solution: "The app allows you to log in with a Twitter account and view a list of recent posts. I built a scrolling timeline that loads more tweets as you reach the bottom, making it feel like a standard social app. I also added a screen for writing new tweets, with a counter to make sure the text stays within the character limit. The app refreshes automatically so you can see new posts as they happen."
-
-process: "I started by working on the login process to make sure the app could safely talk to the social media service. I then built the main timeline screen and wrote the logic to fetch and display the posts. Most of the effort went into handling the data flow so that new tweets would appear in the right place and that the app remained fast while loading more items. I tested the app by posting a few messages and scrolling through my feed to see how it handled the live data."
-
-impact: "The project resulted in a functional tool for viewing and posting updates to a real social network. It provided a simple way to interact with the service without the distractions of a more complex application. It served as a useful way to see how apps can be built around existing online platforms."
-
-reflection: "Building this was a useful lesson in how to work with real-world data and security rules. I learned how to manage tokens for user accounts and how to structure requests to a remote service. If I were to work on this more, I would add features like being able to reply to posts or share them with others."
-
+background: "After learning Android basics, I wanted to connect to a real production API with real auth requirements. Twitter's platform was the target: log in, read a timeline, post tweets."
+solution: "OAuth login, an infinite-scrolling timeline, and a compose screen with a character counter. The timeline refreshes automatically so new posts show up without manual reloads."
+process: "Auth came first since everything depends on token handling being correct. Then the timeline: fetching, displaying, and paginating smoothly. Tested against my own account — posting real tweets and scrolling the feed to check pagination behaved."
+impact: "A working client around a live social platform, and a real education in API tokens and request structure — things toy projects don't teach."
+reflection: "Working with a real API's constraints and security rules was the valuable part. Replies and sharing would be next if I extended it."
 links:
   live: ""
   source: "https://github.com/jdluu/SimpleTweet"

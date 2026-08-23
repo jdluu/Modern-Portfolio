@@ -21,25 +21,23 @@ technologies:
 work:
   responsibilities:
     - duties: >-
-        Applied multi-agent reinforcement learning to develop an improved
-        path-finding system for simulations
+        Built path-finding for simulations using multi-agent reinforcement
+        learning
     - duties: >-
-        Designed and tested Unity simulations in C# to enhance AI
-        decision-making and coordination
+        Designed Unity simulations in C# to study agent decision-making and
+        coordination
     - duties: >-
-        Applied machine learning to train agents for complex tasks and optimize
-        their behavior
+        Trained agents for complex tasks and iterated on reward design to fix
+        unwanted behavior
     - duties: >-
-        Collaborated on reports and contributed to academic discussions,
-        enhancing the quality of research outputs
+        Co-authored reports and presented findings in lab meetings
   achievements:
     - points: >-
-        Improved multi-agent reinforcement learning performance through reward
-        shaping techniques inspired by video game design principles
+        Improved agent coordination with reward shaping adapted from video
+        game design principles
     - points: >-
-        Demonstrated coordinated behavior among multiple agents in Unity
-        simulations, validating reinforcement learning strategies for complex
-        tasks
+        Produced reproducible demonstrations of coordinated multi-agent
+        behavior in Unity
 thumbnail: ../../assets/images/experiences/csulb/thumbnail_csulb.min.png
-summary: Pushing the boundaries of AI collaboration
+summary: Multi-agent reinforcement learning research at CSULB
 ---

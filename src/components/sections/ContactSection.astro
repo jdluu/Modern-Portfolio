@@ -32,7 +32,7 @@ import "./ContactSection.css";
 				name="name"
 				required
 				aria-required="true"
-				placeholder="Enter your name"
+				placeholder="Jane Doe"
 				minlength="2"
 				autocomplete="name"
 				aria-describedby="name-error"
@@ -48,7 +48,7 @@ import "./ContactSection.css";
 				name="email"
 				required
 				aria-required="true"
-				placeholder="Enter your email"
+				placeholder="jane@example.com"
 				autocomplete="email"
 				aria-describedby="email-error"
 			/>
@@ -63,7 +63,7 @@ import "./ContactSection.css";
 				name="subject"
 				required
 				aria-required="true"
-				placeholder="Enter message subject"
+				placeholder="What's this about?"
 				aria-describedby="subject-error"
 			/>
 			<span id="subject-error" class="error-message" aria-live="polite"></span>
@@ -76,14 +76,14 @@ import "./ContactSection.css";
 				name="message"
 				required
 				aria-required="true"
-				placeholder="Write your message here"
+				placeholder="Say hello — opportunities, questions, or feedback all welcome."
 				aria-describedby="message-error"
 				rows="5"
 			></textarea>
 			<span id="message-error" class="error-message" aria-live="polite"></span>
 		</div>
 
-		<button type="submit" aria-label="Send message" id="submit-button">Send Email!</button>
+		<button type="submit" aria-label="Send message" id="submit-button">Send message</button>
 	</form>
 </section>
 
@@ -217,7 +217,7 @@ import "./ContactSection.css";
 				showToast("Network error. Please try again.", "error");
 			} finally {
 				submitBtn.disabled = false;
-				submitBtn.textContent = "Send Email!";
+				submitBtn.textContent = "Send message";
 			}
 		});
 	});

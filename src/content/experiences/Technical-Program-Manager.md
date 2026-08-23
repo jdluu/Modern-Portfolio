@@ -19,20 +19,21 @@ technologies:
 work:
   responsibilities:
     - duties: >-
-        Managed course logistics, including scheduling sessions, reviewing
-        submissions, and collaborating with managers
+        Ran course logistics — session scheduling, submission reviews, and
+        coordination with program managers
     - duties: >-
-        Worked closely with Regional Program Manager and CodePath.org team to
-        address student feedback
+        Channeled student feedback to the regional program manager and
+        CodePath.org team
     - duties: >-
-        Developed a Kotlin app development curriculum and provided student
-        support improving educational outcomes
-    - duties: Promoted enrollment through presentations and information distribution
+        Built Kotlin app-development curriculum material and held student
+        support hours
+    - duties: >-
+        Presented at campus events to recruit students into the program
   achievements:
     - points: Generated 80+ student applications through enrollment promotion efforts
     - points: >-
         Mentored a student group that became a top 10 finalist in android apps
         for Codepath nationally
 thumbnail: ../../assets/images/experiences/codepath/thumbnail_codepath.min.png
-summary: Driving the Education and Empowerment of Future Tech Innovators
+summary: Teaching Android development and running a CodePath course
 ---
