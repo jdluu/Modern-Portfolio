@@ -10,6 +10,18 @@ import {
 import { Image, getImage } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
+// Import demo videos eagerly so Astro's asset pipeline emits them with hashed URLs.
+const demoVideos = import.meta.glob<string>(
+  "/src/assets/images/projects/*/final_*.{mp4,webm}",
+  { eager: true, import: "default" },
+);
+const demoVideoUrl = (projectDir: string, ext: "mp4" | "webm"): string | undefined => {
+  const key = Object.keys(demoVideos).find(
+    (k) => k.includes(`/projects/${projectDir}/final_`) && k.endsWith(`.${ext}`),
+  );
+  return key ? demoVideos[key] : undefined;
+};
+
 // Generate static paths
 export async function getStaticPaths() {
   const entries = await getCollection("projects");
@@ -225,16 +237,26 @@ const structuredDataString = JSON.stringify(structuredData);
                           <figure class="final-figure" aria-hidden="false">
                             {typeof finalUrl === 'string' ? (
                                 <img src={finalUrl} alt={`${title} final product`} loading="lazy" decoding="async" />
-                            ) : finalUrl.format === 'gif' ? (
-                                <img
-                                  src={finalUrl.src}
-                                  width={finalUrl.width}
-                                  height={finalUrl.height}
-                                  alt={`${title} final product`}
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                            ) : (
+                            ) : finalUrl.format === 'gif' ? (() => {
+                                // GIFs ship alongside converted mp4/webm demos (same basename).
+                                const meta = finalUrl as unknown as { src: string; width?: number; height?: number };
+                                const base = meta.src.replace(/\.gif$/, "");
+                                return (
+                                  <video
+                                    width={meta.width}
+                                    height={meta.height}
+                                    autoplay
+                                    loop
+                                    muted
+                                    playsinline
+                                    preload="none"
+                                    aria-label={`${title} final product demo`}
+                                  >
+                                    <source src={demoVideoUrl(entry.id, "webm")} type="video/webm" />
+                                    <source src={demoVideoUrl(entry.id, "mp4")} type="video/mp4" />
+                                  </video>
+                                );
+                            })() : (
                                 <Image
                                   src={finalUrl}
                                   alt={`${title} final product`}
