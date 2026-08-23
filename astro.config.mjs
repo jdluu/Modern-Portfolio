@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
 import icon from "astro-icon";
@@ -9,7 +10,9 @@ export default defineConfig({
   site: "https://jluu.dev",
   base: "/",
   markdown: {
-    rehypePlugins: [rehypeSlug],
+    processor: unified({
+      rehypePlugins: [rehypeSlug],
+    }),
   },
   integrations: [
     sitemap(),
