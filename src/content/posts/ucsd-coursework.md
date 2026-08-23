@@ -65,7 +65,8 @@ The "cognitive" in cognitive science:
 - **WCWP 10A/10B: The Writing Course** - Two quarters of college writing.
 - **MATH 20B/20C: Calculus for Science & Engineering**
 
-## Appendix: Complete Course History
+<details class="appendix-table">
+<summary>Full course history (44 entries)</summary>
 
 | Academic Year | Term   | Course    | Title                                    |
 | :------------ | :----- | :-------- | :--------------------------------------- |
@@ -113,3 +114,5 @@ The "cognitive" in cognitive science:
 | 2023-24       | Spring | CSE 135   | Online Database Analytics Applications   |
 | 2023-24       | Spring | CSE 191   | Senior Seminar in CSE                    |
 | 2023-24       | Spring | DSGN 1    | Design of Everyday Things                |
+
+</details>

@@ -34,7 +34,8 @@ The courses that shaped my current research direction:
 - **CECS 698: Thesis or Industrial Project** (Spring 2026) - Thesis proposal and initial work.
 - Currently finishing the thesis (expected 2027), on enhancing agentic AI capabilities in simulations with reinforcement learning and reward shaping techniques.
 
-## Appendix: Complete Course History
+<details class="appendix-table">
+<summary>Full course history (11 entries)</summary>
 
 | Year      | Term   | Course   | Title                                    |
 | :-------- | :----- | :------- | :--------------------------------------- |
@@ -49,3 +50,5 @@ The courses that shaped my current research direction:
 | 2025-2026 | Fall   | CECS 547 | Software Maintenance, Reengin. & Reuse   |
 | 2025-2026 | Fall   | CECS 697 | Directed Research                        |
 | 2025-2026 | Spring | CECS 698 | Thesis or Industrial Project             |
+
+</details>

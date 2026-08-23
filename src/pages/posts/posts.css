@@ -1,41 +1,24 @@
-/* Blog Post Page Container */
+/* Blog Post Page — redesigned per taste-skill guidelines */
+/* Design read: editorial/developer portfolio, VARIANCE:5 MOTION:3 DENSITY:3 */
+
 .post-page-container {
-  max-width: var(--container-standard);
+  max-width: var(--container-blog, 72rem);
   margin: 0 auto;
-  padding: var(--space-xl) var(--space-m);
+  padding: var(--space-xl) var(--space-l);
   box-sizing: border-box;
-}
-
-/* Base Layout Structure (matches projects) */
-.post-grid-layout {
-  display: grid;
-  grid-template-columns: 1fr 22rem;
-  gap: var(--space-xl);
-  align-items: start;
   position: relative;
-  transition: all var(--m3-motion-duration-medium)
-    var(--m3-motion-easing-standard);
 }
 
-.post-content-column {
-  min-width: 0;
-}
-
-/* Original article styles adapted for the column */
+/* Article — centered, no grid fighting the fixed TOC */
 .post-main-article {
-  background-color: var(--m3-color-surface);
-  color: var(--m3-color-on-surface);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-  box-sizing: border-box;
+  max-width: 68ch;
+  margin: 0 auto;
+  background: transparent;
 }
 
+/* ===== HEADER ===== */
 .post-header {
-  margin: 0 0 var(--space-xl) 0;
-  text-align: left;
-  align-self: start;
-  max-width: min(100ch, 100%);
+  margin-bottom: var(--space-2xl);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -43,112 +26,97 @@
   gap: var(--space-m);
 }
 
-/* Center header when there's no hero image */
-.post-main-article.no-hero .post-header {
-  max-width: 110ch;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 .post-header-content {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
-}
-
-.post-links-top {
-  display: inline-flex;
-  align-items: center;
-  margin-top: var(--space-s);
-  padding: var(--space-xs) var(--space-m);
-  background: color-mix(
-    in oklab,
-    var(--m3-color-secondary-container) 12%,
-    transparent
-  );
-  backdrop-filter: blur(12px);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 10%, transparent);
-  border-radius: 999px;
-  box-shadow: 0 4px 10px color-mix(in oklab, black 5%, transparent);
-}
-
-.post-header-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-s);
 }
 
 .post-title {
   font-family: var(--m3-font-family-display);
   font-size: var(--m3-font-headline-large);
+  font-weight: 540;
   color: var(--m3-color-primary);
-  margin-bottom: var(--space-m);
   line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-s);
 }
 
 .publish-date {
   font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-label-large);
-  color: var(--m3-color-on-surface-variant);
-  margin-bottom: 0;
+  font-size: var(--step--1);
+  color: var(--color-text-tertiary);
+  margin: 0;
 }
 
-/* Copy as Markdown button */
+/* ===== COPY MARKDOWN BUTTON ===== */
+.post-header-actions {
+  flex-shrink: 0;
+}
+
 .copy-markdown-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2xs);
   padding: var(--space-2xs) var(--space-s);
-  background-color: var(--m3-color-surface-variant);
-  color: var(--m3-color-on-surface);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 30%, transparent);
-  border-radius: 8px;
+  background: color-mix(
+    in oklab,
+    var(--m3-color-surface-variant) 50%,
+    transparent
+  );
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
   font-family: var(--m3-font-family-body);
-  font-size: var(--m3-font-label-medium);
-  font-weight: 560;
+  font-size: var(--step--2);
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--m3-motion-duration-short)
-    var(--m3-motion-easing-standard);
+  transition: all 0.15s ease;
   white-space: nowrap;
-  box-shadow: var(--m3-elevation-1);
 }
 
 .copy-markdown-btn:hover {
-  background-color: var(--m3-color-primary-container);
-  color: var(--m3-color-on-primary-container);
-  border-color: var(--m3-color-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--m3-elevation-2);
+  background: var(--m3-color-surface-variant);
+  color: var(--color-text-primary);
+  border-color: var(--m3-color-outline);
 }
 
-.main-content {
-  min-width: 0;
-  width: 100%;
-}
-
-.post-main-article.no-hero .main-content {
-  max-width: 75ch;
-  margin: 0 auto;
-}
-
+/* ===== PROSE (Main Content) ===== */
 .prose {
   font-family: var(--m3-font-family-body);
   font-size: var(--step-0);
-  line-height: 1.8;
+  line-height: 1.75;
   color: var(--m3-color-on-surface);
-  min-width: 0;
-  max-width: 70ch;
   width: 100%;
 }
 
-/* Restore list styling inside prose (reset.css strips it globally) */
+.prose p {
+  margin-bottom: var(--space-m);
+  line-height: 1.75;
+}
+
+/* Headings */
+.prose h2 {
+  font-family: var(--m3-font-family-display);
+  font-size: var(--m3-font-headline-medium);
+  font-weight: 520;
+  color: var(--m3-color-on-surface);
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-s);
+  padding-bottom: var(--space-2xs);
+  border-bottom: 1px solid var(--color-border);
+  letter-spacing: -0.01em;
+}
+
+.prose h3 {
+  font-family: var(--m3-font-family-display);
+  font-size: var(--m3-font-title-large);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-xs);
+}
+
+/* Lists */
 .prose ul,
 .prose ol {
   list-style: revert;
@@ -166,71 +134,48 @@
   min-width: 14ch;
 }
 
-/* Section intro paragraph — subtle breathing room before course list */
-.prose p {
-  margin-bottom: var(--space-m);
-  line-height: 1.75;
+/* Links inside prose */
+.prose a {
+  color: var(--m3-color-primary);
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--m3-color-primary) 30%,
+    transparent
+  );
+  text-underline-offset: 0.15em;
+  transition: text-decoration-color 0.15s;
 }
 
-/* Tighten spacing around headings inside prose */
-.prose h2 {
-  font-size: var(--m3-font-headline-medium);
-  margin-top: var(--space-2xl);
-  margin-bottom: var(--space-s);
-  padding-bottom: var(--space-2xs);
-  border-bottom: 1px solid var(--m3-color-outline-variant);
+.prose a:hover {
+  text-decoration-color: var(--m3-color-primary);
 }
 
-.prose h3 {
-  font-size: var(--m3-font-title-large);
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-xs);
-}
-
-.prose h1,
-.prose h2,
-.prose h3 {
-  font-family: var(--m3-font-family-display);
-  color: var(--m3-color-on-surface);
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.prose h1 {
-  font-size: var(--m3-font-headline-large);
-  margin-top: var(--space-2xl);
-}
-.prose h2 {
-  font-size: var(--m3-font-headline-medium);
-  margin-top: var(--space-xl);
-}
-.prose h3 {
-  font-size: var(--m3-font-title-large);
-  margin-top: var(--space-l);
-}
-
-/* Table styling for coursework */
+/* ===== APPENDIX TABLE ===== */
 .prose table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--space-l) 0;
   font-size: var(--step--1);
-  border: 1px solid var(--m3-color-outline-variant);
-  border-radius: var(--space-s);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .prose th,
 .prose td {
   text-align: left;
-  padding: var(--space-s) var(--space-m);
-  border-bottom: 1px solid var(--m3-color-outline-variant);
+  padding: var(--space-xs) var(--space-s);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .prose th {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--m3-color-on-primary-container);
   background-color: var(--m3-color-primary-container);
+  font-size: var(--step--2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .prose tr:last-child td {
@@ -240,7 +185,7 @@
 .prose tbody tr:nth-child(even) {
   background-color: color-mix(
     in oklab,
-    var(--m3-color-surface-variant) 30%,
+    var(--m3-color-surface-variant) 25%,
     transparent
   );
 }
@@ -248,121 +193,163 @@
 .prose tbody tr:hover {
   background-color: color-mix(
     in oklab,
-    var(--m3-color-secondary-container) 30%,
+    var(--m3-color-secondary-container) 25%,
     transparent
   );
 }
 
-/* TOC Integration (Ported from projects.css) */
+/* ===== COLLAPSIBLE TABLE (details/summary) ===== */
+.prose details.appendix-table {
+  margin: var(--space-l) 0;
+}
+
+.prose details.appendix-table summary {
+  cursor: pointer;
+  font-family: var(--m3-font-family-display);
+  font-size: var(--step-0);
+  font-weight: 520;
+  color: var(--m3-color-primary);
+  padding: var(--space-s) 0;
+  border-bottom: 1px solid var(--color-border);
+  user-select: none;
+}
+
+.prose details.appendix-table summary:hover {
+  color: var(--color-accent-hover, var(--m3-color-primary));
+}
+
+.prose details.appendix-table summary::marker {
+  color: var(--color-text-tertiary);
+}
+
+.prose details.appendix-table > table {
+  margin-top: var(--space-m);
+}
+
+/* ===== TOC (fixed sidebar, positioned by JS) ===== */
 .blog-toc {
-  position: fixed;
-  top: calc(var(--nav-height) + var(--space-l));
-  right: clamp(1.5rem, 5vw, 4.5rem);
-  width: clamp(16rem, 18vw, 22rem);
   z-index: 120;
   pointer-events: auto;
+  width: 18rem;
 }
 
 .toc-card {
-  position: relative;
-  padding: var(--space-l) 0;
+  padding: var(--space-m) 0;
   background: var(--color-card);
-  border-radius: var(--radius-md, var(--space-s));
-  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
   box-shadow: 0 var(--space-s) var(--space-2xl)
-    color-mix(in oklab, black 8%, transparent);
-  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l)));
-  overflow: auto;
+    color-mix(in oklab, black 6%, transparent);
+  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l) * 2));
+  overflow-y: auto;
 }
 
 .toc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-l);
+  padding: 0 var(--space-m);
 }
 
 .toc-card h4 {
   margin: 0;
-  font-size: var(--step-2);
-  font-weight: 700;
-  color: var(--m3-color-primary);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--m3-color-on-surface);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .toc-toggle {
   appearance: none;
   border: none;
-  background: color-mix(in oklab, var(--color-border) 8%, transparent);
-  color: var(--text-color);
-  width: var(--space-2xl);
-  height: var(--space-2xl);
-  border-radius: 8px;
+  background: color-mix(in oklab, var(--color-border) 10%, transparent);
+  color: var(--color-text-tertiary);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: var(--step-0);
+  line-height: 1;
+}
+
+.toc-toggle:hover {
+  background: color-mix(in oklab, var(--color-border) 20%, transparent);
 }
 
 .toc-list {
   list-style: none;
   padding: 0;
-  margin: var(--space-l) 0 0;
+  margin: var(--space-m) 0 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: var(--space-2xs);
 }
 
 .toc-list li {
-  padding: 0 var(--space-l);
+  padding: 0 var(--space-m);
 }
 
 .toc-list a {
   text-decoration: none;
-  color: var(--color-text-secondary);
-  font-size: var(--step-0);
-  transition: color 0.2s;
+  color: var(--color-text-tertiary);
+  font-size: var(--step--1);
+  line-height: 1.4;
+  transition: color 0.15s;
   display: block;
+  padding: 0.1em 0;
 }
 
 .toc-list a:hover,
 .toc-list a.link-active {
   color: var(--m3-color-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .toc-depth-3 {
-  padding-left: var(--space-xl) !important;
+  padding-left: calc(var(--space-m) + var(--space-s)) !important;
 }
 
-/* FAB for Mobile ToC */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 980px) {
-  .post-grid-layout {
-    grid-template-columns: 1fr;
+  .post-page-container {
+    padding: var(--space-l) var(--space-m);
+  }
+
+  .post-header {
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+
+  .post-title {
+    font-size: var(--m3-font-headline-medium);
   }
 
   .blog-toc {
     position: fixed;
     top: auto;
-    right: var(--space-s-m);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m-l));
+    right: var(--space-m);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m));
     width: auto;
     z-index: 200;
   }
 
   .blog-toc.toc-collapsed {
-    width: var(--space-2xl);
+    width: 3rem;
   }
 
   .blog-toc.toc-collapsed .toc-card {
-    width: var(--space-2xl);
-    height: var(--space-2xl);
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
-    background: var(--accent-color);
+    background: var(--m3-color-primary);
     overflow: visible;
   }
 
   .blog-toc.toc-collapsed .toc-toggle {
-    color: var(--color-on-accent);
+    color: var(--m3-color-on-primary);
   }
 }
