@@ -11,7 +11,7 @@ tools: ["Android Studio", "Git", "GitHub"]
 cover: "../../assets/images/projects/parsegram/cover_parsegram.png"
 final: "../../assets/images/projects/parsegram/final_parsegram.gif"
 
-background: "I wanted to understand how social apps work under the hood, so I built a minimal Instagram-style clone: sign up, take a photo, caption it, post to a shared feed."
+background: "The final project of CodePath's Android course. I wanted to understand how social apps work under the hood, so I built a minimal Instagram-style clone: sign up, take a photo, caption it, post to a shared feed."
 solution: "Parse handles accounts and image storage. The feed shows recent posts with pull-to-refresh, photos come straight from the device camera with captions added before posting."
 process: "Backend connection and auth screens first, then camera capture and preview, which took longer than expected to get right. Tested by creating several accounts and posting different images to make sure the feed held up."
 impact: "Built in about a week (Oct 22–27, 2021). Not fancy, but it covered the whole loop: account creation through posting to viewing, and demystified how mobile apps talk to servers."

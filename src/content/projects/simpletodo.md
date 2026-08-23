@@ -11,7 +11,7 @@ tools: ["Android Studio", "Git", "GitHub"]
 cover: "../../assets/images/projects/simpletodo/cover_simpletodo.png"
 final: "../../assets/images/projects/simpletodo/final_simpletodo.gif"
 
-background: "One of my very first apps. The point was learning fundamentals like user input and persistence. Can I make data survive closing the app?"
+background: "One of my very first apps, built through CodePath's Android course. The point was learning fundamentals like user input and persistence. Can I make data survive closing the app?"
 solution: "A single task list. Type a task and add it, long-press to delete, tap into a second screen to edit text. The list saves to local storage so it's still there after a restart."
 process: "I built the main screen first, then list management, then persistence. Persistence got most of the attention because it was the actual learning goal. Tested by adding items, force-closing the app, and verifying state came back."
 impact: "Did its job and taught me the core loop of Android development: input, state, storage."

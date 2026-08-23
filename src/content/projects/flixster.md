@@ -11,7 +11,7 @@ tools: ["Android Studio", "Git", "GitHub", "Glide"]
 cover: "../../assets/images/projects/flixster/cover_flixster.png"
 final: "../../assets/images/projects/flixster/final_flixster.gif"
 
-background: "This was my introduction to Android development. The goal was simple: pull live data from a movie API and present it cleanly, while learning how network calls and screen navigation actually work on mobile."
+background: "This was my introduction to Android development, built as part of CodePath's Android course. The goal was simple: pull live data from a movie API and present it cleanly, while learning how network calls and screen navigation actually work on mobile."
 solution: "A movie list with posters, titles, and descriptions; tap through to a detail screen; play trailers inline. Network requests run in the background so the list stays responsive while data loads."
 process: "Set up the HTTP client and image loading first, modeled the movie data, wrote the parsing logic, then built the list and detail screens. I tested failure cases deliberately (what happens when the API is unreachable?) because that's the part tutorials skip."
 impact: "It did exactly what I set out for: a working app that made the fundamentals of mobile development concrete instead of theoretical."

@@ -29,11 +29,14 @@ work:
         support hours
     - duties: >-
         Presented at campus events to recruit students into the program
+    - duties: >-
+        Returned to CodePath as an instructor after first completing the same
+        Android course as a student in 2021
   achievements:
     - points: Generated 80+ student applications through enrollment promotion efforts
     - points: >-
         Mentored a student group that became a top 10 finalist in android apps
         for Codepath nationally
 thumbnail: ../../assets/images/experiences/codepath/thumbnail_codepath.min.png
-summary: Teaching Android development and running a CodePath course
+summary: Taught Android development at CodePath, the same program I started in as a student
 ---
