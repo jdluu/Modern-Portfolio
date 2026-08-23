@@ -239,8 +239,7 @@ const structuredDataString = JSON.stringify(structuredData);
                                 <img src={finalUrl} alt={`${title} final product`} loading="lazy" decoding="async" />
                             ) : finalUrl.format === 'gif' ? (() => {
                                 // GIFs ship alongside converted mp4/webm demos (same basename).
-                                const meta = finalUrl as unknown as { src: string; width?: number; height?: number };
-                                const base = meta.src.replace(/\.gif$/, "");
+                                const meta = finalUrl as unknown as { width?: number; height?: number };
                                 return (
                                   <video
                                     width={meta.width}
