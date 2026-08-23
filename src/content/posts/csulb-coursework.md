@@ -12,7 +12,7 @@ I started my M.S. in Computer Science at Cal State Long Beach in Fall 2024, fini
 
 The courses that shaped my current research direction:
 
-- **CECS 529: Search Engine Technology** - Retrieval, ranking, and the architecture of search systems. Directly relevant background for [BrainWave](/projects/brainwave) and [TruthSeeker](/projects/truthseeker).
+- **CECS 529: Search Engine Technology** - Retrieval, ranking, and the architecture of search systems. Directly relevant background for [TruthSeeker](/projects/truthseeker).
 - **CECS 551: Advanced Artificial Intelligence** - Graduate-level AI methods.
 - **CECS 553: Machine Vision** - Feature extraction and visual recognition pipelines.
 - **CECS 697: Directed Research** (Fall 2025) - The research work that grew into multi-agent reinforcement learning with reward shaping, now the core of my thesis.
