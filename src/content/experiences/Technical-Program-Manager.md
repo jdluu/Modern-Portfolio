@@ -19,7 +19,7 @@ technologies:
 work:
   responsibilities:
     - duties: >-
-        Ran course logistics — session scheduling, submission reviews, and
+        Ran course logistics: session scheduling, submission reviews, and
         coordination with program managers
     - duties: >-
         Channeled student feedback to the regional program manager and
