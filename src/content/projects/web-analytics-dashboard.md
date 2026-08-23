@@ -11,7 +11,7 @@ tools: ["DigitalOcean", "GitHub", "MySQL Workbench", "Postman"]
 cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"
 final: "../../assets/images/projects/web_analytics_dashboard/final_web_analytics_dashboard.min.png"
 
-background: "I wanted to know which of my pages people actually visit and how long they stay. Existing analytics tools gave me more than I needed while taking my data elsewhere. So I built my own tracker."
+background: "Started as a project for CSE 135 (Online Database Analytics Applications) at UCSD. I wanted to know which of my pages people actually visit and how long they stay. Existing analytics tools gave me more than I needed while taking my data elsewhere. So I built my own tracker."
 solution: "A Node/Express endpoint collects visit data into MySQL, and a private dashboard renders traffic in ZingChart charts and tables. Login-gated so the analytics are mine alone."
 process: "Deciding what was worth tracking came first: page views, session duration, and little else. Then schema design for event data, the collection code, and the dashboard. Verified end-to-end by browsing my sites and watching numbers land correctly."
 impact: "It replaced guessing with real numbers for my own projects. It was also a solid full-stack exercise, since instrumentation, storage, and visualization all touch the same data."

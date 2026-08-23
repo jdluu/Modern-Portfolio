@@ -50,7 +50,7 @@ The "cognitive" in cognitive science:
 
 ## Data Science & Research Methods
 
-- **COGS 108: Data Science in Practice** - Python data pipelines on real datasets. My introduction to pandas and the messy-reality-of-data lessons that showed up again later in [Learning From Health](/projects/learning-from-health).
+- **COGS 108: Data Science in Practice** - Python data pipelines on real datasets. My introduction to pandas; [Learning From Health](/projects/learning-from-health) was the course project.
 - **COGS 14A: Introduction to Research Methods** - Experimental design and statistics.
 - **PSYC 60: Introduction to Statistics**
 - **MATH 18: Linear Algebra** - The math that everything ML-related sits on top of.
