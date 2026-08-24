@@ -3,7 +3,7 @@ title: "Bughound"
 slug: "bughound"
 date: "2025-01-15"
 
-summary: "A bug tracker built for CECS 544: reports, assignments, attachments, and lifecycle tracking without the bloat."
+summary: "A bug tracker for CECS 544: file-attachment reports, assignment grading, and database-driven workflows."
 role: "Developer"
 technologies: ["React", "TypeScript", "Bun", "Hono"]
 tools: ["GitHub", "GitHub Actions", "Docker", "Supabase"]
