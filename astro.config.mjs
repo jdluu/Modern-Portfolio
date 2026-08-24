@@ -26,6 +26,8 @@ export default defineConfig({
   output: "static",
   prefetch: true,
   vite: {
+    // Allow the tailnet preview host (temporary local review setup).
+    preview: { allowedHosts: ["debian.tail38ae82.ts.net"] },
     build: {
       target: "es2024",
       sourcemap: false,

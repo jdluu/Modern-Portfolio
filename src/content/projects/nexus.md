@@ -2,7 +2,7 @@
 title: "Nexus"
 slug: "nexus"
 date: "2026-03"
-draft: true
+draft: false
 
 summary: "A terminal dashboard that launches TUI apps so I stop forgetting their commands. Published to PyPI as nexus-tui."
 role: "Developer"

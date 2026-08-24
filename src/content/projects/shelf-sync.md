@@ -2,7 +2,7 @@
 title: "ShelfSync"
 slug: "shelf-sync"
 date: "2026-04"
-draft: true
+draft: false
 
 summary: "Syncs Calibre ebook libraries between devices over the local network, without cloud services or cables, keeping metadata intact."
 role: "Developer"

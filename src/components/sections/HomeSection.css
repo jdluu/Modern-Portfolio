@@ -26,7 +26,9 @@
 }
 
 .intro-greeting {
-  font-size: var(--step--1);
+  /* Small-caps eyebrow above the name. Bumped from --step--1 (maxes at
+     ~15px) because it read as too small on 2560px-wide displays. */
+  font-size: clamp(0.8333rem, 0.55rem + 0.9vw, 1.35rem);
   font-weight: 520;
   letter-spacing: 0.08em;
   text-transform: uppercase;
