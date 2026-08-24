@@ -978,11 +978,10 @@ section[id] {
 
 .toc-card h4 {
   margin: 0;
-  font-size: var(--step--1);
-  font-weight: 600;
+  font-size: var(--step-2);
+  font-weight: 700;
   color: var(--m3-color-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .toc-toggle {
@@ -1017,7 +1016,7 @@ section[id] {
 .toc-list a {
   text-decoration: none;
   color: var(--color-text-tertiary);
-  font-size: var(--step--1);
+  font-size: var(--step-1);
   line-height: 1.6;
   transition: color 0.15s;
   display: block;
