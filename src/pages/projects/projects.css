@@ -1,26 +1,31 @@
-/* Project detail page — restoring live-site proportions with taste refinements */
-/* Design read: developer portfolio, wide two-column layout, editorial detail */
+/* New stylesheet for project detail pages
+   Uses global design tokens defined in src/styles/global.css
+   Desktop-first layout: two-column grid, hero overlay, sticky right TOC card,
+   cards, lists, and minimal token-based CTA buttons.
+*/
 
-/* ===== CONTAINER — match live site at 110rem ===== */
-.project-page-container {
+/* Container + Grid */
+.project-detail {
+  max-width: var(
+    --container-blog
+  ); /* Increased from 85rem to 72rem... wait, standard is 128rem. Let's use 110rem or similar. */
   max-width: 110rem;
   margin: 0 auto;
   padding: var(--space-xl) var(--space-m);
   box-sizing: border-box;
 }
 
-.project-detail {
-  width: 100%;
-}
-
-/* ===== TWO-COLUMN GRID: content + TOC sidebar ===== */
 .project-grid {
   display: grid;
   grid-template-columns: 1fr 22rem;
   gap: var(--space-xl);
   align-items: start;
+  position: relative;
+  transition: all var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
 }
 
+/* Content column (left) and TOC column (right) */
 .project-content {
   min-width: 0;
 }
@@ -29,7 +34,62 @@
   width: 100%;
 }
 
-/* ===== INTRO CARD (visual white card container) ===== */
+/* HERO */
+.project-hero {
+  position: relative;
+  border-radius: var(--space-s);
+  overflow: hidden;
+  box-shadow: var(--m3-elevation-2);
+  margin-bottom: var(--space-l);
+  transition: box-shadow var(--m3-motion-duration-medium)
+    var(--m3-motion-easing-standard);
+}
+
+.project-hero:hover {
+  box-shadow: var(--m3-elevation-4);
+}
+
+.project-hero-figure {
+  width: 100%;
+  height: clamp(30rem, 50vh, 45rem);
+  overflow: hidden;
+  display: block;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.02));
+  background-size: cover;
+  background-position: center;
+}
+
+.project-hero-figure::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.35) 70%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.project-hero-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center;
+  transition: transform 0.6s ease;
+}
+
+.project-hero:hover .project-hero-figure img,
+.project-hero:focus-within .project-hero-figure img {
+  transform: scale(1.03);
+}
+
+/* Singular Project Header Card */
 .project-intro-card {
   background: var(--color-surface);
   border-radius: 2rem;
@@ -41,20 +101,18 @@
   margin-bottom: var(--space-xl);
 }
 
-/* ===== HERO full-width inside intro card ===== */
 .project-hero {
   position: relative;
   margin: 0;
   display: block;
-  overflow: hidden;
 }
 
 .project-hero-figure {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #f3f4f8;
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Unified aspect ratio from reference code */
+  overflow: hidden;
+  background: #f3f4f8; /* background-light from reference */
 }
 
 .project-hero-figure img {
@@ -63,13 +121,9 @@
   object-fit: cover;
   display: block;
   opacity: 0.95;
-  transition: transform 0.6s ease;
 }
 
-.project-hero:hover .project-hero-figure img {
-  transform: scale(1.02);
-}
-
+/* Precise title overlay matching reference screenshot */
 .project-hero-title {
   position: absolute;
   inset: 0;
@@ -79,7 +133,8 @@
   padding: var(--space-l) var(--space-xl);
   background: linear-gradient(
     180deg,
-    transparent 0%,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 60%,
     rgba(0, 0, 0, 0.4) 80%,
     rgba(0, 0, 0, 0.8) 100%
   );
@@ -90,66 +145,292 @@
 .project-hero-title h1 {
   margin: 0;
   font-size: var(--step-5);
-  font-weight: 520;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-weight: 780;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== SUMMARY + ACTIONS (two-column inside intro card) ===== */
+.project-version {
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--step-0);
+  font-weight: 350;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Use the global fluid heading tokens but keep local scale for hero */
+.project-hero-title h1,
+.project-hero-title .project-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 780; /* Thicker for more impact */
+  color: #fff;
+  font-size: var(--step-5);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.025em;
+  text-shadow: var(--m3-elevation-2);
+}
+
+/* Summary (lead) below hero */
+.project-summary {
+  margin: var(--space-m) 0 var(--space-xl);
+  color: var(--color-text-secondary);
+  font-size: var(--step-3); /* Bumped from step-2 */
+  line-height: var(--font-line-height-body);
+  max-width: 85ch;
+}
+
+/* Two-column info row (My Role / Tech & Tools) inside content column */
+.info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gap-md);
+  margin: var(--space-l) 0;
+  align-items: start; /* prevent grid items (cards) from stretching to equal height */
+}
+
+.card {
+  padding: var(--space-m);
+  background: var(--color-card);
+  border-radius: var(--space-s);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
+  box-shadow: var(--m3-elevation-1);
+  transition:
+    transform var(--m3-motion-duration-short) var(--m3-motion-easing-standard),
+    box-shadow var(--m3-motion-duration-short) var(--m3-motion-easing-standard);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--m3-elevation-3);
+  background: color-mix(
+    in oklab,
+    var(--color-card) 95%,
+    var(--m3-color-primary) 5%
+  );
+}
+
+/* Role text */
+.role-heading {
+  margin: 0 0 var(--space-s);
+  font-weight: 780;
+  font-size: var(--step-1);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--m3-color-primary);
+}
+
+.role-body {
+  color: var(--color-text-secondary);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
+}
+
+/* Technologies & Tools two-column grid inside the card:
+   - Desktop: two equal columns (Technologies | Tools) with a subtle vertical divider
+   - Mobile: stacks into one column (divider removed)
+*/
+.tt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+  align-items: start;
+  margin-top: var(--space-3xs);
+}
+
+.tt-column {
+  min-width: 0;
+  padding: 0;
+}
+
+.tt-subheading {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--step-0); /* Bumped from step--1 */
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.tt-column .tech-list {
+  margin: 0;
+  padding: 0;
+}
+
+.tt-column .tech-list li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Desktop: show a subtle vertical divider between the two columns and add breathing room */
+@media (min-width: 981px) {
+  .tt-column + .tt-column {
+    padding-left: var(--space-m);
+    border-left: 1px solid
+      color-mix(in oklab, var(--color-border) 12%, transparent);
+    margin-left: 0;
+  }
+  /* Slightly offset the subheading so it visually anchors to its column */
+  .tt-subheading {
+    margin-left: 0;
+  }
+}
+
+/* Small screens: stack into a single column and remove divider */
+@media (max-width: 560px) {
+  .tt-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-s);
+  }
+
+  .tt-column + .tt-column {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .tech-pill {
+    font-size: var(--step--1);
+    padding: var(--space-3xs) var(--space-xs);
+  }
+}
+
+/* Technologies / Tools list */
+.tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap; /* allow pills to wrap into multiple rows to reduce vertical whitespace */
+  gap: var(--space-xs);
+}
+
+/* Individual tech list items: remove stacked layout and extra gaps */
+.tech-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-s);
+  color: var(--color-text-secondary);
+  margin: 0; /* remove default bottom spacing that was adding vertical space */
+  padding: 0;
+}
+
+/* Style pills a bit tighter so more items fit per row */
+.tech-pill {
+  display: inline-block;
+  padding: var(--space-2xs) var(--space-s);
+  background: color-mix(in oklab, var(--m3-color-primary) 8%, transparent);
+  border: 1px solid
+    color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
+  border-radius: 999px;
+  font-size: var(--step-0); /* Bumped from step--1 */
+  color: var(--m3-color-on-surface);
+  line-height: 1;
+  font-weight: 500;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+}
+
+.tech-pill:hover {
+  background: var(--m3-color-primary);
+  color: var(--m3-color-on-primary);
+  transform: scale(1.05);
+}
+
+/* Main narrative sections */
+.project-section {
+  margin: var(--space-l) 0;
+}
+
+/* Section headings spacing */
+.project-section h2 {
+  margin-top: 0;
+  margin-bottom: var(--space-m);
+  color: var(--text-color);
+  font-size: var(--step-3); /* Bumped from step-2 */
+  font-weight: 650;
+}
+
+.section-content {
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: 1.6;
+}
+
+p {
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
+  margin-bottom: var(--space-l);
+  color: var(--color-text-secondary);
+  max-width: 85ch;
+}
+
+/* Process steps: prefer bullet list for arrays */
+.process-list {
+  list-style: disc;
+  margin-left: var(--space-m);
+  color: var(--color-text-secondary);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
+}
+
+/* Media figure for final product */
+.final-figure {
+  margin: var(--space-l) 0;
+  border-radius: var(--space-s);
+  overflow: hidden;
+  box-shadow: 0 var(--space-s) var(--space-xl)
+    color-mix(in oklab, black 8%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+}
+
+.final-figure img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Impact and reflection lists */
+.simple-list {
+  list-style: disc;
+  margin-left: var(--space-m);
+  color: var(--color-text-secondary);
+  font-size: var(--step-2); /* Bumped from step-1 */
+  line-height: var(--font-line-height-body);
+}
+
+/* CTA Row */
+/* Overview Layout (Summary + Side Actions) */
 .overview-layout {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: var(--space-l);
+  gap: var(--space-xl); /* Generous gap between text and buttons */
   align-items: start;
-  padding: var(--space-l) var(--space-xl);
-  border-top: 1px solid var(--color-border);
+  margin-bottom: var(--space-xl);
 }
 
 .project-summary {
-  margin: 0;
-  max-width: 70ch;
-  line-height: 1.6;
-  font-size: var(--step-1);
-  color: var(--color-text-secondary);
+  margin-bottom: 0; /* Remove bottom margin as grid gap handles spacing */
+  max-width: 65ch; /* Optimal line length */
 }
 
-.project-summary strong {
-  font-weight: 560;
-  color: var(--color-text-primary);
-}
-
-/* CTA buttons */
-.cta-aside.primary-actions {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  align-items: stretch;
-  min-width: 14rem;
-}
-
+/* Refined "Action Pill" buttons */
 .cta-aside .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  padding: 0.5rem 1.5rem;
-  border-radius: 999px;
+  padding: 0.5rem 1.75rem; /* Further reduced vertical padding */
+  border-radius: var(--space-s);
   text-decoration: none;
-  font-weight: 560;
+  font-weight: 600;
   font-size: var(--step-0);
-  background: var(--m3-color-surface-container-low, #f3f4f8);
+  background-color: var(--m3-color-surface-container-low, #f3f4f8);
   color: var(--m3-color-on-surface);
   border: 1px solid var(--m3-color-outline-variant, var(--m3-color-outline));
-  transition: all 0.15s ease;
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
   width: 100%;
   max-width: 220px;
-  line-height: 1.2;
-}
-
-.cta-aside .btn-primary {
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  border-color: var(--color-accent);
+  line-height: 1.2; /* Tightened line height to reduce vertical space */
 }
 
 .cta-aside .btn:hover {
@@ -159,207 +440,464 @@
   transform: translateY(-2px);
 }
 
-.cta-aside .btn-icon {
-  width: 18px;
-  height: 18px;
-}
-
-@media (max-width: 700px) {
-  .overview-layout {
-    grid-template-columns: 1fr;
-    padding: var(--space-m);
-  }
-  .cta-aside.primary-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    min-width: auto;
-  }
-  .cta-aside .btn {
-    max-width: none;
-  }
-}
-
-/* ===== INFO ROW (Role + Tech) ===== */
-.info-row {
+/* Overview Layout (Summary + Side Actions) */
+/* Overview Layout (Summary + Side Actions) */
+.overview-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-m);
-  margin: var(--space-l) 0;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-xl);
+  align-items: center;
+  padding: var(--space-l) var(--space-xl); /* Reduced vertical padding from xl to l */
+  border-top: 1px solid var(--color-border);
 }
 
-.card {
-  background: var(--color-surface);
-  border-radius: var(--space-s);
-  padding: var(--space-m);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-outline) 15%, transparent);
-  box-shadow: var(--m3-elevation-1);
-}
-
-.role-heading {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--step--1);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--m3-color-primary);
-}
-
-.role-body {
+.project-summary {
+  margin-bottom: 0;
+  max-width: 70ch;
+  line-height: var(--font-line-height-body);
   font-size: var(--step-1);
-  font-weight: 520;
-  color: var(--color-text-primary);
-  margin: 0;
-}
-
-.kv {
-  margin-top: var(--space-s);
-}
-
-.kv dt {
-  font-size: var(--step--1);
-  font-weight: 600;
-  color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.kv dd {
-  margin: var(--space-3xs) 0 0;
-  color: var(--color-text-primary);
-  font-size: var(--step-0);
-}
-
-/* ===== TECHNOLOGY PILLS ===== */
-.tt-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-s);
-}
-
-.tt-subheading {
-  margin: 0 0 var(--space-xs);
-  font-size: var(--step--1);
-  font-weight: 600;
-  color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.tech-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-}
-
-.tech-list li {
-  margin: 0;
-  padding: 0;
-}
-
-.tech-pill {
-  display: inline-block;
-  padding: 0.2em 0.6em;
-  background: color-mix(in oklab, var(--m3-color-primary) 8%, transparent);
-  border: 1px solid
-    color-mix(in oklab, var(--m3-color-primary) 12%, transparent);
-  border-radius: 999px;
-  font-size: var(--step--1);
-  color: var(--m3-color-on-surface);
-  line-height: 1.4;
-  font-weight: 500;
-  transition: all 0.15s ease;
-}
-
-.tech-pill:hover {
-  background: var(--m3-color-primary);
-  color: var(--m3-color-on-primary);
-  transform: scale(1.05);
-}
-
-@media (max-width: 560px) {
-  .tt-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===== NARRATIVE SECTIONS ===== */
-.project-section {
-  margin: var(--space-xl) 0;
-}
-
-.project-section h2 {
-  font-family: var(--m3-font-family-display);
-  font-size: var(--m3-font-headline-medium);
-  font-weight: 520;
-  line-height: 1.3;
-  margin: 0 0 var(--space-s);
-  padding-bottom: var(--space-2xs);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  letter-spacing: -0.01em;
-}
-
-.section-content {
-  font-size: var(--step-0);
-  line-height: 1.7;
   color: var(--color-text-secondary);
 }
 
-.section-content strong {
-  color: var(--color-text-primary);
+.project-summary strong {
+  font-weight: 700;
+  color: var(--m3-color-on-surface);
 }
 
-.section-content p {
-  margin-bottom: var(--space-m);
+.cta-aside.primary-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs); /* Reduced gap from s to xs */
+  align-items: stretch;
+  min-width: 14rem;
 }
 
-/* ===== FINAL IMAGE WITH LIGHTBOX ===== */
-.final-figure-wrapper {
-  margin: var(--space-l) 0;
-}
-
-.final-figure-wrapper .aside {
-  margin: 0;
-}
-
-.final-figure-wrapper .hero {
-  margin: 0;
-}
-
-.final-figure-wrapper .hero-trigger {
-  display: block;
+.cta-aside-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
   width: 100%;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.2s ease;
 }
 
-.final-figure-wrapper .hero-trigger:hover {
-  transform: scale(1.01);
+/* Source Code Button - Precision matching reference */
+
+.cta-aside .btn-icon {
+  width: 20px;
+  height: 20px;
+  color: #111827;
 }
 
-.final-figure-wrapper img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-  box-shadow: 0 var(--space-s) var(--space-xl)
-    color-mix(in oklab, black 8%, transparent);
+/* Remove the arrow icon if not in screenshot */
+.btn-arrow-icon {
+  display: none;
+}
+
+.license-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #9ca3af; /* gray-400 */
+  text-transform: none; /* Reference shows "MIT License" */
+  letter-spacing: normal;
+  margin-right: 0.25rem;
+}
+
+/* Mobile: Stack layout */
+@media (max-width: 900px) {
+  .overview-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+  }
+
+  .cta-aside.primary-actions {
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+/* Make sure long labels don't break in unexpected places */
+.project-detail .btn strong,
+.project-detail .btn span {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* Right fixed TOC wrapper (always visible) */
+.project-toc {
+  position: fixed;
+  top: calc(var(--nav-height) + var(--space-l));
+  right: clamp(1.5rem, 5vw, 4.5rem);
+  width: 24rem; /* Increased from 20rem */
+  z-index: 120;
+  pointer-events: auto;
+}
+
+/* Inner card is positioned relative inside the fixed wrapper */
+.toc-card {
+  position: relative;
+  padding: var(--space-l) 0; /* Only vertical padding here */
+  background: var(--color-card);
+  border-radius: var(--radius-md, var(--space-s));
   border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
+  box-shadow: 0 var(--space-s) var(--space-2xl)
+    color-mix(in oklab, black 8%, transparent);
+  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l)));
+  overflow: auto;
 }
 
-.final-figure-wrapper figure {
+/* Header inside TOC (title + toggle) */
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: 0 var(--space-l); /* Moved horizontal padding here */
+}
+
+.toc-toggle {
+  appearance: none;
+  border: none;
+  background: color-mix(in oklab, var(--color-border) 8%, transparent);
+  color: var(--text-color);
+  width: var(--space-2xl); /* Increased from var(--space-xl) */
+  height: var(--space-2xl);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--step-0); /* Bumped from step--1 */
+}
+
+.toc-toggle:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: var(--space-3xs);
+}
+
+/* Collapsed/minimized TOC - still visible with toggle (apply to wrapper) */
+.project-toc.toc-collapsed {
+  width: var(--space-xl);
+}
+
+.project-toc.toc-collapsed .toc-card {
+  padding: var(--space-3xs);
+  width: var(--space-xl);
+  overflow: visible;
+}
+
+.project-toc.toc-collapsed .toc-list {
+  display: none;
+}
+
+.project-toc.toc-collapsed h4 {
+  display: none;
+}
+
+.project-toc.toc-collapsed .toc-toggle {
+  width: var(--space-xl);
+  height: var(--space-xl);
+}
+
+.toc-card h4 {
   margin: 0;
+  font-size: var(--step-2); /* Bumped from step-1 */
+  font-weight: 700;
+  color: var(--m3-color-primary);
 }
 
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-l) 0 0; /* Space from header */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs); /* Tighter gaps for "active list" feel */
+}
+
+.toc-list a {
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  padding: var(--space-s) var(--space-l); /* Full card width */
+  border-radius: 4px;
+  display: block;
+  font-size: var(--step-1);
+  transition: all var(--m3-motion-duration-short)
+    var(--m3-motion-easing-standard);
+  margin: 0 4px; /* Minimal inset for a crisp look */
+}
+
+/* Active link (clear, stronger contrast) */
+.toc-list a.link-active {
+  color: var(--text-color);
+  background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  font-weight: 700;
+  box-shadow: 0 var(--space-3xs) var(--space-2xs)
+    color-mix(in oklab, var(--color-accent) 6%, transparent);
+}
+
+/* Hover/focus (lighter than active so hover is visually distinct) */
+.toc-list a:hover,
+.toc-list a:focus {
+  color: var(--color-text-tertiary);
+  background: color-mix(in oklab, var(--color-accent) 4%, transparent);
+  font-weight: 600;
+}
+
+/* Small utilities */
+.kv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.kv dt {
+  font-weight: 700;
+  font-size: var(--step--1);
+}
+
+.kv dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--step-1);
+}
+
+/* Responsiveness - Desktop first; reduce to single column below 980px */
+@media (max-width: 980px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-toc {
+    order: 2;
+  }
+
+  .project-hero-figure {
+    height: 320px;
+  }
+
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Mobile FAB: stick TOC to bottom-left as hamburger */
+  .project-toc {
+    position: fixed;
+    top: auto;
+    right: var(--space-s-m);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m-l));
+    left: auto;
+    width: auto;
+    z-index: 200;
+    max-height: none;
+    box-shadow: none;
+    pointer-events: auto;
+  }
+
+  /* Expanded menu card sizing on mobile */
+  .toc-card {
+    padding: var(--space-s);
+    max-width: min(86vw, 360px);
+    max-height: min(70vh, 520px);
+    overflow: auto;
+    box-shadow: 0 var(--space-s) var(--space-2xl)
+      color-mix(in oklab, black 12%, transparent);
+  }
+
+  /* Collapsed look as circular FAB */
+  .project-toc.toc-collapsed {
+    width: var(--space-2xl);
+  }
+
+  .project-toc.toc-collapsed .toc-card {
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    padding: var(--space-3xs);
+    border-radius: var(--space-3xl);
+    background: var(--accent-color);
+    box-shadow: 0 var(--space-s) var(--space-2xl)
+      color-mix(in oklab, var(--accent-color) 28%, transparent);
+    overflow: visible;
+  }
+
+  .project-toc.toc-collapsed .toc-toggle {
+    width: var(--space-xl);
+    height: var(--space-xl);
+    border-radius: var(--space-3xl);
+    background: transparent;
+    color: var(--color-on-accent);
+    font-size: var(--step-0);
+  }
+
+  /* Expanded state toggle look on mobile */
+  .project-toc:not(.toc-collapsed) .toc-toggle {
+    width: var(--space-xl);
+    height: var(--space-xl);
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--color-border) 8%, transparent);
+    color: var(--text-color);
+  }
+
+  /* Show title only when expanded (collapsed already hides via rules above) */
+  .project-toc:not(.toc-collapsed) h4 {
+    display: block;
+  }
+
+  /* Slightly larger link targets for mobile */
+  .toc-list a {
+    font-size: var(--step-1);
+  }
+}
+
+/* Small screens */
+@media (max-width: 560px) {
+  /* Reduce overall page padding for mobile */
+  .project-detail {
+    padding: var(--space-m) var(--space-s);
+  }
+
+  /* Hero adjustments */
+  .project-hero-figure {
+    height: 200px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-hero-title {
+    padding: var(--space-m);
+  }
+
+  .project-hero-title h1 {
+    font-size: var(--step-3);
+  }
+
+  /* Intro card tighter on mobile */
+  .project-intro-card {
+    border-radius: var(--space-m);
+    margin-bottom: var(--space-l);
+  }
+
+  /* Overview layout - tighter spacing */
+  .overview-layout {
+    padding: var(--space-m);
+    gap: var(--space-s);
+  }
+
+  .project-summary {
+    font-size: var(--step-0);
+  }
+
+  /* Cards stack better on mobile */
+  .card {
+    padding: var(--space-s);
+    border-radius: var(--space-xs);
+  }
+
+  .role-heading {
+    font-size: var(--step-0);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .role-body {
+    font-size: var(--step-1);
+  }
+
+  /* Section typography scaling */
+  .project-section h2 {
+    font-size: var(--step-2);
+    margin-bottom: var(--space-s);
+  }
+
+  .section-content,
+  p {
+    font-size: var(--step-0);
+  }
+
+  /* Tighter tech pills */
+  .tech-pill {
+    font-size: var(--step--1);
+    padding: var(--space-3xs) var(--space-xs);
+  }
+
+  /* Buttons */
+  .project-detail .btn {
+    font-size: var(--step--1);
+    padding: var(--space-xs) var(--space-s);
+    max-width: none;
+    width: 100%;
+  }
+
+  /* Final figure less margin */
+  .final-figure {
+    margin: var(--space-m) 0;
+  }
+
+  /* Reduce section spacing */
+  .project-section {
+    margin: var(--space-m) 0;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .project-hero-figure img {
+    transition: none;
+  }
+
+  .project-detail .btn,
+  .project-hero {
+    transition: none;
+  }
+}
+
+/* Ensure sections have consistent scroll offset */
+section[id] {
+  scroll-margin-top: calc(var(--nav-height) + var(--space-s));
+}
+/* Scroll-to-top button (appears after user scrolls > 50%) */
+.scroll-top {
+  position: fixed;
+  right: var(--space-s-m);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m));
+  width: var(--space-xl);
+  height: var(--space-xl);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--accent-color);
+  color: var(--color-on-accent);
+  box-shadow: 0 var(--space-s) var(--space-2xl)
+    color-mix(in oklab, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
+  opacity: 0;
+  transform: translateY(var(--space-xs));
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+  z-index: 220;
+  font-size: var(--step-1);
+  line-height: 1;
+}
+.scroll-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-top:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: var(--space-3xs);
+}
+/* Mobile placement: move scroll-top to bottom-left to avoid the mobile TOC FAB (hamburger) */
+@media (max-width: 980px) {
+  .scroll-top {
+    right: auto;
+    left: var(--space-s-m);
+    /* give it a bit more spacing on mobile so it doesn't collide with other FABs */
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m-l));
+  }
+}
+
+/* ===== Lightbox (added post-live-deploy) ===== */
 /* ===== LIGHTBOX ===== */
 .lightbox {
   position: fixed;
@@ -577,4 +1115,8 @@
   .project-hero-figure img {
     animation: none;
   }
+}
+
+.final-figure-wrapper {
+  margin: var(--space-m) 0;
 }
