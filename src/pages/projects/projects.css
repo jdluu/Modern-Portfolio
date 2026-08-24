@@ -523,14 +523,9 @@ p {
 }
 
 /* Right fixed TOC wrapper (always visible) */
-.project-toc {
-  position: fixed;
-  top: calc(var(--nav-height) + var(--space-l));
-  right: clamp(1.5rem, 5vw, 4.5rem);
-  width: 24rem; /* Increased from 20rem */
-  z-index: 120;
-  pointer-events: auto;
-}
+/* TOC positioning now lives in the "TOC (right sidebar column)" section below —
+   the old position:fixed rule here made the TOC render as a full-width bar
+   pinned over the hero. */
 
 /* Inner card is positioned relative inside the fixed wrapper */
 .toc-card {
@@ -1119,4 +1114,17 @@ section[id] {
 
 .final-figure-wrapper {
   margin: var(--space-m) 0;
+}
+
+/* ===== TOC fixed positioning (desktop) ===== */
+/* The aside sits outside .project-detail in the DOM, so it needs explicit
+   fixed positioning on wide screens. Mobile collapse rules override below 981px. */
+@media (min-width: 981px) {
+  .project-toc {
+    position: fixed;
+    top: calc(var(--nav-height) + var(--space-l));
+    right: clamp(1.5rem, 5vw, 4.5rem);
+    width: 24rem;
+    z-index: 120;
+  }
 }
