@@ -10,8 +10,6 @@ I finished my B.S. in Cognitive Science with a specialization in Human-Computer 
 
 ## Computer Science
 
-The CSE sequence covered programming through operating systems. CSE 8A/8B was the intro pair for students who already had some exposure, moving faster into data structures than the 11-track.
-
 - **CSE 8A/8B: Intro to Programming** - Java fundamentals, then object-oriented design.
 - **CSE 12: Basic Data Structures & OO Design** - Lists, stacks, queues, trees, and hash tables, with implementation and analysis.
 - **CSE 15L: Software Tools & Techniques Lab** - Git, debugging, testing, and the Unix toolchain.
