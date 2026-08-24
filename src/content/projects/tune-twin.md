@@ -4,7 +4,7 @@ slug: "tune-twin"
 date: "2026-02"
 draft: true
 
-summary: "Finds new songs that match a YouTube Music playlist's vibe by analyzing tempo and energy — not just 'more like this'."
+summary: "Finds new songs that match a YouTube Music playlist's vibe by analyzing tempo and energy, not just 'more like this'."
 role: "Developer"
 technologies:
   [
