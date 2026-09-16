@@ -33,8 +33,3 @@ blob-report/
 playwright/.cache/
 
 .npmrc
-AGENTS.md
-.agents/
-.claude/
-skills-lock.json
-docs/agent-references/
