@@ -144,7 +144,9 @@ rather than rendering broken.
 Captured 2026-08-23 after a correction: the deployed pages looked better than a
 redesign. Treat this as a spec, not a suggestion.
 
-- **Container max-width:** `110rem` (1760px). Not 72ch, not 68ch, not 52rem.
+- **Container max-width:** `110rem`. At this project's root that is **1100px**,
+  not 1760px — see the root-font-size pitfall below before converting any rem
+  here into pixels. Not 72ch, not 68ch, not 52rem.
 - **Grid:** `1fr 22rem`, content column plus a TOC sidebar column.
 - **TOC:** sticky in its grid column (`position: sticky; top: calc(var(--nav-height) + var(--space-l))`),
   not floating and not JS-positioned.
@@ -257,11 +259,35 @@ Rules for working on it:
   root, so every `rem` in `tokens.css` is 62.5% of its face value. `--step-6`
   tops out at 45.7px, not 73px. Compute against 10px or you will misread
   measurements and chase phantoms.
+- **The Utopia scales were generated against a 16px root, so they render at
+  62.5% of their intended size here.** `--step-0` is `clamp(1rem, …)` — a 16px
+  body size on a 16px root, but 10px -> 11.94px on this root. That means
+  `--step-0` is a label size, not a reading size. `--step-body` restores the
+  16px -> 19.1px body intent for prose. Do **not** "fix" the basis by switching
+  to a 100% root: the upper steps (h1 57px, project prose 18.7px) are calibrated
+  against the deployed site and would jump ~60% at once.
 - **A `var()` with a literal fallback hides a missing token.** `var(--token,
 #f3f4f8)` looks defensive, but the fallback is a light colour, so in dark
   theme light text landed on light grey and every project page button failed
   WCAG 1.4.3 at 1.08:1. If a token is referenced, define it in both themes;
-  audit for tokens that exist in no theme at all.
+  audit for tokens that exist in no theme at all. A full audit on 2026-09-27
+  found **17** referenced-but-undefined tokens, and the fallbacks had been
+  masking several of them. The worst was `--accent-color`: `.scroll-top` fell
+  back to `transparent`, leaving a near-white arrow on the page background —
+  invisible, and axe never catches it because the button is `inert` until the
+  user scrolls past 50%, which is where the suite runs. Others silently dropped
+  whole declarations (`--grid-gap-md` left `.info-row` with no gap, and
+  `--m3-color-secondary-container` invalidated an entire `color-mix`). Re-audit
+  with:
+
+  ```sh
+  python3 -c "import re,pathlib;t=''.join(p.read_text() for p in pathlib.Path('src').rglob('*') if p.suffix in {'.css','.astro','.tsx','.ts'});print(sorted(set(re.findall(r'var\(\s*(--[a-z0-9-]+)',t))-set(re.findall(r'(--[a-z0-9-]+)\s*:',t))))"
+  ```
+
+  It should print `[]`. Remember Astro scopes CSS per page bundle, so a token
+  defined inside a component stylesheet is _not_ global: check resolution on a
+  page that lacks that component, not just on `documentElement` of one page.
+
 - **`BaseLayout` already provides the `<main>` landmark.** Page templates that
   add their own `<main>` (or `role="main"`) produce two main landmarks, which
   breaks WCAG 1.3.1 and confuses screen readers. Use a `<div>` for page-level
