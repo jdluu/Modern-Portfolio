@@ -194,8 +194,12 @@ redesign. Treat this as a spec, not a suggestion.
   `final_<name>.png`; never add a GIF reference to satisfy the schema.
 - **Never commit placeholder media.** A 67-byte stub GIF renders as an 8x8
   figure in the Final Product section, and the build ships it without complaint.
-- Original GIF masters live in `assets-demo-masters/` and are intentionally kept
-  out of the deployed output. Re-encode from there if needed.
+- **All demo media lives under `src/assets/images/projects/<project>/`.** A
+  top-level `assets-demo-masters/` folder used to hold original GIF masters; it
+  was removed, and no GIF is referenced anywhere. Re-encode from an existing
+  recording if a demo needs rebuilding, e.g.
+  `ffmpeg -i in.mov -movflags +faststart -pix_fmt yuv420p final_<name>.mp4`,
+  and pull a poster with `ffmpeg -ss 2 -i final_<name>.mp4 -frames:v 1 final_<name>.png`.
 - `thumbnail_<name>.min.png` is the card image, distinct from `cover_<name>.*`,
   which is the hero. Keep both.
 
@@ -259,4 +263,3 @@ redesign. Treat this as a spec, not a suggestion.
 - `humanizer` skill (`skill_view(name='humanizer')`) for the full 34-pattern
   checklist of AI writing tells.
 - `design-taste-frontend` skill for frontend layout and taste review.
-- `assets-demo-masters/README.md` for demo media masters.
