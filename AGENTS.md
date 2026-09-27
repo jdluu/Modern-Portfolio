@@ -17,20 +17,20 @@ adding per-tool config directories (`.agents/`, `.claude/`, `skills-lock.json`).
 
 ## Tech stack
 
-| Area              | Choice                                                                                                                                                                                                 |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Framework         | Astro ^7.2, `output: "static"`, pages prerendered by default                                                                                                                                           |
-| Runtime           | Node >= 22; pnpm 11 (CI pins `pnpm/action-setup` to version 11)                                                                                                                                        |
-| Language          | TypeScript ^6, `extends: astro/tsconfigs/strict`, `target: ES2024`, `strict: true`                                                                                                                     |
-| Interactive parts | Solid.js ^1.9 via `@astrojs/solid-js`, scoped to `src/components/**/*.tsx` only                                                                                                                        |
-| Icons             | `astro-icon` + `@iconify-json/lucide`. There is no `public/icons/`                                                                                                                                     |
-| Images            | Astro's image service on `sharp`; sources under `src/assets/images/`                                                                                                                                   |
-| Markdown          | `@astrojs/markdown-remark` unified processor, single rehype plugin `rehype-slug`                                                                                                                       |
-| Sitemap           | `@astrojs/sitemap`                                                                                                                                                                                     |
-| Styling           | Hand-written CSS: `src/styles/{reset,global,tokens,typography}.css` + a per-component sibling `.css`. No CSS framework, no Tailwind                                                                    |
-| Tests             | Vitest (unit, `environment: node`), Playwright (`chromium` + `Pixel 5`)                                                                                                                                |
-| Quality gates     | ESLint 10 flat config, Prettier 3, knip, husky + lint-staged                                                                                                                                           |
-| Deploy            | GitHub Pages: `.github/workflows/deploy.yml` builds on `main` and publishes `dist`. Custom domain `jluu.dev` lives in Settings → Pages, not the repo — Actions-based publishing ignores a `CNAME` file |
+| Area              | Choice                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework         | Astro ^7.2.10, `output: "static"`, pages prerendered by default. Never below 7.2.8 — earlier releases have a critical RCE in AVIF image optimisation                                                                                                                                                                                                                        |
+| Runtime           | Node >= 22; pnpm 11 (CI pins `pnpm/action-setup` to version 11). pnpm 11 reads its settings from `pnpm-workspace.yaml`, not package.json                                                                                                                                                                                                                                    |
+| Language          | TypeScript ^6, `extends: astro/tsconfigs/strict`, `target: ES2024`, `strict: true`                                                                                                                                                                                                                                                                                          |
+| Interactive parts | Solid.js ^1.9 via `@astrojs/solid-js`, scoped to `src/components/**/*.tsx` only                                                                                                                                                                                                                                                                                             |
+| Icons             | `astro-icon` + `@iconify-json/lucide`. There is no `public/icons/`                                                                                                                                                                                                                                                                                                          |
+| Images            | Astro's image service on `sharp`; sources under `src/assets/images/`                                                                                                                                                                                                                                                                                                        |
+| Markdown          | `@astrojs/markdown-remark` unified processor, single rehype plugin `rehype-slug`. Its major must satisfy astro's peer range (`^7.3.0` on the 7.2 line)                                                                                                                                                                                                                      |
+| Sitemap           | `@astrojs/sitemap`                                                                                                                                                                                                                                                                                                                                                          |
+| Styling           | Hand-written CSS: `src/styles/{reset,global,tokens,typography}.css` + a per-component sibling `.css`. No CSS framework, no Tailwind                                                                                                                                                                                                                                         |
+| Tests             | Vitest (unit, `environment: node`), Playwright (`chromium` + `Pixel 5`)                                                                                                                                                                                                                                                                                                     |
+| Quality gates     | ESLint 10 flat config, Prettier 3, knip, husky + lint-staged, `pnpm audit --prod` (must stay clean)                                                                                                                                                                                                                                                                         |
+| Deploy            | GitHub Pages: `.github/workflows/deploy.yml` builds on `main` and publishes `dist`. Pages source must be **GitHub Actions** (`build_type: workflow`), never "Deploy from a branch". Custom domain `jluu.dev` lives in Settings → Pages, not the repo — Actions-based publishing ignores a `CNAME` file, and setting the domain while in branch mode makes GitHub commit one |
 
 Build knobs in `astro.config.mjs`: `prefetch: true`, Vite `build.target: es2024`,
 `cssCodeSplit`, and a `manualChunks` split putting `@astrojs/*` in
@@ -83,9 +83,20 @@ and the non-existent `public/icons/`. Vitest resolves the same aliases.
 | `pnpm run test:e2e`  | Playwright (builds and previews first)  |
 
 CI (`.github/workflows/ci.yml`) runs, in order: `pnpm install --frozen-lockfile`,
-`lint`, `check`, `test:unit`, `knip`, `build`, `playwright install --with-deps
-chromium`, `test:e2e`, `pnpm audit --prod`. Anything green locally but red there
-is usually alias resolution or filename case.
+`prettier --check .`, `lint`, `check`, `test:unit`, `knip`, `build`, `playwright
+install --with-deps chromium`, `test:e2e`, `pnpm audit --prod`. Anything green
+locally but red there is usually alias resolution or filename case.
+
+**Gate split.** `ci.yml` and `deploy.yml` trigger on the same events but are
+independent, and `deploy.yml` does not wait for CI. Deploy re-runs the _fast_
+subset itself — `lint`, `check`, `test:unit`, `knip`, `audit --prod`, `build` —
+so a red gate cannot publish, at the cost of running those gates twice on a
+`main` push. E2E is deliberately CI-only to keep deploys quick, which means a
+commit can deploy while its E2E run is still in flight; if that ever matters more
+than deploy latency, gate deploy on CI with a `workflow_run` trigger rather than
+duplicating more gates. Runners are pinned to `ubuntu-24.04` instead of
+`ubuntu-latest`, because the latest label migrates to Ubuntu 26 in October 2026
+and a runner image change should be a deliberate commit.
 
 The pre-commit hook (husky + lint-staged) runs `eslint --fix` over
 `**/*.{js,jsx,ts,tsx,astro}` and `prettier --write --ignore-unknown` over
@@ -362,3 +373,53 @@ Rules for working on it:
   _visible_ page-heading style; only `HomeSection.css` adds
   `position: absolute; left: -9999px`. For text that must be hidden but exposed
   to assistive tech, use `.visually-hidden` from `global.css`.
+- **GitHub Pages must be in workflow mode, or the deploy silently serves
+  nothing.** Pages has two build types and they are not interchangeable.
+  `build_type: legacy` ("Deploy from a branch") makes GitHub try to serve the raw
+  repo root; on an Astro source tree there is no `index.html` there, so the build
+  reports `status: errored` and the apex 404s _while the Settings page still shows
+  a passing DNS check_. `actions/deploy-pages` also requires workflow mode, so the
+  workflow fails too. Check with `gh api repos/<owner>/<repo>/pages` — it should
+  print `build_type: workflow`. Switch it with
+  `gh api -X PUT repos/<owner>/<repo>/pages -f build_type=workflow -f cname=<domain>`;
+  pass `cname` too or you can drop the custom domain. Related: setting a custom
+  domain _while in branch mode_ makes GitHub commit a root `CNAME` file, which then
+  sits in the tree doing nothing, because workflow-mode publishing ignores it.
+- **`Enforce HTTPS` stays unavailable until GitHub has issued a certificate, and
+  the tell is the TLS subject.** While a domain has no cert, GitHub answers on
+  :443 with its default `CN=*.github.io` wildcard, so `curl` fails hostname
+  verification (`HTTP 000`) and the toggle is greyed out with "a certificate has
+  not yet been issued". That is normal until a Pages build succeeds, and can take
+  up to 24h afterwards. Before blaming GitHub, rule out the DNS-side blockers: a
+  restrictive `CAA` record prevents Let's Encrypt from issuing at all, and stale
+  `AAAA` records point traffic (and validation) at the old host. Check both with
+  `https://dns.google/resolve?name=<host>&type=CAA` and `type=AAAA`.
+- **pnpm 11 ignores the `pnpm` field in `package.json` entirely.** Settings moved
+  to `pnpm-workspace.yaml`. A `pnpm.overrides` block in `package.json` is dead
+  config: pnpm warns `The "pnpm" field in package.json is no longer read`, ignores
+  the key, and installs the vulnerable version anyway while the edit _looks_
+  correct. Put overrides in `pnpm-workspace.yaml` under `overrides:`. This repo
+  gates on `pnpm audit --prod`, and the mechanism for a transitive advisory whose
+  parent declares a compatible range is a narrow override floor (e.g.
+  `svgo: ^4.1.0`), not a major bump — read the parent's declared range first, then
+  pin inside it. Bumping a direct dependency can also reveal a peer range its own
+  manifest expects (astro 7.2.10 requires `@astrojs/markdown-remark ^7.3.0`), so
+  run `pnpm peers check` after any version bump.
+- **This host's resolver serves stale DNS answers.** After a delegation or record
+  change, dnsmasq here keeps returning the _old_ host long after propagation:
+  `jluu.dev` still resolved to Netlify's IPv6 addresses and `curl` reported
+  `Server: Netlify` with Netlify's older cert, which reads exactly like a failed
+  migration. Authoritative and Cloudflare DoH already showed the correct GitHub
+  IPs. Never diagnose DNS or a host cutover from plain `curl`/`getent` on this box.
+  Verify against the authoritative address with
+  `curl --resolve <host>:443:<ip> https://<host>/`, or with
+  `https://dns.google/resolve?name=<host>&type=A`, and cross-check two resolvers.
+- **A contact form that posts to a third-party API cannot be verified
+  server-side.** Web3Forms rejects non-browser requests outright — both a valid and
+  a deliberately invalid key return the same "This method is not allowed ... (Pro
+  plan is required)" body, and adding `Origin`/`Referer` does not change it. Do not
+  read that message as a key verdict. Verify with a real browser driving the live
+  page (`chromium.launch({ headless: false })` under `xvfb-run`) and assert on the
+  XHR response: a working key returns `200` with
+  `{"success":true,"message":"Form submitted successfully!"}`. Note the submission
+  really is delivered, so label the test payload as such.
