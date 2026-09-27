@@ -26,7 +26,7 @@ if (!entry) {
 const experience = entry.data;
 const title = experience?.title ?? "Untitled";
 const companyName = experience?.company?.name ?? "Company Name Not Available";
-const companyLogo = experience?.company?.image ?? "/placeholder-logo.png";
+const companyLogo = experience?.company?.image;
 const duration = experience?.logistics?.duration ?? "Duration Not Specified";
 
 const responsibilities = Array.isArray(experience?.work?.responsibilities)
@@ -42,8 +42,8 @@ const achievements = Array.isArray(experience?.work?.achievements)
         <!-- Full-Width Hero Header -->
         <header class="experience-hero">
             <div class="hero-content">
-                <div class="hero-brand">
-                    {companyLogo && typeof companyLogo !== "string" ? (
+                {companyLogo && (
+                    <div class="hero-brand">
                         <Image
                             src={companyLogo}
                             alt={`${companyName} logo`}
@@ -53,19 +53,8 @@ const achievements = Array.isArray(experience?.work?.achievements)
                             loading="eager"
                             decoding="async"
                         />
-                    ) : (
-                        <img
-                            src={companyLogo as string}
-                            alt={`${companyName} logo`}
-                            class="hero-logo"
-                            width="140"
-                            height="140"
-                            loading="eager"
-                            decoding="async"
-                            aria-hidden="true"
-                        />
-                    )}
-                </div>
+                    </div>
+                )}
                 
                 <div class="hero-text-area">
                     <div class="hero-badges">
