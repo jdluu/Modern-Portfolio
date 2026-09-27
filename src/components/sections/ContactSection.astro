@@ -16,12 +16,24 @@ import "./ContactSection.css";
 		name="contact-form"
 		id="contact-form"
 		method="POST"
-		data-netlify="true"
-		data-netlify-honeypot="bot-field"
+		action="https://api.web3forms.com/submit"
 		aria-labelledby="form-title"
 		novalidate
 	>
-		<input type="hidden" name="form-name" value="contact-form" />
+		<!-- Web3Forms access key. Not a secret: it is an alias for the destination
+		     inbox and is designed to ship in client-side code, so it is safe in this
+		     public repo. Get one by verifying your email at https://web3forms.com and
+		     replace the placeholder value below. Until then submissions are rejected. -->
+		<input type="hidden" name="access_key" value="REPLACE_WITH_WEB3FORMS_ACCESS_KEY" />
+
+		<!-- No `subject` field here on purpose: the form already has a visible
+		     `subject` input, and Web3Forms also reads a field of that name to set the
+		     notification subject, so declaring a second one would send it twice. -->
+
+		<!-- Honeypot: `hidden` keeps it out of the accessibility tree and the tab
+		     order so nobody can reach it, while bots that fill every field still do. -->
+		<input type="checkbox" name="botcheck" hidden autocomplete="off" />
+
 		<h2 id="form-title" class="form-main-title">Get in Touch!</h2>
 
 		<div class="form-group">

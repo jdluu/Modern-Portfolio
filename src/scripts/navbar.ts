@@ -177,6 +177,19 @@ function initNavbar() {
   mql.addEventListener("change", resetDesktopState);
 }
 
+// Initialize on DOM ready as well as on astro:page-load. The nav must not depend
+// on the router firing: a blocked or failed ClientRouter meant astro:page-load
+// never arrived, the panel kept its `inert` attribute, and every nav link stayed
+// unclickable while still looking visible. The data-navInit guard makes a second
+// call a no-op.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => initNavbar(), {
+    once: true,
+  });
+} else {
+  initNavbar();
+}
+
 document.addEventListener("astro:page-load", () => {
   initNavbar();
 });
