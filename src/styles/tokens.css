@@ -34,7 +34,12 @@
   --m3-color-primary: #bb9af7;
   --m3-color-on-primary: #1a1b26;
   --m3-color-primary-container: #414868;
-  --m3-color-on-primary-container: #bb9af7;
+  /* M3's dark on-primary-container for a purple primary. The previous #bb9af7
+     measured 3.86:1 on --m3-color-primary-container (#414868), under the 4.5:1
+     WCAG AA floor for the 9.5px table-header text that uses this pair; #d0bcff
+     measures 5.24:1. Only visible once the coursework appendix <details> is
+     expanded, which is why axe never saw it. */
+  --m3-color-on-primary-container: #d0bcff;
   --m3-color-secondary: #7aa2f7;
   --m3-color-on-secondary: #11121b;
   --m3-color-tertiary: #f7768e;
@@ -89,6 +94,12 @@
      --step-body wraps every course list onto two lines. */
   --step-body: clamp(1.6rem, 1.4918rem + 0.3381vw, 1.911rem);
 
+  /* Text floor: --step--2 renders 6.94px -> 7.62px against this root, below any
+     readable size (M3's own label-small is 11px). --step--2 therefore stays
+     defined for non-text/decorative use only; --step--1 (8.33px -> 9.54px) is the
+     smallest step for anything that has to be read. Five component rules had been
+     using --step--2 for text and were retargeted. */
+
   /* 3. Fluid space scale - Utopia
      -----------------------------------------------------------------
      Source tool: https://utopia.fyi/space/calculator
@@ -133,9 +144,13 @@
   --m3-font-family-body: "Roboto Flex", sans-serif;
   --font-heading: var(--m3-font-family-display);
   --font-body: var(--m3-font-family-body);
-  /* No monospace face is loaded, so license/code text falls back to the platform
-     mono stack. This was referenced as --font-mono but never defined, so the
-     declaration was dropped and .license-tag silently rendered in Roboto Flex. */
+  /* No monospace face is loaded, so code text falls back to the platform mono
+     stack. This was referenced as --font-mono but never defined, so the
+     declaration was dropped and the affected element silently rendered in the
+     body face instead. Currently has no consumer: the one rule that used it was
+     dead CSS and was removed, and no content in this repo has code fences or
+     inline code, so nothing needs styling yet. Kept so a future code/pre rule
+     does not hit the same silent drop. */
   --font-mono:
     ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -151,7 +166,8 @@
   --m3-font-title-small: var(--step-0);
   --m3-font-label-large: var(--step--1);
   --m3-font-label-medium: var(--step--1);
-  --m3-font-label-small: var(--step--2);
+  /* M3 label-small is 11px; --step--2 is 6.94px here. See the text floor note. */
+  --m3-font-label-small: var(--step--1);
   --m3-font-body-large: var(--step-0);
   --m3-font-body-medium: var(--step-0);
   --m3-font-body-small: var(--step--1);

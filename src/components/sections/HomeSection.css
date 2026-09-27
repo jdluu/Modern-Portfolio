@@ -26,9 +26,13 @@
 }
 
 .intro-greeting {
-  /* Small-caps eyebrow above the name. Bumped from --step--1 (maxes at
-     ~15px) because it read as too small on 2560px-wide displays. */
-  font-size: clamp(0.8333rem, 0.55rem + 0.9vw, 1.35rem);
+  /* Small-caps eyebrow above the name. This was --step--1 plus a hand-rolled
+     clamp(0.8333rem, 0.55rem + 0.9vw, 1.35rem), which rendered 8.33px -> 13.5px
+     and was the only off-scale font size left in the site. The "maxes at ~15px"
+     note above it came from reading 0.9542rem at a 16px root. The step that
+     really does reach ~15px is --step-1 (12px -> 14.94px), so this now matches
+     the intent exactly and sits back on the scale. */
+  font-size: var(--step-1);
   font-weight: 520;
   letter-spacing: 0.08em;
   text-transform: uppercase;

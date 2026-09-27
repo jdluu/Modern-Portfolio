@@ -402,7 +402,7 @@
 
 .tech-section .tt-subheading,
 .mini-pills .tt-subheading {
-  font-size: var(--step--2);
+  font-size: var(--step--1);
   font-weight: 800;
   color: var(--color-text-tertiary);
   letter-spacing: 0.05em;
@@ -509,12 +509,12 @@
   }
 
   .detail-label {
-    font-size: var(--step--2);
+    font-size: var(--step--1);
   }
 
   /* Tech pills more compact */
   .tech-pill {
-    font-size: var(--step--2);
+    font-size: var(--step--1);
     padding: var(--space-3xs) var(--space-xs);
   }
 
@@ -546,7 +546,7 @@
   }
 
   .badge {
-    font-size: var(--step--2);
+    font-size: var(--step--1); /* was --step--2: 7.17px on a phone */
     padding: 0.2rem 0.5rem;
   }
 

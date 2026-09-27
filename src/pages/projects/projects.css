@@ -502,21 +502,15 @@ p {
 .cta-aside .btn-icon {
   width: 20px;
   height: 20px;
-  color: #111827;
+  /* Was a literal #111827, which measured 1.26:1 against the button surface in
+     dark theme - effectively an invisible icon. The button already sets this
+     colour for its label, so the icon now matches it in both themes. */
+  color: var(--m3-color-on-surface);
 }
 
 /* Remove the arrow icon if not in screenshot */
 .btn-arrow-icon {
   display: none;
-}
-
-.license-tag {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #9ca3af; /* gray-400 */
-  text-transform: none; /* Reference shows "MIT License" */
-  letter-spacing: normal;
-  margin-right: 0.25rem;
 }
 
 /* Mobile: Stack layout */

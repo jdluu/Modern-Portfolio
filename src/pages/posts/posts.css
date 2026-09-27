@@ -78,7 +78,7 @@
   border: 1px solid var(--color-border);
   border-radius: 6px;
   font-family: var(--m3-font-family-body);
-  font-size: var(--step--2);
+  font-size: var(--step--1);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
