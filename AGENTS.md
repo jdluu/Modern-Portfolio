@@ -223,8 +223,52 @@ Rules for working on it:
 - Add delay/scroll/interaction through the helpers in `site.ts` rather than
   re-deriving it per spec.
 
+## Type and space scale rules
+
+- **The `--m3-font-*` roles are aliases of Utopia steps**, not a competing scale
+  (`--m3-font-headline-large: var(--step-4)`, and so on). Use either, but do not
+  introduce a third size system, and do not hand-roll a `clamp()`: a
+  `clamp(0.8333rem, 0.55rem + 0.9vw, 1.35rem)` on the homepage eyebrow rendered
+  8.33px -> 13.5px and was the only off-scale font size left in the built site.
+  When a size "reads too small", the cause is usually the 62.5% root, not the
+  step: check the rendered px before compensating.
+- **`--step--2` is not a text size here.** It renders 6.94px -> 7.62px against
+  this root, and M3's own `label-small` is 11px. `--step--1` (8.33px -> 9.54px) is
+  the smallest step for anything that has to be read. Five rules had used
+  `--step--2` for chip, badge, eyebrow and subheading text; all were retargeted.
+  WCAG sets no minimum font size, so this is a legibility floor, not a
+  conformance one - mobile values for `--step--1` bottom out at 8.74px at 393px
+  and 8.33px at the 320px design minimum, and that is accepted.
+- **Prove "on the scale" by evaluating the clamps**, not by comparing against
+  endpoint values: at 393px every step sits between its min and max, so an
+  endpoint-only check reports a dozen false "OFF-SCALE" hits. Parse the `clamp()`
+  expressions out of `tokens.css` and evaluate them at the tested viewport. Note
+  the preferred value is a sum (`0.671rem + 0.1171vw`), so add the terms.
+
 ## Known pitfalls
 
+- **Content inside a closed `<details>` is invisible to axe, and worse, it fools
+  geometry tests.** Chrome returns a layout box for collapsed disclosure content
+  while painting none of it, so a `rect > 0` visibility check measures the colours
+  of text nobody can see. That is how a 3.86:1 table header at 9.5px sat inside a
+  coursework appendix `<details>` undetected through several audits.
+  `auditRoute()` in `tests/e2e/a11y.spec.ts` now opens every disclosure before
+  scanning. Anything else that walks "visible" elements needs the same guard.
+- **Do not measure icon contrast from the `<svg>` root.** Computed `fill`
+  defaults to `rgb(0,0,0)` - the SVG initial - even when the icon actually paints
+  `currentColor` through a `<symbol>`/`<use>` sprite. A root-level check invented
+  failures on 24 pages, and before that on a footer icon that renders fine.
+  Inspect painted descendants, or sample rendered pixels. Note also that a
+  per-element screenshot of a sprite `<svg>` can come back blank while a
+  screenshot of its container clearly shows the icon - trust the container and
+  your own eyes over the element shot.
+- **Theme state persists in `localStorage`.** The layout's inline script resolves
+  system preference into an explicit theme and `ThemeToggleButton` persists it, so
+  reusing one browser context across pages silently pins the theme for later
+  pages. A probe that forgets this measures the wrong theme - which is how a false
+  "the a11y suite never really tests dark mode" conclusion got reached. Use a
+  fresh context per themed measurement, and assert the applied `data-theme`
+  before trusting any number.
 - **Never allocate CSS Grid space for a `position: fixed` element.** The fixed
   element is already out of flow, so the reserved column is dead space that
   squeezes real content. This exact bug hit both the blog post and project
