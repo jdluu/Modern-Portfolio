@@ -1,6 +1,6 @@
 # AGENTS.md: Modern Portfolio (jluu.dev)
 
-Notes for AI agents working in this repo.
+Engineering notes for agents working in this repo.
 
 This is the only agent instruction file here. Fold new lessons into it instead of
 adding per-tool config directories (`.agents/`, `.claude/`, `skills-lock.json`).
@@ -8,11 +8,65 @@ adding per-tool config directories (`.agents/`, `.claude/`, `skills-lock.json`).
 ## Ground rules
 
 - The **deployed site (jluu.dev) is the design source of truth.** Compare against
-  the live pages before redesigning anything.
-- Never invent stats, course codes, dates, or screenshots. On portfolio copy,
-  vague-but-true beats impressive-but-fabricated.
-- Content and asset changes are only done when `pnpm run check`, `pnpm run lint`,
-  and `pnpm run build` pass, and the built page was actually inspected.
+  the live pages before changing any layout or styling.
+- **Don't introduce data you can't verify.** Course codes, dates, metrics, and
+  screenshots must come from a real source or a confirmation, not from
+  plausibility. An unverifiable number is worse than no number.
+- A change is only done when `pnpm run check`, `pnpm run lint`, and
+  `pnpm run build` pass and the built page was inspected.
+
+## Tech stack
+
+| Area              | Choice                                                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Framework         | Astro ^7.2, `output: "static"`, pages prerendered by default                                                                        |
+| Runtime           | Node >= 22; pnpm 11 (CI pins `pnpm/action-setup` to version 11)                                                                     |
+| Language          | TypeScript ^6, `extends: astro/tsconfigs/strict`, `target: ES2024`, `strict: true`                                                  |
+| Interactive parts | Solid.js ^1.9 via `@astrojs/solid-js`, scoped to `src/components/**/*.tsx` only                                                     |
+| Icons             | `astro-icon` + `@iconify-json/lucide`. There is no `public/icons/`                                                                  |
+| Images            | Astro's image service on `sharp`; sources under `src/assets/images/`                                                                |
+| Markdown          | `@astrojs/markdown-remark` unified processor, single rehype plugin `rehype-slug`                                                    |
+| Sitemap           | `@astrojs/sitemap`                                                                                                                  |
+| Styling           | Hand-written CSS: `src/styles/{reset,global,tokens,typography}.css` + a per-component sibling `.css`. No CSS framework, no Tailwind |
+| Tests             | Vitest (unit, `environment: node`), Playwright (`chromium` + `Pixel 5`)                                                             |
+| Quality gates     | ESLint 10 flat config, Prettier 3, knip, husky + lint-staged                                                                        |
+| Deploy            | Netlify: `netlify.toml` runs `pnpm build` and publishes `dist`                                                                      |
+
+Build knobs in `astro.config.mjs`: `prefetch: true`, Vite `build.target: es2024`,
+`cssCodeSplit`, and a `manualChunks` split putting `@astrojs/*` in
+`astro-vendor` and other `node_modules` in `vendor`.
+
+## Repo map
+
+```
+src/
+  content.config.ts         collection schemas (posts, experiences, projects)
+  content/{posts,experiences,projects}/*.md
+  layouts/BaseLayout.astro  the only layout; it already renders <main>
+  pages/                    routes: index, about, work, blog, contact, 404
+    projects/[slug].astro      project case study (layout spec below)
+    posts/[slug].astro         blog post + TOC sidebar
+    experiences/[slug].astro   experience detail
+  components/
+    navigation/   Navbar, Footer, PaginationControls
+    cards/        ProjectCard, ExperienceCard (+ their .css)
+    filters/      ProjectCardList, ExperienceCardList, FilterDropdown (Solid islands)
+    sections/     HomeSection, AboutSection, ProjectSection, ...  (homepage bands)
+    blog/ ui/ shared/
+  hooks/        usePagination, useProjectFiltering, useDomSync (Solid)
+  lib/          content-mappers, sort-utils, utils
+  scripts/      navbar, scroll-to-top, toc (plain browser TS, not Astro)
+  styles/       reset, global, tokens, typography
+  types/        project-card, experience-card, post
+tests/
+  unit/         sort-utils, toc, utils
+  e2e/          images, a11y, navigation, home + helpers/{site,fixtures}
+```
+
+Path aliases (`tsconfig.json`): `@/src/*`, `@components/*`, `@layouts/*`,
+`@pages/*`, `@images/*`, `@scripts/*`, `@styles/*`, `@hooks/*`, `@lib/*`,
+`@app-types/*`. Two more, `@fonts/*` and `@icons/*`, point at `public/fonts/`
+and the non-existent `public/icons/`. Vitest resolves the same aliases.
 
 ## Commands
 
@@ -27,6 +81,109 @@ adding per-tool config directories (`.agents/`, `.claude/`, `skills-lock.json`).
 | `pnpm run knip`      | Unused files, exports, dependencies     |
 | `pnpm run test:unit` | Vitest                                  |
 | `pnpm run test:e2e`  | Playwright (builds and previews first)  |
+
+CI (`.github/workflows/ci.yml`) runs, in order: `pnpm install --frozen-lockfile`,
+`lint`, `check`, `test:unit`, `knip`, `build`, `playwright install --with-deps
+chromium`, `test:e2e`, `pnpm audit --prod`. Anything green locally but red there
+is usually alias resolution or filename case.
+
+The pre-commit hook (husky + lint-staged) runs `eslint --fix` over
+`**/*.{js,jsx,ts,tsx,astro}` and `prettier --write --ignore-unknown` over
+everything staged, so a commit can be rewritten or blocked by it.
+`.prettierignore` excludes `pnpm-lock.yaml` (pnpm formats it in its own style, so
+reformatting produces thousands of lines of churn that hide the real dependency
+change), `dist/`, `.astro/`, `node_modules/`, `playwright-report/`, and
+`test-results/`.
+
+## Content collections
+
+Defined in `src/content.config.ts`. Three collections, each loaded by `glob` with
+the pattern `**/[^_]*.{md,mdx}` — **a leading underscore excludes a file from the
+collection**, which is how drafts and scratch entries are parked.
+
+- **`projects`** — `summary`, `description`, `role`, `technologies`, `tools`,
+  `cover`, `thumbnail`, `final`, `startDate`, `endDate`,
+  `programming_languages`, `domains`, `background`, `solution`, `process`,
+  `impact`, `reflection`, `links: { live, source }`.
+- **`experiences`** — `company: { name, image, imagealt }`,
+  `logistics: { role, duration, startDate, endDate, focusArea, status,
+department, type }`, `technologies: { tools, skills }`,
+  `work: { responsibilities[], achievements[] }`,
+  `showcase: { link, description, insight }`, `thumbnail`, `summary`.
+- **`posts`** — `description`, `tags`, `hero`, `links[{ label, url }]`.
+
+Shared base fields: `title`, optional `slug`, optional `date`, optional `draft`
+(set `draft: true` to keep an entry out of the build). Image fields are typed
+with Astro's `image()`, so a path that doesn't resolve fails `pnpm run check`
+rather than rendering broken.
+
+## Media conventions
+
+- `final_<name>.png` in a project asset directory is the still shown in the Final
+  Product section, and doubles as the demo video poster.
+- `final_<name>.mp4` and `final_<name>.webm` (same basename) are the recorded
+  demo. When either exists, `src/pages/projects/[slug].astro` renders a
+  `<video>` (webm first, mp4 fallback) with the still as its poster, and skips
+  the lightbox. Astro has no video pipeline, so the sources come from an eager
+  `import.meta.glob`; image sources go through `getImage` and `Image`.
+- `final_<name>.gif` is not used anywhere. Content entries point at
+  `final_<name>.png`; never add a GIF reference to satisfy the schema.
+- **Never commit placeholder media.** A 67-byte stub GIF renders as an 8x8
+  figure in the Final Product section, and the build ships it without complaint.
+- **All demo media lives under `src/assets/images/projects/<project>/`.** A
+  top-level `assets-demo-masters/` folder used to hold original GIF masters; it
+  was removed, and no GIF is referenced anywhere. Re-encode from an existing
+  recording if a demo needs rebuilding, e.g.
+  `ffmpeg -i in.mov -movflags +faststart -pix_fmt yuv420p final_<name>.mp4`,
+  and pull a poster with `ffmpeg -ss 2 -i final_<name>.mp4 -frames:v 1 final_<name>.png`.
+- `thumbnail_<name>.min.png` is the card image, distinct from `cover_<name>.*`,
+  which is the hero. Keep both.
+
+## Project detail page layout
+
+Captured 2026-08-23 after a correction: the deployed pages looked better than a
+redesign. Treat this as a spec, not a suggestion.
+
+- **Container max-width:** `110rem` (1760px). Not 72ch, not 68ch, not 52rem.
+- **Grid:** `1fr 22rem`, content column plus a TOC sidebar column.
+- **TOC:** sticky in its grid column (`position: sticky; top: calc(var(--nav-height) + var(--space-l))`),
+  not floating and not JS-positioned.
+- **Content column:** no explicit max-width. The grid column is the constraint.
+- **Intro card:** `var(--color-surface)` background, `2rem` radius, shadow
+  `0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.1)`, 1px
+  `color-mix` border, `overflow: hidden`, `var(--space-xl)` bottom margin.
+- **Hero:** 16/9, `clamp(30rem, 50vh, 45rem)` tall on desktop. Title overlay uses
+  an absolute gradient from transparent through `rgba(0,0,0,0.4)` to
+  `rgba(0,0,0,0.8)`. Title is `var(--step-5)`, weight 780, letter-spacing
+  -0.025em. Hover scales the image to `1.03`.
+- **Summary and actions:** `grid-template-columns: 1fr auto`, padding
+  `var(--space-l) var(--space-xl)`, `border-top` to separate from the hero,
+  summary at `var(--step-1)`.
+- **Role and tech cards:** two-column grid at the section level. Cards use
+  `var(--color-surface)`, `var(--space-s)` radius, `var(--m3-elevation-1)`, and a
+  1px `color-mix` outline. Pills use `border-radius: 999px` with primary-tinted
+  `color-mix` background and border.
+- **Do not drop:** lightbox on final product images, the 0.3s `cardFadeIn`
+  pagination transition, hero scale and card lift on hover.
+- **Type scale:** section headings use `var(--m3-font-headline-medium)`, body
+  text stays at `var(--step-0)`. Bumping it to step-2 or step-3 looks
+  disproportionate.
+
+## Markdown-rendered pages
+
+Long markdown pages (the coursework archives in `src/content/posts/`) need
+explicit CSS care:
+
+- Section headings get a subtle bottom border.
+- `.prose ul { list-style: revert; }`, because `reset.css` strips list styles
+  from Astro post markdown.
+- Fixed-width label columns (e.g. course codes) are bolded with a `min-width` so
+  the column scans vertically.
+- Appendix tables: rounded corners, outer border, zebra striping, generous
+  padding, hover state.
+- Content column max-width around 70ch. TOC sidebar width uses `clamp()`, never
+  a fixed value.
+- About-page chips: 6 items max per degree.
 
 ## End-to-end suite
 
@@ -64,145 +221,6 @@ Rules for working on it:
 - Add delay/scroll/interaction through the helpers in `site.ts` rather than
   re-deriving it per spec.
 
-## Content writing rules
-
-### Voice and tone
-
-- Direct and understated. Plain facts, no hype. No "Advancing technology,
-  empowering people" taglines, no "innovative and user-friendly experiences"
-  filler in meta descriptions.
-- First person where it fits. Project pages, About, and experience narratives
-  use "I" naturally.
-- Specific over abstract. Name the framework, the problem, what broke, and what
-  you would do differently.
-- Reflections mention actual difficulties, not vague learning outcomes.
-
-### Fact rules for portfolio copy
-
-- **Trace projects to their origin.** Say which course or program, e.g. "built
-  through CodePath's Android course" or "final project of COGS 108 (Data Science
-  in Practice) at UCSD". A course-born project that reads as a standalone
-  personal project is a gap.
-- **State student-to-instructor arcs.** e.g. "Returned to CodePath as an
-  instructor after completing the same Android course as a student in 2021."
-- **Verify course numbers against the transcript.** When in doubt, ask. A wrong
-  course code erodes credibility.
-- **No unverifiable stats.** Drop "accepted 95% of reviews" or "improved
-  throughput by 20%" unless the user supplied the number. Replace with concrete
-  but defensible phrasing.
-- **Directed Research and Thesis are usually different projects.** Confirm they
-  are distinct before writing copy that treats them as one.
-- **Verify graduation dates with the user.** Never assume "expected 2026";
-  thesis timelines shift.
-
-### AI-tell audit (mandatory after writing portfolio copy)
-
-1. **Em dashes.** The #1 modern tell. Replace with periods, colons, commas, or
-   parentheses. Only legitimate date ranges survive (Oct 22–27). Both the
-   `humanizer` skill (pattern 14) and `design-taste-frontend` treat this as a
-   binary ban, so verify `—` and `–` are absent before finishing.
-2. **"Not X but Y" / "rather than".** State it directly instead.
-3. **Forced groups of three.** Real enumerations (course lists, tech stacks)
-   are fine. Rhetorical tricolons are not.
-4. **Dramatic fragments and punchline stacking.** "No cloud. No cables." reads
-   as performed. Fold it back into a real sentence with a subject.
-5. **Copula avoidance.** "serves as", "stands as", "represents a" become "is"
-   or "has".
-6. **AI vocabulary.** delve, tapestry, underscore, showcase, pivotal, intricate,
-   landscape (abstract), seamless, robust, leverage, utilize, meticulous,
-   passionate, cutting-edge.
-7. **Hedge stacks.** "could potentially possibly" becomes "may".
-8. **Curly quotes and emoji-decorated headings.**
-
-### Audit procedure
-
-1. Scan for decorative em dashes and eliminate them.
-2. Scan for not-X-but-Y, rather-than, and rule-of-three.
-3. Scan for AI vocabulary and hedge stacks.
-4. Read it aloud. Does it sound like Jeffrey?
-5. Re-run the project's own checks, then tell the user a human skim is still
-   worthwhile. Regex catches patterns, not rhythm.
-
-Killing AI vocabulary while keeping AI _structure_ (fragment endings, forced
-tricolons, stacked short sentences) just produces subtler slop. Audit the
-structure, not only the word list.
-
-### Project page structure
-
-Vary paragraph structure, but cover why you built it, what it does, what was
-hard, where it came from (course or program), and what you would change.
-
-### Experience page bullets
-
-Drop unverifiable percentages and "meticulous" adjectives. Describe the actual
-day-to-day work. Highlight arcs (student → instructor).
-
-### Coursework archive posts
-
-Dense course lists need explicit CSS care:
-
-- Section headings get a subtle bottom border.
-- `.prose ul { list-style: revert; }`, because `reset.css` strips list styles
-  from Astro post markdown.
-- Course codes are bolded with a `min-width` so the column scans vertically.
-- Appendix table: rounded corners, outer border, zebra striping, generous
-  padding, hover state.
-- Content column max-width around 70ch. TOC sidebar width uses `clamp()`, never
-  a fixed value.
-- About chips: 6 courses max per degree. Pick the ones that tell the story.
-
-## Project detail page layout
-
-Captured 2026-08-23 after a correction: the deployed pages looked better than a
-redesign. Treat this as a spec, not a suggestion.
-
-- **Container max-width:** `110rem` (1760px). Not 72ch, not 68ch, not 52rem.
-- **Grid:** `1fr 22rem`, content column plus a TOC sidebar column.
-- **TOC:** sticky in its grid column (`position: sticky; top: calc(var(--nav-height) + var(--space-l))`),
-  not floating and not JS-positioned.
-- **Content column:** no explicit max-width. The grid column is the constraint.
-- **Intro card:** `var(--color-surface)` background, `2rem` radius, shadow
-  `0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.1)`, 1px
-  `color-mix` border, `overflow: hidden`, `var(--space-xl)` bottom margin.
-- **Hero:** 16/9, `clamp(30rem, 50vh, 45rem)` tall on desktop. Title overlay uses
-  an absolute gradient from transparent through `rgba(0,0,0,0.4)` to
-  `rgba(0,0,0,0.8)`. Title is `var(--step-5)`, weight 780, letter-spacing
-  -0.025em. Hover scales the image to `1.03`.
-- **Summary and actions:** `grid-template-columns: 1fr auto`, padding
-  `var(--space-l) var(--space-xl)`, `border-top` to separate from the hero,
-  summary at `var(--step-1)`.
-- **Role and tech cards:** two-column grid at the section level. Cards use
-  `var(--color-surface)`, `var(--space-s)` radius, `var(--m3-elevation-1)`, and a
-  1px `color-mix` outline. Pills use `border-radius: 999px` with primary-tinted
-  `color-mix` background and border.
-- **Do not drop:** lightbox on final product images, the 0.3s `cardFadeIn`
-  pagination transition, hero scale and card lift on hover.
-- **Type scale:** section headings use `var(--m3-font-headline-medium)`, body
-  copy stays at `var(--step-0)`. Bumping narrative text to step-2 or step-3
-  looks disproportionate.
-
-## Media conventions
-
-- `final_<name>.png` in a project asset directory is the still shown in the
-  Final Product section, and doubles as the demo video poster.
-- `final_<name>.mp4` and `final_<name>.webm` (same basename) are the recorded
-  demo. When either exists, `src/pages/projects/[slug].astro` renders a
-  `<video>` (webm first, mp4 fallback) with the still as its poster, and skips
-  the lightbox. Astro has no video pipeline, so the sources come from an eager
-  `import.meta.glob`; image sources go through `getImage` and `Image`.
-- `final_<name>.gif` is not used anywhere. Content entries point at
-  `final_<name>.png`; never add a GIF reference to satisfy the schema.
-- **Never commit placeholder media.** A 67-byte stub GIF renders as an 8x8
-  figure in the Final Product section, and the build ships it without complaint.
-- **All demo media lives under `src/assets/images/projects/<project>/`.** A
-  top-level `assets-demo-masters/` folder used to hold original GIF masters; it
-  was removed, and no GIF is referenced anywhere. Re-encode from an existing
-  recording if a demo needs rebuilding, e.g.
-  `ffmpeg -i in.mov -movflags +faststart -pix_fmt yuv420p final_<name>.mp4`,
-  and pull a poster with `ffmpeg -ss 2 -i final_<name>.mp4 -frames:v 1 final_<name>.png`.
-- `thumbnail_<name>.min.png` is the card image, distinct from `cover_<name>.*`,
-  which is the hero. Keep both.
-
 ## Known pitfalls
 
 - **Never allocate CSS Grid space for a `position: fixed` element.** The fixed
@@ -228,9 +246,13 @@ redesign. Treat this as a spec, not a suggestion.
   is `ok: false`. `server.host` and `preview.host` are pinned to `127.0.0.1` in
   `astro.config.mjs`, and `playwright.config.ts` matches, so every local tool
   agrees on one address family. Keep those in sync or the probe regresses.
-- `README.md` drifts. It still references `src/content/config.ts` (the real file
-  is `src/content.config.ts`), `public/styles/reset.css`, and `public/icons/`,
-  none of which exist. Icons come from `astro-icon`.
+- **Hand-written paths in docs drift; verify them instead of trusting them.**
+  `README.md` had accumulated four dead references that no build step checks:
+  `src/content/config.ts` (the real file is `src/content.config.ts`),
+  `public/styles/reset.css` (it lives in `src/styles/`), `public/icons/` (which
+  does not exist, because icons come from `astro-icon`), and
+  `src/components/ui/ThemeToggleButton.tsx` (it is in `shared/`, not `ui/`).
+  Before citing a path, confirm it exists.
 - **The root font size is 10px.** `global.css` sets `font-size: 62.5%` on the
   root, so every `rem` in `tokens.css` is 62.5% of its face value. `--step-6`
   tops out at 45.7px, not 73px. Compute against 10px or you will misread
@@ -257,9 +279,3 @@ redesign. Treat this as a spec, not a suggestion.
   _visible_ page-heading style; only `HomeSection.css` adds
   `position: absolute; left: -9999px`. For text that must be hidden but exposed
   to assistive tech, use `.visually-hidden` from `global.css`.
-
-## References
-
-- `humanizer` skill (`skill_view(name='humanizer')`) for the full 34-pattern
-  checklist of AI writing tells.
-- `design-taste-frontend` skill for frontend layout and taste review.
