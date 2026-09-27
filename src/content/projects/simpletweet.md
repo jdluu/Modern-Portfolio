@@ -9,7 +9,7 @@ technologies: ["Java", "Android"]
 tools: ["Git", "GitHub", "Android Studio"]
 
 cover: "../../assets/images/projects/simpletweet/cover_simpletweet.min.png"
-final: "../../assets/images/projects/simpletweet/final_simpletweet.gif"
+final: "../../assets/images/projects/simpletweet/final_simpletweet.png"
 
 background: "A later project in CodePath's Android track, after the early apps like SimpleTodo and Flixster. I needed to connect to a real production API with real auth requirements. Twitter's platform was the target: log in, read a timeline, post tweets."
 solution: "The app has OAuth login, an infinite-scrolling timeline, and a compose screen with a character counter. The timeline refreshes automatically so new posts show up without manual reloads."

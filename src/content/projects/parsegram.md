@@ -9,7 +9,7 @@ technologies: ["Java", "Android", "Parse"]
 tools: ["Android Studio", "Git", "GitHub"]
 
 cover: "../../assets/images/projects/parsegram/cover_parsegram.png"
-final: "../../assets/images/projects/parsegram/final_parsegram.gif"
+final: "../../assets/images/projects/parsegram/final_parsegram.png"
 
 background: "The final project of CodePath's Android course. I was curious how social apps work under the hood, so I built a minimal Instagram-style clone: sign up, take a photo, caption it, post to a shared feed."
 solution: "Parse handles accounts and image storage. The feed shows recent posts with pull-to-refresh, photos come straight from the device camera with captions added before posting."

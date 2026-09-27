@@ -9,7 +9,7 @@ technologies: ["Java", "Android SDK", "Android Async HTTP"]
 tools: ["Android Studio", "Git", "GitHub", "Glide"]
 
 cover: "../../assets/images/projects/flixster/cover_flixster.png"
-final: "../../assets/images/projects/flixster/final_flixster.gif"
+final: "../../assets/images/projects/flixster/final_flixster.png"
 
 background: "This was my introduction to Android development, built as part of CodePath's Android course. The goal was simple: pull live data from a movie API and present it cleanly, while learning how network calls and screen navigation actually work on mobile."
 solution: "A movie list with posters, titles, and descriptions; tap through to a detail screen; play trailers inline. Network requests run in the background so the list stays responsive while data loads."

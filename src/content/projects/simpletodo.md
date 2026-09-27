@@ -9,7 +9,7 @@ technologies: ["Java", "Android SDK"]
 tools: ["Android Studio", "Git", "GitHub"]
 
 cover: "../../assets/images/projects/simpletodo/cover_simpletodo.png"
-final: "../../assets/images/projects/simpletodo/final_simpletodo.gif"
+final: "../../assets/images/projects/simpletodo/final_simpletodo.png"
 
 background: "One of my very first apps, built through CodePath's Android course. The point was learning fundamentals like user input and persistence. Can I make data survive closing the app?"
 solution: "A single task list. Type a task and add it, long-press to delete, tap into a second screen to edit text. The list saves to local storage so it's still there after a restart."
