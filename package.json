@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.11",
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
     "@iconify-json/lucide": "^1.2.125",
     "@playwright/test": "^1.62.1",
