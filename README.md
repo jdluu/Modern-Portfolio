@@ -12,11 +12,11 @@ This project is built with the following technologies:
 
 - Framework: Astro (islands architecture) + SolidJS for interactive islands
 - Language: TypeScript ([tsconfig.json](tsconfig.json))
-- Styling: Vanilla CSS with custom reset ([public/styles/reset.css](public/styles/reset.css))
-- Content: Astro Content Collections ([src/content/config.ts](src/content/config.ts)) with Markdown posts
-- Components: Astro .astro components + Solid TSX islands (example: [src/components/ui/ThemeToggleButton.tsx](src/components/ui/ThemeToggleButton.tsx))
+- Styling: Vanilla CSS with custom reset ([src/styles/reset.css](src/styles/reset.css))
+- Content: Astro Content Collections ([src/content.config.ts](src/content.config.ts)) with Markdown posts
+- Components: Astro .astro components + Solid TSX islands (example: [src/components/shared/ThemeToggleButton.tsx](src/components/shared/ThemeToggleButton.tsx))
 - Fonts: Locally hosted Roboto Flex variable font (WOFF2) ([public/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2](public/fonts/Roboto_Flex/RobotoFlex-VariableFont.woff2))
-- Icons: Inline SVG assets ([public/icons/](public/icons/))
+- Icons: `astro-icon` with the Lucide icon set (`@iconify-json/lucide`)
 - SEO/Meta: Robots and favicons ([public/robots.txt](public/robots.txt), [public/favicons/](public/favicons/))
 - Hosting/Deploy: Netlify (custom headers via [public/\_headers](public/_headers))
 - Package Manager: pnpm

@@ -3,7 +3,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 /**
- * Content Collections configuration for Astro 6+
+ * Content Collections configuration for Astro 7+
  *
  * This file defines the schemas and loaders for all content collections
  * (posts, experiences, projects). These schemas are used for build-time validation
