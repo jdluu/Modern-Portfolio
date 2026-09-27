@@ -55,6 +55,15 @@ function describeViolations(
  */
 async function auditRoute(page: Page, route: string, tags: string[]) {
   await page.goto(route, { waitUntil: "load" });
+  // Open every disclosure before auditing. Chrome reports a layout box for
+  // content inside a closed <details> while painting none of it, and axe only
+  // audits what is rendered - so the coursework appendices went unchecked, and a
+  // 3.86:1 table header sat in there at 9.5px, well under the 4.5:1 AA floor.
+  await page.evaluate(() => {
+    for (const d of document.querySelectorAll("details:not([open])")) {
+      d.setAttribute("open", "");
+    }
+  });
   await settleAnimations(page);
   return new AxeBuilder({ page }).withTags(tags).analyze();
 }
