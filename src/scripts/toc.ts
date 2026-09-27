@@ -127,12 +127,12 @@ export function initToc(): void {
       projectToc.style.top = "";
       projectToc.style.left = "";
       projectToc.style.right = "clamp(12px, 6vw, 24px)";
-      projectToc.style.bottom = `calc(env(safe-area-inset-bottom, 0px) + var(--space-6))`;
+      projectToc.style.bottom = `calc(env(safe-area-inset-bottom, 0px) + var(--space-l))`;
       projectToc.style.zIndex = "200";
     } else {
       projectToc.style.bottom = "";
       projectToc.style.left = "";
-      projectToc.style.top = `calc(var(--nav-height) + var(--space-6))`;
+      projectToc.style.top = `calc(var(--nav-height) + var(--space-l))`;
       projectToc.style.right = `clamp(18px, 6vw, 56px)`;
       projectToc.style.zIndex = "120";
     }

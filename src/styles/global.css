@@ -141,10 +141,10 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: var(--accent-color);
+  background: var(--color-accent);
   color: var(--color-on-accent);
   box-shadow: 0 8px 22px
-    color-mix(in oklab, var(--accent-color) 20%, transparent);
+    color-mix(in oklab, var(--color-accent) 20%, transparent);
   border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
   opacity: 0;
   transform: translateY(12px);

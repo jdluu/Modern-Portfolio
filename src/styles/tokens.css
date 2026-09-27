@@ -20,6 +20,14 @@
   --m3-color-surface-container-low: #f3f4f8;
   --m3-color-on-surface-variant: #40434f;
   --m3-color-outline: #6c6e75;
+  /* Error and success are not both Material 3 roles: M3 defines error, success
+     is an extra role this site needs for the contact form. Both must exist in
+     both themes, otherwise a literal fallback bakes in a light-theme colour and
+     the dark theme renders light-on-light. */
+  --m3-color-error: #b3261e;
+  --m3-color-success: #2e7d32;
+  --m3-color-secondary-container: #d0ccde;
+  --m3-color-surface-container-high: #dcdde3;
 }
 
 [data-theme="dark"] {
@@ -41,10 +49,29 @@
   --m3-color-surface-container-low: #252a3d;
   --m3-color-on-surface-variant: #bfc6f4;
   --m3-color-outline: #6e78a8;
+  --m3-color-error: #f7768e;
+  --m3-color-success: #9ece6a;
+  --m3-color-secondary-container: #293147;
+  --m3-color-surface-container-high: #262b3f;
 }
 
 :root {
-  /* 2. Typography Scale (Utopia 320px -> 1240px) */
+  /* 2. Fluid type scale - Utopia
+     -----------------------------------------------------------------
+     Source tool: https://utopia.fyi/type/calculator
+       min viewport 320px @ 16px font,  scale 1.2
+       max viewport 1240px @ 19.1104px, scale ~1.2506      (10 steps, -2..7)
+
+     Provenance caveat - these values are NOT reproducible from a single
+     generator parameter set. Utopia's own formula lands within 0.04px of them,
+     which is ~25x the 4-decimal-rem rounding granularity, so this block was
+     hand-edited after generation. The literals are the source of truth and were
+     deliberately left untouched.
+
+     Root font size: this project sets html { font-size: 62.5% }, so 1rem is
+     10px and every step renders at 62.5% of the px a 16px root would give.
+     --step-0 therefore renders 10px -> 11.94px, which is a label size rather
+     than a reading size - use --step-body below for prose. */
   --step--2: clamp(0.6944rem, 0.671rem + 0.1171vw, 0.7619rem);
   --step--1: clamp(0.8333rem, 0.7913rem + 0.2101vw, 0.9542rem);
   --step-0: clamp(1rem, 0.9326rem + 0.337vw, 1.1944rem);
@@ -56,7 +83,22 @@
   --step-6: clamp(2.986rem, 2.434rem + 2.76vw, 4.57rem);
   --step-7: clamp(3.5832rem, 2.84rem + 3.7161vw, 5.7125rem);
 
-  /* 3. Spacing Scale (Utopia 320px -> 1240px) */
+  /* Body copy. This is the 16px -> 19.1px body size the type scale was designed
+     around, re-expressed for this project's 10px root (see the note above).
+     Use it for running prose; --step-0 is a 10px -> 11.94px label size. */
+  --step-body: clamp(1.6rem, 1.4918rem + 0.3381vw, 1.911rem);
+
+  /* 3. Fluid space scale - Utopia
+     -----------------------------------------------------------------
+     Source tool: https://utopia.fyi/space/calculator
+       viewport 320px -> 1240px, space base 16px -> 20.1344px
+       multipliers .25 .5 .75 1 1.5 2 3 4 6   (t-shirt sizes 3xs..3xl)
+     Unlike the type scale, this block DOES reproduce from those parameters.
+
+     Coherence note: in Utopia the space base IS the body font size, so --space-s
+     is defined to equal --step-0. Here it does not - --space-s tops out at
+     1.2584rem (20.13px basis) while --step-0 tops out at 1.1944rem (19.11px
+     basis), so these two scales were generated from different bases. */
   --space-3xs: clamp(0.25rem, 0.2275rem + 0.1124vw, 0.3146rem);
   --space-2xs: clamp(0.5rem, 0.4551rem + 0.2247vw, 0.6292rem);
   --space-xs: clamp(0.75rem, 0.6826rem + 0.3371vw, 0.9438rem);
@@ -90,6 +132,12 @@
   --m3-font-family-body: "Roboto Flex", sans-serif;
   --font-heading: var(--m3-font-family-display);
   --font-body: var(--m3-font-family-body);
+  /* No monospace face is loaded, so license/code text falls back to the platform
+     mono stack. This was referenced as --font-mono but never defined, so the
+     declaration was dropped and .license-tag silently rendered in Roboto Flex. */
+  --font-mono:
+    ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 
   --m3-font-display-large: var(--step-7);
   --m3-font-display-medium: var(--step-6);

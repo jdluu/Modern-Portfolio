@@ -134,7 +134,7 @@
 
 .edu-degree {
   font-size: var(--step-2);
-  color: var(--text-color);
+  color: var(--color-text-primary);
   margin: 0;
   line-height: var(--font-line-height-heading-tight);
   font-weight: 600;
@@ -187,7 +187,7 @@
 
 .edu-gpa {
   margin: var(--space-2xs) 0;
-  color: var(--text-color);
+  color: var(--color-text-primary);
   font-size: var(--step-1);
 }
 

@@ -6,9 +6,7 @@
 
 /* Container + Grid */
 .project-detail {
-  max-width: var(
-    --container-blog
-  ); /* Increased from 85rem to 72rem... wait, standard is 128rem. Let's use 110rem or similar. */
+  /* 110rem = 1100px at this project's 62.5% root (see tokens.css). */
   max-width: 110rem;
   margin: 0 auto;
   padding: var(--space-xl) var(--space-m);
@@ -183,7 +181,7 @@
 .info-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--grid-gap-md);
+  gap: var(--space-m);
   margin: var(--space-l) 0;
   align-items: start; /* prevent grid items (cards) from stretching to equal height */
 }
@@ -253,7 +251,7 @@
   margin: 0 0 var(--space-xs);
   font-size: var(--step-0); /* Bumped from step--1 */
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--color-text-primary);
   /* Pinned to the h4 rendering this subheading had, so the heading level can be
      corrected without changing how it looks. */
   line-height: var(--font-line-height-heading);
@@ -354,7 +352,7 @@
 .project-section h2 {
   margin-top: 0;
   margin-bottom: var(--space-m);
-  color: var(--text-color);
+  color: var(--color-text-primary);
   font-size: var(--step-3); /* Bumped from step-2 */
   font-weight: 650;
 }
@@ -442,9 +440,9 @@ p {
   text-decoration: none;
   font-weight: 600;
   font-size: var(--step-0);
-  background-color: var(--m3-color-surface-container-low, #f3f4f8);
+  background-color: var(--m3-color-surface-container-low);
   color: var(--m3-color-on-surface);
-  border: 1px solid var(--m3-color-outline-variant, var(--m3-color-outline));
+  border: 1px solid var(--m3-color-outline);
   transition: all var(--m3-motion-duration-short)
     var(--m3-motion-easing-standard);
   width: 100%;
@@ -551,7 +549,7 @@ p {
   position: relative;
   padding: var(--space-l) 0; /* Only vertical padding here */
   background: var(--color-card);
-  border-radius: var(--radius-md, var(--space-s));
+  border-radius: var(--space-s);
   border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
   box-shadow: 0 var(--space-s) var(--space-2xl)
     color-mix(in oklab, black 8%, transparent);
@@ -572,7 +570,7 @@ p {
   appearance: none;
   border: none;
   background: color-mix(in oklab, var(--color-border) 8%, transparent);
-  color: var(--text-color);
+  color: var(--color-text-primary);
   width: var(--space-2xl); /* Increased from var(--space-xl) */
   height: var(--space-2xl);
   border-radius: 8px;
@@ -646,7 +644,7 @@ p {
 
 /* Active link (clear, stronger contrast) */
 .toc-list a.link-active {
-  color: var(--text-color);
+  color: var(--color-text-primary);
   background: color-mix(in oklab, var(--color-accent) 10%, transparent);
   font-weight: 700;
   box-shadow: 0 var(--space-3xs) var(--space-2xs)
@@ -731,9 +729,9 @@ p {
     height: var(--space-2xl);
     padding: var(--space-3xs);
     border-radius: var(--space-3xl);
-    background: var(--accent-color);
+    background: var(--color-accent);
     box-shadow: 0 var(--space-s) var(--space-2xl)
-      color-mix(in oklab, var(--accent-color) 28%, transparent);
+      color-mix(in oklab, var(--color-accent) 28%, transparent);
     overflow: visible;
   }
 
@@ -752,7 +750,7 @@ p {
     height: var(--space-xl);
     border-radius: 10px;
     background: color-mix(in oklab, var(--color-border) 8%, transparent);
-    color: var(--text-color);
+    color: var(--color-text-primary);
   }
 
   /* Show title only when expanded (collapsed already hides via rules above) */
@@ -881,10 +879,10 @@ section[id] {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: var(--accent-color);
+  background: var(--color-accent);
   color: var(--color-on-accent);
   box-shadow: 0 var(--space-s) var(--space-2xl)
-    color-mix(in oklab, var(--accent-color) 20%, transparent);
+    color-mix(in oklab, var(--color-accent) 20%, transparent);
   border: 1px solid color-mix(in oklab, var(--color-border) 14%, transparent);
   opacity: 0;
   transform: translateY(var(--space-xs));
