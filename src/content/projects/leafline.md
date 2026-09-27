@@ -23,7 +23,7 @@ links:
 description: "A private, local-first EPUB reader for Android. Books and reading data stay on the device."
 startDate: 2026-05-01
 endDate: 2026-09-01
-thumbnail: "../../assets/images/projects/leafline/cover_leafline.png"
+thumbnail: "../../assets/images/projects/leafline/thumbnail_leafline.min.png"
 programming_languages:
   - "Kotlin"
 domains:
