@@ -64,7 +64,7 @@ const structuredDataString = JSON.stringify(structuredData);
 
 <BaseLayout title={title}>
   <script type="application/ld+json" is:inline set:html={structuredDataString} />
-  <main class="post-page-container">
+  <div class="post-page-container">
     <article class={`post-main-article ${!heroUrl ? 'no-hero' : ''}`}>
       <header class="post-header">
         <div class="post-header-content">
@@ -94,7 +94,7 @@ const structuredDataString = JSON.stringify(structuredData);
       <aside class="project-toc blog-toc" aria-label="Table of contents">
         <div class="toc-card" role="navigation" aria-labelledby="toc-label">
           <div class="toc-header">
-            <h4 id="toc-label">On this page</h4>
+            <h2 id="toc-label">On this page</h2>
             <button id="toc-toggle" class="toc-toggle" aria-expanded="true" aria-label="Collapse table of contents">−</button>
           </div>
           <ul class="toc-list">
@@ -107,7 +107,7 @@ const structuredDataString = JSON.stringify(structuredData);
         </div>
       </aside>
     )}
-  </main>
+  </div>
 </BaseLayout>
 
 <script>

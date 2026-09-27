@@ -8,6 +8,10 @@ const pageTitle = "Experience & Projects";
 ---
  
 <BaseLayout title={pageTitle}>
+	<!-- This page has two peer sections rather than one page heading, so the
+	     document outline needs an h1 of its own. Hidden with the global
+	     visually-hidden utility: the page is designed without a visible title. -->
+	<h1 class="visually-hidden">Experience &amp; Projects</h1>
 	<ExperienceSection />
 	<ProjectSection />
 </BaseLayout>

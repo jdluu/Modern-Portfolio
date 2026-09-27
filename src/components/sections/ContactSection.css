@@ -79,6 +79,11 @@
   text-align: center;
   margin-bottom: var(--space-m-l);
   color: var(--m3-color-on-surface);
+  /* Pinned to the h3 rendering this heading had, so correcting the document
+     outline does not resize it. */
+  font-weight: var(--font-weight-h3);
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.008em;
 }
 .form-group {
   margin-bottom: var(--space-s-m);

@@ -26,7 +26,11 @@ function initScrollToTop() {
   scrollTopBtn.className = "scroll-top";
   scrollTopBtn.type = "button";
   scrollTopBtn.setAttribute("aria-label", "Back to top");
-  scrollTopBtn.setAttribute("aria-hidden", "true");
+  // Hidden until the user scrolls: `.scroll-top` only fades out, it stays rendered, so
+  // the button must leave the tab order explicitly. `inert` does that and also removes
+  // it from the accessibility tree, which is why no aria-hidden is set here - an
+  // aria-hidden element that can still take focus is a WCAG 4.1.2 failure.
+  scrollTopBtn.inert = true;
   scrollTopBtn.innerHTML = "↑";
   document.body.appendChild(scrollTopBtn);
 
@@ -41,10 +45,10 @@ function initScrollToTop() {
       const percent = docHeight > 0 ? scrollY / docHeight : 0;
       if (percent > 0.5) {
         scrollTopBtn.classList.add("visible");
-        scrollTopBtn.setAttribute("aria-hidden", "false");
+        scrollTopBtn.inert = false;
       } else {
         scrollTopBtn.classList.remove("visible");
-        scrollTopBtn.setAttribute("aria-hidden", "true");
+        scrollTopBtn.inert = true;
       }
     } catch (_e) {
       // Fail silently

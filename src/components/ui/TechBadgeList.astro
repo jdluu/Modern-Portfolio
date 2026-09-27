@@ -11,7 +11,7 @@ const { title, items, id, className, variant = "primary" } = Astro.props;
 ---
 
 <div class:list={["tt-column", className, { "variant-subtle": variant === "subtle" }]} aria-labelledby={id}>
-  <h4 id={id} class="tt-subheading">{title}</h4>
+  <h3 id={id} class="tt-subheading">{title}</h3>
   {items.length > 0 ? (
     <ul class={`tech-badge-list ${className ?? ""} ${variant === "subtle" ? "variant-subtle" : ""}`} aria-labelledby={id}>
       {items.map((t) => (<li><span class:list={["tech-pill", { "pill-subtle": variant === "subtle" }]}>{t}</span></li>))}

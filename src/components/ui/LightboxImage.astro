@@ -41,7 +41,10 @@ const isAstroImage = typeof src !== "string";
 </aside>
 
 <!-- Lightbox Modal -->
-<div id="image-lightbox" class="lightbox is-hidden" hidden data-open="false" aria-hidden="true">
+<!-- `inert` from the start, not just via the open/close script: `.lightbox` is
+     display:flex, so the `hidden` attribute alone does not stop the close button
+     from being focusable while the modal is aria-hidden. -->
+<div id="image-lightbox" class="lightbox is-hidden" hidden inert data-open="false" aria-hidden="true">
   <div class="lightbox-content" role="dialog" aria-modal="true" aria-label={`${alt} full size`} tabindex="-1">
     {isAstroImage ? (
       <Image src={src as ImageMetadata} alt={`${alt} full size`} />

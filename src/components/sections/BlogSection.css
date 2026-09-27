@@ -9,6 +9,16 @@
   margin: 0 auto;
 }
 
+/* This page's heading is its h1. Pin the size it had as an h2 so the document
+   outline could be corrected without restyling it: previously its size came
+   from the bare h2 element default, since this sheet defines no rule. */
+.page-h2 {
+  font-size: var(--step-6);
+  font-weight: var(--font-weight-h2);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.012em;
+}
+
 .posts-container {
   width: 100%;
   max-width: 56rem;

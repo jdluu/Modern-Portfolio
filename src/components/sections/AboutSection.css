@@ -13,6 +13,11 @@
   color: var(--color-text-primary);
   text-align: center;
   margin-bottom: var(--space-l);
+  /* Pinned to the h2 typography this heading had, so promoting it to the page's
+     h1 for the document outline does not restyle it. */
+  font-weight: var(--font-weight-h2);
+  line-height: var(--font-line-height-heading-tight);
+  letter-spacing: -0.012em;
 }
 
 /* Layout: Responsive grid (stacks on mobile, side-by-side on desktop) */
@@ -90,6 +95,10 @@
   text-align: left;
   margin-bottom: var(--space-m);
   font-weight: 600;
+  /* Pinned to the h3 rendering this heading had, so correcting the document
+     outline does not resize it. */
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.008em;
 }
 
 /* Education list and individual cards */
@@ -129,6 +138,10 @@
   margin: 0;
   line-height: var(--font-line-height-heading-tight);
   font-weight: 600;
+  /* Pinned to the h4 rendering this heading had, so the heading level can be
+     corrected without changing how it looks. */
+  letter-spacing: -0.004em;
+  font-variation-settings: normal; /* the Safari h1-h3 clipping fix must not apply here */
 }
 
 .edu-status {

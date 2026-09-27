@@ -10,8 +10,8 @@ const ucsdPost = posts.find((p: { id: string; data: PostEntry }) => p.id === "uc
 const csulbPost = posts.find((p: { id: string; data: PostEntry }) => p.id === "csulb-coursework" && p.data.draft !== true);
 ---
 <section class="content-section" aria-labelledby="about">
-        <h2 id="about" class="page-h2">About Me</h2>
-        <div id="flex-container" role="main">
+        <h1 id="about" class="page-h2">About Me</h1>
+        <div id="flex-container">
                 <div id="about-wrapper">
                         <p id="about-desc">
                                 <span class="intro-text">Hi, I'm Jeffrey Luu.</span> I'm finishing an M.S. in
@@ -38,12 +38,12 @@ const csulbPost = posts.find((p: { id: string; data: PostEntry }) => p.id === "c
                 </div>
 
                 <div id="education-wrapper">
-                        <h3 class="skills-title">Education</h3>
+                        <h2 class="skills-title">Education</h2>
 
                         <div class="education-list">
                                 <article class="edu-card">
                                         <header class="edu-header">
-                                                <h4 class="edu-degree">M.S. Computer Science</h4>
+                                                <h3 class="edu-degree">M.S. Computer Science</h3>
                                                 <div class="edu-meta">
                                                         <span class="edu-status">Aug. 2024 — Expected Graduation: Dec. 2027</span>
                                                 </div>
@@ -80,7 +80,7 @@ const csulbPost = posts.find((p: { id: string; data: PostEntry }) => p.id === "c
 
                                 <article class="edu-card">
                                         <header class="edu-header">
-                                                <h4 class="edu-degree">B.S. Human Computer Interaction <span class="edu-minor-inline">Minor in Computer Science</span></h4>
+                                                <h3 class="edu-degree">B.S. Human Computer Interaction <span class="edu-minor-inline">Minor in Computer Science</span></h3>
                                                 <div class="edu-meta">
                                                         <span class="edu-status">Oct. 2020 — June 2023</span>
                                                 </div>

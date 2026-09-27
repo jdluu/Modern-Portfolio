@@ -15,6 +15,9 @@
   --m3-color-surface: #e6e7ed;
   --m3-color-on-surface: #343b58;
   --m3-color-surface-variant: #e6e7ed;
+  /* Referenced by .cta-aside .btn; without it the button falls back to a light
+     hardcoded value and light-on-light text appears in dark mode. */
+  --m3-color-surface-container-low: #f3f4f8;
   --m3-color-on-surface-variant: #40434f;
   --m3-color-outline: #6c6e75;
 }
@@ -33,6 +36,9 @@
   --m3-color-surface: #202436;
   --m3-color-on-surface: #e7ebff;
   --m3-color-surface-variant: #2c3147;
+  /* Referenced by .cta-aside .btn; without it the button falls back to a light
+     hardcoded value and light-on-light text appears in dark mode. */
+  --m3-color-surface-container-low: #252a3d;
   --m3-color-on-surface-variant: #bfc6f4;
   --m3-color-outline: #6e78a8;
 }

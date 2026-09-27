@@ -274,13 +274,17 @@
   padding: 0 var(--space-m);
 }
 
-.toc-card h4 {
+/* Selected by id rather than tag: the label's heading level is a document-outline
+   decision, and this rule must survive that level changing. */
+.toc-card #toc-label {
   margin: 0;
   font-size: var(--step--1);
   font-weight: 600;
+  line-height: var(--font-line-height-heading); /* pinned to the h4 rendering */
   color: var(--m3-color-on-surface);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  font-variation-settings: normal; /* the Safari h1-h3 clipping fix must not restyle this label */
 }
 
 .toc-toggle {
@@ -323,7 +327,10 @@
   line-height: 1.4;
   transition: color 0.15s;
   display: block;
-  padding: 0.1em 0;
+  /* Padding, not just line-height: WCAG 2.2 target size (2.5.8, AA) needs every
+     touch target to be at least 24px in both dimensions. At 0.1em these links
+     were 13.9px tall on a phone. */
+  padding: 0.4em 0;
 }
 
 .toc-list a:hover,
