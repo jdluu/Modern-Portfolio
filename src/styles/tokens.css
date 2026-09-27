@@ -85,7 +85,8 @@
 
   /* Body copy. This is the 16px -> 19.1px body size the type scale was designed
      around, re-expressed for this project's 10px root (see the note above).
-     Use it for running prose; --step-0 is a 10px -> 11.94px label size. */
+     Opt-in, not applied by default: the markdown archives use --step-1, because
+     --step-body wraps every course list onto two lines. */
   --step-body: clamp(1.6rem, 1.4918rem + 0.3381vw, 1.911rem);
 
   /* 3. Fluid space scale - Utopia

@@ -94,7 +94,11 @@
 /* ===== PROSE (Main Content) ===== */
 .prose {
   font-family: var(--m3-font-family-body);
-  font-size: var(--step-0);
+  /* --step-0 renders at only 11.94px at this project's 62.5% root, which is too
+     small for the long course archives. --step-1 is 14.94px. Note --step-body in
+     tokens.css is the full 16px-equivalent intent but it doubles the course
+     lists, because the strong:first-child label column stops sharing its line. */
+  font-size: var(--step-1);
   line-height: 1.75;
   color: var(--m3-color-on-surface);
   width: 100%;
@@ -168,7 +172,9 @@
   width: 100%;
   border-collapse: collapse;
   margin: var(--space-l) 0;
-  font-size: var(--step--1);
+  /* One step below the prose body. These were --step--1 and --step--2, which
+     rendered at 9.54px (cells) and 7.62px (headers) - below any readable size. */
+  font-size: var(--step-0);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
@@ -185,7 +191,7 @@
   font-weight: 600;
   color: var(--m3-color-on-primary-container);
   background-color: var(--m3-color-primary-container);
-  font-size: var(--step--2);
+  font-size: var(--step--1);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
