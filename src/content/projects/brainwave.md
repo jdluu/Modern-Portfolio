@@ -19,7 +19,7 @@ technologies:
   ]
 tools: ["GitHub", "Clerk v6", "Radix UI"]
 
-cover: "../../assets/images/projects/brainwave/cover_brainwave.min.png"
+cover: "../../assets/images/projects/brainwave/cover_brainwave.png"
 final: "../../assets/images/projects/brainwave/final_brainwave.png"
 
 background: "I kept losing things in my own notes. Keyword search only works if you remember the exact word you wrote, and six months later you never do. I wanted to see if I could just ask my notes a question and get an answer back."

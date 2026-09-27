@@ -8,8 +8,8 @@ role: "Developer"
 technologies: ["Python", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn"]
 tools: ["Jupyter Notebook"]
 
-cover: "../../assets/images/projects/learning_from_health/cover_learning_from_health.min.png"
-final: "../../assets/images/projects/learning_from_health/final_learning_from_health.min.png"
+cover: "../../assets/images/projects/learning_from_health/cover_learning_from_health.png"
+final: "../../assets/images/projects/learning_from_health/final_learning_from_health.png"
 
 background: "Built for COGS 108 (Data Science in Practice) at UCSD. I was curious whether population health data says anything about economics: specifically, whether conditions like diabetes or cholesterol levels correlate with income. CDC public datasets made the question answerable."
 solution: "A predictive model combining health statistics with geographic data to estimate income level. Most of the actual work went into cleaning and visualization, because the relationships only became legible once location was factored in properly."

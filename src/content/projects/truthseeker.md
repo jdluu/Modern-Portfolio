@@ -9,8 +9,8 @@ technologies:
   ["Python", "Streamlit", "Pydantic", "DeepSeek API", "Brave Search API"]
 tools: ["GitHub", "uv", "Rich", "httpx"]
 
-cover: "../../assets/images/projects/truthseeker/cover_truthseeker.min.png"
-final: "../../assets/images/projects/truthseeker/final_truthseeker.min.png"
+cover: "../../assets/images/projects/truthseeker/cover_truthseeker.png"
+final: "../../assets/images/projects/truthseeker/final_truthseeker.png"
 
 background: "Manually checking claims online means opening ten tabs and reconciling them yourself. The tedious part needed automating: search for evidence, have a model assess it against the claim, and show the sources so I can disagree with the verdict."
 solution: "Streamlit web app plus a terminal version. Submitting a statement triggers a Brave Search lookup, and a DeepSeek model reasons over the results to produce a verdict with explanations and direct source links. Search history exports to multiple formats, and Pydantic models keep responses structured."

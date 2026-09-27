@@ -9,8 +9,8 @@ role: "Developer"
 technologies: ["Rust", "Tauri", "React", "TypeScript", "SQLite", "OPDS"]
 tools: ["Tokio", "Tailwind CSS", "DaisyUI", "TanStack Query"]
 
-cover: "../../assets/images/projects/shelf-sync/cover_shelf-sync.min.png"
-final: "../../assets/images/projects/shelf-sync/final_shelf-sync.min.png"
+cover: "../../assets/images/projects/shelf-sync/cover_shelf-sync.png"
+final: "../../assets/images/projects/shelf-sync/final_shelf-sync.png"
 
 background: "My ebooks live on a server at home. Getting one onto my laptop or phone still meant opening a browser, saving a file to a downloads folder, and hoping it arrived intact. I wanted a client that treated my own catalog as a catalog, with a real library state for every book."
 solution: "ShelfSync connects to any OPDS server and browses the catalog with cover-forward cards. Downloads stream into a .part file, verify against the checksums the server publishes, and rename into place only once they match, so a dropped connection never leaves a half book behind. The offline library tracks each publication through complete, downloading, failed, unavailable, and superseded states. ShelfSync does not open books. It hands the verified file to a reader, which in my case is Leafline."

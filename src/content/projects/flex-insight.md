@@ -18,8 +18,8 @@ technologies:
   ]
 tools: ["Android Studio", "Material 3", "Local AI"]
 
-cover: "../../assets/images/projects/flex-insight/cover_flex-insight.min.png"
-final: "../../assets/images/projects/flex-insight/final_flex-insight.min.png"
+cover: "../../assets/images/projects/flex-insight/cover_flex-insight.png"
+final: "../../assets/images/projects/flex-insight/final_flex-insight.png"
 
 background: "My training data lives in Hevy, and I didn't want to hand it to another cloud service just to get basic coaching feedback. Fitness data is personal. A Pixel 9 with Gemini Nano meant I could build analysis that runs entirely on-device."
 solution: "The app syncs workout history from the Hevy API into local SQLite, then runs analysis through Android's AICore. Gemini Nano looks at volume and consistency trends and suggests weight adjustments or recovery days. The Jetpack Compose UI is designed to be readable mid-set at the gym."

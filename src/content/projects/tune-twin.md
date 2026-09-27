@@ -25,8 +25,8 @@ tools:
     "unstable_cache",
   ]
 
-cover: "../../assets/images/projects/tune-twin/cover_tune-twin.min.png"
-final: "../../assets/images/projects/tune-twin/final_tune-twin.min.png"
+cover: "../../assets/images/projects/tune-twin/cover_tune-twin.png"
+final: "../../assets/images/projects/tune-twin/final_tune-twin.png"
 
 background: "YouTube Music recommendations loop the same artists back at me. I wanted something that explains why a playlist feels cohesive (tempo, energy, mood) and finds songs matching that recipe instead of just adjacent artists."
 solution: "Next.js app that reads playlists through youtubei.js and analyzes their characteristics to generate 'twin' recommendations. The frontend uses Material UI with light and dark modes, the app installs as a PWA, and search history stays on-device."

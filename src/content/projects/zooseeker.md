@@ -18,7 +18,7 @@ tools:
     "Github Actions CI",
   ]
 
-cover: "../../assets/images/projects/zooseeker/cover_zooseeker.min.png"
+cover: "../../assets/images/projects/zooseeker/cover_zooseeker.png"
 final: "../../assets/images/projects/zooseeker/final_zooseeker.png"
 
 background: "A team project for CSE 110 (Software Engineering) at UCSD. Zoo visitors waste huge amounts of backtracking, and neither the official app nor a paper map plans routes. We set out to build something that plans your day: select exhibits, get an efficient path."

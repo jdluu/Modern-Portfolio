@@ -10,8 +10,8 @@ technologies:
   ["Python", "Textual", "TOML", "Infisical", "uv", "PyPI", "GitHub Actions"]
 tools: ["Tokyo Night", "Command Palette", "Fuzzy Search"]
 
-cover: "../../assets/images/projects/nexus/cover_nexus.min.png"
-final: "../../assets/images/projects/nexus/final_nexus.min.png"
+cover: "../../assets/images/projects/nexus/cover_nexus.png"
+final: "../../assets/images/projects/nexus/final_nexus.png"
 
 background: "My terminal setup accumulated tools I use weekly, not daily, and every time I'd forget the command or which directory they lived in. I wanted one place to find and launch them all."
 solution: "A cross-platform dashboard written in Python with Textual. Tools are defined in a TOML config, and fuzzy search plus a command palette find them fast. Launching suspends the dashboard cleanly and restores it when the tool exits. There's also a project browser for jumping between file contexts."

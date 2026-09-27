@@ -8,8 +8,8 @@ role: "Developer"
 technologies: ["JS", "Node.js", "Express.js", "MySQL", "ZingChart", "ZingGrid"]
 tools: ["DigitalOcean", "GitHub", "MySQL Workbench", "Postman"]
 
-cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.min.png"
-final: "../../assets/images/projects/web_analytics_dashboard/final_web_analytics_dashboard.min.png"
+cover: "../../assets/images/projects/web_analytics_dashboard/cover_web_analytics_dashboard.png"
+final: "../../assets/images/projects/web_analytics_dashboard/final_web_analytics_dashboard.png"
 
 background: "Started as a project for CSE 135 (Online Database Analytics Applications) at UCSD. I was curious which of my pages people actually visit and how long they stay. Existing analytics tools gave me more than I needed while taking my data elsewhere. So I built my own tracker."
 solution: "A Node/Express endpoint collects visit data into MySQL, and a private dashboard renders traffic in ZingChart charts and tables. Login-gated so the analytics are mine alone."
