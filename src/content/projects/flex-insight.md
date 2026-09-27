@@ -2,7 +2,7 @@
 title: "FlexInsight"
 slug: "flex-insight"
 date: "2026-03"
-draft: true
+draft: false
 
 summary: "An offline workout coach for Android that analyzes Hevy data locally with Gemini Nano. Nothing leaves the phone."
 role: "Developer"
