@@ -17,20 +17,20 @@ adding per-tool config directories (`.agents/`, `.claude/`, `skills-lock.json`).
 
 ## Tech stack
 
-| Area              | Choice                                                                                                                              |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Framework         | Astro ^7.2, `output: "static"`, pages prerendered by default                                                                        |
-| Runtime           | Node >= 22; pnpm 11 (CI pins `pnpm/action-setup` to version 11)                                                                     |
-| Language          | TypeScript ^6, `extends: astro/tsconfigs/strict`, `target: ES2024`, `strict: true`                                                  |
-| Interactive parts | Solid.js ^1.9 via `@astrojs/solid-js`, scoped to `src/components/**/*.tsx` only                                                     |
-| Icons             | `astro-icon` + `@iconify-json/lucide`. There is no `public/icons/`                                                                  |
-| Images            | Astro's image service on `sharp`; sources under `src/assets/images/`                                                                |
-| Markdown          | `@astrojs/markdown-remark` unified processor, single rehype plugin `rehype-slug`                                                    |
-| Sitemap           | `@astrojs/sitemap`                                                                                                                  |
-| Styling           | Hand-written CSS: `src/styles/{reset,global,tokens,typography}.css` + a per-component sibling `.css`. No CSS framework, no Tailwind |
-| Tests             | Vitest (unit, `environment: node`), Playwright (`chromium` + `Pixel 5`)                                                             |
-| Quality gates     | ESLint 10 flat config, Prettier 3, knip, husky + lint-staged                                                                        |
-| Deploy            | Netlify: `netlify.toml` runs `pnpm build` and publishes `dist`                                                                      |
+| Area              | Choice                                                                                                                                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Framework         | Astro ^7.2, `output: "static"`, pages prerendered by default                                                                                                                                           |
+| Runtime           | Node >= 22; pnpm 11 (CI pins `pnpm/action-setup` to version 11)                                                                                                                                        |
+| Language          | TypeScript ^6, `extends: astro/tsconfigs/strict`, `target: ES2024`, `strict: true`                                                                                                                     |
+| Interactive parts | Solid.js ^1.9 via `@astrojs/solid-js`, scoped to `src/components/**/*.tsx` only                                                                                                                        |
+| Icons             | `astro-icon` + `@iconify-json/lucide`. There is no `public/icons/`                                                                                                                                     |
+| Images            | Astro's image service on `sharp`; sources under `src/assets/images/`                                                                                                                                   |
+| Markdown          | `@astrojs/markdown-remark` unified processor, single rehype plugin `rehype-slug`                                                                                                                       |
+| Sitemap           | `@astrojs/sitemap`                                                                                                                                                                                     |
+| Styling           | Hand-written CSS: `src/styles/{reset,global,tokens,typography}.css` + a per-component sibling `.css`. No CSS framework, no Tailwind                                                                    |
+| Tests             | Vitest (unit, `environment: node`), Playwright (`chromium` + `Pixel 5`)                                                                                                                                |
+| Quality gates     | ESLint 10 flat config, Prettier 3, knip, husky + lint-staged                                                                                                                                           |
+| Deploy            | GitHub Pages: `.github/workflows/deploy.yml` builds on `main` and publishes `dist`. Custom domain `jluu.dev` lives in Settings → Pages, not the repo — Actions-based publishing ignores a `CNAME` file |
 
 Build knobs in `astro.config.mjs`: `prefetch: true`, Vite `build.target: es2024`,
 `cssCodeSplit`, and a `manualChunks` split putting `@astrojs/*` in
@@ -286,6 +286,19 @@ Rules for working on it:
   105 minutes and was picked up by a later run. Check nothing is on :4321 before
   trusting a result, or run `CI=1 pnpm run test:e2e`, which disables reuse and
   hard-fails on a busy port.
+- **The deploy host differs from `astro preview`, and GitHub Pages serves no
+  custom response headers at all.** Local runs go through `astro preview`, which
+  applies no host behaviour, so anything host-specific is invisible to the suite.
+  GitHub Pages cannot set headers, so the CSP, HSTS, `X-Frame-Options`,
+  `Referrer-Policy`, `Permissions-Policy` and `immutable` cache headers that
+  Netlify served are gone — the accepted tradeoff of moving hosts, not an
+  oversight. `_headers` and `_redirects` are ignored there, so do not add them
+  expecting them to take effect; a CSP would have to go in a `<meta>` tag, and
+  Astro's hash-based `security.csp` does not support `<ClientRouter />`.
+  Separately, anything that must run a script has to be initialized outside
+  `astro:page-load` too: that event only fires if the router itself loaded, and
+  when a blocked inline script left the desktop nav visible but `inert`, every
+  nav link silently refused clicks while looking perfectly normal.
 - **`hermes verify`'s readiness probe checks `127.0.0.1`.** `astro dev` otherwise
   binds only `localhost`, which resolves to `::1` on this host, so the server is
   healthy while the probe reports `Connection refused` for 60s and the whole run
