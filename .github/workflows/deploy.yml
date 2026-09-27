@@ -19,15 +19,17 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest: the latest label migrates to Ubuntu 26
+    # in October 2026, and a runner image change should be a deliberate commit.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -36,8 +38,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # The fast gates run here too, not only in ci.yml: the two workflows are
-      # independent, so without these a red lint or type error would still
-      # publish. E2E stays in ci.yml to keep deploys quick.
+      # independent, so without them a red lint, type error, unused dependency or
+      # vulnerable package would still publish. This is deliberately the fast
+      # subset rather than full parity — E2E stays in ci.yml to keep deploys
+      # quick, so a commit can deploy while its E2E run is still going.
       - name: Lint
         run: pnpm lint
 
@@ -47,22 +51,28 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-      - uses: actions/configure-pages@v5
+      - name: Knip (unused exports/deps)
+        run: pnpm knip
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod
+
+      - uses: actions/configure-pages@v6
 
       - name: Build
         run: pnpm build
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

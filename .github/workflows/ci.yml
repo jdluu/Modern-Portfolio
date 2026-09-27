@@ -5,23 +5,40 @@ on:
     branches: [main]
   pull_request:
 
+# The verification job only reads the repository.
+permissions:
+  contents: read
+
+# A newer push to the same ref supersedes an in-flight run. Grouping by ref
+# keeps a push to main from cancelling an unrelated pull-request check.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest: the latest label migrates to Ubuntu 26
+    # in October 2026, and a runner image change should be a deliberate commit.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Formatting is already enforced by the pre-commit hook, but a hook is
+      # local and can be skipped with --no-verify, so CI checks it too.
+      - name: Format check
+        run: pnpm exec prettier --check .
 
       - name: Lint
         run: pnpm lint
@@ -37,6 +54,14 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # Only the browser download is cacheable; `--with-deps` still installs the
+      # system libraries, which come from apt and cannot be cached this way.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
