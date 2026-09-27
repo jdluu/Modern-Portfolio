@@ -1,0 +1,11 @@
+# Machine-generated files. Prettier must not rewrite these: pnpm writes the
+# lockfile in its own style, so formatting it creates thousands of lines of
+# churn that hides the real dependency change.
+pnpm-lock.yaml
+
+# Build output and test artifacts.
+dist/
+.astro/
+node_modules/
+playwright-report/
+test-results/

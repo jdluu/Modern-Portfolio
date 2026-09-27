@@ -102,7 +102,7 @@ const structuredDataString = JSON.stringify(structuredData);
 
 <BaseLayout title={title}>
     <script type="application/ld+json" is:inline set:html={structuredDataString} />
-    <main class="project-page-container">
+    <div class="project-page-container">
       <div class="project-detail">
         <div class="project-grid">
           <div class="project-content">
@@ -179,7 +179,7 @@ const structuredDataString = JSON.stringify(structuredData);
 
                   <div class="info-row">
                     <div class="card" aria-hidden="false">
-                      <h3 class="role-heading">Role</h3>
+                      <h2 class="role-heading">Role</h2>
                       <p class="role-body">{role}</p>
                       <dl class="kv">
                         <dt>Timeline</dt>
@@ -189,7 +189,7 @@ const structuredDataString = JSON.stringify(structuredData);
                     <div class="card">
                       <div class="tt-grid" role="group" aria-label="Technologies and tools">
                         <div class="tt-column" aria-labelledby="tech-label">
-                          <h4 id="tech-label" class="tt-subheading">Technologies</h4>
+                          <h3 id="tech-label" class="tt-subheading">Technologies</h3>
                           {techArray.length > 0 ? (
                             <ul class="tech-list" aria-label="Technologies">
                               {techArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
@@ -199,7 +199,7 @@ const structuredDataString = JSON.stringify(structuredData);
                           )}
                         </div>
                         <div class="tt-column" aria-labelledby="tool-label">
-                          <h4 id="tool-label" class="tt-subheading">Tools</h4>
+                          <h3 id="tool-label" class="tt-subheading">Tools</h3>
                           {toolsArray.length > 0 ? (
                             <ul class="tech-list" aria-label="Tools">
                               {toolsArray.map((t) => (<li><span class="tech-pill">{t}</span></li>))}
@@ -269,7 +269,7 @@ const structuredDataString = JSON.stringify(structuredData);
           <aside class="project-toc" aria-label="Table of contents">
             <div class="toc-card" role="navigation" aria-labelledby="toc-label">
               <div class="toc-header" aria-hidden="false">
-                <h4 id="toc-label">Table of Contents</h4>
+                <h2 id="toc-label">Table of Contents</h2>
                 <button id="toc-toggle" class="toc-toggle" aria-expanded="true" aria-label="Collapse Table of Contents">−</button>
               </div>
               <ul class="toc-list">
@@ -283,7 +283,7 @@ const structuredDataString = JSON.stringify(structuredData);
           </aside>
         </div>
       </div>
-    </main>
+    </div>
 </BaseLayout>
 
 <script>

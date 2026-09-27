@@ -211,8 +211,14 @@
 }
 
 /* Role text */
-.role-heading {
+/* Scoped through .card so this class owns its heading's appearance: a bare
+   `.project-section h2` rule would otherwise outrank it now that the heading is
+   an h2 rather than an h3. */
+.card .role-heading {
   margin: 0 0 var(--space-s);
+  /* Pinned: typography.css sets line-height per heading level, so without this
+     the document outline could not be corrected without resizing the heading. */
+  line-height: var(--font-line-height-heading);
   font-weight: 780;
   font-size: var(--step-1);
   letter-spacing: 0.02em;
@@ -248,6 +254,11 @@
   font-size: var(--step-0); /* Bumped from step--1 */
   font-weight: 600;
   color: var(--text-color);
+  /* Pinned to the h4 rendering this subheading had, so the heading level can be
+     corrected without changing how it looks. */
+  line-height: var(--font-line-height-heading);
+  letter-spacing: -0.004em;
+  font-variation-settings: normal; /* the Safari h1-h3 clipping fix must not apply here */
 }
 
 .tt-column .tech-list {
@@ -584,7 +595,7 @@ p {
   display: none;
 }
 
-.project-toc.toc-collapsed h4 {
+.project-toc.toc-collapsed #toc-label {
   display: none;
 }
 
@@ -593,11 +604,15 @@ p {
   height: var(--space-xl);
 }
 
-.toc-card h4 {
+/* Selected by id rather than tag: the label's heading level is a document-outline
+   decision, and this rule must survive that level changing. */
+.toc-card #toc-label {
   margin: 0;
   font-size: var(--step-2); /* Bumped from step-1 */
   font-weight: 700;
+  line-height: var(--font-line-height-heading); /* pinned to the h4 rendering */
   color: var(--m3-color-primary);
+  font-variation-settings: normal; /* the Safari h1-h3 clipping fix must not restyle this label */
 }
 
 .toc-list {
@@ -733,7 +748,7 @@ p {
   }
 
   /* Show title only when expanded (collapsed already hides via rules above) */
-  .project-toc:not(.toc-collapsed) h4 {
+  .project-toc:not(.toc-collapsed) #toc-label {
     display: block;
   }
 
@@ -786,7 +801,7 @@ p {
     border-radius: var(--space-xs);
   }
 
-  .role-heading {
+  .card .role-heading {
     font-size: var(--step-0);
     margin-bottom: var(--space-2xs);
   }
@@ -976,7 +991,7 @@ section[id] {
   padding: 0 var(--space-m);
 }
 
-.toc-card h4 {
+.toc-card #toc-label {
   margin: 0;
   font-size: var(--step-2);
   font-weight: 700;

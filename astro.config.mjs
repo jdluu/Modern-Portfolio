@@ -24,6 +24,12 @@ export default defineConfig({
     locales: ["en"],
   },
   output: "static",
+  // Pin the local servers to IPv4 loopback. `astro dev` otherwise binds only
+  // `localhost`, which resolves to ::1 on this host, so anything probing
+  // 127.0.0.1 (hermes verify's readiness check) is refused while the server is
+  // perfectly healthy. Both are loopback, so exposure is unchanged.
+  server: { host: "127.0.0.1" },
+  preview: { host: "127.0.0.1" },
   prefetch: true,
   vite: {
     // Allow the tailnet preview host (temporary local review setup).
