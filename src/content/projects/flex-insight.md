@@ -5,7 +5,7 @@ date: "2026-03"
 draft: false
 
 summary: "An offline workout coach for Android that analyzes Hevy data locally with Gemini Nano. Nothing leaves the phone."
-role: "Developer"
+role: "Android AI Developer"
 technologies:
   [
     "Kotlin",

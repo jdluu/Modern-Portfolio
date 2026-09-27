@@ -4,7 +4,7 @@ slug: "brainwave"
 date: "2024-02"
 
 summary: "A note-taking app that answers questions about your notes using local semantic search and an AI chat interface."
-role: "Developer"
+role: "Full-Stack AI Developer"
 technologies:
   [
     "Next.js",

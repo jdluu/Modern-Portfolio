@@ -5,7 +5,7 @@ date: "2026-03"
 draft: false
 
 summary: "A terminal dashboard that launches TUI apps so I stop forgetting their commands. Published to PyPI as nexus-tui."
-role: "Developer"
+role: "Python TUI Developer"
 technologies:
   ["Python", "Textual", "TOML", "Infisical", "uv", "PyPI", "GitHub Actions"]
 tools: ["Tokyo Night", "Command Palette", "Fuzzy Search"]

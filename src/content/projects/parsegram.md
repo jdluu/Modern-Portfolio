@@ -4,7 +4,7 @@ slug: "parsegram"
 date: "2021-10"
 
 summary: "A photo-sharing Android app built in a week to learn accounts, camera capture, and feed design."
-role: "Developer"
+role: "Android Social App Developer"
 technologies: ["Java", "Android", "Parse"]
 tools: ["Android Studio", "Git", "GitHub"]
 

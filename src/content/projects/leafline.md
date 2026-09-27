@@ -5,7 +5,7 @@ date: "2026-09"
 draft: false
 
 summary: "A local-first EPUB reader for Android. Books, reading progress, and annotations stay on the device, with no account and no telemetry."
-role: "Developer"
+role: "Local-First Android Developer"
 technologies: ["Kotlin", "Jetpack Compose", "Room", "Readium", "Android"]
 tools: ["Android Studio", "JUnit", "Espresso", "GitHub Actions"]
 

@@ -4,7 +4,7 @@ slug: "simpletodo"
 date: "2021-09"
 
 summary: "A to-do app for Android. Add, edit, and long-press to remove tasks; tasks persist across sessions."
-role: "Developer"
+role: "Android App Developer"
 technologies: ["Java", "Android SDK"]
 tools: ["Android Studio", "Git", "GitHub"]
 

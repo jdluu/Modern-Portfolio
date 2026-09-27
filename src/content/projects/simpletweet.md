@@ -4,7 +4,7 @@ slug: "simpletweet"
 date: "2021-10"
 
 summary: "A minimal Twitter client for Android with an infinite-scrolling timeline, a compose screen, and OAuth login."
-role: "Developer"
+role: "Android Client Developer"
 technologies: ["Java", "Android"]
 tools: ["Git", "GitHub", "Android Studio"]
 

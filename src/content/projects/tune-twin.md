@@ -5,7 +5,7 @@ date: "2026-02"
 draft: false
 
 summary: "Finds new songs that match a YouTube Music playlist's vibe by analyzing tempo and energy, not just 'more like this'."
-role: "Developer"
+role: "Web Application Developer"
 technologies:
   [
     "Next.js",

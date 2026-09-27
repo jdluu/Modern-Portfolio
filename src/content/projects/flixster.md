@@ -4,7 +4,7 @@ slug: "flixster"
 date: "2021-09"
 
 summary: "The Android app I built to learn mobile development. Browse movies, view details, watch trailers."
-role: "Developer"
+role: "Android Developer"
 technologies: ["Java", "Android SDK", "Android Async HTTP"]
 tools: ["Android Studio", "Git", "GitHub", "Glide"]
 

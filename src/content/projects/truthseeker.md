@@ -4,7 +4,7 @@ slug: "truthseeker"
 date: "2024-12"
 
 summary: "A fact-checking assistant. Give it a claim; it searches the web and returns an AI verdict with linked sources."
-role: "Developer"
+role: "Python & AI Developer"
 technologies:
   ["Python", "Streamlit", "Pydantic", "DeepSeek API", "Brave Search API"]
 tools: ["GitHub", "uv", "Rich", "httpx"]

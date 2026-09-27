@@ -4,14 +4,14 @@ slug: "bughound"
 date: "2025-01-15"
 
 summary: "A bug tracker for CECS 544: file-attachment reports, assignment grading, and database-driven workflows."
-role: "Developer"
+role: "Full-Stack Web Developer"
 technologies: ["React", "TypeScript", "Bun", "Hono"]
 tools: ["GitHub", "GitHub Actions", "Docker", "Supabase"]
 
 cover: "../../assets/images/projects/bughound/cover_bughound.png"
 final: "../../assets/images/projects/bughound/final_bughound.png"
 
-background: "This was a semester project for my software testing course (CECS 544). We needed a bug tracker that didn't drown you in features: report a defect, assign it, attach evidence, track it to resolution. I owned both the interface and the server logic."
+background: "Built as a two-person team project for my software testing course (CECS 544). We needed a bug tracker that didn't drown you in features: report a defect, assign it, attach evidence, track it to resolution. I owned both the interface and the server logic."
 solution: "React frontend talking to a backend running on Bun. Editable tables for managing programs and employees, login, and file attachments on bug reports so fix context lives in one place. Every report moves through a defined status flow from submission to resolution."
 process: "I designed the relational schema first: employees, programs, functional areas, and how they map onto reports. Frontend and backend stayed separate, with migrations keeping the schema stable as features landed. A lot of time went into form ergonomics and making uploads actually work end-to-end."
 impact: "It covers the full bug lifecycle in an interface a team could actually use, and CI kept the code consistent through the whole semester."

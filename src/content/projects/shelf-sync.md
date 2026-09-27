@@ -5,7 +5,7 @@ date: "2026-04"
 draft: false
 
 summary: "Browses a self-hosted OPDS ebook catalog and keeps verified downloads available offline on desktop and Android."
-role: "Developer"
+role: "Rust & Tauri Developer"
 technologies: ["Rust", "Tauri", "React", "TypeScript", "SQLite", "OPDS"]
 tools: ["Tokio", "Tailwind CSS", "DaisyUI", "TanStack Query"]
 
