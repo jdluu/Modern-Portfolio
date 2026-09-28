@@ -27,11 +27,11 @@ export default function ProjectCardList(props: Props) {
     setSortOption,
     languageFilters,
     setLanguageFilters,
-    domainFilters,
-    setDomainFilters,
+    categoryFilters,
+    setCategoryFilters,
     years,
     languageCounts,
-    domainCounts,
+    categoryCounts,
     processedItems,
     resetFilters,
     filtersSummary,
@@ -54,7 +54,7 @@ export default function ProjectCardList(props: Props) {
     yearFilter();
     sortOption();
     languageFilters();
-    domainFilters();
+    categoryFilters();
     pagination.setPage(1);
   });
 
@@ -152,12 +152,13 @@ export default function ProjectCardList(props: Props) {
         />
 
         <FilterDropdown
-          id="project-domain-button"
-          label="Domains"
-          items={domainCounts}
-          selectedItems={domainFilters}
-          setSelectedItems={setDomainFilters}
-          placeholder="Search domains"
+          id="project-category-button"
+          label="Category"
+          pluralLabel="categories"
+          items={categoryCounts}
+          selectedItems={categoryFilters}
+          setSelectedItems={setCategoryFilters}
+          placeholder="Search categories"
           onPageReset={() => pagination.setPage(1)}
         />
 

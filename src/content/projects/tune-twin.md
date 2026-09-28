@@ -44,6 +44,6 @@ programming_languages:
   - "TypeScript"
   - "CSS"
   - "JavaScript"
-domains:
+categories:
   - "Web"
 ---

@@ -27,6 +27,6 @@ programming_languages:
   - "TypeScript"
   - "React"
   - "JavaScript"
-domains:
+categories:
   - "Web"
 ---

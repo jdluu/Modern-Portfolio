@@ -17,6 +17,8 @@ interface DropdownItem {
 interface FilterDropdownProps {
   id: string;
   label: string;
+  /** Plural form used in the button's "All …" text. Defaults to the label. */
+  pluralLabel?: string;
   items: Accessor<DropdownItem[]>;
   selectedItems: Accessor<string[]>;
   setSelectedItems: Setter<string[]>;
@@ -87,7 +89,7 @@ export default function FilterDropdown(props: FilterDropdownProps) {
         >
           {props.selectedItems().length
             ? `${props.selectedItems().length} selected`
-            : `All ${props.label.toLowerCase()}`}
+            : `All ${(props.pluralLabel ?? props.label).toLowerCase()}`}
         </button>
 
         <div

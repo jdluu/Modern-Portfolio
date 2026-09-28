@@ -39,6 +39,6 @@ programming_languages:
   - "Next.js"
   - "React"
   - "JavaScript"
-domains:
+categories:
   - "Web"
 ---

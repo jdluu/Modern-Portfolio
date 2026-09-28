@@ -109,9 +109,12 @@ the pattern `**/[^_]*.{md,mdx}`, so **a leading underscore excludes a file from
 the collection**, which is how drafts and scratch entries are parked.
 
 - **`projects`** — `summary`, `description`, `role`, `technologies`, `tools`,
-  `cover`, `thumbnail`, `final`, `startDate`, `endDate`,
-  `programming_languages`, `domains`, `background`, `solution`, `process`,
-  `impact`, `reflection`, and `links: { live, source }`.
+  `cover`, `thumbnail`, `final`, `startDate`, `endDate`, `programming_languages`,
+  `categories`, `background`, `solution`, `process`, `impact`, `reflection`, and
+  `links: { live, source }`. `categories` is a closed set — `Web`, `Mobile`,
+  `Desktop`, `Data Science` — validated by the schema, and a project may carry
+  more than one. It also drives the structured data on the case-study page, so a
+  new value needs an entry in the platform map there.
 - **`experiences`** — `company`, `logistics`, `technologies`, `work`,
   `showcase`, `thumbnail`, `summary`.
 - **`posts`** — `description`, `tags`, `hero`, `links[]`.

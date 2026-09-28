@@ -26,6 +26,6 @@ endDate: 2026-09-01
 thumbnail: "../../assets/images/projects/leafline/thumbnail_leafline.min.png"
 programming_languages:
   - "Kotlin"
-domains:
+categories:
   - "Mobile"
 ---

@@ -124,7 +124,9 @@ const projects = defineCollection({
       startDate: z.union([z.string(), z.coerce.date()]).optional(),
       endDate: z.union([z.string(), z.coerce.date()]).optional(),
       programming_languages: z.array(z.string()).optional(),
-      domains: z.array(z.string()).optional(),
+      categories: z
+        .array(z.enum(["Web", "Mobile", "Desktop", "Data Science"]))
+        .optional(),
       background: z.string().optional(),
       solution: z.string().optional(),
       process: z.string().optional(),

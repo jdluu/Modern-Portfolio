@@ -25,6 +25,6 @@ endDate: 2022-03-22
 thumbnail: "../../assets/images/projects/simpletweet/thumbnail_simpletweet.min.png"
 programming_languages:
   - "Java"
-domains:
+categories:
   - "Mobile"
 ---

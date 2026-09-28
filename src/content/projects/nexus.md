@@ -27,6 +27,6 @@ endDate: 2026-03-12
 thumbnail: "../../assets/images/projects/nexus/thumbnail_nexus.min.png"
 programming_languages:
   - "Python"
-domains:
-  - "Web"
+categories:
+  - "Desktop"
 ---

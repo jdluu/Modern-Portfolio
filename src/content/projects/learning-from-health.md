@@ -25,6 +25,6 @@ endDate: 2022-03-31
 thumbnail: "../../assets/images/projects/learning_from_health/thumbnail_learning_from_health.min.png"
 programming_languages:
   - "Python"
-domains:
-  - "AI/ML"
+categories:
+  - "Data Science"
 ---

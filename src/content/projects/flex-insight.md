@@ -35,6 +35,6 @@ endDate: 2026-03-07
 thumbnail: "../../assets/images/projects/flex-insight/thumbnail_flex-insight.min.png"
 programming_languages:
   - "Kotlin"
-domains:
+categories:
   - "Mobile"
 ---

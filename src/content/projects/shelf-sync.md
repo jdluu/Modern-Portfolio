@@ -28,6 +28,7 @@ programming_languages:
   - "Rust"
   - "TypeScript"
   - "JavaScript"
-domains:
-  - "Web"
+categories:
+  - "Desktop"
+  - "Mobile"
 ---

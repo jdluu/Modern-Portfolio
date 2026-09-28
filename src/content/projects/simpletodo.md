@@ -25,6 +25,6 @@ endDate: 2021-09-28
 thumbnail: "../../assets/images/projects/simpletodo/thumbnail_simpletodo.min.png"
 programming_languages:
   - "Java"
-domains:
+categories:
   - "Mobile"
 ---

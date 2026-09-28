@@ -25,6 +25,6 @@ endDate: 2021-10-27
 thumbnail: "../../assets/images/projects/parsegram/thumbnail_parsegram.min.png"
 programming_languages:
   - "Java"
-domains:
+categories:
   - "Mobile"
 ---

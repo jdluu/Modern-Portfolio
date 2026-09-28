@@ -35,16 +35,16 @@ export interface UseProjectFilteringResult {
   languageFilters: Accessor<string[]>;
   /** Setter for language filters. */
   setLanguageFilters: Setter<string[]>;
-  /** Selected domain filters. */
-  domainFilters: Accessor<string[]>;
-  /** Setter for domain filters. */
-  setDomainFilters: Setter<string[]>;
+  /** Selected category filters. */
+  categoryFilters: Accessor<string[]>;
+  /** Setter for category filters. */
+  setCategoryFilters: Setter<string[]>;
   /** List of unique years available in the items. */
   years: Accessor<string[]>;
-  /** Dynamic counts of languages based on current year and domain filters. */
+  /** Dynamic counts of languages based on current year and category filters. */
   languageCounts: Accessor<{ name: string; count: number }[]>;
-  /** Dynamic counts of domains based on current year and language filters. */
-  domainCounts: Accessor<{ name: string; count: number }[]>;
+  /** Dynamic counts of categories based on current year and language filters. */
+  categoryCounts: Accessor<{ name: string; count: number }[]>;
   /** The final list of items after applying all filters and sorting. */
   processedItems: Accessor<ProjectCard[]>;
   /** Resets all filters to default states. */
@@ -56,7 +56,7 @@ export interface UseProjectFilteringResult {
 /**
  * Custom hook to manage project filtering, sorting, and aggregation logic.
  *
- * Encapsulates state for year, sort, language, and domain filters, and computes
+ * Encapsulates state for year, sort, language, and category filters, and computes
  * derived lists and counts based on the initial items. Designed for use in
  * client-side SolidJS islands.
  *
@@ -69,7 +69,7 @@ export function useProjectFiltering(
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
   const [sortOption, setSortOption] = createSignal<SortOption>("date-desc");
   const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
-  const [domainFilters, setDomainFilters] = createSignal<string[]>([]);
+  const [categoryFilters, setCategoryFilters] = createSignal<string[]>([]);
 
   /**
    * Derive unique years from the provided items for the year filter dropdown.
@@ -107,18 +107,18 @@ export function useProjectFiltering(
   });
 
   /**
-   * Computes dynamic counts for programming languages based on active year and domain filters.
+   * Computes dynamic counts for programming languages based on active year and category filters.
    * Excludes common generic technologies like HTML/CSS and normalizes JS/TS variants.
    */
   const languageCounts = createMemo(() => {
-    const currentDomainFilters = domainFilters() ?? [];
+    const currentCategoryFilters = categoryFilters() ?? [];
     let items = filteredByYear();
 
-    // Cross-filter: languages should respect domain selection
-    if (currentDomainFilters.length > 0) {
+    // Cross-filter: languages should respect category selection
+    if (currentCategoryFilters.length > 0) {
       items = items.filter((it) => {
-        const itemDomains = it.domains ?? [];
-        return currentDomainFilters.some((f) => itemDomains.includes(f));
+        const itemCategories = it.categories ?? [];
+        return currentCategoryFilters.some((f) => itemCategories.includes(f));
       });
     }
 
@@ -154,13 +154,13 @@ export function useProjectFiltering(
   });
 
   /**
-   * Computes dynamic counts for domains based on active year and language filters.
+   * Computes dynamic counts for categories based on active year and language filters.
    */
-  const domainCounts = createMemo(() => {
+  const categoryCounts = createMemo(() => {
     const currentLanguageFilters = languageFilters() ?? [];
     let items = filteredByYear();
 
-    // Cross-filter: domains should respect language selection
+    // Cross-filter: categories should respect language selection
     if (currentLanguageFilters.length > 0) {
       items = items.filter((it) => {
         const itemLangs = it.programming_languages ?? [];
@@ -170,10 +170,10 @@ export function useProjectFiltering(
 
     const counts = new Map<string, number>();
     items.forEach((it) => {
-      const list = it.domains ?? [];
-      list.forEach((d) => {
-        if (!d) return;
-        const name = String(d);
+      const list = it.categories ?? [];
+      list.forEach((c) => {
+        if (!c) return;
+        const name = String(c);
         counts.set(name, (counts.get(name) ?? 0) + 1);
       });
     });
@@ -205,11 +205,11 @@ export function useProjectFiltering(
       });
     }
 
-    const domFilters = domainFilters();
-    if (domFilters.length > 0) {
+    const catFilters = categoryFilters();
+    if (catFilters.length > 0) {
       items = items.filter((it) => {
-        const itemDomains = it.domains ?? [];
-        return domFilters.some((f) => itemDomains.includes(f));
+        const itemCategories = it.categories ?? [];
+        return catFilters.some((f) => itemCategories.includes(f));
       });
     }
 
@@ -233,7 +233,7 @@ export function useProjectFiltering(
       setYearFilter("");
       setSortOption("date-desc");
       setLanguageFilters([]);
-      setDomainFilters([]);
+      setCategoryFilters([]);
     });
   };
 
@@ -246,8 +246,8 @@ export function useProjectFiltering(
     if (yf) parts.push(`Year: ${yf}`);
     const langs = languageFilters();
     if (langs && langs.length) parts.push(`Languages: ${langs.join(", ")}`);
-    const doms = domainFilters();
-    if (doms && doms.length) parts.push(`Domains: ${doms.join(", ")}`);
+    const cats = categoryFilters();
+    if (cats && cats.length) parts.push(`Categories: ${cats.join(", ")}`);
     parts.push(
       sortOption() === "date-desc"
         ? "Sorted: Newest first"
@@ -263,11 +263,11 @@ export function useProjectFiltering(
     setSortOption,
     languageFilters,
     setLanguageFilters,
-    domainFilters,
-    setDomainFilters,
+    categoryFilters,
+    setCategoryFilters,
     years,
     languageCounts,
-    domainCounts,
+    categoryCounts,
     processedItems,
     resetFilters,
     filtersSummary,

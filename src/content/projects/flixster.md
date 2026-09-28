@@ -25,6 +25,6 @@ endDate: 2022-04-16
 thumbnail: "../../assets/images/projects/flixster/thumbnail_flixster.min.png"
 programming_languages:
   - "Java"
-domains:
+categories:
   - "Mobile"
 ---

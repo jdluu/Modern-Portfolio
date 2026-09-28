@@ -35,6 +35,6 @@ endDate: 2022-05-31
 thumbnail: "../../assets/images/projects/zooseeker/thumbnail_zooseeker.min.png"
 programming_languages:
   - "Java"
-domains:
+categories:
   - "Mobile"
 ---

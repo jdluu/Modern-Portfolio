@@ -93,16 +93,31 @@ const reflectionText = data?.reflection ?? "";
 const liveLink = data?.links?.live ?? "";
 const sourceLink = data?.links?.source ?? "";
 
-const domains = data?.domains || [];
-const isMobile = domains.includes("Mobile");
+// Structured data is derived from the case study's categories, so it has to track
+// the category set rather than a guess about the platform.
+const categories: string[] = data?.categories ?? [];
+
+const PLATFORM_SCHEMA: Record<string, { category: string; os: string }> = {
+  Web: { category: "WebApplication", os: "Web" },
+  Mobile: { category: "MobileApplication", os: "Android" },
+  Desktop: { category: "DesktopApplication", os: "Windows, macOS, Linux" },
+  "Data Science": { category: "DataScienceApplication", os: "" },
+};
+
+// The first category leads, and the operating systems come from all of them, so a
+// cross-platform app is described as running on each platform it actually ships on.
+const leadCategory = categories.map((c) => PLATFORM_SCHEMA[c]).find(Boolean);
+const operatingSystems = [
+  ...new Set(categories.map((c) => PLATFORM_SCHEMA[c]?.os).filter(Boolean)),
+].join(", ");
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": title,
   "description": summary,
-  "applicationCategory": isMobile ? "MobileApplication" : "WebApplication",
-  "operatingSystem": isMobile ? "Android, iOS" : "Web",
+  ...(leadCategory ? { applicationCategory: leadCategory.category } : {}),
+  ...(operatingSystems ? { operatingSystem: operatingSystems } : {}),
   "author": {
     "@type": "Person",
     "name": "Jeffrey Luu",
