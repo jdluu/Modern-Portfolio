@@ -14,14 +14,14 @@ The courses that shaped my current research direction:
 
 - **CECS 529: Search Engine Technology** - Retrieval, ranking, and the architecture of search systems. Directly relevant background for [TruthSeeker](/projects/truthseeker).
 - **CECS 551: Advanced Artificial Intelligence** - Graduate-level AI methods.
-- **CECS 553: Machine Vision** - Feature extraction and visual recognition pipelines.
+- **CECS 553: Machine Vision** - Feature extraction and visual recognition pipelines. Written up in [Classifying Colon Pathology Images with a ResNet-Inspired CNN](/posts/pathmnist-cnn).
 - **CECS 697: Directed Research** (Fall 2025) - Multi-agent reinforcement learning with reward shaping in Unity simulations, exploring how agents learn to cooperate in shared environments.
 
 ## Software Engineering
 
 - **CECS 543: Advanced Software Engineering** - Design patterns and architectural styles at graduate depth.
 - **CECS 544: Software Testing & Verification** - Automated testing, quality assurance, and formal verification. The course behind [Bughound](/projects/bughound).
-- **CECS 547: Software Maintenance, Reengineering & Reuse** - Working with existing codebases: understanding, refactoring, and extending software that already exists.
+- **CECS 547: Software Maintenance, Reengineering & Reuse** - Working with existing codebases: understanding, refactoring, and extending software that already exists. Written up in [Reengineering a CRUD Application](/posts/crud-app-reengineering).
 
 ## Theory & Systems
 
