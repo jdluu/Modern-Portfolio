@@ -149,6 +149,48 @@ rather than rendering broken.
   and pull a poster with `ffmpeg -ss 2 -i final_<name>.mp4 -frames:v 1 final_<name>.png`.
 - `thumbnail_<name>.min.png` is the card image, distinct from `cover_<name>.*`,
   which is the hero. Keep both.
+- **`.min` belongs only on thumbnails.** `cover_<name>.png` and
+  `final_<name>.{png,mp4,webm}` never carry it. A stray `.min` on a cover or
+  final is drift, not a variant — rename the file and fix the frontmatter
+  reference rather than leaving both.
+
+## Recapturing legacy Android demo media
+
+The 2018–2022 Android repos (ZooSeeker, Flixster, Parsegram, SimpleTweet,
+SimpleTodo) need a JDK 11 toolchain, which this host does not default to. A
+clone into the scratch directory is enough; capturing media requires no push to
+the fork.
+
+- **Toolchain:** Gradle 7.x / AGP 7.2 with `compileSdk 32` will not run on this
+  host's JDK 21 or its `android-36` platform. Unpack Temurin JDK 11 to
+  `~/.local/opt/jdk-11` (from
+  `https://api.adoptium.net/v3/binary/latest/11/ga/linux/x64/jdk/hotspot/normal/eclipse`),
+  then
+  `~/.local/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-32" "build-tools;32.0.0"`,
+  then build with `JAVA_HOME=~/.local/opt/jdk-11 ANDROID_HOME=~/.local/android-sdk
+ANDROID_SDK_ROOT=~/.local/android-sdk ./gradlew assembleDebug`. No sudo is
+  needed. `sdkmanager --list` prints packages with `/` separators
+  (`platforms/android-32`) even though install syntax uses `;`.
+- **Take the still from `adb exec-out screencap -p`, never from a video frame.**
+  An h264 frame carries compression artifacts that inflate the PNG — 331 KB vs
+  137 KB for the same screen — and quantizing it makes it _larger_ by adding
+  dither noise.
+- **Crop the status bar.** It is exactly 136px at 1080x2400 on the Pixel 7, so
+  crop `(0,136,1080,2400)` for a 1080x2264 still that matches the cropped video.
+- **Recording:** `adb shell "nohup screenrecord --size 1080x2400 --bit-rate
+12000000 --time-limit 60 /sdcard/x.mp4 >/dev/null 2>&1 &"`, drive the UI, then
+  `adb shell pkill -INT screenrecord`. Encode h264 crf 29 + vp9 crf 38 at fps 24
+  to land around 0.45 MB, inside the repo's 0.1–0.5 MB convention.
+- **Drive the UI by dumping it:** `uiautomator dump` and parse bounds. A
+  checkbox tap must hit the `CheckBox` element (x ~160), not the row label.
+- **A clean status bar needs demo mode:** `settings put global sysui_demo_allowed
+1`, then `am broadcast com.android.systemui.demo` commands, with `-e fully
+true` on the network command to clear the wifi "no internet" exclamation.
+- **Measure the test baseline before blaming your change.** ZooSeeker's
+  JUnit/Robolectric suite is order-flaky: 18 tests, 7 of which also fail on the
+  pristine tree, all `Illegal connection pointer` once the suite shares one
+  connection. Running a single class with `--tests` passes. A whole-suite count
+  is not a verdict on your edit.
 
 ## Project detail page layout
 
@@ -280,6 +322,18 @@ Rules for working on it:
   "the a11y suite never really tests dark mode" conclusion got reached. Use a
   fresh context per themed measurement, and assert the applied `data-theme`
   before trusting any number.
+- **Project prose lives in frontmatter, not in the body.** The
+  `src/content/projects/*.md` files have empty bodies; every sentence sits in
+  `background`/`solution`/`impact`/`reflection`. A probe that splits on the
+  closing `---` and searches "the body" finds blank text and reports zero
+  matches for _every_ project, which reads as "the content is missing" rather
+  than "the probe is wrong". Search the whole file.
+- **Orphan-media checks false-positive on the demo videos.**
+  `src/pages/projects/[slug].astro` collects recordings with
+  `import.meta.glob("/src/assets/images/projects/*/final_*.{mp4,webm}")` — a
+  pattern, not filenames — so matching asset basenames against `src/` reports
+  all twelve `.mp4`/`.webm` files as unreferenced. Only image paths appear
+  literally in frontmatter. Any name-based orphan check must skip them.
 - **Never allocate CSS Grid space for a `position: fixed` element.** The fixed
   element is already out of flow, so the reserved column is dead space that
   squeezes real content. This exact bug hit both the blog post and project
