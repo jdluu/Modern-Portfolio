@@ -123,7 +123,6 @@ const projects = defineCollection({
       final: image().optional(),
       startDate: z.union([z.string(), z.coerce.date()]).optional(),
       endDate: z.union([z.string(), z.coerce.date()]).optional(),
-      programming_languages: z.array(z.string()).optional(),
       categories: z
         .array(z.enum(["Web", "Mobile", "Desktop", "Data Science"]))
         .optional(),

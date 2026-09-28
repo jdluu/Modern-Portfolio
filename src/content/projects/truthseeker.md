@@ -24,8 +24,6 @@ description: "A tool for checking facts by using real-time web searches and AI a
 startDate: 2024-12-01
 endDate: 2024-12-13
 thumbnail: "../../assets/images/projects/truthseeker/thumbnail_truthseeker.min.png"
-programming_languages:
-  - "Python"
 categories:
   - "Desktop"
 ---

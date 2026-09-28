@@ -23,8 +23,6 @@ description: "A photo sharing app for Android that allows users to post pictures
 startDate: 2021-10-22
 endDate: 2021-10-27
 thumbnail: "../../assets/images/projects/parsegram/thumbnail_parsegram.min.png"
-programming_languages:
-  - "Java"
 categories:
   - "Mobile"
 ---

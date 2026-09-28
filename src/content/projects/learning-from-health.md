@@ -23,8 +23,6 @@ description: "A data science project using CDC health data to explore the relati
 startDate: 2022-01-01
 endDate: 2022-03-31
 thumbnail: "../../assets/images/projects/learning_from_health/thumbnail_learning_from_health.min.png"
-programming_languages:
-  - "Python"
 categories:
   - "Data Science"
 ---

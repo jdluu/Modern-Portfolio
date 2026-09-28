@@ -33,8 +33,6 @@ description: "A private, offline-first Android fitness companion leveraging on-d
 startDate: 2025-12-14
 endDate: 2026-03-07
 thumbnail: "../../assets/images/projects/flex-insight/thumbnail_flex-insight.min.png"
-programming_languages:
-  - "Kotlin"
 categories:
   - "Mobile"
 ---

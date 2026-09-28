@@ -23,8 +23,6 @@ description: "A web app with a private dashboard to track and see how people are
 startDate: 2023-05-01
 endDate: 2023-06-14
 thumbnail: "../../assets/images/projects/web_analytics_dashboard/thumbnail_web_analytics_dashboard.min.png"
-programming_languages:
-  - "JavaScript"
 categories:
   - "Web"
 ---

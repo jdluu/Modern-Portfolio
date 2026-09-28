@@ -45,7 +45,6 @@ export function mapProjectToCard(
     startDate: (d.startDate as string) ?? null,
     endDate: (d.endDate as string) ?? null,
     thumbnail: d.thumbnail ?? d.cover ?? null,
-    programming_languages: d.programming_languages ?? null,
     categories: d.categories ?? null,
   };
 }

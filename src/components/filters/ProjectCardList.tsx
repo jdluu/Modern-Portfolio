@@ -25,12 +25,9 @@ export default function ProjectCardList(props: Props) {
     setYearFilter,
     sortOption,
     setSortOption,
-    languageFilters,
-    setLanguageFilters,
     categoryFilters,
     setCategoryFilters,
     years,
-    languageCounts,
     categoryCounts,
     processedItems,
     resetFilters,
@@ -53,7 +50,6 @@ export default function ProjectCardList(props: Props) {
   createEffect(() => {
     yearFilter();
     sortOption();
-    languageFilters();
     categoryFilters();
     pagination.setPage(1);
   });
@@ -140,16 +136,6 @@ export default function ProjectCardList(props: Props) {
             <option value="24">24</option>
           </select>
         </div>
-
-        <FilterDropdown
-          id="project-language-button"
-          label="Languages"
-          items={languageCounts}
-          selectedItems={languageFilters}
-          setSelectedItems={setLanguageFilters}
-          placeholder="Search languages"
-          onPageReset={() => pagination.setPage(1)}
-        />
 
         <FilterDropdown
           id="project-category-button"

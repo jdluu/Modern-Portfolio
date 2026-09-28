@@ -25,8 +25,6 @@ description: "A terminal dashboard that finds and launches TUI tools so you stop
 startDate: 2026-01-21
 endDate: 2026-03-12
 thumbnail: "../../assets/images/projects/nexus/thumbnail_nexus.min.png"
-programming_languages:
-  - "Python"
 categories:
   - "Desktop"
 ---

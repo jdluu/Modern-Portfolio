@@ -24,10 +24,6 @@ description: "A Tauri app for browsing an OPDS ebook catalog and keeping verifie
 startDate: 2026-01-13
 endDate: 2026-04-06
 thumbnail: "../../assets/images/projects/shelf-sync/thumbnail_shelf-sync.min.png"
-programming_languages:
-  - "Rust"
-  - "TypeScript"
-  - "JavaScript"
 categories:
   - "Desktop"
   - "Mobile"

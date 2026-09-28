@@ -23,8 +23,6 @@ description: "An Android app for viewing a Twitter timeline and posting new twee
 startDate: 2021-10-08
 endDate: 2022-03-22
 thumbnail: "../../assets/images/projects/simpletweet/thumbnail_simpletweet.min.png"
-programming_languages:
-  - "Java"
 categories:
   - "Mobile"
 ---

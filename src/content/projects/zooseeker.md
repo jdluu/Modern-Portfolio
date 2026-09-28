@@ -33,8 +33,6 @@ description: "An Android app that finds the shortest path between exhibits at th
 startDate: 2022-03-17
 endDate: 2022-05-31
 thumbnail: "../../assets/images/projects/zooseeker/thumbnail_zooseeker.min.png"
-programming_languages:
-  - "Java"
 categories:
   - "Mobile"
 ---

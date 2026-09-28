@@ -23,8 +23,6 @@ description: "An Android app that shows movie trailers and info from a movie dat
 startDate: 2021-09-18
 endDate: 2022-04-16
 thumbnail: "../../assets/images/projects/flixster/thumbnail_flixster.min.png"
-programming_languages:
-  - "Java"
 categories:
   - "Mobile"
 ---

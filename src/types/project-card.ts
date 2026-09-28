@@ -17,6 +17,5 @@ export interface ProjectCard {
   endDate?: string | null;
   thumbnail?: ImageMetadata | null;
   content?: string | null;
-  programming_languages?: string[] | null;
   categories?: string[] | null;
 }

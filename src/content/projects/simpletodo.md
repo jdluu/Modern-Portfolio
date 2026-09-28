@@ -23,8 +23,6 @@ description: "A simple Android app for managing a to-do list."
 startDate: 2021-07-27
 endDate: 2021-09-28
 thumbnail: "../../assets/images/projects/simpletodo/thumbnail_simpletodo.min.png"
-programming_languages:
-  - "Java"
 categories:
   - "Mobile"
 ---

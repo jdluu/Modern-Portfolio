@@ -40,10 +40,6 @@ description: "A music discovery application that generates algorithmic recommend
 startDate: 2026-01-15
 endDate: 2026-02-10
 thumbnail: "../../assets/images/projects/tune-twin/thumbnail_tune-twin.min.png"
-programming_languages:
-  - "TypeScript"
-  - "CSS"
-  - "JavaScript"
 categories:
   - "Web"
 ---

@@ -31,19 +31,13 @@ export interface UseProjectFilteringResult {
   sortOption: Accessor<SortOption>;
   /** Setter for sort option. */
   setSortOption: Setter<SortOption>;
-  /** Selected language filters. */
-  languageFilters: Accessor<string[]>;
-  /** Setter for language filters. */
-  setLanguageFilters: Setter<string[]>;
   /** Selected category filters. */
   categoryFilters: Accessor<string[]>;
   /** Setter for category filters. */
   setCategoryFilters: Setter<string[]>;
   /** List of unique years available in the items. */
   years: Accessor<string[]>;
-  /** Dynamic counts of languages based on current year and category filters. */
-  languageCounts: Accessor<{ name: string; count: number }[]>;
-  /** Dynamic counts of categories based on current year and language filters. */
+  /** Dynamic counts of categories based on the current year selection. */
   categoryCounts: Accessor<{ name: string; count: number }[]>;
   /** The final list of items after applying all filters and sorting. */
   processedItems: Accessor<ProjectCard[]>;
@@ -56,7 +50,7 @@ export interface UseProjectFilteringResult {
 /**
  * Custom hook to manage project filtering, sorting, and aggregation logic.
  *
- * Encapsulates state for year, sort, language, and category filters, and computes
+ * Encapsulates state for the year, sort, and category filters, and computes the
  * derived lists and counts based on the initial items. Designed for use in
  * client-side SolidJS islands.
  *
@@ -68,7 +62,6 @@ export function useProjectFiltering(
 ): UseProjectFilteringResult {
   const [yearFilter, setYearFilter] = createSignal(""); // "" means all years
   const [sortOption, setSortOption] = createSignal<SortOption>("date-desc");
-  const [languageFilters, setLanguageFilters] = createSignal<string[]>([]);
   const [categoryFilters, setCategoryFilters] = createSignal<string[]>([]);
 
   /**
@@ -107,69 +100,12 @@ export function useProjectFiltering(
   });
 
   /**
-   * Computes dynamic counts for programming languages based on active year and category filters.
-   * Excludes common generic technologies like HTML/CSS and normalizes JS/TS variants.
-   */
-  const languageCounts = createMemo(() => {
-    const currentCategoryFilters = categoryFilters() ?? [];
-    let items = filteredByYear();
-
-    // Cross-filter: languages should respect category selection
-    if (currentCategoryFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemCategories = it.categories ?? [];
-        return currentCategoryFilters.some((f) => itemCategories.includes(f));
-      });
-    }
-
-    const counts = new Map<string, number>();
-    items.forEach((it) => {
-      const list = it.programming_languages ?? [];
-      const normalizedInProject = new Set<string>();
-
-      list.forEach((l) => {
-        if (!l) return;
-        const name = String(l);
-        const lower = name.toLowerCase();
-
-        // Skip generic UI technologies
-        if (lower === "html" || lower === "css") return;
-
-        // Group related language ecosystems
-        if (["javascript", "js", "typescript"].includes(lower)) {
-          normalizedInProject.add("JavaScript / TypeScript");
-        } else {
-          normalizedInProject.add(name);
-        }
-      });
-
-      normalizedInProject.forEach((name) => {
-        counts.set(name, (counts.get(name) ?? 0) + 1);
-      });
-    });
-
-    return Array.from(counts.entries())
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-  });
-
-  /**
-   * Computes dynamic counts for categories based on active year and language filters.
+   * Computes dynamic counts for categories based on the active year selection, so
+   * the dropdown never offers a category that the year filter has emptied.
    */
   const categoryCounts = createMemo(() => {
-    const currentLanguageFilters = languageFilters() ?? [];
-    let items = filteredByYear();
-
-    // Cross-filter: categories should respect language selection
-    if (currentLanguageFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemLangs = it.programming_languages ?? [];
-        return currentLanguageFilters.some((f) => itemLangs.includes(f));
-      });
-    }
-
     const counts = new Map<string, number>();
-    items.forEach((it) => {
+    filteredByYear().forEach((it) => {
       const list = it.categories ?? [];
       list.forEach((c) => {
         if (!c) return;
@@ -189,21 +125,6 @@ export function useProjectFiltering(
    */
   const processedItems = createMemo(() => {
     let items = filterByYearHelper(initialItems, yearFilter());
-
-    const langFilters = languageFilters();
-    if (langFilters.length > 0) {
-      items = items.filter((it) => {
-        const itemLangs = (it.programming_languages ?? []).map((l) => {
-          const name = String(l);
-          const lower = name.toLowerCase();
-          if (["javascript", "js", "typescript"].includes(lower)) {
-            return "JavaScript / TypeScript";
-          }
-          return name;
-        });
-        return langFilters.some((f) => itemLangs.includes(f));
-      });
-    }
 
     const catFilters = categoryFilters();
     if (catFilters.length > 0) {
@@ -232,7 +153,6 @@ export function useProjectFiltering(
     batch(() => {
       setYearFilter("");
       setSortOption("date-desc");
-      setLanguageFilters([]);
       setCategoryFilters([]);
     });
   };
@@ -244,8 +164,6 @@ export function useProjectFiltering(
     const parts: string[] = [];
     const yf = yearFilter();
     if (yf) parts.push(`Year: ${yf}`);
-    const langs = languageFilters();
-    if (langs && langs.length) parts.push(`Languages: ${langs.join(", ")}`);
     const cats = categoryFilters();
     if (cats && cats.length) parts.push(`Categories: ${cats.join(", ")}`);
     parts.push(
@@ -261,12 +179,9 @@ export function useProjectFiltering(
     setYearFilter,
     sortOption,
     setSortOption,
-    languageFilters,
-    setLanguageFilters,
     categoryFilters,
     setCategoryFilters,
     years,
-    languageCounts,
     categoryCounts,
     processedItems,
     resetFilters,

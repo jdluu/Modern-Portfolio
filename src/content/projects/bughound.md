@@ -23,10 +23,6 @@ description: "A tool for tracking software bugs with support for file attachment
 startDate: 2025-01-15
 endDate: 2025-05-31
 thumbnail: "../../assets/images/projects/bughound/thumbnail_bughound.min.png"
-programming_languages:
-  - "TypeScript"
-  - "React"
-  - "JavaScript"
 categories:
   - "Web"
 ---

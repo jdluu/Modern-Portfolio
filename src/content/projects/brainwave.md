@@ -34,11 +34,6 @@ description: "A note-taking app that uses a chat interface to help you find info
 startDate: 2024-02-01
 endDate: 2024-03-31
 thumbnail: "../../assets/images/projects/brainwave/thumbnail_brainwave.min.png"
-programming_languages:
-  - "TypeScript"
-  - "Next.js"
-  - "React"
-  - "JavaScript"
 categories:
   - "Web"
 ---
