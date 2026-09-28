@@ -147,8 +147,14 @@ rather than rendering broken.
   recording if a demo needs rebuilding, e.g.
   `ffmpeg -i in.mov -movflags +faststart -pix_fmt yuv420p final_<name>.mp4`,
   and pull a poster with `ffmpeg -ss 2 -i final_<name>.mp4 -frames:v 1 final_<name>.png`.
-- `thumbnail_<name>.min.png` is the card image, distinct from `cover_<name>.*`,
-  which is the hero. Keep both.
+- **The three image roles are distinct and must never be conflated.**
+  `thumbnail_<name>.min.png` is the **card image** — the generated brand graphic
+  shown in card lists. `cover_<name>.*` is the **hero**, and is a real
+  **screenshot of the app's home screen** (or the site's home page), never a
+  generated graphic. `final_<name>.*` is a **video of the app in action, or an
+  image of one key feature**. All three must be separate files: a cover that is
+  byte-identical to the thumbnail means the hero was never actually sourced,
+  which is drift, not a variant.
 - **`.min` belongs only on thumbnails.** `cover_<name>.png` and
   `final_<name>.{png,mp4,webm}` never carry it. A stray `.min` on a cover or
   final is drift, not a variant — rename the file and fix the frontmatter
