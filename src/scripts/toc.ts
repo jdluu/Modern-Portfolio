@@ -104,12 +104,15 @@ export function initToc(): void {
       if (!href) return;
       const target = document.querySelector(href);
       if (!target) return;
-      const navHeight =
-        parseInt(
-          getComputedStyle(document.documentElement).getPropertyValue(
-            "--nav-height",
-          ),
-        ) || 64;
+      // Measure the navbar rather than parsing --nav-height: that token reads
+      // "4rem" and parseInt returns 4, which landed every section 28px from the
+      // viewport top, behind a 51px navbar, so a clicked TOC entry scrolled its
+      // own heading out of sight. The measured header also carries padding the
+      // token does not describe.
+      const navbar = document.querySelector("#main-navbar");
+      const navHeight = navbar
+        ? Math.round(navbar.getBoundingClientRect().height)
+        : 64;
       const targetPosition =
         (target as HTMLElement).getBoundingClientRect().top + window.scrollY;
       const offsetPosition = targetPosition - navHeight - 24;
@@ -153,17 +156,11 @@ export function initToc(): void {
       collapsed ? "Expand Table of Contents" : "Collapse Table of Contents",
     );
 
-    const list = tocCard.querySelector(".toc-list");
-    const title = tocCard.querySelector("h4");
-    if (collapsed) {
-      if (tocCard instanceof HTMLElement) tocCard.style.width = "56px";
-      if (list instanceof HTMLElement) list.style.display = "none";
-      if (title instanceof HTMLElement) title.style.display = "none";
-    } else {
-      if (tocCard instanceof HTMLElement) tocCard.style.width = "";
-      if (list instanceof HTMLElement) list.style.removeProperty("display");
-      if (title instanceof HTMLElement) title.style.removeProperty("display");
-    }
+    // Geometry is the stylesheet's job: it owns the collapsed width, hides the
+    // list, and hides the label. Setting width and display here as well created
+    // competing width sources (inline 56px against a --space-xl wrapper) and
+    // squeezed the toggle to 10px on desktop and 16px on mobile, so the glyph
+    // clipped. Only the class, the accessible state, and the glyph are set here.
 
     try {
       const desktopKey = "toc-collapsed-desktop";

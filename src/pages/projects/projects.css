@@ -581,14 +581,23 @@ p {
 }
 
 /* Collapsed/minimized TOC - still visible with toggle (apply to wrapper) */
+/* One width source: the pill sizes to its toggle rather than naming several
+   independent widths. A hard 56px card under a --space-xl wrapper (38px at
+   desktop, 30px on mobile) overhung the wrapper, and the header's --space-m side
+   padding left only ~10px for the button, which clipped the glyph. */
 .project-toc.toc-collapsed {
-  width: var(--space-xl);
+  width: auto;
 }
 
 .project-toc.toc-collapsed .toc-card {
   padding: var(--space-3xs);
-  width: var(--space-xl);
+  width: auto;
   overflow: visible;
+}
+
+.project-toc.toc-collapsed .toc-header {
+  padding: 0;
+  justify-content: center;
 }
 
 .project-toc.toc-collapsed .toc-list {
@@ -602,6 +611,7 @@ p {
 .project-toc.toc-collapsed .toc-toggle {
   width: var(--space-xl);
   height: var(--space-xl);
+  flex-shrink: 0;
 }
 
 /* Selected by id rather than tag: the label's heading level is a document-outline
@@ -1079,13 +1089,17 @@ section[id] {
     max-height: min(70vh, 520px);
   }
 
+  /* The FAB size has to contain the toggle: --space-xl is 33px at this
+     breakpoint, so a 3rem (30px) circle left the button hanging 3px outside it.
+     This matches the --space-2xl FAB in the earlier mobile block, which the
+     duplicate rules here were silently overriding. */
   .project-toc.toc-collapsed {
-    width: 3rem;
+    width: var(--space-2xl);
   }
 
   .project-toc.toc-collapsed .toc-card {
-    width: 3rem;
-    height: 3rem;
+    width: var(--space-2xl);
+    height: var(--space-2xl);
     border-radius: 50%;
     background: var(--m3-color-primary);
     overflow: visible;

@@ -333,15 +333,34 @@ const structuredDataString = JSON.stringify(structuredData);
 
 <script>
   import { initToc } from "@scripts/toc";
-  document.addEventListener("DOMContentLoaded", initToc);
 
-  // Autoplaying demo loops honor a reduced-motion preference.
-  const demoVideos = document.querySelectorAll<HTMLVideoElement>(".final-figure video");
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    demoVideos.forEach((video) => {
-      video.autoplay = false;
-      video.removeAttribute("autoplay");
-      video.pause();
+  // Register on astro:page-load as well as on first load. ClientRouter swaps the
+  // document on client-side navigation and DOMContentLoaded never fires again, so
+  // a visitor arriving by clicking through the site got a dead toggle, no mobile
+  // default-collapse, and no scroll-spy. The data-tocInit guard inside initToc
+  // makes the second call a no-op.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initToc(), {
+      once: true,
     });
+  } else {
+    initToc();
   }
+  document.addEventListener("astro:page-load", () => initToc());
+
+  // Autoplaying demo loops honor a reduced-motion preference, re-applied on
+  // astro:page-load because a video the router swaps in is a fresh element that
+  // would otherwise start autoplaying.
+  const applyReducedMotion = () => {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document
+      .querySelectorAll<HTMLVideoElement>(".final-figure video")
+      .forEach((video) => {
+        video.autoplay = false;
+        video.removeAttribute("autoplay");
+        video.pause();
+      });
+  };
+  applyReducedMotion();
+  document.addEventListener("astro:page-load", applyReducedMotion);
 </script>
