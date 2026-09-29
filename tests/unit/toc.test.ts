@@ -25,4 +25,28 @@ describe("TOC Controller", () => {
     initToc();
     expect(document.querySelector).toHaveBeenCalledWith(".project-toc");
   });
+
+  it("should be a no-op when the container is already initialised", () => {
+    // The controller is registered on both DOMContentLoaded and astro:page-load, so
+    // it can run twice against one document. Without the guard the second pass would
+    // attach a second set of listeners and make the toggle fire twice.
+    const container = {
+      dataset: { tocInit: "1" },
+      querySelector: vi.fn().mockReturnValue(null),
+    };
+    const querySelector = vi.fn().mockReturnValue(container);
+    vi.stubGlobal("document", {
+      querySelector,
+      querySelectorAll: vi.fn().mockReturnValue([]),
+      getElementById: vi.fn().mockReturnValue(null),
+      addEventListener: vi.fn(),
+    });
+
+    initToc();
+
+    expect(querySelector).toHaveBeenCalledWith(".project-toc");
+    // The guard must return before doing any further DOM work.
+    expect(container.querySelector).not.toHaveBeenCalled();
+    expect(document.querySelectorAll).not.toHaveBeenCalled();
+  });
 });

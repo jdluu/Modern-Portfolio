@@ -181,6 +181,91 @@ export async function settleAnimations(page: Page): Promise<void> {
   });
 }
 
+/**
+ * Wait for smooth scrolling to stop.
+ *
+ * Anchor clicks scroll with `behavior: "smooth"`, so a position sampled straight
+ * after a click reads mid-animation and an offset assertion then fails depending
+ * on which way the animation happened to be passing. Requires either an observed
+ * movement or a grace period before accepting stability, because a scroll that has
+ * not started yet also looks perfectly stable. Bounded, so a scroll that never
+ * settles cannot hang the suite.
+ */
+export async function settleScroll(page: Page): Promise<void> {
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        const started = performance.now();
+        let last = window.scrollY;
+        let stable = 0;
+        let moved = false;
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          resolve();
+        };
+        const tick = () => {
+          const y = window.scrollY;
+          if (y !== last) {
+            moved = true;
+            stable = 0;
+          } else {
+            stable += 1;
+          }
+          last = y;
+          if (stable >= 3 && (moved || performance.now() - started > 400)) {
+            return finish();
+          }
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        setTimeout(finish, 6_000);
+      }),
+  );
+}
+
+/**
+ * Wait until the DOM stops mutating.
+ *
+ * Hydrated islands re-render after load. The work page is the sharp example: it
+ * server-renders every project card, then the paginating island hides all but the
+ * current page, collapsing the hidden ones to a zero-size box. A locator resolved
+ * before that settles points at an element that is about to vanish, so a click
+ * either targets the wrong card or fails on an element that was visible when it
+ * was resolved. Bounded, so a page that never settles cannot hang the suite.
+ */
+export async function settleDom(page: Page, quietMs = 300): Promise<void> {
+  await page.evaluate(
+    (quiet) =>
+      new Promise<void>((resolve) => {
+        let timer = 0;
+        let settled = false;
+        const finish = () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          observer.disconnect();
+          resolve();
+        };
+        // Declared after finish, which only ever runs from a timer or an observer
+        // callback, so the binding is always initialised by the time it is read.
+        const observer = new MutationObserver(() => {
+          clearTimeout(timer);
+          timer = window.setTimeout(finish, quiet);
+        });
+        observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+        });
+        timer = window.setTimeout(finish, quiet);
+        setTimeout(finish, 5_000);
+      }),
+    quietMs,
+  );
+}
+
 /** The nav panel, scoped so link lookups cannot collide with in-page links. */
 export function navPanel(page: Page) {
   return page.getByRole("navigation", { name: "Main navigation" });

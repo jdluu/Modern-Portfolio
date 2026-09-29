@@ -28,10 +28,6 @@
   min-width: 0;
 }
 
-.project-toc {
-  width: 100%;
-}
-
 /* HERO */
 .project-hero {
   position: relative;
@@ -533,135 +529,9 @@ p {
   word-break: keep-all;
 }
 
-/* Right fixed TOC wrapper (always visible) */
-/* TOC positioning now lives in the "TOC (right sidebar column)" section below —
-   the old position:fixed rule here made the TOC render as a full-width bar
-   pinned over the hero. */
-
-/* Inner card is positioned relative inside the fixed wrapper */
-.toc-card {
-  position: relative;
-  padding: var(--space-l) 0; /* Only vertical padding here */
-  background: var(--color-card);
-  border-radius: var(--space-s);
-  border: 1px solid color-mix(in oklab, var(--color-border) 10%, transparent);
-  box-shadow: 0 var(--space-s) var(--space-2xl)
-    color-mix(in oklab, black 8%, transparent);
-  max-height: calc(100vh - calc(var(--nav-height) + var(--space-l)));
-  overflow: auto;
-}
-
-/* Header inside TOC (title + toggle) */
-.toc-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-s);
-  padding: 0 var(--space-l); /* Moved horizontal padding here */
-}
-
-.toc-toggle {
-  appearance: none;
-  border: none;
-  background: color-mix(in oklab, var(--color-border) 8%, transparent);
-  color: var(--color-text-primary);
-  width: var(--space-2xl); /* Increased from var(--space-xl) */
-  height: var(--space-2xl);
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: var(--step-0); /* Bumped from step--1 */
-}
-
-.toc-toggle:focus {
-  outline: 2px solid var(--color-focus);
-  outline-offset: var(--space-3xs);
-}
-
-/* Collapsed/minimized TOC - still visible with toggle (apply to wrapper) */
-/* One width source: the pill sizes to its toggle rather than naming several
-   independent widths. A hard 56px card under a --space-xl wrapper (38px at
-   desktop, 30px on mobile) overhung the wrapper, and the header's --space-m side
-   padding left only ~10px for the button, which clipped the glyph. */
-.project-toc.toc-collapsed {
-  width: auto;
-}
-
-.project-toc.toc-collapsed .toc-card {
-  padding: var(--space-3xs);
-  width: auto;
-  overflow: visible;
-}
-
-.project-toc.toc-collapsed .toc-header {
-  padding: 0;
-  justify-content: center;
-}
-
-.project-toc.toc-collapsed .toc-list {
-  display: none;
-}
-
-.project-toc.toc-collapsed #toc-label {
-  display: none;
-}
-
-.project-toc.toc-collapsed .toc-toggle {
-  width: var(--space-xl);
-  height: var(--space-xl);
-  flex-shrink: 0;
-}
-
-/* Selected by id rather than tag: the label's heading level is a document-outline
-   decision, and this rule must survive that level changing. */
-.toc-card #toc-label {
-  margin: 0;
-  font-size: var(--step-2); /* Bumped from step-1 */
-  font-weight: 700;
-  line-height: var(--font-line-height-heading); /* pinned to the h4 rendering */
-  color: var(--m3-color-primary);
-  font-variation-settings: normal; /* the Safari h1-h3 clipping fix must not restyle this label */
-}
-
-.toc-list {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-l) 0 0; /* Space from header */
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs); /* Tighter gaps for "active list" feel */
-}
-
-.toc-list a {
-  color: var(--color-text-tertiary);
-  text-decoration: none;
-  padding: var(--space-s) var(--space-l); /* Full card width */
-  border-radius: 4px;
-  display: block;
-  font-size: var(--step-1);
-  transition: all var(--m3-motion-duration-short)
-    var(--m3-motion-easing-standard);
-  margin: 0 4px; /* Minimal inset for a crisp look */
-}
-
-/* Active link (clear, stronger contrast) */
-.toc-list a.link-active {
-  color: var(--color-text-primary);
-  background: color-mix(in oklab, var(--color-accent) 10%, transparent);
-  font-weight: 700;
-  box-shadow: 0 var(--space-3xs) var(--space-2xs)
-    color-mix(in oklab, var(--color-accent) 6%, transparent);
-}
-
-/* Hover/focus (lighter than active so hover is visually distinct) */
-.toc-list a:hover,
-.toc-list a:focus {
-  color: var(--color-text-tertiary);
-  background: color-mix(in oklab, var(--color-accent) 4%, transparent);
-  font-weight: 600;
-}
+/* TOC styles live in the "TOC (right sidebar column)" section near the end of this
+   file. They used to be declared here as well, and because the later copy won,
+   a value changed in this block could have no effect at all. */
 
 /* Small utilities */
 .kv {
@@ -687,10 +557,6 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .project-toc {
-    order: 2;
-  }
-
   .project-hero-figure {
     height: 320px;
   }
@@ -699,73 +565,8 @@ p {
     grid-template-columns: 1fr;
   }
 
-  /* Mobile FAB: stick TOC to bottom-left as hamburger */
-  .project-toc {
-    position: fixed;
-    top: auto;
-    right: var(--space-s-m);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m-l));
-    left: auto;
-    width: auto;
-    z-index: 200;
-    max-height: none;
-    box-shadow: none;
-    pointer-events: auto;
-  }
-
-  /* Expanded menu card sizing on mobile */
-  .toc-card {
-    padding: var(--space-s);
-    max-width: min(86vw, 360px);
-    max-height: min(70vh, 520px);
-    overflow: auto;
-    box-shadow: 0 var(--space-s) var(--space-2xl)
-      color-mix(in oklab, black 12%, transparent);
-  }
-
-  /* Collapsed look as circular FAB */
-  .project-toc.toc-collapsed {
-    width: var(--space-2xl);
-  }
-
-  .project-toc.toc-collapsed .toc-card {
-    width: var(--space-2xl);
-    height: var(--space-2xl);
-    padding: var(--space-3xs);
-    border-radius: var(--space-3xl);
-    background: var(--color-accent);
-    box-shadow: 0 var(--space-s) var(--space-2xl)
-      color-mix(in oklab, var(--color-accent) 28%, transparent);
-    overflow: visible;
-  }
-
-  .project-toc.toc-collapsed .toc-toggle {
-    width: var(--space-xl);
-    height: var(--space-xl);
-    border-radius: var(--space-3xl);
-    background: transparent;
-    color: var(--color-on-accent);
-    font-size: var(--step-0);
-  }
-
-  /* Expanded state toggle look on mobile */
-  .project-toc:not(.toc-collapsed) .toc-toggle {
-    width: var(--space-xl);
-    height: var(--space-xl);
-    border-radius: 10px;
-    background: color-mix(in oklab, var(--color-border) 8%, transparent);
-    color: var(--color-text-primary);
-  }
-
-  /* Show title only when expanded (collapsed already hides via rules above) */
-  .project-toc:not(.toc-collapsed) #toc-label {
-    display: block;
-  }
-
-  /* Slightly larger link targets for mobile */
-  .toc-list a {
-    font-size: var(--step-1);
-  }
+  /* TOC mobile rules live in the later @media (max-width: 980px) block, beside the
+     base TOC styles. They used to be duplicated here, and the later copy won. */
 }
 
 /* Small screens */
@@ -977,36 +778,67 @@ section[id] {
 }
 
 /* ===== TOC (right sidebar column — not fixed) ===== */
+/* The single source of truth for TOC styling. These rules were previously
+   declared twice in this file, and the later copy silently won, so an edit to the
+   first copy could have no effect. Mobile overrides live in the
+   @media (max-width: 980px) block below; desktop positioning is the
+   @media (min-width: 981px) block at the end. */
 .project-toc {
   width: 100%;
 }
 
 .toc-card {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-l));
   padding: var(--space-m) 0;
   background: var(--color-card);
-  border-radius: 8px;
   border: 1px solid var(--color-border);
+  border-radius: 8px;
   box-shadow: 0 var(--space-s) var(--space-2xl)
     color-mix(in oklab, black 6%, transparent);
   max-height: calc(100vh - calc(var(--nav-height) + var(--space-l) * 2));
-  overflow-y: auto;
-  position: sticky;
-  top: calc(var(--nav-height) + var(--space-l));
+  overflow: auto;
 }
 
 .toc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-s);
   padding: 0 var(--space-m);
 }
 
-.toc-card #toc-label {
-  margin: 0;
-  font-size: var(--step-2);
-  font-weight: 700;
-  color: var(--m3-color-primary);
-  letter-spacing: 0.02em;
+/* Collapsed: a pill sized by its toggle, so the box can never be narrower than
+   the control inside it. Naming several independent widths here once left the
+   card wider than its own wrapper and squeezed the toggle to 10px on desktop,
+   which painted the glyph outside its box. */
+.project-toc.toc-collapsed {
+  width: auto;
+}
+
+.project-toc.toc-collapsed .toc-card {
+  padding: var(--space-3xs);
+  width: auto;
+  overflow: visible;
+}
+
+.project-toc.toc-collapsed .toc-header {
+  padding: 0;
+  justify-content: center;
+}
+
+.project-toc.toc-collapsed .toc-list {
+  display: none;
+}
+
+.project-toc.toc-collapsed #toc-label {
+  display: none;
+}
+
+.project-toc.toc-collapsed .toc-toggle {
+  width: var(--space-xl);
+  height: var(--space-xl);
+  flex-shrink: 0;
 }
 
 .toc-toggle {
@@ -1025,6 +857,23 @@ section[id] {
   line-height: 1;
 }
 
+.toc-toggle:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: var(--space-3xs);
+}
+
+/* Selected by id rather than tag: the label's heading level is a document-outline
+   decision, and this rule must survive that level changing. */
+.toc-card #toc-label {
+  margin: 0;
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: var(--font-line-height-heading);
+  letter-spacing: 0.02em;
+  color: var(--m3-color-primary);
+  font-variation-settings: normal;
+}
+
 .toc-list {
   list-style: none;
   padding: 0;
@@ -1039,14 +888,29 @@ section[id] {
 }
 
 .toc-list a {
-  text-decoration: none;
   color: var(--color-text-tertiary);
+  text-decoration: none;
+  padding: 0.2em 0;
+  margin: 0 4px;
+  border-radius: 4px;
+  display: block;
   font-size: var(--step-1);
   line-height: 1.6;
   transition: color 0.15s;
-  display: block;
-  padding: 0.2em 0;
-  border-radius: 4px;
+}
+
+/* Keyboard focus keeps the quieter treatment; hover and the current section share
+   the stronger one. Kept as separate rules because the active box-shadow must not
+   leak onto hover. */
+.toc-list a:focus {
+  color: var(--color-text-tertiary);
+  background: color-mix(in oklab, var(--color-accent) 4%, transparent);
+  font-weight: 600;
+}
+
+.toc-list a.link-active {
+  box-shadow: 0 var(--space-3xs) var(--space-2xs)
+    color-mix(in oklab, var(--color-accent) 6%, transparent);
 }
 
 .toc-list a:hover,
@@ -1074,25 +938,37 @@ section[id] {
     grid-template-columns: 1fr;
   }
 
+  /* ===== TOC on mobile: a FAB pinned bottom-right =====
+     One set of rules, merged from the two identical @media (max-width: 980px)
+     blocks that used to declare them. The later copy silently won, so a value
+     changed in the earlier block had no effect. */
   .project-toc {
     position: fixed;
     top: auto;
     right: var(--space-m);
     bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-m));
+    left: auto;
     width: auto;
     z-index: 200;
+    max-height: none;
+    box-shadow: none;
+    pointer-events: auto;
+    order: 2;
   }
 
+  /* Expanded menu card. Padding and shadow are deliberately NOT set here: this
+     block used to declare its own, but the base .toc-card rule sits later in the
+     file and silently overrode both, so they never applied. */
   .toc-card {
     position: relative;
     top: auto;
+    max-width: min(86vw, 360px);
     max-height: min(70vh, 520px);
+    overflow: auto;
   }
 
-  /* The FAB size has to contain the toggle: --space-xl is 33px at this
-     breakpoint, so a 3rem (30px) circle left the button hanging 3px outside it.
-     This matches the --space-2xl FAB in the earlier mobile block, which the
-     duplicate rules here were silently overriding. */
+  /* Collapsed: a circular FAB, which has to be large enough to contain the
+     toggle at --space-xl (33px at this breakpoint). */
   .project-toc.toc-collapsed {
     width: var(--space-2xl);
   }
@@ -1100,15 +976,34 @@ section[id] {
   .project-toc.toc-collapsed .toc-card {
     width: var(--space-2xl);
     height: var(--space-2xl);
+    padding: var(--space-3xs);
     border-radius: 50%;
     background: var(--m3-color-primary);
-    overflow: visible;
     box-shadow: 0 var(--space-s) var(--space-2xl)
       color-mix(in oklab, var(--m3-color-primary) 28%, transparent);
+    overflow: visible;
   }
 
   .project-toc.toc-collapsed .toc-toggle {
+    width: var(--space-xl);
+    height: var(--space-xl);
+    border-radius: var(--space-3xl);
+    background: transparent;
     color: var(--m3-color-on-primary);
+    font-size: var(--step-0);
+  }
+
+  /* Expanded state toggle */
+  .project-toc:not(.toc-collapsed) .toc-toggle {
+    width: var(--space-xl);
+    height: var(--space-xl);
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--color-border) 8%, transparent);
+    color: var(--color-text-primary);
+  }
+
+  .project-toc:not(.toc-collapsed) #toc-label {
+    display: block;
   }
 }
 
